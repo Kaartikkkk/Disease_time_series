@@ -1,0 +1,262 @@
+date,crop,disease,location_id,latitude,longitude,cases_or_affected,inspected_or_total,incidence_rate,severity,temperature,humidity,rainfall,source,is_synthetic,Date,Counts,parsed_date,spore_count
+2023-05-01,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,11.676388888888889,83.63194444444444,31.2,Agroscope_Switzerland,False,01.05.2023 00:00,0.0,2023-05-01,0.0
+2023-05-03,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,15.082638888888889,59.451388888888886,0.0,Agroscope_Switzerland,False,03.05.2023 00:00,0.0,2023-05-03,0.0
+2023-05-05,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,18.175694444444446,56.333333333333336,0.0,Agroscope_Switzerland,False,05.05.2023 00:00,0.0,2023-05-05,0.0
+2023-05-08,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.235883283,,15.677777777777777,79.625,0.6,Agroscope_Switzerland,False,08.05.2023 00:00,0.235883283,2023-05-08,0.235883283
+2023-05-08,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.941241589,,15.677777777777777,79.625,0.6,Agroscope_Switzerland,False,08.05.2023 00:00,0.941241589,2023-05-08,0.941241589
+2023-05-10,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,37.00529521,,12.8,72.05555555555556,9.6,Agroscope_Switzerland,False,10.05.2023 00:00,37.00529521,2023-05-10,37.00529521
+2023-05-10,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,1.89559977,,12.8,72.05555555555556,9.6,Agroscope_Switzerland,False,10.05.2023 00:00,1.89559977,2023-05-10,1.89559977
+2023-05-12,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.920475952,,13.243055555555555,70.33333333333333,0.6,Agroscope_Switzerland,False,12.05.2023 00:00,0.920475952,2023-05-12,0.920475952
+2023-05-12,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,1.836528012,,13.243055555555555,70.33333333333333,0.6,Agroscope_Switzerland,False,12.05.2023 00:00,1.836528012,2023-05-12,1.836528012
+2023-05-15,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,3.724439414,,12.552083333333334,82.40972222222223,28.8,Agroscope_Switzerland,False,15.05.2023 00:00,3.724439414,2023-05-15,3.724439414
+2023-05-15,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,4.620306001,,12.552083333333334,82.40972222222223,28.8,Agroscope_Switzerland,False,15.05.2023 00:00,4.620306001,2023-05-15,4.620306001
+2023-05-17,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,2.470144925,,11.704166666666667,55.958333333333336,0.0,Agroscope_Switzerland,False,17.05.2023 00:00,2.470144925,2023-05-17,2.470144925
+2023-05-17,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,1.23241972,,11.704166666666667,55.958333333333336,0.0,Agroscope_Switzerland,False,17.05.2023 00:00,1.23241972,2023-05-17,1.23241972
+2023-05-19,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,5.470785508,,13.955555555555556,64.32638888888889,0.0,Agroscope_Switzerland,False,19.05.2023 00:00,5.470785508,2023-05-19,5.470785508
+2023-05-19,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,3.01657069,,13.955555555555556,64.32638888888889,0.0,Agroscope_Switzerland,False,19.05.2023 00:00,3.01657069,2023-05-19,3.01657069
+2023-05-22,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,18.393749999999997,70.40972222222223,0.0,Agroscope_Switzerland,False,22.05.2023 00:00,0.0,2023-05-22,0.0
+2023-05-22,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,1.250067338,,18.393749999999997,70.40972222222223,0.0,Agroscope_Switzerland,False,22.05.2023 00:00,1.250067338,2023-05-22,1.250067338
+2023-05-24,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.685351019,,16.28611111111111,69.3125,0.0,Agroscope_Switzerland,False,24.05.2023 00:00,0.685351019,2023-05-24,0.685351019
+2023-05-24,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.503272797,,16.28611111111111,69.3125,0.0,Agroscope_Switzerland,False,24.05.2023 00:00,0.503272797,2023-05-24,0.503272797
+2023-05-26,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,17.728472222222223,69.22222222222223,0.0,Agroscope_Switzerland,False,26.05.2023 00:00,0.0,2023-05-26,0.0
+2023-05-26,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.379086471,,17.728472222222223,69.22222222222223,0.0,Agroscope_Switzerland,False,26.05.2023 00:00,0.379086471,2023-05-26,0.379086471
+2023-05-29,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.130850802,,19.84652777777778,48.28472222222222,0.0,Agroscope_Switzerland,False,29.05.2023 00:00,0.130850802,2023-05-29,0.130850802
+2023-05-29,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,19.84652777777778,48.28472222222222,0.0,Agroscope_Switzerland,False,29.05.2023 00:00,0.0,2023-05-29,0.0
+2023-05-31,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,19.11111111111111,55.81944444444444,0.0,Agroscope_Switzerland,False,31.05.2023 00:00,0.0,2023-05-31,0.0
+2023-05-31,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,19.11111111111111,55.81944444444444,0.0,Agroscope_Switzerland,False,31.05.2023 00:00,0.0,2023-05-31,0.0
+2023-06-02,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.172904528,,19.720833333333335,62.125,0.0,Agroscope_Switzerland,False,02.06.2023 00:00,0.172904528,2023-06-02,0.172904528
+2023-06-02,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,19.720833333333335,62.125,0.0,Agroscope_Switzerland,False,02.06.2023 00:00,0.0,2023-06-02,0.0
+2023-06-05,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.658114183,,18.476388888888888,61.625,0.0,Agroscope_Switzerland,False,05.06.2023 00:00,0.658114183,2023-06-05,0.658114183
+2023-06-05,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,18.476388888888888,61.625,0.0,Agroscope_Switzerland,False,05.06.2023 00:00,0.0,2023-06-05,0.0
+2023-06-07,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,7.815308799,,19.720833333333335,55.166666666666664,0.0,Agroscope_Switzerland,False,07.06.2023 00:00,7.815308799,2023-06-07,7.815308799
+2023-06-07,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,4.583068441,,19.720833333333335,55.166666666666664,0.0,Agroscope_Switzerland,False,07.06.2023 00:00,4.583068441,2023-06-07,4.583068441
+2023-06-09,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,18.685416666666665,72.18055555555556,9.6,Agroscope_Switzerland,False,09.06.2023 00:00,0.0,2023-06-09,0.0
+2023-06-09,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.604895213,,18.685416666666665,72.18055555555556,9.6,Agroscope_Switzerland,False,09.06.2023 00:00,0.604895213,2023-06-09,0.604895213
+2023-06-12,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,12.62334874,,21.116666666666667,58.56944444444444,0.0,Agroscope_Switzerland,False,12.06.2023 00:00,12.62334874,2023-06-12,12.62334874
+2023-06-12,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,249.2017837,,21.116666666666667,58.56944444444444,0.0,Agroscope_Switzerland,False,12.06.2023 00:00,249.2017837,2023-06-12,249.2017837
+2023-06-14,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,4.518621285,,20.734722222222224,40.645833333333336,0.0,Agroscope_Switzerland,False,14.06.2023 00:00,4.518621285,2023-06-14,4.518621285
+2023-06-14,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,89.44518137,,20.734722222222224,40.645833333333336,0.0,Agroscope_Switzerland,False,14.06.2023 00:00,89.44518137,2023-06-14,89.44518137
+2023-06-16,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,18.04440386,,20.402083333333334,47.763888888888886,0.0,Agroscope_Switzerland,False,16.06.2023 00:00,18.04440386,2023-06-16,18.04440386
+2023-06-16,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,20.402083333333334,47.763888888888886,0.0,Agroscope_Switzerland,False,16.06.2023 00:00,0.0,2023-06-16,0.0
+2023-06-20,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,20.67204965,,22.876388888888886,67.61111111111111,1.2,Agroscope_Switzerland,False,20.06.2023 00:00,20.67204965,2023-06-20,20.67204965
+2023-06-20,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,3.652947065,,22.876388888888886,67.61111111111111,1.2,Agroscope_Switzerland,False,20.06.2023 00:00,3.652947065,2023-06-20,3.652947065
+2023-06-23,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,269.9066696,,19.980555555555554,67.44444444444444,12.6,Agroscope_Switzerland,False,23.06.2023 00:00,269.9066696,2023-06-23,269.9066696
+2023-06-23,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,49.11477157,,19.980555555555554,67.44444444444444,12.6,Agroscope_Switzerland,False,23.06.2023 00:00,49.11477157,2023-06-23,49.11477157
+2023-06-26,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,161.6686224,,23.866666666666667,54.75694444444444,0.0,Agroscope_Switzerland,False,26.06.2023 00:00,161.6686224,2023-06-26,161.6686224
+2023-06-26,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,358.1691328,,23.866666666666667,54.75694444444444,0.0,Agroscope_Switzerland,False,26.06.2023 00:00,358.1691328,2023-06-26,358.1691328
+2023-06-28,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,65.14106658,,20.838194444444444,47.06944444444444,0.0,Agroscope_Switzerland,False,28.06.2023 00:00,65.14106658,2023-06-28,65.14106658
+2023-06-28,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,48.52916953,,20.838194444444444,47.06944444444444,0.0,Agroscope_Switzerland,False,28.06.2023 00:00,48.52916953,2023-06-28,48.52916953
+2023-06-30,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,2.428635846,,17.961805555555557,82.47222222222223,267.6,Agroscope_Switzerland,False,30.06.2023 00:00,2.428635846,2023-06-30,2.428635846
+2023-06-30,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,110.2572776,,17.961805555555557,82.47222222222223,267.6,Agroscope_Switzerland,False,30.06.2023 00:00,110.2572776,2023-06-30,110.2572776
+2023-07-03,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,34.04976565,,20.560416666666665,56.77777777777778,0.0,Agroscope_Switzerland,False,03.07.2023 00:00,34.04976565,2023-07-03,34.04976565
+2023-07-03,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,38.24280669,,20.560416666666665,56.77777777777778,0.0,Agroscope_Switzerland,False,03.07.2023 00:00,38.24280669,2023-07-03,38.24280669
+2023-07-05,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,100.3254009,,20.295833333333334,61.479166666666664,1.2,Agroscope_Switzerland,False,05.07.2023 00:00,100.3254009,2023-07-05,100.3254009
+2023-07-05,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,309.9935132,,20.295833333333334,61.479166666666664,1.2,Agroscope_Switzerland,False,05.07.2023 00:00,309.9935132,2023-07-05,309.9935132
+2023-07-07,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,25.88118239,,21.81736111111111,57.666666666666664,0.0,Agroscope_Switzerland,False,07.07.2023 00:00,25.88118239,2023-07-07,25.88118239
+2023-07-07,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,221.4279291,,21.81736111111111,57.666666666666664,0.0,Agroscope_Switzerland,False,07.07.2023 00:00,221.4279291,2023-07-07,221.4279291
+2023-07-10,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,10.98757049,,26.561111111111114,57.47222222222222,0.0,Agroscope_Switzerland,False,10.07.2023 00:00,10.98757049,2023-07-10,10.98757049
+2023-07-10,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,58.52271462,,26.561111111111114,57.47222222222222,0.0,Agroscope_Switzerland,False,10.07.2023 00:00,58.52271462,2023-07-10,58.52271462
+2023-07-12,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,58.70763869,,23.877083333333335,66.26388888888889,12.0,Agroscope_Switzerland,False,12.07.2023 00:00,58.70763869,2023-07-12,58.70763869
+2023-07-12,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,76.57374869,,23.877083333333335,66.26388888888889,12.0,Agroscope_Switzerland,False,12.07.2023 00:00,76.57374869,2023-07-12,76.57374869
+2023-07-14,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,4.841677379,,21.95486111111111,51.53472222222222,0.0,Agroscope_Switzerland,False,14.07.2023 00:00,4.841677379,2023-07-14,4.841677379
+2023-07-14,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.239053376,,21.95486111111111,51.53472222222222,0.0,Agroscope_Switzerland,False,14.07.2023 00:00,0.239053376,2023-07-14,0.239053376
+2023-07-17,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,155.2364789,,24.86388888888889,53.604166666666664,0.0,Agroscope_Switzerland,False,17.07.2023 00:00,155.2364789,2023-07-17,155.2364789
+2023-07-17,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,30.0006105,,24.86388888888889,53.604166666666664,0.0,Agroscope_Switzerland,False,17.07.2023 00:00,30.0006105,2023-07-17,30.0006105
+2023-07-19,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,4.287488036,,26.431944444444444,47.451388888888886,0.0,Agroscope_Switzerland,False,19.07.2023 00:00,4.287488036,2023-07-19,4.287488036
+2023-07-19,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,11.17985019,,26.431944444444444,47.451388888888886,0.0,Agroscope_Switzerland,False,19.07.2023 00:00,11.17985019,2023-07-19,11.17985019
+2023-07-21,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,40.52315988,,20.865972222222222,63.270833333333336,62.4,Agroscope_Switzerland,False,21.07.2023 00:00,40.52315988,2023-07-21,40.52315988
+2023-07-21,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.515662758,,20.865972222222222,63.270833333333336,62.4,Agroscope_Switzerland,False,21.07.2023 00:00,0.515662758,2023-07-21,0.515662758
+2023-07-24,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,24.84830212,,21.541666666666668,75.17361111111111,35.4,Agroscope_Switzerland,False,24.07.2023 00:00,24.84830212,2023-07-24,24.84830212
+2023-07-24,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.632516131,,21.541666666666668,75.17361111111111,35.4,Agroscope_Switzerland,False,24.07.2023 00:00,0.632516131,2023-07-24,0.632516131
+2023-07-26,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,75.02104987,,16.206944444444446,66.3125,0.0,Agroscope_Switzerland,False,26.07.2023 00:00,75.02104987,2023-07-26,75.02104987
+2023-07-26,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,365.0793516,,16.206944444444446,66.3125,0.0,Agroscope_Switzerland,False,26.07.2023 00:00,365.0793516,2023-07-26,365.0793516
+2023-07-28,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,9.621557127,,23.39513888888889,55.40277777777778,3.0,Agroscope_Switzerland,False,28.07.2023 00:00,9.621557127,2023-07-28,9.621557127
+2023-07-28,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,13.46624954,,23.39513888888889,55.40277777777778,3.0,Agroscope_Switzerland,False,28.07.2023 00:00,13.46624954,2023-07-28,13.46624954
+2023-07-31,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,165.3637938,,20.03402777777778,56.611111111111114,0.0,Agroscope_Switzerland,False,31.07.2023 00:00,165.3637938,2023-07-31,165.3637938
+2023-07-31,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,103.0077115,,20.03402777777778,56.611111111111114,0.0,Agroscope_Switzerland,False,31.07.2023 00:00,103.0077115,2023-07-31,103.0077115
+2023-08-02,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,1030.193516,,22.68263888888889,57.111111111111114,1.7999999999999998,Agroscope_Switzerland,False,02.08.2023 00:00,1030.193516,2023-08-02,1030.193516
+2023-08-02,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,212.3191596,,22.68263888888889,57.111111111111114,1.7999999999999998,Agroscope_Switzerland,False,02.08.2023 00:00,212.3191596,2023-08-02,212.3191596
+2023-08-04,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,47.61854749,,17.191666666666666,66.73611111111111,27.6,Agroscope_Switzerland,False,04.08.2023 00:00,47.61854749,2023-08-04,47.61854749
+2023-08-04,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,51.84096493,,17.191666666666666,66.73611111111111,27.6,Agroscope_Switzerland,False,04.08.2023 00:00,51.84096493,2023-08-04,51.84096493
+2023-08-07,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,5.565390337,,15.021527777777777,63.50694444444444,0.0,Agroscope_Switzerland,False,07.08.2023 00:00,5.565390337,2023-08-07,5.565390337
+2023-08-07,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,7.675007583,,15.021527777777777,63.50694444444444,0.0,Agroscope_Switzerland,False,07.08.2023 00:00,7.675007583,2023-08-07,7.675007583
+2023-08-09,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,3.209065044,,20.856944444444444,52.15277777777778,0.0,Agroscope_Switzerland,False,09.08.2023 00:00,3.209065044,2023-08-09,3.209065044
+2023-08-09,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,27.26243969,,20.856944444444444,52.15277777777778,0.0,Agroscope_Switzerland,False,09.08.2023 00:00,27.26243969,2023-08-09,27.26243969
+2023-08-11,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,18.91370631,,23.899305555555557,57.81944444444444,0.0,Agroscope_Switzerland,False,11.08.2023 00:00,18.91370631,2023-08-11,18.91370631
+2023-08-11,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.876418168,,23.899305555555557,57.81944444444444,0.0,Agroscope_Switzerland,False,11.08.2023 00:00,0.876418168,2023-08-11,0.876418168
+2023-08-14,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,59.71103607,,25.023611111111112,57.076388888888886,0.0,Agroscope_Switzerland,False,14.08.2023 00:00,59.71103607,2023-08-14,59.71103607
+2023-08-14,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,15.53580834,,25.023611111111112,57.076388888888886,0.0,Agroscope_Switzerland,False,14.08.2023 00:00,15.53580834,2023-08-14,15.53580834
+2023-08-16,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,105.8649177,,24.762500000000003,53.9375,0.0,Agroscope_Switzerland,False,16.08.2023 00:00,105.8649177,2023-08-16,105.8649177
+2023-08-16,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,197.9678366,,24.762500000000003,53.9375,0.0,Agroscope_Switzerland,False,16.08.2023 00:00,197.9678366,2023-08-16,197.9678366
+2023-08-18,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,77.46260339,,24.353472222222223,52.34722222222222,0.0,Agroscope_Switzerland,False,18.08.2023 00:00,77.46260339,2023-08-18,77.46260339
+2023-08-18,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,1.773383657,,24.353472222222223,52.34722222222222,0.0,Agroscope_Switzerland,False,18.08.2023 00:00,1.773383657,2023-08-18,1.773383657
+2023-08-21,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,5.995697931,,28.101388888888888,53.56944444444444,0.0,Agroscope_Switzerland,False,21.08.2023 00:00,5.995697931,2023-08-21,5.995697931
+2023-08-21,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,96.47619502,,28.101388888888888,53.56944444444444,0.0,Agroscope_Switzerland,False,21.08.2023 00:00,96.47619502,2023-08-21,96.47619502
+2023-08-23,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,78.14280501,,28.79930555555556,49.354166666666664,0.0,Agroscope_Switzerland,False,23.08.2023 00:00,78.14280501,2023-08-23,78.14280501
+2023-08-23,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.778704839,,28.79930555555556,49.354166666666664,0.0,Agroscope_Switzerland,False,23.08.2023 00:00,0.778704839,2023-08-23,0.778704839
+2024-04-15,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,1.3,,17.939583333333335,52.208333333333336,0.0,Agroscope_Switzerland,False,15.04.2024 00:00,1.3,2024-04-15,1.3
+2024-04-17,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,6.461805555555555,76.15972222222223,22.2,Agroscope_Switzerland,False,17.04.2024 00:00,0.0,2024-04-17,0.0
+2024-04-19,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,1.55,,5.752083333333333,72.38194444444444,6.6,Agroscope_Switzerland,False,19.04.2024 00:00,1.55,2024-04-19,1.55
+2024-04-22,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.79,,4.1618055555555555,67.52777777777777,0.0,Agroscope_Switzerland,False,22.04.2024 00:00,0.79,2024-04-22,0.79
+2024-04-24,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.11,,6.014583333333333,60.3125,0.0,Agroscope_Switzerland,False,24.04.2024 00:00,0.11,2024-04-24,0.11
+2024-04-26,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,9.079166666666667,78.42361111111111,24.599999999999998,Agroscope_Switzerland,False,26.04.2024 00:00,0.0,2024-04-26,0.0
+2024-04-29,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,12.374305555555557,83.63194444444444,11.4,Agroscope_Switzerland,False,29.04.2024 00:00,0.0,2024-04-29,0.0
+2024-05-01,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,13.646527777777777,79.54166666666667,0.0,Agroscope_Switzerland,False,01.05.2024 00:00,0.0,2024-05-01,0.0
+2024-05-03,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.55,,9.921527777777778,82.86805555555556,9.0,Agroscope_Switzerland,False,03.05.2024 00:00,0.55,2024-05-03,0.55
+2024-05-06,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,11.906944444444443,90.71527777777777,126.0,Agroscope_Switzerland,False,06.05.2024 00:00,0.0,2024-05-06,0.0
+2024-05-08,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,13.702083333333333,72.76388888888889,0.6,Agroscope_Switzerland,False,08.05.2024 00:00,0.0,2024-05-08,0.0
+2024-05-15,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.66,,13.488888888888889,90.76388888888889,87.0,Agroscope_Switzerland,False,15.05.2024 00:00,0.66,2024-05-15,0.66
+2024-05-17,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.24,,14.243055555555555,72.59722222222223,0.0,Agroscope_Switzerland,False,17.05.2024 00:00,0.24,2024-05-17,0.24
+2024-05-20,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,15.635416666666666,78.44444444444444,66.0,Agroscope_Switzerland,False,20.05.2024 00:00,0.0,2024-05-20,0.0
+2024-05-22,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,7.87,,14.905555555555557,78.78472222222223,17.4,Agroscope_Switzerland,False,22.05.2024 00:00,7.87,2024-05-22,7.87
+2024-05-24,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,12.818055555555555,82.07638888888889,84.6,Agroscope_Switzerland,False,24.05.2024 00:00,0.0,2024-05-24,0.0
+2024-05-27,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.56,,15.266666666666667,89.1875,27.0,Agroscope_Switzerland,False,27.05.2024 00:00,0.56,2024-05-27,0.56
+2024-05-29,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,2.05,,15.964583333333334,72.81944444444444,7.2,Agroscope_Switzerland,False,29.05.2024 00:00,2.05,2024-05-29,2.05
+2024-05-31,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,2.6,,12.098611111111111,80.82638888888889,7.2,Agroscope_Switzerland,False,31.05.2024 00:00,2.6,2024-05-31,2.6
+2024-06-03,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.25,,16.368055555555557,84.01388888888889,8.4,Agroscope_Switzerland,False,03.06.2024 00:00,0.25,2024-06-03,0.25
+2024-06-05,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,5.92,,19.358333333333334,67.79861111111111,0.0,Agroscope_Switzerland,False,05.06.2024 00:00,5.92,2024-06-05,5.92
+2024-06-07,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,16.43,,19.79513888888889,79.64583333333333,10.799999999999999,Agroscope_Switzerland,False,07.06.2024 00:00,16.43,2024-06-07,16.43
+2024-06-10,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,142.48,,17.543750000000003,68.61111111111111,34.2,Agroscope_Switzerland,False,10.06.2024 00:00,142.48,2024-06-10,142.48
+2024-06-12,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,78.34,,14.409027777777778,61.020833333333336,0.0,Agroscope_Switzerland,False,12.06.2024 00:00,78.34,2024-06-12,78.34
+2024-06-14,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,17.45,,15.698611111111111,73.5625,21.6,Agroscope_Switzerland,False,14.06.2024 00:00,17.45,2024-06-14,17.45
+2024-06-17,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,6.35,,20.0375,69.06944444444444,0.0,Agroscope_Switzerland,False,17.06.2024 00:00,6.35,2024-06-17,6.35
+2024-06-19,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,22684.5,,23.254166666666666,68.24305555555556,0.0,Agroscope_Switzerland,False,19.06.2024 00:00,22684.5,2024-06-19,22684.5
+2024-06-21,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,15318.06,,18.677083333333332,83.01388888888889,22.2,Agroscope_Switzerland,False,21.06.2024 00:00,15318.06,2024-06-21,15318.06
+2024-06-24,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,84420.61,,20.597916666666666,69.82638888888889,0.0,Agroscope_Switzerland,False,24.06.2024 00:00,84420.61,2024-06-24,84420.61
+2024-06-26,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,32671.23,,19.52013888888889,89.59027777777777,52.2,Agroscope_Switzerland,False,26.06.2024 00:00,32671.23,2024-06-26,32671.23
+2024-06-28,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,472296.5,,23.654166666666665,70.84027777777777,0.0,Agroscope_Switzerland,False,28.06.2024 00:00,472296.5,2024-06-28,472296.5
+2024-07-01,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,23528.88,,19.125694444444445,76.70833333333333,9.6,Agroscope_Switzerland,False,01.07.2024 00:00,23528.88,2024-07-01,23528.88
+2024-07-03,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,7028.16,,16.568055555555556,69.74305555555556,0.6,Agroscope_Switzerland,False,03.07.2024 00:00,7028.16,2024-07-03,7028.16
+2024-07-05,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,10256.81,,19.855555555555554,68.0625,0.0,Agroscope_Switzerland,False,05.07.2024 00:00,10256.81,2024-07-05,10256.81
+2024-07-08,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,227911.06,,19.330555555555556,73.00694444444444,0.0,Agroscope_Switzerland,False,08.07.2024 00:00,227911.06,2024-07-08,227911.06
+2024-07-10,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,1000427.71,,22.819444444444443,69.16666666666667,0.6,Agroscope_Switzerland,False,10.07.2024 00:00,1000427.71,2024-07-10,1000427.71
+2024-07-12,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,112149.36,,19.362499999999997,87.8125,62.4,Agroscope_Switzerland,False,12.07.2024 00:00,112149.36,2024-07-12,112149.36
+2024-07-15,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,830425.34,,21.425694444444446,73.59027777777777,1.8,Agroscope_Switzerland,False,15.07.2024 00:00,830425.34,2024-07-15,830425.34
+2024-07-17,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,39058.36,,21.119444444444444,59.201388888888886,0.0,Agroscope_Switzerland,False,17.07.2024 00:00,39058.36,2024-07-17,39058.36
+2024-07-19,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,3786.21,,22.944444444444443,69.21527777777777,0.0,Agroscope_Switzerland,False,19.07.2024 00:00,3786.21,2024-07-19,3786.21
+2024-07-22,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,5150.78,,21.147222222222222,76.27083333333333,10.2,Agroscope_Switzerland,False,22.07.2024 00:00,5150.78,2024-07-22,5150.78
+2024-07-24,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,10663.43,,22.07361111111111,65.34027777777777,0.0,Agroscope_Switzerland,False,24.07.2024 00:00,10663.43,2024-07-24,10663.43
+2024-07-26,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,2035.68,,23.313194444444445,61.958333333333336,0.0,Agroscope_Switzerland,False,26.07.2024 00:00,2035.68,2024-07-26,2035.68
+2024-07-29,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,2870.75,,23.780555555555555,70.34027777777777,0.0,Agroscope_Switzerland,False,29.07.2024 00:00,2870.75,2024-07-29,2870.75
+2024-07-31,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,13076.89,,23.929861111111112,74.46527777777777,47.4,Agroscope_Switzerland,False,31.07.2024 00:00,13076.89,2024-07-31,13076.89
+2024-08-02,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,4528.1,,24.050694444444446,70.79861111111111,0.0,Agroscope_Switzerland,False,02.08.2024 00:00,4528.1,2024-08-02,4528.1
+2024-08-05,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,2577.05,,22.754166666666666,67.11805555555556,0.0,Agroscope_Switzerland,False,05.08.2024 00:00,2577.05,2024-08-05,2577.05
+2024-08-07,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,123.42,,22.170833333333334,74.32638888888889,6.0,Agroscope_Switzerland,False,07.08.2024 00:00,123.42,2024-08-07,123.42
+2024-08-09,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,2301.72,,23.484722222222224,62.541666666666664,0.0,Agroscope_Switzerland,False,09.08.2024 00:00,2301.72,2024-08-09,2301.72
+2024-08-12,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,5675.98,,24.864583333333332,76.31944444444444,63.0,Agroscope_Switzerland,False,12.08.2024 00:00,5675.98,2024-08-12,5675.98
+2024-08-14,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,71389.38,,21.881560283687943,72.01418439716312,1.7999999999999998,Agroscope_Switzerland,False,14.08.2024 00:00,71389.38,2024-08-14,71389.38
+2024-08-16,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,35385.77,,23.470833333333335,76.11111111111111,0.0,Agroscope_Switzerland,False,16.08.2024 00:00,35385.77,2024-08-16,35385.77
+2024-08-19,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,4453.57,,19.970138888888886,67.5,0.0,Agroscope_Switzerland,False,19.08.2024 00:00,4453.57,2024-08-19,4453.57
+2024-08-21,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,6092.69,,20.566666666666666,62.65277777777778,0.0,Agroscope_Switzerland,False,21.08.2024 00:00,6092.69,2024-08-21,6092.69
+2024-08-23,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,5229.59,,21.324305555555554,58.388888888888886,0.0,Agroscope_Switzerland,False,23.08.2024 00:00,5229.59,2024-08-23,5229.59
+2024-08-26,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,3130.4,,17.702777777777776,72.6875,0.0,Agroscope_Switzerland,False,26.08.2024 00:00,3130.4,2024-08-26,3130.4
+2025-04-14,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,9.72,,14.149999999999999,83.57638888888889,4.2,Agroscope_Switzerland,False,14.04.2025 00:00,9.72,2025-04-14,9.72
+2025-04-14,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,14.149999999999999,83.57638888888889,4.2,Agroscope_Switzerland,False,14.04.2025 00:00,0.0,2025-04-14,0.0
+2025-04-16,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,1.19,,9.415972222222223,96.04166666666667,171.6,Agroscope_Switzerland,False,16.04.2025 00:00,1.19,2025-04-16,1.19
+2025-04-16,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.31,,9.415972222222223,96.04166666666667,171.6,Agroscope_Switzerland,False,16.04.2025 00:00,0.31,2025-04-16,0.31
+2025-04-18,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.01,,9.397222222222222,76.45833333333333,0.0,Agroscope_Switzerland,False,18.04.2025 00:00,0.01,2025-04-18,0.01
+2025-04-18,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.75,,9.397222222222222,76.45833333333333,0.0,Agroscope_Switzerland,False,18.04.2025 00:00,0.75,2025-04-18,0.75
+2025-04-21,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,11.343055555555557,76.96527777777777,12.6,Agroscope_Switzerland,False,21.04.2025 00:00,0.0,2025-04-21,0.0
+2025-04-21,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.29,,11.343055555555557,76.96527777777777,12.6,Agroscope_Switzerland,False,21.04.2025 00:00,0.29,2025-04-21,0.29
+2025-04-23,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,1.05,,11.429166666666667,80.10416666666667,16.2,Agroscope_Switzerland,False,23.04.2025 00:00,1.05,2025-04-23,1.05
+2025-04-23,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.23,,11.429166666666667,80.10416666666667,16.2,Agroscope_Switzerland,False,23.04.2025 00:00,0.23,2025-04-23,0.23
+2025-04-25,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,11.692361111111111,72.38888888888889,0.0,Agroscope_Switzerland,False,25.04.2025 00:00,0.0,2025-04-25,0.0
+2025-04-25,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,11.692361111111111,72.38888888888889,0.0,Agroscope_Switzerland,False,25.04.2025 00:00,0.0,2025-04-25,0.0
+2025-04-28,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.41,,14.613888888888889,76.77777777777777,0.0,Agroscope_Switzerland,False,28.04.2025 00:00,0.41,2025-04-28,0.41
+2025-04-28,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,1.57,,14.613888888888889,76.77777777777777,0.0,Agroscope_Switzerland,False,28.04.2025 00:00,1.57,2025-04-28,1.57
+2025-04-30,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,17.129166666666666,66.25,0.0,Agroscope_Switzerland,False,30.04.2025 00:00,0.0,2025-04-30,0.0
+2025-04-30,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,17.129166666666666,66.25,0.0,Agroscope_Switzerland,False,30.04.2025 00:00,0.0,2025-04-30,0.0
+2025-05-02,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,18.929166666666667,61.15277777777778,0.0,Agroscope_Switzerland,False,02.05.2025 00:00,0.0,2025-05-02,0.0
+2025-05-02,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.1,,18.929166666666667,61.15277777777778,0.0,Agroscope_Switzerland,False,02.05.2025 00:00,0.1,2025-05-02,0.1
+2025-05-05,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,10.16875,83.66666666666667,16.2,Agroscope_Switzerland,False,05.05.2025 00:00,0.0,2025-05-05,0.0
+2025-05-05,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.05,,10.16875,83.66666666666667,16.2,Agroscope_Switzerland,False,05.05.2025 00:00,0.05,2025-05-05,0.05
+2025-05-07,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,9.618749999999999,79.52777777777777,16.2,Agroscope_Switzerland,False,07.05.2025 00:00,0.0,2025-05-07,0.0
+2025-05-07,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.34,,9.618749999999999,79.52777777777777,16.2,Agroscope_Switzerland,False,07.05.2025 00:00,0.34,2025-05-07,0.34
+2025-05-09,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,12.270138888888889,73.04861111111111,0.6,Agroscope_Switzerland,False,09.05.2025 00:00,0.0,2025-05-09,0.0
+2025-05-09,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.36,,12.270138888888889,73.04861111111111,0.6,Agroscope_Switzerland,False,09.05.2025 00:00,0.36,2025-05-09,0.36
+2025-05-12,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.15,,12.781944444444443,91.72916666666667,0.6,Agroscope_Switzerland,False,12.05.2025 00:00,0.15,2025-05-12,0.15
+2025-05-12,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.19,,12.781944444444443,91.72916666666667,0.6,Agroscope_Switzerland,False,12.05.2025 00:00,0.19,2025-05-12,0.19
+2025-05-14,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,15.311805555555557,69.99305555555556,0.0,Agroscope_Switzerland,False,14.05.2025 00:00,0.0,2025-05-14,0.0
+2025-05-14,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,15.311805555555557,69.99305555555556,0.0,Agroscope_Switzerland,False,14.05.2025 00:00,0.0,2025-05-14,0.0
+2025-05-16,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.41,,15.145833333333334,41.0,0.0,Agroscope_Switzerland,False,16.05.2025 00:00,0.41,2025-05-16,0.41
+2025-05-16,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,15.145833333333334,41.0,0.0,Agroscope_Switzerland,False,16.05.2025 00:00,0.0,2025-05-16,0.0
+2025-05-19,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.13,,15.247222222222222,69.10416666666667,16.8,Agroscope_Switzerland,False,19.05.2025 00:00,0.13,2025-05-19,0.13
+2025-05-19,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.07,,15.247222222222222,69.10416666666667,16.8,Agroscope_Switzerland,False,19.05.2025 00:00,0.07,2025-05-19,0.07
+2025-05-21,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,15.61111111111111,82.77083333333333,4.8,Agroscope_Switzerland,False,21.05.2025 00:00,0.0,2025-05-21,0.0
+2025-05-21,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,15.61111111111111,82.77083333333333,4.8,Agroscope_Switzerland,False,21.05.2025 00:00,0.0,2025-05-21,0.0
+2025-05-23,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,11.678472222222222,73.48611111111111,0.0,Agroscope_Switzerland,False,23.05.2025 00:00,0.0,2025-05-23,0.0
+2025-05-23,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.68,,11.678472222222222,73.48611111111111,0.0,Agroscope_Switzerland,False,23.05.2025 00:00,0.68,2025-05-23,0.68
+2025-05-26,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,1.75,,16.347916666666666,72.34722222222223,16.2,Agroscope_Switzerland,False,26.05.2025 00:00,1.75,2025-05-26,1.75
+2025-05-26,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,16.347916666666666,72.34722222222223,16.2,Agroscope_Switzerland,False,26.05.2025 00:00,0.0,2025-05-26,0.0
+2025-05-28,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,15.193055555555556,78.18055555555556,6.6,Agroscope_Switzerland,False,28.05.2025 00:00,0.0,2025-05-28,0.0
+2025-05-28,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,2.61,,15.193055555555556,78.18055555555556,6.6,Agroscope_Switzerland,False,28.05.2025 00:00,2.61,2025-05-28,2.61
+2025-05-30,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,19.577777777777776,63.986111111111114,0.0,Agroscope_Switzerland,False,30.05.2025 00:00,0.0,2025-05-30,0.0
+2025-05-30,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.05,,19.577777777777776,63.986111111111114,0.0,Agroscope_Switzerland,False,30.05.2025 00:00,0.05,2025-05-30,0.05
+2025-06-02,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.01,,17.844444444444445,89.52777777777777,121.2,Agroscope_Switzerland,False,02.06.2025 00:00,0.01,2025-06-02,0.01
+2025-06-02,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,17.844444444444445,89.52777777777777,121.2,Agroscope_Switzerland,False,02.06.2025 00:00,0.0,2025-06-02,0.0
+2025-06-04,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,77.41,,17.319444444444443,89.00694444444444,48.6,Agroscope_Switzerland,False,04.06.2025 00:00,77.41,2025-06-04,77.41
+2025-06-04,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,3.0,,17.319444444444443,89.00694444444444,48.6,Agroscope_Switzerland,False,04.06.2025 00:00,3.0,2025-06-04,3.0
+2025-06-06,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,19.33263888888889,79.32638888888889,15.6,Agroscope_Switzerland,False,06.06.2025 00:00,0.0,2025-06-06,0.0
+2025-06-06,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.59,,19.33263888888889,79.32638888888889,15.6,Agroscope_Switzerland,False,06.06.2025 00:00,0.59,2025-06-06,0.59
+2025-06-09,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,27.51,,16.941666666666666,66.56944444444444,0.0,Agroscope_Switzerland,False,09.06.2025 00:00,27.51,2025-06-09,27.51
+2025-06-09,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,16.941666666666666,66.56944444444444,0.0,Agroscope_Switzerland,False,09.06.2025 00:00,0.0,2025-06-09,0.0
+2025-06-11,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,20.475,61.111111111111114,0.0,Agroscope_Switzerland,False,11.06.2025 00:00,0.0,2025-06-11,0.0
+2025-06-11,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,20.475,61.111111111111114,0.0,Agroscope_Switzerland,False,11.06.2025 00:00,0.0,2025-06-11,0.0
+2025-06-13,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.62,,24.617361111111112,67.23611111111111,0.0,Agroscope_Switzerland,False,13.06.2025 00:00,0.62,2025-06-13,0.62
+2025-06-13,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,2.2,,24.617361111111112,67.23611111111111,0.0,Agroscope_Switzerland,False,13.06.2025 00:00,2.2,2025-06-13,2.2
+2025-06-16,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,5.64,,20.203472222222224,65.80555555555556,0.0,Agroscope_Switzerland,False,16.06.2025 00:00,5.64,2025-06-16,5.64
+2025-06-16,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.3,,20.203472222222224,65.80555555555556,0.0,Agroscope_Switzerland,False,16.06.2025 00:00,0.3,2025-06-16,0.3
+2025-06-18,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.18,,22.009722222222223,63.25,0.0,Agroscope_Switzerland,False,18.06.2025 00:00,0.18,2025-06-18,0.18
+2025-06-18,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,22.009722222222223,63.25,0.0,Agroscope_Switzerland,False,18.06.2025 00:00,0.0,2025-06-18,0.0
+2025-06-20,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.2,,23.85763888888889,61.020833333333336,0.0,Agroscope_Switzerland,False,20.06.2025 00:00,0.2,2025-06-20,0.2
+2025-06-20,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.12,,23.85763888888889,61.020833333333336,0.0,Agroscope_Switzerland,False,20.06.2025 00:00,0.12,2025-06-20,0.12
+2025-06-23,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,9.84,,25.365277777777777,62.236111111111114,6.0,Agroscope_Switzerland,False,23.06.2025 00:00,9.84,2025-06-23,9.84
+2025-06-23,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,9.98,,25.365277777777777,62.236111111111114,6.0,Agroscope_Switzerland,False,23.06.2025 00:00,9.98,2025-06-23,9.98
+2025-06-25,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.67,,23.986805555555556,51.548611111111114,0.0,Agroscope_Switzerland,False,25.06.2025 00:00,0.67,2025-06-25,0.67
+2025-06-25,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.07,,23.986805555555556,51.548611111111114,0.0,Agroscope_Switzerland,False,25.06.2025 00:00,0.07,2025-06-25,0.07
+2025-06-27,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,23.449305555555554,63.25,0.0,Agroscope_Switzerland,False,27.06.2025 00:00,0.0,2025-06-27,0.0
+2025-06-27,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,23.449305555555554,63.25,0.0,Agroscope_Switzerland,False,27.06.2025 00:00,0.0,2025-06-27,0.0
+2025-06-30,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.45,,26.129166666666666,62.71527777777778,0.0,Agroscope_Switzerland,False,30.06.2025 00:00,0.45,2025-06-30,0.45
+2025-06-30,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,26.129166666666666,62.71527777777778,0.0,Agroscope_Switzerland,False,30.06.2025 00:00,0.0,2025-06-30,0.0
+2025-07-02,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,25.336111111111112,59.423611111111114,0.0,Agroscope_Switzerland,False,02.07.2025 00:00,0.0,2025-07-02,0.0
+2025-07-02,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.25,,25.336111111111112,59.423611111111114,0.0,Agroscope_Switzerland,False,02.07.2025 00:00,0.25,2025-07-02,0.25
+2025-07-04,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,23.79861111111111,69.99305555555556,34.2,Agroscope_Switzerland,False,04.07.2025 00:00,0.0,2025-07-04,0.0
+2025-07-04,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,4.13,,23.79861111111111,69.99305555555556,34.2,Agroscope_Switzerland,False,04.07.2025 00:00,4.13,2025-07-04,4.13
+2025-07-07,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,27.3,,16.933333333333334,75.40972222222223,48.599999999999994,Agroscope_Switzerland,False,07.07.2025 00:00,27.3,2025-07-07,27.3
+2025-07-07,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,274.09,,16.933333333333334,75.40972222222223,48.599999999999994,Agroscope_Switzerland,False,07.07.2025 00:00,274.09,2025-07-07,274.09
+2025-07-09,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,16.029166666666665,66.11111111111111,0.0,Agroscope_Switzerland,False,09.07.2025 00:00,0.0,2025-07-09,0.0
+2025-07-09,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,2.62,,16.029166666666665,66.11111111111111,0.0,Agroscope_Switzerland,False,09.07.2025 00:00,2.62,2025-07-09,2.62
+2025-07-11,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,1.7,,21.463194444444444,51.270833333333336,0.0,Agroscope_Switzerland,False,11.07.2025 00:00,1.7,2025-07-11,1.7
+2025-07-11,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.2,,21.463194444444444,51.270833333333336,0.0,Agroscope_Switzerland,False,11.07.2025 00:00,0.2,2025-07-11,0.2
+2025-07-14,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,22.54513888888889,73.14583333333333,39.0,Agroscope_Switzerland,False,14.07.2025 00:00,0.0,2025-07-14,0.0
+2025-07-14,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,22.54513888888889,73.14583333333333,39.0,Agroscope_Switzerland,False,14.07.2025 00:00,0.0,2025-07-14,0.0
+2025-07-16,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,6.37,,21.075694444444444,57.53472222222222,0.0,Agroscope_Switzerland,False,16.07.2025 00:00,6.37,2025-07-16,6.37
+2025-07-16,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,8.13,,21.075694444444444,57.53472222222222,0.0,Agroscope_Switzerland,False,16.07.2025 00:00,8.13,2025-07-16,8.13
+2025-07-18,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,17.12,,22.277083333333334,59.90277777777778,0.0,Agroscope_Switzerland,False,18.07.2025 00:00,17.12,2025-07-18,17.12
+2025-07-18,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,1.39,,22.277083333333334,59.90277777777778,0.0,Agroscope_Switzerland,False,18.07.2025 00:00,1.39,2025-07-18,1.39
+2025-07-21,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,5.85,,19.428472222222222,76.88194444444444,29.4,Agroscope_Switzerland,False,21.07.2025 00:00,5.85,2025-07-21,5.85
+2025-07-21,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,8.1,,19.428472222222222,76.88194444444444,29.4,Agroscope_Switzerland,False,21.07.2025 00:00,8.1,2025-07-21,8.1
+2025-07-23,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,11.72,,19.05763888888889,62.513888888888886,0.0,Agroscope_Switzerland,False,23.07.2025 00:00,11.72,2025-07-23,11.72
+2025-07-23,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,182.93,,19.05763888888889,62.513888888888886,0.0,Agroscope_Switzerland,False,23.07.2025 00:00,182.93,2025-07-23,182.93
+2025-07-25,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,17.945138888888888,72.91666666666667,6.6,Agroscope_Switzerland,False,25.07.2025 00:00,0.0,2025-07-25,0.0
+2025-07-25,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,1.26,,17.945138888888888,72.91666666666667,6.6,Agroscope_Switzerland,False,25.07.2025 00:00,1.26,2025-07-25,1.26
+2025-07-28,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,29.99,,16.124305555555555,81.29166666666667,25.2,Agroscope_Switzerland,False,28.07.2025 00:00,29.99,2025-07-28,29.99
+2025-07-28,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,14.17,,16.124305555555555,81.29166666666667,25.2,Agroscope_Switzerland,False,28.07.2025 00:00,14.17,2025-07-28,14.17
+2025-07-30,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,11.33,,17.974305555555556,67.45138888888889,0.6,Agroscope_Switzerland,False,30.07.2025 00:00,11.33,2025-07-30,11.33
+2025-07-30,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.58,,17.974305555555556,67.45138888888889,0.6,Agroscope_Switzerland,False,30.07.2025 00:00,0.58,2025-07-30,0.58
+2025-08-01,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,2.24,,20.849305555555556,64.41666666666667,0.0,Agroscope_Switzerland,False,01.08.2025 00:00,2.24,2025-08-01,2.24
+2025-08-01,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,26.75,,20.849305555555556,64.41666666666667,0.0,Agroscope_Switzerland,False,01.08.2025 00:00,26.75,2025-08-01,26.75
+2025-08-04,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.96,,18.883333333333333,62.13194444444444,0.0,Agroscope_Switzerland,False,04.08.2025 00:00,0.96,2025-08-04,0.96
+2025-08-04,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,18.883333333333333,62.13194444444444,0.0,Agroscope_Switzerland,False,04.08.2025 00:00,0.0,2025-08-04,0.0
+2025-08-06,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,21.57,,19.575694444444444,59.90277777777778,0.0,Agroscope_Switzerland,False,06.08.2025 00:00,21.57,2025-08-06,21.57
+2025-08-06,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.56,,19.575694444444444,59.90277777777778,0.0,Agroscope_Switzerland,False,06.08.2025 00:00,0.56,2025-08-06,0.56
+2025-08-08,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.19,,24.376388888888886,51.770833333333336,0.0,Agroscope_Switzerland,False,08.08.2025 00:00,0.19,2025-08-08,0.19
+2025-08-11,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,1.65,,25.577777777777776,57.125,0.0,Agroscope_Switzerland,False,11.08.2025 00:00,1.65,2025-08-11,1.65
+2025-08-11,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,1.22,,25.577777777777776,57.125,0.0,Agroscope_Switzerland,False,11.08.2025 00:00,1.22,2025-08-11,1.22
+2025-08-13,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.64,,27.703472222222224,45.25694444444444,0.0,Agroscope_Switzerland,False,13.08.2025 00:00,0.64,2025-08-13,0.64
+2025-08-13,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.02,,27.703472222222224,45.25694444444444,0.0,Agroscope_Switzerland,False,13.08.2025 00:00,0.02,2025-08-13,0.02
+2025-08-15,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,24.24,,23.602777777777778,63.020833333333336,11.4,Agroscope_Switzerland,False,15.08.2025 00:00,24.24,2025-08-15,24.24
+2025-08-15,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,1.72,,23.602777777777778,63.020833333333336,11.4,Agroscope_Switzerland,False,15.08.2025 00:00,1.72,2025-08-15,1.72
+2025-08-18,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,0.0,,23.12777777777778,59.020833333333336,0.0,Agroscope_Switzerland,False,18.08.2025 00:00,0.0,2025-08-18,0.0
+2025-08-20,Grapevine (Chasselas),Downy Mildew,Changins_Switzerland,46.4,6.23,,,346.93,,17.90138888888889,92.15972222222223,21.0,Agroscope_Switzerland,False,20.08.2025 00:00,346.93,2025-08-20,346.93
+2025-08-20,Grapevine (Pinot Noir),Downy Mildew,Changins_Switzerland,46.4,6.23,,,127.84,,17.90138888888889,92.15972222222223,21.0,Agroscope_Switzerland,False,20.08.2025 00:00,127.84,2025-08-20,127.84

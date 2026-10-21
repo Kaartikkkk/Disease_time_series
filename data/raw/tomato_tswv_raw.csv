@@ -1,0 +1,10 @@
+date,crop,disease,location_id,latitude,longitude,cases_or_affected,inspected_or_total,incidence_rate,severity,temperature,humidity,rainfall,source,is_synthetic
+1928-10-22,Tomato,Spotted Wilt Virus,Waite_Institute_field_1928,-34.97,138.63,145.0,1848.0,7.846320346320345,,,,,Bald_epiphy_TomatoTSWV,False
+1928-10-29,Tomato,Spotted Wilt Virus,Waite_Institute_field_1928,-34.97,138.63,437.0,1848.0,23.647186147186147,,,,,Bald_epiphy_TomatoTSWV,False
+1928-11-05,Tomato,Spotted Wilt Virus,Waite_Institute_field_1928,-34.97,138.63,755.0,1848.0,40.85497835497836,,,,,Bald_epiphy_TomatoTSWV,False
+1928-11-12,Tomato,Spotted Wilt Virus,Waite_Institute_field_1928,-34.97,138.63,1151.0,1848.0,62.28354978354979,,,,,Bald_epiphy_TomatoTSWV,False
+1928-11-19,Tomato,Spotted Wilt Virus,Waite_Institute_field_1928,-34.97,138.63,1361.0,1848.0,73.64718614718615,,,,,Bald_epiphy_TomatoTSWV,False
+1928-11-26,Tomato,Spotted Wilt Virus,Waite_Institute_field_1928,-34.97,138.63,1473.0,1848.0,79.70779220779221,,,,,Bald_epiphy_TomatoTSWV,False
+1929-10-22,Tomato,Spotted Wilt Virus,Waite_Institute_field_1929,-34.97,138.63,261.0,1440.0,18.125,,,,,Bald_epiphy_TomatoTSWV,False
+1929-10-29,Tomato,Spotted Wilt Virus,Waite_Institute_field_1929,-34.97,138.63,486.0,1440.0,33.75,,,,,Bald_epiphy_TomatoTSWV,False
+1929-11-05,Tomato,Spotted Wilt Virus,Waite_Institute_field_1929,-34.97,138.63,828.0,1440.0,57.49999999999999,,,,,Bald_epiphy_TomatoTSWV,False

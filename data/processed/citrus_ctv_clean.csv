@@ -1,0 +1,13 @@
+date,crop,disease,location_id,latitude,longitude,cases_or_affected,inspected_or_total,incidence_rate,severity,temperature,humidity,rainfall,source,is_synthetic
+1981-06-01,Citrus,Citrus Tristeza Virus (CTV),Spain_El_Realengo,39.4699,-0.3763,69.0,400.0,17.25,,,,,Gottwald_epiphy_CitrusCTV,False
+1982-06-01,Citrus,Citrus Tristeza Virus (CTV),Spain_El_Realengo,39.4699,-0.3763,96.0,400.0,24.0,,,,,Gottwald_epiphy_CitrusCTV,False
+1984-06-01,Citrus,Citrus Tristeza Virus (CTV),Spain_El_Realengo,39.4699,-0.3763,108.0,400.0,27.0,,,,,Gottwald_epiphy_CitrusCTV,False
+1985-06-01,Citrus,Citrus Tristeza Virus (CTV),Spain_El_Realengo,39.4699,-0.3763,132.0,400.0,33.0,,,,,Gottwald_epiphy_CitrusCTV,False
+1990-06-01,Citrus,Citrus Tristeza Virus (CTV),Spain_IVI6and7,39.4699,-0.3763,60.0,216.0,27.77777777777778,,,,,Gottwald_epiphy_CitrusCTV,False
+1990-06-01,Citrus,Citrus Tristeza Virus (CTV),Spain_El_Realengo,39.4699,-0.3763,161.0,400.0,40.25,,,,,Gottwald_epiphy_CitrusCTV,False
+1991-06-01,Citrus,Citrus Tristeza Virus (CTV),Spain_IVI3and4,39.4699,-0.3763,44.0,216.0,20.37037037037037,,,,,Gottwald_epiphy_CitrusCTV,False
+1991-06-01,Citrus,Citrus Tristeza Virus (CTV),Spain_IVI6and7,39.4699,-0.3763,77.0,216.0,35.648148148148145,,,,,Gottwald_epiphy_CitrusCTV,False
+1992-06-01,Citrus,Citrus Tristeza Virus (CTV),Spain_IVI3and4,39.4699,-0.3763,76.0,216.0,35.18518518518518,,,,,Gottwald_epiphy_CitrusCTV,False
+1992-06-01,Citrus,Citrus Tristeza Virus (CTV),Spain_IVI6and7,39.4699,-0.3763,127.0,216.0,58.79629629629629,,,,,Gottwald_epiphy_CitrusCTV,False
+1993-06-01,Citrus,Citrus Tristeza Virus (CTV),Spain_IVI3and4,39.4699,-0.3763,127.0,216.0,58.79629629629629,,,,,Gottwald_epiphy_CitrusCTV,False
+1994-06-01,Citrus,Citrus Tristeza Virus (CTV),Spain_IVI3and4,39.4699,-0.3763,136.0,216.0,62.96296296296296,,,,,Gottwald_epiphy_CitrusCTV,False

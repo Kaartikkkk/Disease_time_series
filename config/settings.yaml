@@ -1,0 +1,174 @@
+# Central Configuration for Plant Disease Outbreak Forecasting
+project:
+  name: "Plant Disease Outbreak Forecasting Using Time Series Analysis"
+  version: "1.0.0"
+  random_seed: 42
+
+paths:
+  raw_data_dir: "data/raw"
+  processed_data_dir: "data/processed"
+  sample_data_dir: "data/sample"
+  models_dir: "models"
+  reports_dir: "reports"
+  logs_dir: "logs"
+
+data_sources:
+  agroscope_grapevine:
+    name: "Agroscope Grapevine Downy Mildew Surveillance"
+    publisher: "Agroscope - Swiss Federal Centre of Excellence for Agricultural Research"
+    source_url: "https://raw.githubusercontent.com/agroscope-ch/plasmopy/main/data/input/"
+    license: "CC-BY-4.0 / Open Access"
+    crop: "Grapevine"
+    disease: "Downy Mildew"
+    pathogen: "Plasmopara viticola"
+    location: "Changins, Nyon, Switzerland"
+    coordinates:
+      latitude: 46.40
+      longitude: 6.23
+    target_variable: "spore_concentration_qpcr"
+    target_units: "log10(copies/m³)"
+    frequency: "irregular_subweekly"
+    temporal_coverage: "2023 - 2025"
+
+  wheat_blast_brazil:
+    name: "Wheat Blast Epidemiological Field Trials"
+    publisher: "Del Ponte et al., Embrapa / University of Passo Fundo"
+    source_url: "https://raw.githubusercontent.com/emdelponte/r4pde/main/data/BlastWheat.rda"
+    license: "GPL-3.0 / CC-BY"
+    crop: "Wheat"
+    disease: "Wheat Blast"
+    pathogen: "Magnaporthe oryzae (Pyricularia oryzae)"
+    location: "Multi-site Brazil (Paraná, Mato Grosso do Sul, São Paulo)"
+    target_variable: "incidence_rate"
+    target_units: "percentage (%)"
+    frequency: "trial_surveys"
+    temporal_coverage: "2012 - 2018"
+
+  wheat_fhb_brazil:
+    name: "Fusarium Head Blight Surveillance"
+    publisher: "Del Ponte et al., Embrapa Trigo"
+    source_url: "https://raw.githubusercontent.com/emdelponte/r4pde/main/data/FHBWheatBrazil.rda"
+    license: "GPL-3.0 / CC-BY"
+    crop: "Wheat"
+    disease: "Fusarium Head Blight"
+    pathogen: "Fusarium graminearum"
+    location: "Rio Grande do Sul & Paraná, Brazil"
+    target_variable: "disease_index"
+    target_units: "index (0-100)"
+    frequency: "seasonal_monitoring"
+    temporal_coverage: "2011 - 2016"
+
+  citrus_ctv:
+    name: "Citrus Tristeza Virus Longitudinal Surveillance"
+    publisher: "Gottwald et al. / epiphy (APS Press)"
+    source_url: "https://raw.githubusercontent.com/chgigot/epiphy/master/data/citrus_ctv.rda"
+    license: "GPL-2.0 / Academic Open Data"
+    crop: "Citrus"
+    disease: "Citrus Tristeza Virus (CTV)"
+    pathogen: "Citrus tristeza virus (Closterovirus)"
+    location: "Valencia, Spain & Corsica, France"
+    target_variable: "incidence_rate"
+    target_units: "proportion (0.0 - 1.0)"
+    frequency: "annual_surveys"
+    temporal_coverage: "1981 - 1993"
+
+  tomato_tswv:
+    name: "Tomato Spotted Wilt Virus Field Surveillance"
+    publisher: "Bald et al., epiphy"
+    source_url: "https://raw.githubusercontent.com/chgigot/epiphy/master/data/tomato_tswv.rda"
+    license: "GPL-2.0 / Academic Open Data"
+    crop: "Tomato"
+    disease: "Spotted Wilt Virus"
+    pathogen: "Tomato spotted wilt orthotospovirus"
+    location: "Waite Agricultural Research Institute, Australia"
+    target_variable: "incidence_rate"
+    target_units: "proportion (0.0 - 1.0)"
+    frequency: "sequential_surveys"
+    temporal_coverage: "1928 - 1929"
+
+  synthetic_demo_benchmark:
+    name: "Synthetic Demonstration Benchmark: Potato Late Blight Daily Dynamics"
+    publisher: "Synthetic Benchmark Generator (Explicitly Labeled Demonstration)"
+    license: "MIT"
+    crop: "Potato"
+    disease: "Late Blight"
+    pathogen: "Phytophthora infestans"
+    location: "Simulated Temperate Humid Region"
+    target_variable: "incidence_rate"
+    target_units: "percentage (%)"
+    frequency: "daily"
+    temporal_coverage: "2021-01-01 to 2024-12-31"
+
+forecasting:
+  default_target: "incidence_rate"
+  frequencies:
+    daily:
+      code: "D"
+      name: "Daily"
+      default_horizon: 14
+      min_horizon: 7
+      max_horizon: 30
+      lags: [1, 2, 3, 7, 14, 21, 28]
+      rolling_windows: [3, 7, 14]
+      seasonal_period: 7
+    weekly:
+      code: "W-SUN"
+      name: "Weekly"
+      default_horizon: 8
+      min_horizon: 4
+      max_horizon: 16
+      lags: [1, 2, 4, 8, 12]
+      rolling_windows: [2, 4, 8]
+      seasonal_period: 52
+    monthly:
+      code: "MS"
+      name: "Monthly"
+      default_horizon: 6
+      min_horizon: 3
+      max_horizon: 12
+      lags: [1, 2, 3, 6, 12]
+      rolling_windows: [3, 6]
+      seasonal_period: 12
+
+validation:
+  test_ratio: 0.20
+  val_ratio: 0.15
+  min_train_size: 30
+  n_splits: 4
+  backtest_type: "expanding"  # 'expanding' or 'rolling'
+
+models:
+  baselines:
+    - "persistence"
+    - "seasonal_naive"
+    - "moving_average"
+    - "historical_mean"
+  statistical:
+    - "arima"
+    - "sarima"
+    - "exponential_smoothing"
+  machine_learning:
+    - "random_forest"
+    - "hist_gradient_boosting"
+    - "xgboost"
+
+outbreak_risk:
+  anomaly_percentile_threshold: 85.0
+  extreme_percentile_threshold: 95.0
+  risk_levels:
+    low:
+      label: "Low Risk"
+      color: "#10B981"
+      description: "Disease incidence is within normal baseline seasonal expectations."
+    moderate:
+      label: "Moderate Risk"
+      color: "#F59E0B"
+      description: "Elevated incidence or microclimatic conditions favoring pathogen proliferation."
+    high:
+      label: "High Risk (Alert)"
+      color: "#EF4444"
+      description: "Incidence exceeds standard epidemic thresholds; field scouting recommended."
+    very_high:
+      label: "Very High Risk (Outbreak)"
+      color: "#7F1D1D"
+      description: "Severe outbreak dynamics detected; urgent crop protection intervention advised."

@@ -1,0 +1,143 @@
+date,crop,disease,location_id,latitude,longitude,cases_or_affected,inspected_or_total,incidence_rate,severity,temperature,humidity,rainfall,source,is_synthetic
+2012-04-15,Wheat,Wheat Blast,Itaberá_SP,-24.06832318,-49.1557491,,,7.71,0.35,22.2,72.0,0.4,DelPonte_Embrapa_WheatBlast,False
+2012-05-03,Wheat,Wheat Blast,Planaltina_DF,-15.60386606,-47.71381108,,,35.5,6.36,19.3,71.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2012-05-10,Wheat,Wheat Blast,Dourados_MS,-22.27516178,-54.81639706,,,93.3,68.65,19.3,69.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2012-06-01,Wheat,Wheat Blast,Londrina_PR,-23.35915702,-51.1647559,,,100.0,92.86,19.9,77.0,0.2,DelPonte_Embrapa_WheatBlast,False
+2012-06-09,Wheat,Wheat Blast,Palotina_PR,-24.35482869,-53.75793624,,,40.5,11.73,18.4,87.0,5.6,DelPonte_Embrapa_WheatBlast,False
+2013-03-23,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,76.75,68.06,21.3,86.0,6.9,DelPonte_Embrapa_WheatBlast,False
+2013-04-02,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,72.5,55.82,22.5,79.0,1.5,DelPonte_Embrapa_WheatBlast,False
+2013-04-10,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,66.75,46.09,20.2,91.0,16.3,DelPonte_Embrapa_WheatBlast,False
+2013-04-11,Wheat,Wheat Blast,Itaberá_SP,-24.06832318,-49.1557491,,,68.61,41.86,19.9,94.0,3.8,DelPonte_Embrapa_WheatBlast,False
+2013-04-18,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,33.0,17.64,19.4,71.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2013-04-27,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,26.38,14.56,20.1,69.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2013-05-07,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,26.63,13.04,19.4,71.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2013-05-08,Wheat,Wheat Blast,Planaltina_DF,-15.60386606,-47.71381108,,,46.5,10.41,17.1,62.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2013-05-11,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,22.38,10.23,19.5,64.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2013-05-22,Wheat,Wheat Blast,Dourados_MS,-22.27516178,-54.81639706,,,48.7,9.17,22.0,68.0,0.3,DelPonte_Embrapa_WheatBlast,False
+2013-05-22,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,31.75,19.45,22.0,68.0,0.3,DelPonte_Embrapa_WheatBlast,False
+2013-05-29,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,33.25,18.26,19.7,85.0,6.9,DelPonte_Embrapa_WheatBlast,False
+2013-06-05,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,22.0,2.91,18.7,73.0,0.1,DelPonte_Embrapa_WheatBlast,False
+2013-06-06,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,15.13,7.33,19.4,80.0,1.6,DelPonte_Embrapa_WheatBlast,False
+2013-06-13,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,3.25,1.43,19.6,71.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2013-06-21,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,3.38,2.39,20.1,64.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2013-06-29,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,0.0,0.01,20.4,70.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2014-03-31,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,91.25,51.04,21.8,85.0,17.4,DelPonte_Embrapa_WheatBlast,False
+2014-04-04,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,27.5,12.98,22.1,82.0,0.6,DelPonte_Embrapa_WheatBlast,False
+2014-04-09,Wheat,Wheat Blast,Planaltina_DF,-15.60386606,-47.71381108,,,100.0,97.83,23.3,73.0,0.4,DelPonte_Embrapa_WheatBlast,False
+2014-04-10,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,89.67,48.88,23.2,79.0,2.2,DelPonte_Embrapa_WheatBlast,False
+2014-04-17,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,75.33,39.27,21.8,82.0,2.4,DelPonte_Embrapa_WheatBlast,False
+2014-04-25,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,62.33,32.13,19.2,82.0,0.3,DelPonte_Embrapa_WheatBlast,False
+2014-04-27,Wheat,Wheat Blast,Londrina_PR,-23.62247869,-51.15305886,,,98.5,77.66,19.2,68.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2014-05-06,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,23.25,0.73,20.6,67.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2014-05-07,Wheat,Wheat Blast,Londrina_PR,-23.62247869,-51.15305886,,,87.5,82.61,21.2,64.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2014-05-11,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,17.92,8.39,19.1,68.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2014-05-12,Wheat,Wheat Blast,Itaberá_SP,-24.06832318,-49.1557491,,,49.13,14.48,18.9,65.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2014-05-19,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,10.92,5.12,19.5,78.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2014-05-25,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,1.75,0.78,21.3,82.0,0.8,DelPonte_Embrapa_WheatBlast,False
+2014-05-29,Wheat,Wheat Blast,Palotina_PR,-24.35482869,-53.75793624,,,86.0,37.91,16.0,75.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2014-05-30,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,16.0,7.61,18.1,69.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2014-06-04,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,7.25,0.11,17.6,72.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2014-06-05,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,2.25,0.97,19.6,71.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2014-06-12,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,2.08,1.17,19.3,65.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2014-06-20,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,1.08,0.5,18.3,71.0,0.2,DelPonte_Embrapa_WheatBlast,False
+2014-06-29,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,0.42,0.17,19.1,66.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2014-07-08,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,0.25,0.15,19.7,55.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2014-08-14,Wheat,Wheat Blast,Palmeira_PR,-25.42604035,-50.05087602,,,33.125,6.29,20.5,62.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2015-04-09,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,96.5,50.58,20.9,78.0,1.3,DelPonte_Embrapa_WheatBlast,False
+2015-04-09,Wheat,Wheat Blast,Itaberá_SP,-24.06832318,-49.1557491,,,57.87,39.28,20.9,78.0,1.3,DelPonte_Embrapa_WheatBlast,False
+2015-04-15,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,97.67,53.63,20.7,83.0,10.1,DelPonte_Embrapa_WheatBlast,False
+2015-04-24,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,87.63,45.81,21.8,86.0,2.1,DelPonte_Embrapa_WheatBlast,False
+2015-04-28,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,70.67,38.28,20.6,72.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2015-05-04,Wheat,Wheat Blast,Campo Verde_MT,-15.55447508,-55.17886004,,,100.0,70.29,20.7,76.0,3.6,DelPonte_Embrapa_WheatBlast,False
+2015-05-04,Wheat,Wheat Blast,Londrina_PR,-23.35915702,-51.1647559,,,87.5,74.22,20.7,76.0,3.6,DelPonte_Embrapa_WheatBlast,False
+2015-05-04,Wheat,Wheat Blast,Uberaba_MG,-19.66470706,-47.97017502,,,41.85,29.3,20.7,76.0,3.6,DelPonte_Embrapa_WheatBlast,False
+2015-05-08,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,53.92,31.15,19.5,68.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2015-05-16,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,26.17,13.66,19.0,72.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2015-05-25,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,14.25,7.78,19.9,78.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2015-05-31,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,8.75,4.45,20.2,77.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2015-06-04,Wheat,Wheat Blast,Londrina_PR,-23.35915702,-51.1647559,,,31.81,22.79,18.6,81.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2015-06-09,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,6.63,2.89,18.7,69.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2015-06-13,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,3.25,1.53,19.4,67.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2015-06-21,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,1.25,0.62,17.8,72.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2015-06-26,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,1.13,0.44,17.2,69.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2015-07-03,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,0.25,0.1,20.2,64.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2015-07-09,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,0.38,0.2,18.2,80.0,0.5,DelPonte_Embrapa_WheatBlast,False
+2015-08-04,Wheat,Wheat Blast,Palmeira_PR,-25.42604035,-50.05087602,,,14.62,4.5,19.6,57.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2016-04-03,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,100.0,72.5,23.6,73.0,1.6,DelPonte_Embrapa_WheatBlast,False
+2016-04-11,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,98.33,63.23,23.9,56.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2016-04-22,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,79.08,45.4,23.6,62.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2016-04-29,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,32.75,16.02,17.2,83.0,6.3,DelPonte_Embrapa_WheatBlast,False
+2016-05-06,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,19.88,7.81,21.2,59.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2016-05-11,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,18.5,7.93,21.6,68.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2016-05-16,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,14.5,4.85,21.7,73.0,2.6,DelPonte_Embrapa_WheatBlast,False
+2016-05-16,Wheat,Wheat Blast,Campo Verde_MT,-15.55447508,-55.17886004,,,19.5,12.33,21.7,73.0,2.6,DelPonte_Embrapa_WheatBlast,False
+2016-05-23,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,6.0,1.69,19.8,79.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2016-05-31,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,3.08,0.61,20.8,67.0,0.5,DelPonte_Embrapa_WheatBlast,False
+2016-06-07,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,1.25,0.59,20.6,86.0,1.9,DelPonte_Embrapa_WheatBlast,False
+2016-06-15,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,0.42,0.15,18.5,67.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2016-06-21,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,0.25,0.11,19.3,61.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2016-06-28,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,0.17,0.03,17.6,59.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2016-07-06,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,0.0,0.01,19.6,63.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2016-07-30,Wheat,Wheat Blast,Palmeira_PR,-25.42604035,-50.05087602,,,3.17,0.25,21.6,49.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2016-08-27,Wheat,Wheat Blast,Planaltina_DF,-15.60386606,-47.71381108,,,0.75,0.08,21.5,40.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2017-04-05,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,65.5,34.23,22.5,62.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2017-04-11,Wheat,Wheat Blast,Planaltina_DF,-15.60386606,-47.71381108,,,7.6,0.43,23.1,69.0,0.1,DelPonte_Embrapa_WheatBlast,False
+2017-04-12,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,52.75,25.21,22.3,77.0,7.9,DelPonte_Embrapa_WheatBlast,False
+2017-04-21,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,38.08,17.89,20.3,79.0,5.9,DelPonte_Embrapa_WheatBlast,False
+2017-04-29,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,22.83,10.48,20.6,85.0,0.9,DelPonte_Embrapa_WheatBlast,False
+2017-05-06,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,11.42,4.89,19.5,81.0,1.6,DelPonte_Embrapa_WheatBlast,False
+2017-05-14,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,2.92,1.01,20.6,71.0,0.2,DelPonte_Embrapa_WheatBlast,False
+2017-05-22,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,0.58,0.24,20.7,86.0,1.1,DelPonte_Embrapa_WheatBlast,False
+2017-06-02,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,0.42,0.18,18.3,83.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2017-06-12,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,0.17,0.04,17.9,76.0,3.1,DelPonte_Embrapa_WheatBlast,False
+2017-06-14,Wheat,Wheat Blast,Campo Mourão_PR,-24.09629202,-52.35690241,,,17.36,1.35,19.1,80.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2017-06-20,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,0.17,0.01,18.4,59.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2017-06-28,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,0.0,0.01,17.3,68.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2017-07-05,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,0.0,0.01,14.7,58.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2017-07-09,Wheat,Wheat Blast,Campo Mourão_PR,-24.09629202,-52.35690241,,,7.13,0.11,16.8,59.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2017-07-12,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,0.0,0.01,18.4,62.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2017-08-18,Wheat,Wheat Blast,Palmeira_PR,-25.42604035,-50.05087602,,,27.5,2.36,21.1,66.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2018-04-02,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,77.75,48.68,21.2,86.0,2.9,DelPonte_Embrapa_WheatBlast,False
+2018-04-05,Wheat,Wheat Blast,Planaltina_DF,-15.60386606,-47.71381108,,,94.02,50.29,21.3,81.0,0.2,DelPonte_Embrapa_WheatBlast,False
+2018-04-08,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,63.5,37.9,21.8,80.0,0.5,DelPonte_Embrapa_WheatBlast,False
+2018-04-12,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,48.42,30.7,19.6,71.0,2.2,DelPonte_Embrapa_WheatBlast,False
+2018-04-18,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,38.0,24.09,19.8,71.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2018-04-23,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,25.13,13.66,20.0,71.0,0.5,DelPonte_Embrapa_WheatBlast,False
+2018-04-30,Wheat,Wheat Blast,Campo Mourão_PR,-24.09629202,-52.35690241,,,9.07,0.92,20.3,66.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2018-05-01,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,11.42,6.38,20.1,67.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2018-05-11,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,6.5,3.37,20.0,69.0,0.1,DelPonte_Embrapa_WheatBlast,False
+2018-05-18,Wheat,Wheat Blast,Campo Verde_MT,-15.55447508,-55.17886004,,,68.0,26.04,20.6,75.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2018-05-18,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,2.5,1.01,20.6,75.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2018-05-23,Wheat,Wheat Blast,Campo Mourão_PR,-24.09629202,-52.35690241,,,5.95,0.09,15.9,64.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2018-05-24,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,2.5,1.05,17.2,62.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2018-06-01,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,1.33,0.39,17.2,64.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2018-06-08,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,0.67,0.29,18.5,76.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2018-06-17,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,0.44,0.13,19.4,72.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2018-06-27,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,0.08,0.05,20.0,58.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2018-07-04,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,0.0,0.01,19.6,55.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2018-07-10,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,0.0,0.01,16.3,73.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2018-08-26,Wheat,Wheat Blast,Palmeira_PR,-25.42604035,-50.05087602,,,59.0,28.02,18.9,85.0,2.2,DelPonte_Embrapa_WheatBlast,False
+2019-03-28,Wheat,Wheat Blast,Guarapuava_PR,-25.24724182,-51.56249488,,,96.69,89.86,22.7,72.0,0.2,DelPonte_Embrapa_WheatBlast,False
+2019-03-29,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,98.25,98.25,21.8,70.0,0.1,DelPonte_Embrapa_WheatBlast,False
+2019-04-04,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,92.5,89.8,23.1,71.0,0.1,DelPonte_Embrapa_WheatBlast,False
+2019-04-09,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,95.5,92.93,20.5,90.0,6.9,DelPonte_Embrapa_WheatBlast,False
+2019-04-09,Wheat,Wheat Blast,Planaltina_DF,-15.60386606,-47.71381108,,,100.0,99.9,20.5,90.0,6.9,DelPonte_Embrapa_WheatBlast,False
+2019-04-14,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,97.88,97.88,20.9,93.0,8.8,DelPonte_Embrapa_WheatBlast,False
+2019-04-19,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,98.0,96.82,19.3,65.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2019-04-23,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,97.0,94.7,21.1,82.0,4.0,DelPonte_Embrapa_WheatBlast,False
+2019-04-29,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,96.63,94.96,20.9,84.0,2.2,DelPonte_Embrapa_WheatBlast,False
+2019-05-07,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,90.42,82.58,21.5,79.0,0.2,DelPonte_Embrapa_WheatBlast,False
+2019-05-14,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,81.25,68.6,21.6,82.0,0.4,DelPonte_Embrapa_WheatBlast,False
+2019-05-15,Wheat,Wheat Blast,Londrina_PR,-23.19155567,-51.18290756,,,15.75,1.62,20.6,80.0,3.1,DelPonte_Embrapa_WheatBlast,False
+2019-05-24,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,75.13,56.33,19.9,69.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2019-05-28,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,78.63,65.38,19.6,73.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2019-06-06,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,61.08,44.2,16.0,62.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2019-06-12,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,40.5,23.14,17.7,70.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2019-06-17,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,51.75,35.18,17.9,64.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2019-06-23,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,23.67,13.53,16.9,67.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2019-06-29,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,19.0,10.41,19.1,64.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2019-07-06,Wheat,Wheat Blast,Patos de Minas_MG,-18.53822068,-46.45883049,,,4.25,1.86,14.3,73.0,0.1,DelPonte_Embrapa_WheatBlast,False
+2019-08-27,Wheat,Wheat Blast,Palmeira_PR,-25.42604035,-50.05087602,,,25.0,4.28,20.3,53.0,0.0,DelPonte_Embrapa_WheatBlast,False
+2020-04-05,Wheat,Wheat Blast,Planaltina_DF,-15.60386606,-47.71381108,,,95.43,79.47,22.8,74.0,0.2,DelPonte_Embrapa_WheatBlast,False
+2020-05-24,Wheat,Wheat Blast,Palmeira_PR,-25.42604035,-50.05087602,,,41.3,22.0,14.4,92.0,11.4,DelPonte_Embrapa_WheatBlast,False
+2020-06-11,Wheat,Wheat Blast,Campo Mourão_PR,-24.09629202,-52.35690241,,,0.0,0.01,20.0,69.0,0.0,DelPonte_Embrapa_WheatBlast,False
