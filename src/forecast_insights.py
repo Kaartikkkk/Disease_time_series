@@ -184,7 +184,7 @@ def identify_peak_forecast_month(
     peak_date = peak_row["date_dt"]
 
     # Check for near-peak plateau (within 10% of maximum)
-    plateau_rows = df[df["forecast"] >= (max_val * 0.90) & (df["forecast"] > 0.1)]
+    plateau_rows = df[(df["forecast"] >= (max_val * 0.90)) & (df["forecast"] > 0.1)]
     is_plateau = len(plateau_rows) >= 2 and max_val >= 1.0
 
     month_str = peak_date.strftime("%B %Y")
