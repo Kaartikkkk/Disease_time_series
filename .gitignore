@@ -40,3 +40,6 @@ models/*.joblib
 
 # Environment variables
 .env
+
+# Legacy archive
+archive_legacy_v1/

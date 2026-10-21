@@ -1,0 +1,70 @@
+{
+  "title": "Methodology, Statistical Assumptions, and System Constraints",
+  "generated_at_utc": "2026-10-21T19:27:22.879324+00:00",
+  "country_scope": "Republic of India (IN)",
+  "target_definition": {
+    "name": "documented_occurrence_count",
+    "unit": "Integer count of qualifying occurrence records per calendar month",
+    "meaning": "Measures the frequency of verified scientific, diagnostic, or preserved pathogen samples deposited in official public biodiversity and agricultural repositories. It is an index of documented field surveillance activity and pathogen presence, not a complete census of farm-level disease incidence.",
+    "missingness_policy": "Months without observations are flagged as `is_missing = True` outside verified active surveillance windows. We never arbitrarily interpolate zeros to artificially complete a time series."
+  },
+  "data_sources": [
+    {
+      "name": "GBIF Occurrence Search API (Techdocs OpenAPI v1)",
+      "url": "https://api.gbif.org/v1/occurrence/search",
+      "license": "Creative Commons Attribution 4.0 International (CC-BY 4.0) / CC0",
+      "temporal_range": "2015-01-01 to 2026-04-30",
+      "attribution": "GBIF.org (2026). Occurrence Download accessed via GBIF REST API."
+    },
+    {
+      "name": "NASA POWER Monthly Agrometeorology API",
+      "url": "https://power.larc.nasa.gov/api/temporal/monthly/point",
+      "license": "NASA Open Data Policy (Public Domain)",
+      "variables": [
+        "T2M (Mean Temp)",
+        "T2M_MAX",
+        "T2M_MIN",
+        "PRECTOTCORR (Rainfall)",
+        "RH2M (Humidity)",
+        "T2MDEW (Dew Point)"
+      ],
+      "attribution": "NASA Langley Research Center POWER Project."
+    },
+    {
+      "name": "EPPO Global Database & Reporting Service",
+      "url": "https://gd.eppo.int/",
+      "license": "Open Access / Academic Fair Use",
+      "role": "Verified regulatory pest alerts, separating publication dates from event dates."
+    }
+  ],
+  "statistical_framework": {
+    "classical_models": [
+      "Seasonal Naive (Benchmark baseline)",
+      "AR(p) Autoregressive",
+      "MA(q) Moving Average",
+      "ARMA(p, q)",
+      "ARIMA(p, d, q) Integrated Autoregressive Moving Average",
+      "SARIMA(p, d, q)(P, D, Q, 12) Seasonal ARIMA",
+      "Holt-Winters Exponential Smoothing",
+      "ARIMAX / SARIMAX with strictly lagged NASA POWER weather regressors"
+    ],
+    "modern_models": [
+      "Meta Prophet (Additive/multiplicative yearly seasonality + exogenous regressors)",
+      "HistGradientBoosting and RandomForest Autoregressors (with cyclical month transforms)"
+    ],
+    "validation_strategy": "Strict chronological train (70%) / validation (15%) / test (15%) splits without shuffling to prevent temporal lookahead bias.",
+    "metrics": [
+      "MAE",
+      "RMSE",
+      "sMAPE (bounded 0-200%)",
+      "WAPE (for count sparsity)",
+      "Forecast Bias (Mean Error)",
+      "Prediction Interval Coverage (80% and 95%)"
+    ]
+  },
+  "scientific_limitations": [
+    "Passive surveillance bias: occurrences reflect sampling intensity of research institutions and diagnostic labs.",
+    "Weather correlation does not prove biological causation: physical disease onset requires susceptible host phenology and microclimatic leaf wetness.",
+    "Forecasts beyond observed weather rely on transparent climatology scenarios, not realized future weather."
+  ]
+}

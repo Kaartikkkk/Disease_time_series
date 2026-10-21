@@ -1,0 +1,441 @@
+{
+  "Fusarium oxysporum": {
+    "total_count": 950,
+    "sampled": 300,
+    "years": {
+      "2026": 26,
+      "2025": 110,
+      "2024": 164
+    },
+    "months": {
+      "1": 47,
+      "2": 24,
+      "3": 29,
+      "4": 8,
+      "5": 23,
+      "7": 8,
+      "8": 26,
+      "9": 28,
+      "10": 19,
+      "11": 16,
+      "12": 25,
+      "6": 17
+    },
+    "top_states": {},
+    "has_coords": 16,
+    "has_event_date": 300,
+    "basis_of_record": {
+      "MATERIAL_SAMPLE": 300
+    }
+  },
+  "Pyricularia oryzae": {
+    "total_count": 367,
+    "sampled": 300,
+    "years": {
+      "2025": 89,
+      "2024": 35,
+      "2023": 108,
+      "2022": 6,
+      "2021": 48,
+      "2020": 8,
+      "2019": 6
+    },
+    "months": {
+      "5": 7,
+      "8": 4,
+      "9": 13,
+      "1": 10,
+      "11": 7,
+      "12": 7,
+      "2": 6,
+      "3": 2,
+      "7": 9,
+      "10": 6
+    },
+    "top_states": {},
+    "has_coords": 64,
+    "has_event_date": 300,
+    "basis_of_record": {
+      "MATERIAL_SAMPLE": 300
+    }
+  },
+  "Magnaporthe oryzae": {
+    "total_count": 367,
+    "sampled": 300,
+    "years": {
+      "2025": 89,
+      "2024": 35,
+      "2023": 108,
+      "2022": 6,
+      "2021": 48,
+      "2020": 8,
+      "2019": 6
+    },
+    "months": {
+      "5": 7,
+      "8": 4,
+      "9": 13,
+      "1": 10,
+      "11": 7,
+      "12": 7,
+      "2": 6,
+      "3": 2,
+      "7": 9,
+      "10": 6
+    },
+    "top_states": {},
+    "has_coords": 64,
+    "has_event_date": 300,
+    "basis_of_record": {
+      "MATERIAL_SAMPLE": 300
+    }
+  },
+  "Phytophthora infestans": {
+    "total_count": 23,
+    "sampled": 23,
+    "years": {
+      "2026": 1,
+      "2025": 5,
+      "2024": 2,
+      "2023": 11,
+      "2022": 2,
+      "2019": 1,
+      "2018": 1
+    },
+    "months": {
+      "1": 5,
+      "2": 6,
+      "12": 11,
+      "11": 1
+    },
+    "top_states": {},
+    "has_coords": 1,
+    "has_event_date": 23,
+    "basis_of_record": {
+      "MATERIAL_SAMPLE": 23
+    }
+  },
+  "Ralstonia solanacearum": {
+    "total_count": 579,
+    "sampled": 300,
+    "years": {
+      "2026": 1,
+      "2025": 23,
+      "2024": 20,
+      "2023": 127,
+      "2022": 12,
+      "2021": 17,
+      "2019": 17,
+      "2018": 83
+    },
+    "months": {
+      "2": 12,
+      "1": 35,
+      "4": 1,
+      "5": 1,
+      "6": 2,
+      "9": 39,
+      "10": 107,
+      "11": 3,
+      "12": 11,
+      "3": 5,
+      "7": 20,
+      "8": 23
+    },
+    "top_states": {},
+    "has_coords": 85,
+    "has_event_date": 300,
+    "basis_of_record": {
+      "MATERIAL_SAMPLE": 300
+    }
+  },
+  "Bipolaris oryzae": {
+    "total_count": 227,
+    "sampled": 227,
+    "years": {
+      "2026": 1,
+      "2025": 19,
+      "2024": 48,
+      "2023": 83,
+      "2022": 31,
+      "2021": 23,
+      "2020": 5,
+      "2019": 2,
+      "2018": 10,
+      "2017": 4,
+      "2015": 1
+    },
+    "months": {
+      "8": 6,
+      "9": 7,
+      "11": 76,
+      "12": 12,
+      "1": 19,
+      "2": 3,
+      "3": 1,
+      "10": 54,
+      "5": 1,
+      "7": 2
+    },
+    "top_states": {},
+    "has_coords": 123,
+    "has_event_date": 227,
+    "basis_of_record": {
+      "MATERIAL_SAMPLE": 227
+    }
+  },
+  "Xanthomonas oryzae": {
+    "total_count": 74,
+    "sampled": 74,
+    "years": {
+      "2025": 9,
+      "2024": 50,
+      "2023": 5,
+      "2022": 2,
+      "2021": 1,
+      "2019": 2,
+      "2017": 1,
+      "2016": 4
+    },
+    "months": {
+      "2": 2,
+      "7": 3,
+      "8": 4,
+      "10": 42,
+      "12": 2,
+      "9": 9,
+      "5": 2,
+      "1": 5
+    },
+    "top_states": {},
+    "has_coords": 8,
+    "has_event_date": 74,
+    "basis_of_record": {
+      "MATERIAL_SAMPLE": 74
+    }
+  },
+  "Alternaria solani": {
+    "total_count": 98,
+    "sampled": 98,
+    "years": {
+      "2026": 2,
+      "2025": 22,
+      "2024": 15,
+      "2023": 14,
+      "2022": 12,
+      "2021": 3,
+      "2019": 24,
+      "2016": 6
+    },
+    "months": {
+      "4": 2,
+      "1": 16,
+      "2": 7,
+      "5": 3,
+      "6": 4,
+      "8": 27,
+      "10": 2,
+      "3": 2,
+      "11": 4,
+      "12": 2,
+      "9": 3,
+      "7": 1
+    },
+    "top_states": {},
+    "has_coords": 1,
+    "has_event_date": 98,
+    "basis_of_record": {
+      "MATERIAL_SAMPLE": 98
+    }
+  },
+  "Colletotrichum falcatum": {
+    "total_count": 62,
+    "sampled": 62,
+    "years": {
+      "2024": 10,
+      "2023": 18,
+      "2022": 19,
+      "2021": 6,
+      "2020": 1,
+      "2019": 4,
+      "2018": 4
+    },
+    "months": {
+      "10": 1,
+      "3": 5,
+      "12": 1,
+      "1": 4
+    },
+    "top_states": {},
+    "has_coords": 1,
+    "has_event_date": 62,
+    "basis_of_record": {
+      "MATERIAL_SAMPLE": 62
+    }
+  },
+  "Puccinia striiformis": {
+    "total_count": 28,
+    "sampled": 28,
+    "years": {
+      "2024": 13,
+      "2023": 8,
+      "2022": 4,
+      "2015": 3
+    },
+    "months": {
+      "5": 25,
+      "2": 3
+    },
+    "top_states": {},
+    "has_coords": 25,
+    "has_event_date": 28,
+    "basis_of_record": {
+      "MATERIAL_SAMPLE": 28
+    }
+  },
+  "Puccinia triticina": {
+    "total_count": 1,
+    "sampled": 1,
+    "years": {
+      "2024": 1
+    },
+    "months": {
+      "11": 1
+    },
+    "top_states": {
+      "Maharashtra": 1
+    },
+    "has_coords": 1,
+    "has_event_date": 1,
+    "basis_of_record": {
+      "HUMAN_OBSERVATION": 1
+    }
+  },
+  "Puccinia graminis": {
+    "total_count": 0,
+    "sampled": 0,
+    "years": {},
+    "months": {},
+    "top_states": {},
+    "has_coords": 0,
+    "has_event_date": 0,
+    "basis_of_record": {}
+  },
+  "Rhizoctonia solani": {
+    "total_count": 413,
+    "sampled": 300,
+    "years": {
+      "2026": 1,
+      "2025": 108,
+      "2024": 83,
+      "2023": 93,
+      "2022": 15
+    },
+    "months": {
+      "1": 14,
+      "2": 6,
+      "3": 5,
+      "4": 17,
+      "5": 48,
+      "6": 16,
+      "7": 9,
+      "9": 48,
+      "10": 39,
+      "11": 12,
+      "12": 17,
+      "8": 9
+    },
+    "top_states": {},
+    "has_coords": 79,
+    "has_event_date": 300,
+    "basis_of_record": {
+      "MATERIAL_SAMPLE": 298,
+      "PRESERVED_SPECIMEN": 2
+    }
+  },
+  "Sclerotium rolfsii": {
+    "total_count": 0,
+    "sampled": 0,
+    "years": {},
+    "months": {},
+    "top_states": {},
+    "has_coords": 0,
+    "has_event_date": 0,
+    "basis_of_record": {}
+  },
+  "Macrophomina phaseolina": {
+    "total_count": 317,
+    "sampled": 300,
+    "years": {
+      "2026": 9,
+      "2025": 114,
+      "2024": 62,
+      "2023": 27,
+      "2022": 13,
+      "2021": 10,
+      "2020": 27,
+      "2019": 30,
+      "2018": 3,
+      "2017": 5
+    },
+    "months": {
+      "1": 25,
+      "2": 19,
+      "3": 16,
+      "4": 6,
+      "5": 15,
+      "7": 27,
+      "8": 10,
+      "9": 26,
+      "10": 22,
+      "11": 10,
+      "12": 20,
+      "6": 11
+    },
+    "top_states": {},
+    "has_coords": 32,
+    "has_event_date": 300,
+    "basis_of_record": {
+      "MATERIAL_SAMPLE": 298,
+      "PRESERVED_SPECIMEN": 2
+    }
+  },
+  "Lasiodiplodia theobromae": {
+    "total_count": 240,
+    "sampled": 240,
+    "years": {
+      "2026": 7,
+      "2025": 34,
+      "2024": 47,
+      "2023": 31,
+      "2022": 30,
+      "2021": 9,
+      "2020": 21,
+      "2019": 17,
+      "2018": 15,
+      "2016": 25,
+      "2015": 4
+    },
+    "months": {
+      "1": 17,
+      "3": 12,
+      "4": 21,
+      "6": 20,
+      "7": 15,
+      "2": 13,
+      "5": 16,
+      "8": 12,
+      "9": 13,
+      "10": 13,
+      "11": 5,
+      "12": 28
+    },
+    "top_states": {},
+    "has_coords": 21,
+    "has_event_date": 240,
+    "basis_of_record": {
+      "MATERIAL_SAMPLE": 238,
+      "PRESERVED_SPECIMEN": 2
+    }
+  }
+}

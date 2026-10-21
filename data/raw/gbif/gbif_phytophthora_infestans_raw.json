@@ -1,0 +1,5356 @@
+{
+  "metadata": {
+    "source": "GBIF Occurrence API",
+    "api_endpoint": "https://api.gbif.org/v1/occurrence/search",
+    "scientific_name": "Phytophthora infestans",
+    "country": "IN",
+    "start_year": 2015,
+    "end_year": 2026,
+    "total_available_in_source": 23,
+    "total_retrieved": 23,
+    "retrieval_timestamp_utc": "2026-10-21T18:34:17.520139+00:00",
+    "license": "CC-BY-4.0 / CC0 (per individual record license fields)",
+    "citation": "GBIF.org Occurrence Download. Accessed via GBIF Occurrence Search API."
+  },
+  "records": [
+    {
+      "key": 6189745778,
+      "datasetKey": "393b8c26-e4e0-4dd0-a218-93fc074ebf4e",
+      "publishingOrgKey": "ada9d123-ddb4-467d-8891-806ea8d94230",
+      "datasetCategory": [
+        "eDNA"
+      ],
+      "installationKey": "17a83780-3060-4851-9d6f-029d5fcb81c9",
+      "hostingOrganizationKey": "fbca90e3-8aed-48b1-84e3-369afbd000ce",
+      "publishingCountry": "GB",
+      "protocol": "EML",
+      "lastCrawled": "2026-10-10T12:02:38.832+00:00",
+      "lastParsed": "2026-10-10T12:09:36.391+00:00",
+      "crawlId": 300,
+      "extensions": {},
+      "basisOfRecord": "MATERIAL_SAMPLE",
+      "occurrenceStatus": "PRESENT",
+      "classifications": {
+        "7ddf754f-d193-4cc9-b351-99906754a03b": {
+          "usage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "CS5HF",
+              "name": "Eukaryota",
+              "rank": "DOMAIN"
+            },
+            {
+              "key": "C",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "D3MRQ",
+              "name": "Harosa",
+              "rank": "SUBKINGDOM"
+            },
+            {
+              "key": "D3MRV",
+              "name": "Heterokonta",
+              "rank": "INFRAKINGDOM"
+            },
+            {
+              "key": "5K",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "G3",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "3SH",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "6266K",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "63MCM",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "4HNSM",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_ID_NOT_FOUND",
+            "TAXON_CONCEPT_ID_NOT_FOUND"
+          ]
+        },
+        "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c": {
+          "usage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "4",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "32",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "8179345",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "1259",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "4785",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "3203589",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "3203716",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_ID_NOT_FOUND",
+            "TAXON_CONCEPT_ID_NOT_FOUND"
+          ]
+        }
+      },
+      "taxonKey": 3203716,
+      "kingdomKey": 4,
+      "phylumKey": 32,
+      "classKey": 8179345,
+      "orderKey": 1259,
+      "familyKey": 4785,
+      "genusKey": 3203589,
+      "speciesKey": 3203716,
+      "acceptedTaxonKey": 3203716,
+      "scientificName": "Phytophthora infestans (Mont.) de Bary",
+      "scientificNameAuthorship": "(Mont.) de Bary",
+      "acceptedScientificName": "Phytophthora infestans (Mont.) de Bary",
+      "kingdom": "Chromista",
+      "phylum": "Oomycota",
+      "order": "Peronosporales",
+      "family": "Peronosporaceae",
+      "genus": "Phytophthora",
+      "species": "Phytophthora infestans",
+      "genericName": "Phytophthora",
+      "specificEpithet": "infestans",
+      "taxonRank": "SPECIES",
+      "taxonomicStatus": "ACCEPTED",
+      "continent": "ASIA",
+      "gadm": {},
+      "year": 2026,
+      "month": 1,
+      "day": 19,
+      "eventDate": "2026-01-19",
+      "startDayOfYear": 19,
+      "endDayOfYear": 19,
+      "issues": [
+        "CONTINENT_DERIVED_FROM_COUNTRY",
+        "TAXON_CONCEPT_ID_NOT_FOUND",
+        "TAXON_ID_NOT_FOUND"
+      ],
+      "lastInterpreted": "2026-10-10T12:09:36.391+00:00",
+      "references": "https://www.ebi.ac.uk/ena/browser/view/PZ159328",
+      "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+      "isSequenced": true,
+      "associatedSequences": "https://www.ebi.ac.uk/ena/browser/api/embl/PZ159328",
+      "identifiers": [
+        {
+          "identifier": "PZ159328"
+        }
+      ],
+      "media": [],
+      "facts": [],
+      "relations": [],
+      "isInCluster": false,
+      "recordedBy": "Lavanya S",
+      "dnaSequenceID": [],
+      "nucleotideSequence": [],
+      "class": "Peronosporea",
+      "countryCode": "IN",
+      "recordedByIDs": [],
+      "identifiedByIDs": [],
+      "gbifRegion": "ASIA",
+      "country": "India",
+      "publishedByGbifRegion": "EUROPE",
+      "identifier": "PZ159328",
+      "http://unknown.org/crawl_attempt": "300",
+      "taxonConceptID": "https://www.ebi.ac.uk/ena/browser/view/Taxon:4787",
+      "associatedTaxa": "potato",
+      "http://unknown.org/allowCoordinatesFlipping": "true",
+      "http://unknown.org/datasetCategory.gbif.org": "eDNA",
+      "occurrenceRemarks": "Phytophthora infestans isolate PIM-2 internal transcribed spacer 1, partial sequence 5.8S ribosomal RNA gene, complete sequence and internal transcribed spacer 2, partial sequence.",
+      "gbifID": "6189745778",
+      "occurrenceID": "PZ159328",
+      "taxonID": "ASV:37401399cc5677fb3da6d95b8e295339"
+    },
+    {
+      "key": 6191520568,
+      "datasetKey": "d8cd16ba-bb74-4420-821e-083f2bac17c2",
+      "publishingOrgKey": "ada9d123-ddb4-467d-8891-806ea8d94230",
+      "datasetCategory": [
+        "eDNA"
+      ],
+      "installationKey": "17a83780-3060-4851-9d6f-029d5fcb81c9",
+      "hostingOrganizationKey": "fbca90e3-8aed-48b1-84e3-369afbd000ce",
+      "publishingCountry": "GB",
+      "protocol": "EML",
+      "lastCrawled": "2026-09-26T12:05:00.250+00:00",
+      "lastParsed": "2026-09-26T12:17:40.124+00:00",
+      "crawlId": 296,
+      "extensions": {},
+      "basisOfRecord": "MATERIAL_SAMPLE",
+      "occurrenceStatus": "PRESENT",
+      "classifications": {
+        "7ddf754f-d193-4cc9-b351-99906754a03b": {
+          "usage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "CS5HF",
+              "name": "Eukaryota",
+              "rank": "DOMAIN"
+            },
+            {
+              "key": "C",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "D3MRQ",
+              "name": "Harosa",
+              "rank": "SUBKINGDOM"
+            },
+            {
+              "key": "D3MRV",
+              "name": "Heterokonta",
+              "rank": "INFRAKINGDOM"
+            },
+            {
+              "key": "5K",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "G3",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "3SH",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "6266K",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "63MCM",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "4HNSM",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_CONCEPT_ID_NOT_FOUND",
+            "TAXON_ID_NOT_FOUND"
+          ]
+        },
+        "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c": {
+          "usage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "4",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "32",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "8179345",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "1259",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "4785",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "3203589",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "3203716",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_CONCEPT_ID_NOT_FOUND",
+            "TAXON_ID_NOT_FOUND"
+          ]
+        }
+      },
+      "taxonKey": 3203716,
+      "kingdomKey": 4,
+      "phylumKey": 32,
+      "classKey": 8179345,
+      "orderKey": 1259,
+      "familyKey": 4785,
+      "genusKey": 3203589,
+      "speciesKey": 3203716,
+      "acceptedTaxonKey": 3203716,
+      "scientificName": "Phytophthora infestans (Mont.) de Bary",
+      "scientificNameAuthorship": "(Mont.) de Bary",
+      "acceptedScientificName": "Phytophthora infestans (Mont.) de Bary",
+      "kingdom": "Chromista",
+      "phylum": "Oomycota",
+      "order": "Peronosporales",
+      "family": "Peronosporaceae",
+      "genus": "Phytophthora",
+      "species": "Phytophthora infestans",
+      "genericName": "Phytophthora",
+      "specificEpithet": "infestans",
+      "taxonRank": "SPECIES",
+      "taxonomicStatus": "ACCEPTED",
+      "continent": "ASIA",
+      "gadm": {},
+      "year": 2025,
+      "month": 1,
+      "day": 10,
+      "eventDate": "2025-01-10",
+      "startDayOfYear": 10,
+      "endDayOfYear": 10,
+      "issues": [
+        "CONTINENT_DERIVED_FROM_COUNTRY",
+        "TAXON_CONCEPT_ID_NOT_FOUND",
+        "TAXON_ID_NOT_FOUND"
+      ],
+      "lastInterpreted": "2026-09-26T12:17:40.124+00:00",
+      "references": "https://www.ebi.ac.uk/ena/browser/view/PX488305",
+      "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+      "isSequenced": true,
+      "associatedSequences": "https://www.ebi.ac.uk/ena/browser/api/embl/PX488305",
+      "identifiers": [
+        {
+          "identifier": "PX488305"
+        }
+      ],
+      "media": [],
+      "facts": [],
+      "relations": [],
+      "isInCluster": false,
+      "dnaSequenceID": [],
+      "nucleotideSequence": [],
+      "class": "Peronosporea",
+      "countryCode": "IN",
+      "recordedByIDs": [],
+      "identifiedByIDs": [],
+      "gbifRegion": "ASIA",
+      "country": "India",
+      "publishedByGbifRegion": "EUROPE",
+      "identifier": "PX488305",
+      "http://unknown.org/crawl_attempt": "296",
+      "taxonConceptID": "https://www.ebi.ac.uk/ena/browser/view/Taxon:4787",
+      "http://unknown.org/datasetCategory.gbif.org": "eDNA",
+      "occurrenceRemarks": "Phytophthora infestans isolate NL1 5.8S ribosomal RNA gene and internal transcribed spacer 2, partial sequence.",
+      "gbifID": "6191520568",
+      "occurrenceID": "PX488305",
+      "taxonID": "ASV:a78cb63e66262a365f40239fd974a241"
+    },
+    {
+      "key": 6189731133,
+      "datasetKey": "393b8c26-e4e0-4dd0-a218-93fc074ebf4e",
+      "publishingOrgKey": "ada9d123-ddb4-467d-8891-806ea8d94230",
+      "datasetCategory": [
+        "eDNA"
+      ],
+      "installationKey": "17a83780-3060-4851-9d6f-029d5fcb81c9",
+      "hostingOrganizationKey": "fbca90e3-8aed-48b1-84e3-369afbd000ce",
+      "publishingCountry": "GB",
+      "protocol": "EML",
+      "lastCrawled": "2026-10-10T12:02:38.832+00:00",
+      "lastParsed": "2026-10-10T12:08:33.480+00:00",
+      "crawlId": 300,
+      "extensions": {},
+      "basisOfRecord": "MATERIAL_SAMPLE",
+      "occurrenceStatus": "PRESENT",
+      "classifications": {
+        "7ddf754f-d193-4cc9-b351-99906754a03b": {
+          "usage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "CS5HF",
+              "name": "Eukaryota",
+              "rank": "DOMAIN"
+            },
+            {
+              "key": "C",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "D3MRQ",
+              "name": "Harosa",
+              "rank": "SUBKINGDOM"
+            },
+            {
+              "key": "D3MRV",
+              "name": "Heterokonta",
+              "rank": "INFRAKINGDOM"
+            },
+            {
+              "key": "5K",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "G3",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "3SH",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "6266K",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "63MCM",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "4HNSM",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_CONCEPT_ID_NOT_FOUND",
+            "TAXON_ID_NOT_FOUND"
+          ]
+        },
+        "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c": {
+          "usage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "4",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "32",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "8179345",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "1259",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "4785",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "3203589",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "3203716",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_CONCEPT_ID_NOT_FOUND",
+            "TAXON_ID_NOT_FOUND"
+          ]
+        }
+      },
+      "taxonKey": 3203716,
+      "kingdomKey": 4,
+      "phylumKey": 32,
+      "classKey": 8179345,
+      "orderKey": 1259,
+      "familyKey": 4785,
+      "genusKey": 3203589,
+      "speciesKey": 3203716,
+      "acceptedTaxonKey": 3203716,
+      "scientificName": "Phytophthora infestans (Mont.) de Bary",
+      "scientificNameAuthorship": "(Mont.) de Bary",
+      "acceptedScientificName": "Phytophthora infestans (Mont.) de Bary",
+      "kingdom": "Chromista",
+      "phylum": "Oomycota",
+      "order": "Peronosporales",
+      "family": "Peronosporaceae",
+      "genus": "Phytophthora",
+      "species": "Phytophthora infestans",
+      "genericName": "Phytophthora",
+      "specificEpithet": "infestans",
+      "taxonRank": "SPECIES",
+      "taxonomicStatus": "ACCEPTED",
+      "continent": "ASIA",
+      "gadm": {},
+      "year": 2025,
+      "month": 2,
+      "day": 22,
+      "eventDate": "2025-02-22",
+      "startDayOfYear": 53,
+      "endDayOfYear": 53,
+      "issues": [
+        "CONTINENT_DERIVED_FROM_COUNTRY",
+        "TAXON_CONCEPT_ID_NOT_FOUND",
+        "TAXON_ID_NOT_FOUND"
+      ],
+      "lastInterpreted": "2026-10-10T12:08:33.480+00:00",
+      "references": "https://www.ebi.ac.uk/ena/browser/view/PZ163716",
+      "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+      "isSequenced": true,
+      "associatedSequences": "https://www.ebi.ac.uk/ena/browser/api/embl/PZ163716",
+      "identifiers": [
+        {
+          "identifier": "PZ163716"
+        }
+      ],
+      "media": [],
+      "facts": [],
+      "relations": [],
+      "isInCluster": false,
+      "recordedBy": "Lavanya S",
+      "dnaSequenceID": [],
+      "nucleotideSequence": [],
+      "class": "Peronosporea",
+      "countryCode": "IN",
+      "recordedByIDs": [],
+      "identifiedByIDs": [],
+      "gbifRegion": "ASIA",
+      "country": "India",
+      "publishedByGbifRegion": "EUROPE",
+      "identifier": "PZ163716",
+      "http://unknown.org/crawl_attempt": "300",
+      "taxonConceptID": "https://www.ebi.ac.uk/ena/browser/view/Taxon:4787",
+      "associatedTaxa": "potato",
+      "http://unknown.org/allowCoordinatesFlipping": "true",
+      "http://unknown.org/datasetCategory.gbif.org": "eDNA",
+      "occurrenceRemarks": "Phytophthora infestans isolate PIK-6 internal transcribed spacer 1, partial sequence 5.8S ribosomal RNA gene and internal transcribed spacer 2, complete sequence and large subunit ribosomal RNA gene, partial sequence.",
+      "gbifID": "6189731133",
+      "occurrenceID": "PZ163716",
+      "taxonID": "ASV:e9712364526283b944c8a8a11edf38c6"
+    },
+    {
+      "key": 6189772392,
+      "datasetKey": "393b8c26-e4e0-4dd0-a218-93fc074ebf4e",
+      "publishingOrgKey": "ada9d123-ddb4-467d-8891-806ea8d94230",
+      "datasetCategory": [
+        "eDNA"
+      ],
+      "installationKey": "17a83780-3060-4851-9d6f-029d5fcb81c9",
+      "hostingOrganizationKey": "fbca90e3-8aed-48b1-84e3-369afbd000ce",
+      "publishingCountry": "GB",
+      "protocol": "EML",
+      "lastCrawled": "2026-10-10T12:02:38.832+00:00",
+      "lastParsed": "2026-10-10T12:08:34.696+00:00",
+      "crawlId": 300,
+      "extensions": {},
+      "basisOfRecord": "MATERIAL_SAMPLE",
+      "occurrenceStatus": "PRESENT",
+      "classifications": {
+        "7ddf754f-d193-4cc9-b351-99906754a03b": {
+          "usage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "CS5HF",
+              "name": "Eukaryota",
+              "rank": "DOMAIN"
+            },
+            {
+              "key": "C",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "D3MRQ",
+              "name": "Harosa",
+              "rank": "SUBKINGDOM"
+            },
+            {
+              "key": "D3MRV",
+              "name": "Heterokonta",
+              "rank": "INFRAKINGDOM"
+            },
+            {
+              "key": "5K",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "G3",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "3SH",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "6266K",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "63MCM",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "4HNSM",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_CONCEPT_ID_NOT_FOUND",
+            "TAXON_ID_NOT_FOUND"
+          ]
+        },
+        "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c": {
+          "usage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "4",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "32",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "8179345",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "1259",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "4785",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "3203589",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "3203716",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_CONCEPT_ID_NOT_FOUND",
+            "TAXON_ID_NOT_FOUND"
+          ]
+        }
+      },
+      "taxonKey": 3203716,
+      "kingdomKey": 4,
+      "phylumKey": 32,
+      "classKey": 8179345,
+      "orderKey": 1259,
+      "familyKey": 4785,
+      "genusKey": 3203589,
+      "speciesKey": 3203716,
+      "acceptedTaxonKey": 3203716,
+      "scientificName": "Phytophthora infestans (Mont.) de Bary",
+      "scientificNameAuthorship": "(Mont.) de Bary",
+      "acceptedScientificName": "Phytophthora infestans (Mont.) de Bary",
+      "kingdom": "Chromista",
+      "phylum": "Oomycota",
+      "order": "Peronosporales",
+      "family": "Peronosporaceae",
+      "genus": "Phytophthora",
+      "species": "Phytophthora infestans",
+      "genericName": "Phytophthora",
+      "specificEpithet": "infestans",
+      "taxonRank": "SPECIES",
+      "taxonomicStatus": "ACCEPTED",
+      "continent": "ASIA",
+      "gadm": {},
+      "year": 2025,
+      "month": 2,
+      "day": 7,
+      "eventDate": "2025-02-07",
+      "startDayOfYear": 38,
+      "endDayOfYear": 38,
+      "issues": [
+        "CONTINENT_DERIVED_FROM_COUNTRY",
+        "TAXON_CONCEPT_ID_NOT_FOUND",
+        "TAXON_ID_NOT_FOUND"
+      ],
+      "lastInterpreted": "2026-10-10T12:08:34.696+00:00",
+      "references": "https://www.ebi.ac.uk/ena/browser/view/PZ161100",
+      "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+      "isSequenced": true,
+      "associatedSequences": "https://www.ebi.ac.uk/ena/browser/api/embl/PZ161100",
+      "identifiers": [
+        {
+          "identifier": "PZ161100"
+        }
+      ],
+      "media": [],
+      "facts": [],
+      "relations": [],
+      "isInCluster": false,
+      "recordedBy": "Lavanya S",
+      "dnaSequenceID": [],
+      "nucleotideSequence": [],
+      "class": "Peronosporea",
+      "countryCode": "IN",
+      "recordedByIDs": [],
+      "identifiedByIDs": [],
+      "gbifRegion": "ASIA",
+      "country": "India",
+      "publishedByGbifRegion": "EUROPE",
+      "identifier": "PZ161100",
+      "http://unknown.org/crawl_attempt": "300",
+      "taxonConceptID": "https://www.ebi.ac.uk/ena/browser/view/Taxon:4787",
+      "associatedTaxa": "potato",
+      "http://unknown.org/allowCoordinatesFlipping": "true",
+      "http://unknown.org/datasetCategory.gbif.org": "eDNA",
+      "occurrenceRemarks": "Phytophthora infestans isolate PIW-4 internal transcribed spacer 1, partial sequence 5.8S ribosomal RNA gene and internal transcribed spacer 2, complete sequence and large subunit ribosomal RNA gene, partial sequence.",
+      "gbifID": "6189772392",
+      "occurrenceID": "PZ161100",
+      "taxonID": "ASV:2ce73230de4f7aa7c93011c0ea3d3aa5"
+    },
+    {
+      "key": 6189819638,
+      "datasetKey": "393b8c26-e4e0-4dd0-a218-93fc074ebf4e",
+      "publishingOrgKey": "ada9d123-ddb4-467d-8891-806ea8d94230",
+      "datasetCategory": [
+        "eDNA"
+      ],
+      "installationKey": "17a83780-3060-4851-9d6f-029d5fcb81c9",
+      "hostingOrganizationKey": "fbca90e3-8aed-48b1-84e3-369afbd000ce",
+      "publishingCountry": "GB",
+      "protocol": "EML",
+      "lastCrawled": "2026-10-10T12:02:38.832+00:00",
+      "lastParsed": "2026-10-10T12:08:35.814+00:00",
+      "crawlId": 300,
+      "extensions": {},
+      "basisOfRecord": "MATERIAL_SAMPLE",
+      "occurrenceStatus": "PRESENT",
+      "classifications": {
+        "7ddf754f-d193-4cc9-b351-99906754a03b": {
+          "usage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "CS5HF",
+              "name": "Eukaryota",
+              "rank": "DOMAIN"
+            },
+            {
+              "key": "C",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "D3MRQ",
+              "name": "Harosa",
+              "rank": "SUBKINGDOM"
+            },
+            {
+              "key": "D3MRV",
+              "name": "Heterokonta",
+              "rank": "INFRAKINGDOM"
+            },
+            {
+              "key": "5K",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "G3",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "3SH",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "6266K",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "63MCM",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "4HNSM",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_ID_NOT_FOUND",
+            "TAXON_CONCEPT_ID_NOT_FOUND"
+          ]
+        },
+        "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c": {
+          "usage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "4",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "32",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "8179345",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "1259",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "4785",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "3203589",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "3203716",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_ID_NOT_FOUND",
+            "TAXON_CONCEPT_ID_NOT_FOUND"
+          ]
+        }
+      },
+      "taxonKey": 3203716,
+      "kingdomKey": 4,
+      "phylumKey": 32,
+      "classKey": 8179345,
+      "orderKey": 1259,
+      "familyKey": 4785,
+      "genusKey": 3203589,
+      "speciesKey": 3203716,
+      "acceptedTaxonKey": 3203716,
+      "scientificName": "Phytophthora infestans (Mont.) de Bary",
+      "scientificNameAuthorship": "(Mont.) de Bary",
+      "acceptedScientificName": "Phytophthora infestans (Mont.) de Bary",
+      "kingdom": "Chromista",
+      "phylum": "Oomycota",
+      "order": "Peronosporales",
+      "family": "Peronosporaceae",
+      "genus": "Phytophthora",
+      "species": "Phytophthora infestans",
+      "genericName": "Phytophthora",
+      "specificEpithet": "infestans",
+      "taxonRank": "SPECIES",
+      "taxonomicStatus": "ACCEPTED",
+      "continent": "ASIA",
+      "gadm": {},
+      "year": 2025,
+      "month": 2,
+      "day": 25,
+      "eventDate": "2025-02-25",
+      "startDayOfYear": 56,
+      "endDayOfYear": 56,
+      "issues": [
+        "CONTINENT_DERIVED_FROM_COUNTRY",
+        "TAXON_CONCEPT_ID_NOT_FOUND",
+        "TAXON_ID_NOT_FOUND"
+      ],
+      "lastInterpreted": "2026-10-10T12:08:35.814+00:00",
+      "references": "https://www.ebi.ac.uk/ena/browser/view/PZ163719",
+      "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+      "isSequenced": true,
+      "associatedSequences": "https://www.ebi.ac.uk/ena/browser/api/embl/PZ163719",
+      "identifiers": [
+        {
+          "identifier": "PZ163719"
+        }
+      ],
+      "media": [],
+      "facts": [],
+      "relations": [],
+      "isInCluster": false,
+      "recordedBy": "Lavanya S",
+      "dnaSequenceID": [],
+      "nucleotideSequence": [],
+      "class": "Peronosporea",
+      "countryCode": "IN",
+      "recordedByIDs": [],
+      "identifiedByIDs": [],
+      "gbifRegion": "ASIA",
+      "country": "India",
+      "publishedByGbifRegion": "EUROPE",
+      "identifier": "PZ163719",
+      "http://unknown.org/crawl_attempt": "300",
+      "taxonConceptID": "https://www.ebi.ac.uk/ena/browser/view/Taxon:4787",
+      "associatedTaxa": "potato",
+      "http://unknown.org/allowCoordinatesFlipping": "true",
+      "http://unknown.org/datasetCategory.gbif.org": "eDNA",
+      "occurrenceRemarks": "Phytophthora infestans isolate PIK-7 small subunit ribosomal RNA gene, partial sequence internal transcribed spacer 1 and 5.8S ribosomal RNA gene, complete sequence and internal transcribed spacer 2, partial sequence.",
+      "gbifID": "6189819638",
+      "occurrenceID": "PZ163719",
+      "taxonID": "ASV:876d38fe931d547c4c289b59e43b0083"
+    },
+    {
+      "key": 6189831371,
+      "datasetKey": "393b8c26-e4e0-4dd0-a218-93fc074ebf4e",
+      "publishingOrgKey": "ada9d123-ddb4-467d-8891-806ea8d94230",
+      "datasetCategory": [
+        "eDNA"
+      ],
+      "installationKey": "17a83780-3060-4851-9d6f-029d5fcb81c9",
+      "hostingOrganizationKey": "fbca90e3-8aed-48b1-84e3-369afbd000ce",
+      "publishingCountry": "GB",
+      "protocol": "EML",
+      "lastCrawled": "2026-10-10T12:02:38.832+00:00",
+      "lastParsed": "2026-10-10T12:09:16.477+00:00",
+      "crawlId": 300,
+      "extensions": {},
+      "basisOfRecord": "MATERIAL_SAMPLE",
+      "occurrenceStatus": "PRESENT",
+      "classifications": {
+        "7ddf754f-d193-4cc9-b351-99906754a03b": {
+          "usage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "CS5HF",
+              "name": "Eukaryota",
+              "rank": "DOMAIN"
+            },
+            {
+              "key": "C",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "D3MRQ",
+              "name": "Harosa",
+              "rank": "SUBKINGDOM"
+            },
+            {
+              "key": "D3MRV",
+              "name": "Heterokonta",
+              "rank": "INFRAKINGDOM"
+            },
+            {
+              "key": "5K",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "G3",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "3SH",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "6266K",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "63MCM",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "4HNSM",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_CONCEPT_ID_NOT_FOUND",
+            "TAXON_ID_NOT_FOUND"
+          ]
+        },
+        "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c": {
+          "usage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "4",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "32",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "8179345",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "1259",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "4785",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "3203589",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "3203716",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_CONCEPT_ID_NOT_FOUND",
+            "TAXON_ID_NOT_FOUND"
+          ]
+        }
+      },
+      "taxonKey": 3203716,
+      "kingdomKey": 4,
+      "phylumKey": 32,
+      "classKey": 8179345,
+      "orderKey": 1259,
+      "familyKey": 4785,
+      "genusKey": 3203589,
+      "speciesKey": 3203716,
+      "acceptedTaxonKey": 3203716,
+      "scientificName": "Phytophthora infestans (Mont.) de Bary",
+      "scientificNameAuthorship": "(Mont.) de Bary",
+      "acceptedScientificName": "Phytophthora infestans (Mont.) de Bary",
+      "kingdom": "Chromista",
+      "phylum": "Oomycota",
+      "order": "Peronosporales",
+      "family": "Peronosporaceae",
+      "genus": "Phytophthora",
+      "species": "Phytophthora infestans",
+      "genericName": "Phytophthora",
+      "specificEpithet": "infestans",
+      "taxonRank": "SPECIES",
+      "taxonomicStatus": "ACCEPTED",
+      "continent": "ASIA",
+      "gadm": {},
+      "year": 2025,
+      "month": 2,
+      "day": 10,
+      "eventDate": "2025-02-10",
+      "startDayOfYear": 41,
+      "endDayOfYear": 41,
+      "issues": [
+        "CONTINENT_DERIVED_FROM_COUNTRY",
+        "TAXON_CONCEPT_ID_NOT_FOUND",
+        "TAXON_ID_NOT_FOUND"
+      ],
+      "lastInterpreted": "2026-10-10T12:09:16.477+00:00",
+      "references": "https://www.ebi.ac.uk/ena/browser/view/PZ161270",
+      "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+      "isSequenced": true,
+      "associatedSequences": "https://www.ebi.ac.uk/ena/browser/api/embl/PZ161270",
+      "identifiers": [
+        {
+          "identifier": "PZ161270"
+        }
+      ],
+      "media": [],
+      "facts": [],
+      "relations": [],
+      "isInCluster": false,
+      "recordedBy": "Lavanya S",
+      "dnaSequenceID": [],
+      "nucleotideSequence": [],
+      "class": "Peronosporea",
+      "countryCode": "IN",
+      "recordedByIDs": [],
+      "identifiedByIDs": [],
+      "gbifRegion": "ASIA",
+      "country": "India",
+      "publishedByGbifRegion": "EUROPE",
+      "identifier": "PZ161270",
+      "http://unknown.org/crawl_attempt": "300",
+      "taxonConceptID": "https://www.ebi.ac.uk/ena/browser/view/Taxon:4787",
+      "associatedTaxa": "potato",
+      "http://unknown.org/allowCoordinatesFlipping": "true",
+      "http://unknown.org/datasetCategory.gbif.org": "eDNA",
+      "occurrenceRemarks": "Phytophthora infestans isolate PIA-5 internal transcribed spacer 1, partial sequence 5.8S ribosomal RNA gene, complete sequence and internal transcribed spacer 2, partial sequence.",
+      "gbifID": "6189831371",
+      "occurrenceID": "PZ161270",
+      "taxonID": "ASV:51fc01602bf8bb1758ea0608d1f72f43"
+    },
+    {
+      "key": 6189822098,
+      "datasetKey": "393b8c26-e4e0-4dd0-a218-93fc074ebf4e",
+      "publishingOrgKey": "ada9d123-ddb4-467d-8891-806ea8d94230",
+      "datasetCategory": [
+        "eDNA"
+      ],
+      "installationKey": "17a83780-3060-4851-9d6f-029d5fcb81c9",
+      "hostingOrganizationKey": "fbca90e3-8aed-48b1-84e3-369afbd000ce",
+      "publishingCountry": "GB",
+      "protocol": "EML",
+      "lastCrawled": "2026-10-10T12:02:38.832+00:00",
+      "lastParsed": "2026-10-10T12:08:34.783+00:00",
+      "crawlId": 300,
+      "extensions": {},
+      "basisOfRecord": "MATERIAL_SAMPLE",
+      "occurrenceStatus": "PRESENT",
+      "classifications": {
+        "7ddf754f-d193-4cc9-b351-99906754a03b": {
+          "usage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "CS5HF",
+              "name": "Eukaryota",
+              "rank": "DOMAIN"
+            },
+            {
+              "key": "C",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "D3MRQ",
+              "name": "Harosa",
+              "rank": "SUBKINGDOM"
+            },
+            {
+              "key": "D3MRV",
+              "name": "Heterokonta",
+              "rank": "INFRAKINGDOM"
+            },
+            {
+              "key": "5K",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "G3",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "3SH",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "6266K",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "63MCM",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "4HNSM",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_CONCEPT_ID_NOT_FOUND",
+            "TAXON_ID_NOT_FOUND"
+          ]
+        },
+        "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c": {
+          "usage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "4",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "32",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "8179345",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "1259",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "4785",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "3203589",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "3203716",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_CONCEPT_ID_NOT_FOUND",
+            "TAXON_ID_NOT_FOUND"
+          ]
+        }
+      },
+      "taxonKey": 3203716,
+      "kingdomKey": 4,
+      "phylumKey": 32,
+      "classKey": 8179345,
+      "orderKey": 1259,
+      "familyKey": 4785,
+      "genusKey": 3203589,
+      "speciesKey": 3203716,
+      "acceptedTaxonKey": 3203716,
+      "scientificName": "Phytophthora infestans (Mont.) de Bary",
+      "scientificNameAuthorship": "(Mont.) de Bary",
+      "acceptedScientificName": "Phytophthora infestans (Mont.) de Bary",
+      "kingdom": "Chromista",
+      "phylum": "Oomycota",
+      "order": "Peronosporales",
+      "family": "Peronosporaceae",
+      "genus": "Phytophthora",
+      "species": "Phytophthora infestans",
+      "genericName": "Phytophthora",
+      "specificEpithet": "infestans",
+      "taxonRank": "SPECIES",
+      "taxonomicStatus": "ACCEPTED",
+      "continent": "ASIA",
+      "gadm": {},
+      "year": 2024,
+      "month": 1,
+      "day": 7,
+      "eventDate": "2024-01-07",
+      "startDayOfYear": 7,
+      "endDayOfYear": 7,
+      "issues": [
+        "CONTINENT_DERIVED_FROM_COUNTRY",
+        "TAXON_CONCEPT_ID_NOT_FOUND",
+        "TAXON_ID_NOT_FOUND"
+      ],
+      "lastInterpreted": "2026-10-10T12:08:34.783+00:00",
+      "references": "https://www.ebi.ac.uk/ena/browser/view/PZ159278",
+      "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+      "isSequenced": true,
+      "associatedSequences": "https://www.ebi.ac.uk/ena/browser/api/embl/PZ159278",
+      "identifiers": [
+        {
+          "identifier": "PZ159278"
+        }
+      ],
+      "media": [],
+      "facts": [],
+      "relations": [],
+      "isInCluster": false,
+      "recordedBy": "Lavanya S",
+      "dnaSequenceID": [],
+      "nucleotideSequence": [],
+      "class": "Peronosporea",
+      "countryCode": "IN",
+      "recordedByIDs": [],
+      "identifiedByIDs": [],
+      "gbifRegion": "ASIA",
+      "country": "India",
+      "publishedByGbifRegion": "EUROPE",
+      "identifier": "PZ159278",
+      "http://unknown.org/crawl_attempt": "300",
+      "taxonConceptID": "https://www.ebi.ac.uk/ena/browser/view/Taxon:4787",
+      "associatedTaxa": "potato",
+      "http://unknown.org/allowCoordinatesFlipping": "true",
+      "http://unknown.org/datasetCategory.gbif.org": "eDNA",
+      "occurrenceRemarks": "Phytophthora infestans isolate PIM-1 internal transcribed spacer 1, partial sequence 5.8S ribosomal RNA gene, complete sequence and internal transcribed spacer 2, partial sequence.",
+      "gbifID": "6189822098",
+      "occurrenceID": "PZ159278",
+      "taxonID": "ASV:8734eaa3eb008105df5881a0655b6591"
+    },
+    {
+      "key": 6189424483,
+      "datasetKey": "393b8c26-e4e0-4dd0-a218-93fc074ebf4e",
+      "publishingOrgKey": "ada9d123-ddb4-467d-8891-806ea8d94230",
+      "datasetCategory": [
+        "eDNA"
+      ],
+      "installationKey": "17a83780-3060-4851-9d6f-029d5fcb81c9",
+      "hostingOrganizationKey": "fbca90e3-8aed-48b1-84e3-369afbd000ce",
+      "publishingCountry": "GB",
+      "protocol": "EML",
+      "lastCrawled": "2026-10-10T12:02:38.832+00:00",
+      "lastParsed": "2026-10-10T12:09:06.056+00:00",
+      "crawlId": 300,
+      "extensions": {},
+      "basisOfRecord": "MATERIAL_SAMPLE",
+      "occurrenceStatus": "PRESENT",
+      "classifications": {
+        "7ddf754f-d193-4cc9-b351-99906754a03b": {
+          "usage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "CS5HF",
+              "name": "Eukaryota",
+              "rank": "DOMAIN"
+            },
+            {
+              "key": "C",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "D3MRQ",
+              "name": "Harosa",
+              "rank": "SUBKINGDOM"
+            },
+            {
+              "key": "D3MRV",
+              "name": "Heterokonta",
+              "rank": "INFRAKINGDOM"
+            },
+            {
+              "key": "5K",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "G3",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "3SH",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "6266K",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "63MCM",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "4HNSM",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_CONCEPT_ID_NOT_FOUND",
+            "TAXON_ID_NOT_FOUND"
+          ]
+        },
+        "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c": {
+          "usage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "4",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "32",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "8179345",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "1259",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "4785",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "3203589",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "3203716",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_CONCEPT_ID_NOT_FOUND",
+            "TAXON_ID_NOT_FOUND"
+          ]
+        }
+      },
+      "taxonKey": 3203716,
+      "kingdomKey": 4,
+      "phylumKey": 32,
+      "classKey": 8179345,
+      "orderKey": 1259,
+      "familyKey": 4785,
+      "genusKey": 3203589,
+      "speciesKey": 3203716,
+      "acceptedTaxonKey": 3203716,
+      "scientificName": "Phytophthora infestans (Mont.) de Bary",
+      "scientificNameAuthorship": "(Mont.) de Bary",
+      "acceptedScientificName": "Phytophthora infestans (Mont.) de Bary",
+      "kingdom": "Chromista",
+      "phylum": "Oomycota",
+      "order": "Peronosporales",
+      "family": "Peronosporaceae",
+      "genus": "Phytophthora",
+      "species": "Phytophthora infestans",
+      "genericName": "Phytophthora",
+      "specificEpithet": "infestans",
+      "taxonRank": "SPECIES",
+      "taxonomicStatus": "ACCEPTED",
+      "continent": "ASIA",
+      "gadm": {},
+      "year": 2024,
+      "month": 2,
+      "day": 1,
+      "eventDate": "2024-02-01",
+      "startDayOfYear": 32,
+      "endDayOfYear": 32,
+      "issues": [
+        "CONTINENT_DERIVED_FROM_COUNTRY",
+        "TAXON_CONCEPT_ID_NOT_FOUND",
+        "TAXON_ID_NOT_FOUND"
+      ],
+      "lastInterpreted": "2026-10-10T12:09:06.056+00:00",
+      "references": "https://www.ebi.ac.uk/ena/browser/view/PZ159351",
+      "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+      "isSequenced": true,
+      "associatedSequences": "https://www.ebi.ac.uk/ena/browser/api/embl/PZ159351",
+      "identifiers": [
+        {
+          "identifier": "PZ159351"
+        }
+      ],
+      "media": [],
+      "facts": [],
+      "relations": [],
+      "isInCluster": false,
+      "recordedBy": "Lavanya S",
+      "dnaSequenceID": [],
+      "nucleotideSequence": [],
+      "class": "Peronosporea",
+      "countryCode": "IN",
+      "recordedByIDs": [],
+      "identifiedByIDs": [],
+      "gbifRegion": "ASIA",
+      "country": "India",
+      "publishedByGbifRegion": "EUROPE",
+      "identifier": "PZ159351",
+      "http://unknown.org/crawl_attempt": "300",
+      "taxonConceptID": "https://www.ebi.ac.uk/ena/browser/view/Taxon:4787",
+      "associatedTaxa": "potato",
+      "http://unknown.org/allowCoordinatesFlipping": "true",
+      "http://unknown.org/datasetCategory.gbif.org": "eDNA",
+      "occurrenceRemarks": "Phytophthora infestans isolate PIO-3 small subunit ribosomal RNA gene, partial sequence internal transcribed spacer 1 and 5.8S ribosomal RNA gene, complete sequence and internal transcribed spacer 2, partial sequence.",
+      "gbifID": "6189424483",
+      "occurrenceID": "PZ159351",
+      "taxonID": "ASV:e5e66b4c83888ff6e7a0b60cf08b52fb"
+    },
+    {
+      "key": 6189292769,
+      "datasetKey": "393b8c26-e4e0-4dd0-a218-93fc074ebf4e",
+      "publishingOrgKey": "ada9d123-ddb4-467d-8891-806ea8d94230",
+      "datasetCategory": [
+        "eDNA"
+      ],
+      "installationKey": "17a83780-3060-4851-9d6f-029d5fcb81c9",
+      "hostingOrganizationKey": "fbca90e3-8aed-48b1-84e3-369afbd000ce",
+      "publishingCountry": "GB",
+      "protocol": "EML",
+      "lastCrawled": "2026-10-10T12:02:38.832+00:00",
+      "lastParsed": "2026-10-10T12:09:07.209+00:00",
+      "crawlId": 300,
+      "extensions": {},
+      "basisOfRecord": "MATERIAL_SAMPLE",
+      "occurrenceStatus": "PRESENT",
+      "classifications": {
+        "7ddf754f-d193-4cc9-b351-99906754a03b": {
+          "usage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "CS5HF",
+              "name": "Eukaryota",
+              "rank": "DOMAIN"
+            },
+            {
+              "key": "C",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "D3MRQ",
+              "name": "Harosa",
+              "rank": "SUBKINGDOM"
+            },
+            {
+              "key": "D3MRV",
+              "name": "Heterokonta",
+              "rank": "INFRAKINGDOM"
+            },
+            {
+              "key": "5K",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "G3",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "3SH",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "6266K",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "63MCM",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "4HNSM",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_ID_NOT_FOUND",
+            "TAXON_CONCEPT_ID_NOT_FOUND"
+          ]
+        },
+        "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c": {
+          "usage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "4",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "32",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "8179345",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "1259",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "4785",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "3203589",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "3203716",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_ID_NOT_FOUND",
+            "TAXON_CONCEPT_ID_NOT_FOUND"
+          ]
+        }
+      },
+      "taxonKey": 3203716,
+      "kingdomKey": 4,
+      "phylumKey": 32,
+      "classKey": 8179345,
+      "orderKey": 1259,
+      "familyKey": 4785,
+      "genusKey": 3203589,
+      "speciesKey": 3203716,
+      "acceptedTaxonKey": 3203716,
+      "scientificName": "Phytophthora infestans (Mont.) de Bary",
+      "scientificNameAuthorship": "(Mont.) de Bary",
+      "acceptedScientificName": "Phytophthora infestans (Mont.) de Bary",
+      "kingdom": "Chromista",
+      "phylum": "Oomycota",
+      "order": "Peronosporales",
+      "family": "Peronosporaceae",
+      "genus": "Phytophthora",
+      "species": "Phytophthora infestans",
+      "genericName": "Phytophthora",
+      "specificEpithet": "infestans",
+      "taxonRank": "SPECIES",
+      "taxonomicStatus": "ACCEPTED",
+      "continent": "ASIA",
+      "gadm": {},
+      "year": 2023,
+      "month": 12,
+      "day": 16,
+      "eventDate": "2023-12-16",
+      "startDayOfYear": 350,
+      "endDayOfYear": 350,
+      "issues": [
+        "CONTINENT_DERIVED_FROM_COUNTRY",
+        "TAXON_CONCEPT_ID_NOT_FOUND",
+        "TAXON_ID_NOT_FOUND"
+      ],
+      "lastInterpreted": "2026-10-10T12:09:07.209+00:00",
+      "references": "https://www.ebi.ac.uk/ena/browser/view/PP764546",
+      "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+      "isSequenced": true,
+      "associatedSequences": "https://www.ebi.ac.uk/ena/browser/api/embl/PP764546",
+      "identifiers": [
+        {
+          "identifier": "PP764546"
+        }
+      ],
+      "media": [],
+      "facts": [],
+      "relations": [],
+      "isInCluster": false,
+      "dnaSequenceID": [],
+      "nucleotideSequence": [],
+      "class": "Peronosporea",
+      "countryCode": "IN",
+      "recordedByIDs": [],
+      "identifiedByIDs": [],
+      "gbifRegion": "ASIA",
+      "country": "India",
+      "publishedByGbifRegion": "EUROPE",
+      "identifier": "PP764546",
+      "http://unknown.org/crawl_attempt": "300",
+      "taxonConceptID": "https://www.ebi.ac.uk/ena/browser/view/Taxon:4787",
+      "associatedTaxa": "Solanum tuberosum",
+      "http://unknown.org/allowCoordinatesFlipping": "true",
+      "http://unknown.org/datasetCategory.gbif.org": "eDNA",
+      "occurrenceRemarks": "Phytophthora infestans isolate PTPI-01 small subunit ribosomal RNA gene, partial sequence internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence and large subunit ribosomal RNA gene, partial sequence.",
+      "gbifID": "6189292769",
+      "occurrenceID": "PP764546",
+      "taxonID": "ASV:95a251fe0ecc66b8388629d85d4057e1"
+    },
+    {
+      "key": 6189316899,
+      "datasetKey": "393b8c26-e4e0-4dd0-a218-93fc074ebf4e",
+      "publishingOrgKey": "ada9d123-ddb4-467d-8891-806ea8d94230",
+      "datasetCategory": [
+        "eDNA"
+      ],
+      "installationKey": "17a83780-3060-4851-9d6f-029d5fcb81c9",
+      "hostingOrganizationKey": "fbca90e3-8aed-48b1-84e3-369afbd000ce",
+      "publishingCountry": "GB",
+      "protocol": "EML",
+      "lastCrawled": "2026-10-10T12:02:38.832+00:00",
+      "lastParsed": "2026-10-10T12:09:07.057+00:00",
+      "crawlId": 300,
+      "extensions": {},
+      "basisOfRecord": "MATERIAL_SAMPLE",
+      "occurrenceStatus": "PRESENT",
+      "classifications": {
+        "7ddf754f-d193-4cc9-b351-99906754a03b": {
+          "usage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "CS5HF",
+              "name": "Eukaryota",
+              "rank": "DOMAIN"
+            },
+            {
+              "key": "C",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "D3MRQ",
+              "name": "Harosa",
+              "rank": "SUBKINGDOM"
+            },
+            {
+              "key": "D3MRV",
+              "name": "Heterokonta",
+              "rank": "INFRAKINGDOM"
+            },
+            {
+              "key": "5K",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "G3",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "3SH",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "6266K",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "63MCM",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "4HNSM",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_ID_NOT_FOUND",
+            "TAXON_CONCEPT_ID_NOT_FOUND"
+          ]
+        },
+        "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c": {
+          "usage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "4",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "32",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "8179345",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "1259",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "4785",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "3203589",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "3203716",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_ID_NOT_FOUND",
+            "TAXON_CONCEPT_ID_NOT_FOUND"
+          ]
+        }
+      },
+      "taxonKey": 3203716,
+      "kingdomKey": 4,
+      "phylumKey": 32,
+      "classKey": 8179345,
+      "orderKey": 1259,
+      "familyKey": 4785,
+      "genusKey": 3203589,
+      "speciesKey": 3203716,
+      "acceptedTaxonKey": 3203716,
+      "scientificName": "Phytophthora infestans (Mont.) de Bary",
+      "scientificNameAuthorship": "(Mont.) de Bary",
+      "acceptedScientificName": "Phytophthora infestans (Mont.) de Bary",
+      "kingdom": "Chromista",
+      "phylum": "Oomycota",
+      "order": "Peronosporales",
+      "family": "Peronosporaceae",
+      "genus": "Phytophthora",
+      "species": "Phytophthora infestans",
+      "genericName": "Phytophthora",
+      "specificEpithet": "infestans",
+      "taxonRank": "SPECIES",
+      "taxonomicStatus": "ACCEPTED",
+      "continent": "ASIA",
+      "gadm": {},
+      "year": 2023,
+      "month": 12,
+      "day": 25,
+      "eventDate": "2023-12-25",
+      "startDayOfYear": 359,
+      "endDayOfYear": 359,
+      "issues": [
+        "CONTINENT_DERIVED_FROM_COUNTRY",
+        "TAXON_CONCEPT_ID_NOT_FOUND",
+        "TAXON_ID_NOT_FOUND"
+      ],
+      "lastInterpreted": "2026-10-10T12:09:07.057+00:00",
+      "references": "https://www.ebi.ac.uk/ena/browser/view/PP800243",
+      "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+      "isSequenced": true,
+      "associatedSequences": "https://www.ebi.ac.uk/ena/browser/api/embl/PP800243",
+      "identifiers": [
+        {
+          "identifier": "PP800243"
+        }
+      ],
+      "media": [],
+      "facts": [],
+      "relations": [],
+      "isInCluster": false,
+      "dnaSequenceID": [],
+      "nucleotideSequence": [],
+      "class": "Peronosporea",
+      "countryCode": "IN",
+      "recordedByIDs": [],
+      "identifiedByIDs": [],
+      "gbifRegion": "ASIA",
+      "country": "India",
+      "publishedByGbifRegion": "EUROPE",
+      "identifier": "PP800243",
+      "http://unknown.org/crawl_attempt": "300",
+      "taxonConceptID": "https://www.ebi.ac.uk/ena/browser/view/Taxon:4787",
+      "associatedTaxa": "potato",
+      "http://unknown.org/allowCoordinatesFlipping": "true",
+      "http://unknown.org/datasetCategory.gbif.org": "eDNA",
+      "occurrenceRemarks": "Phytophthora infestans isolate PTPI-05 small subunit ribosomal RNA gene, partial sequence internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence and large subunit ribosomal RNA gene, partial sequence.",
+      "gbifID": "6189316899",
+      "occurrenceID": "PP800243",
+      "taxonID": "ASV:976d1405f9891f0af57e34e279ab2a5b"
+    },
+    {
+      "key": 6189399945,
+      "datasetKey": "393b8c26-e4e0-4dd0-a218-93fc074ebf4e",
+      "publishingOrgKey": "ada9d123-ddb4-467d-8891-806ea8d94230",
+      "datasetCategory": [
+        "eDNA"
+      ],
+      "installationKey": "17a83780-3060-4851-9d6f-029d5fcb81c9",
+      "hostingOrganizationKey": "fbca90e3-8aed-48b1-84e3-369afbd000ce",
+      "publishingCountry": "GB",
+      "protocol": "EML",
+      "lastCrawled": "2026-10-10T12:02:38.832+00:00",
+      "lastParsed": "2026-10-10T12:08:29.381+00:00",
+      "crawlId": 300,
+      "extensions": {},
+      "basisOfRecord": "MATERIAL_SAMPLE",
+      "occurrenceStatus": "PRESENT",
+      "classifications": {
+        "7ddf754f-d193-4cc9-b351-99906754a03b": {
+          "usage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "CS5HF",
+              "name": "Eukaryota",
+              "rank": "DOMAIN"
+            },
+            {
+              "key": "C",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "D3MRQ",
+              "name": "Harosa",
+              "rank": "SUBKINGDOM"
+            },
+            {
+              "key": "D3MRV",
+              "name": "Heterokonta",
+              "rank": "INFRAKINGDOM"
+            },
+            {
+              "key": "5K",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "G3",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "3SH",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "6266K",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "63MCM",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "4HNSM",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_CONCEPT_ID_NOT_FOUND",
+            "TAXON_ID_NOT_FOUND"
+          ]
+        },
+        "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c": {
+          "usage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "4",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "32",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "8179345",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "1259",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "4785",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "3203589",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "3203716",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_CONCEPT_ID_NOT_FOUND",
+            "TAXON_ID_NOT_FOUND"
+          ]
+        }
+      },
+      "taxonKey": 3203716,
+      "kingdomKey": 4,
+      "phylumKey": 32,
+      "classKey": 8179345,
+      "orderKey": 1259,
+      "familyKey": 4785,
+      "genusKey": 3203589,
+      "speciesKey": 3203716,
+      "acceptedTaxonKey": 3203716,
+      "scientificName": "Phytophthora infestans (Mont.) de Bary",
+      "scientificNameAuthorship": "(Mont.) de Bary",
+      "acceptedScientificName": "Phytophthora infestans (Mont.) de Bary",
+      "kingdom": "Chromista",
+      "phylum": "Oomycota",
+      "order": "Peronosporales",
+      "family": "Peronosporaceae",
+      "genus": "Phytophthora",
+      "species": "Phytophthora infestans",
+      "genericName": "Phytophthora",
+      "specificEpithet": "infestans",
+      "taxonRank": "SPECIES",
+      "taxonomicStatus": "ACCEPTED",
+      "continent": "ASIA",
+      "gadm": {},
+      "year": 2023,
+      "month": 12,
+      "day": 25,
+      "eventDate": "2023-12-25",
+      "startDayOfYear": 359,
+      "endDayOfYear": 359,
+      "issues": [
+        "CONTINENT_DERIVED_FROM_COUNTRY",
+        "TAXON_CONCEPT_ID_NOT_FOUND",
+        "TAXON_ID_NOT_FOUND"
+      ],
+      "lastInterpreted": "2026-10-10T12:08:29.381+00:00",
+      "references": "https://www.ebi.ac.uk/ena/browser/view/PQ295891",
+      "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+      "isSequenced": true,
+      "associatedSequences": "https://www.ebi.ac.uk/ena/browser/api/embl/PQ295891",
+      "identifiers": [
+        {
+          "identifier": "PQ295891"
+        }
+      ],
+      "media": [],
+      "facts": [],
+      "relations": [],
+      "isInCluster": false,
+      "recordedBy": "Shajith Basha J",
+      "dnaSequenceID": [],
+      "nucleotideSequence": [],
+      "class": "Peronosporea",
+      "countryCode": "IN",
+      "recordedByIDs": [],
+      "identifiedByIDs": [],
+      "gbifRegion": "ASIA",
+      "country": "India",
+      "publishedByGbifRegion": "EUROPE",
+      "identifier": "PQ295891",
+      "http://unknown.org/crawl_attempt": "300",
+      "taxonConceptID": "https://www.ebi.ac.uk/ena/browser/view/Taxon:4787",
+      "associatedTaxa": "Solanum tuberosum",
+      "http://unknown.org/allowCoordinatesFlipping": "true",
+      "http://unknown.org/datasetCategory.gbif.org": "eDNA",
+      "occurrenceRemarks": "Phytophthora infestans isolate PTPI-02 ras-related protein Ypt1 (YPT1) gene, partial cds.",
+      "gbifID": "6189399945",
+      "occurrenceID": "PQ295891",
+      "taxonID": "ASV:38c9ec91e6d97f3af97dade8109e03a9"
+    },
+    {
+      "key": 6189468262,
+      "datasetKey": "393b8c26-e4e0-4dd0-a218-93fc074ebf4e",
+      "publishingOrgKey": "ada9d123-ddb4-467d-8891-806ea8d94230",
+      "datasetCategory": [
+        "eDNA"
+      ],
+      "installationKey": "17a83780-3060-4851-9d6f-029d5fcb81c9",
+      "hostingOrganizationKey": "fbca90e3-8aed-48b1-84e3-369afbd000ce",
+      "publishingCountry": "GB",
+      "protocol": "EML",
+      "lastCrawled": "2026-10-10T12:02:38.832+00:00",
+      "lastParsed": "2026-10-10T12:08:30.188+00:00",
+      "crawlId": 300,
+      "extensions": {},
+      "basisOfRecord": "MATERIAL_SAMPLE",
+      "occurrenceStatus": "PRESENT",
+      "classifications": {
+        "7ddf754f-d193-4cc9-b351-99906754a03b": {
+          "usage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "CS5HF",
+              "name": "Eukaryota",
+              "rank": "DOMAIN"
+            },
+            {
+              "key": "C",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "D3MRQ",
+              "name": "Harosa",
+              "rank": "SUBKINGDOM"
+            },
+            {
+              "key": "D3MRV",
+              "name": "Heterokonta",
+              "rank": "INFRAKINGDOM"
+            },
+            {
+              "key": "5K",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "G3",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "3SH",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "6266K",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "63MCM",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "4HNSM",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_ID_NOT_FOUND",
+            "TAXON_CONCEPT_ID_NOT_FOUND"
+          ]
+        },
+        "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c": {
+          "usage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "4",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "32",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "8179345",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "1259",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "4785",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "3203589",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "3203716",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_ID_NOT_FOUND",
+            "TAXON_CONCEPT_ID_NOT_FOUND"
+          ]
+        }
+      },
+      "taxonKey": 3203716,
+      "kingdomKey": 4,
+      "phylumKey": 32,
+      "classKey": 8179345,
+      "orderKey": 1259,
+      "familyKey": 4785,
+      "genusKey": 3203589,
+      "speciesKey": 3203716,
+      "acceptedTaxonKey": 3203716,
+      "scientificName": "Phytophthora infestans (Mont.) de Bary",
+      "scientificNameAuthorship": "(Mont.) de Bary",
+      "acceptedScientificName": "Phytophthora infestans (Mont.) de Bary",
+      "kingdom": "Chromista",
+      "phylum": "Oomycota",
+      "order": "Peronosporales",
+      "family": "Peronosporaceae",
+      "genus": "Phytophthora",
+      "species": "Phytophthora infestans",
+      "genericName": "Phytophthora",
+      "specificEpithet": "infestans",
+      "taxonRank": "SPECIES",
+      "taxonomicStatus": "ACCEPTED",
+      "continent": "ASIA",
+      "gadm": {},
+      "year": 2023,
+      "month": 12,
+      "day": 25,
+      "eventDate": "2023-12-25",
+      "startDayOfYear": 359,
+      "endDayOfYear": 359,
+      "issues": [
+        "CONTINENT_DERIVED_FROM_COUNTRY",
+        "TAXON_CONCEPT_ID_NOT_FOUND",
+        "TAXON_ID_NOT_FOUND"
+      ],
+      "lastInterpreted": "2026-10-10T12:08:30.188+00:00",
+      "references": "https://www.ebi.ac.uk/ena/browser/view/PQ295894",
+      "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+      "isSequenced": true,
+      "associatedSequences": "https://www.ebi.ac.uk/ena/browser/api/embl/PQ295894",
+      "identifiers": [
+        {
+          "identifier": "PQ295894"
+        }
+      ],
+      "media": [],
+      "facts": [],
+      "relations": [],
+      "isInCluster": false,
+      "recordedBy": "Shajith Basha J",
+      "dnaSequenceID": [],
+      "nucleotideSequence": [],
+      "class": "Peronosporea",
+      "countryCode": "IN",
+      "recordedByIDs": [],
+      "identifiedByIDs": [],
+      "gbifRegion": "ASIA",
+      "country": "India",
+      "publishedByGbifRegion": "EUROPE",
+      "identifier": "PQ295894",
+      "http://unknown.org/crawl_attempt": "300",
+      "taxonConceptID": "https://www.ebi.ac.uk/ena/browser/view/Taxon:4787",
+      "associatedTaxa": "Solanum tuberosum",
+      "http://unknown.org/allowCoordinatesFlipping": "true",
+      "http://unknown.org/datasetCategory.gbif.org": "eDNA",
+      "occurrenceRemarks": "Phytophthora infestans isolate PTPI-05 ras-related protein Ypt1 (YPT1) gene, partial cds.",
+      "gbifID": "6189468262",
+      "occurrenceID": "PQ295894",
+      "taxonID": "ASV:38c9ec91e6d97f3af97dade8109e03a9"
+    },
+    {
+      "key": 6189531791,
+      "datasetKey": "393b8c26-e4e0-4dd0-a218-93fc074ebf4e",
+      "publishingOrgKey": "ada9d123-ddb4-467d-8891-806ea8d94230",
+      "datasetCategory": [
+        "eDNA"
+      ],
+      "installationKey": "17a83780-3060-4851-9d6f-029d5fcb81c9",
+      "hostingOrganizationKey": "fbca90e3-8aed-48b1-84e3-369afbd000ce",
+      "publishingCountry": "GB",
+      "protocol": "EML",
+      "lastCrawled": "2026-10-10T12:02:38.832+00:00",
+      "lastParsed": "2026-10-10T12:08:32.142+00:00",
+      "crawlId": 300,
+      "extensions": {},
+      "basisOfRecord": "MATERIAL_SAMPLE",
+      "occurrenceStatus": "PRESENT",
+      "classifications": {
+        "7ddf754f-d193-4cc9-b351-99906754a03b": {
+          "usage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "CS5HF",
+              "name": "Eukaryota",
+              "rank": "DOMAIN"
+            },
+            {
+              "key": "C",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "D3MRQ",
+              "name": "Harosa",
+              "rank": "SUBKINGDOM"
+            },
+            {
+              "key": "D3MRV",
+              "name": "Heterokonta",
+              "rank": "INFRAKINGDOM"
+            },
+            {
+              "key": "5K",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "G3",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "3SH",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "6266K",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "63MCM",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "4HNSM",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_ID_NOT_FOUND",
+            "TAXON_CONCEPT_ID_NOT_FOUND"
+          ]
+        },
+        "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c": {
+          "usage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "4",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "32",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "8179345",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "1259",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "4785",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "3203589",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "3203716",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_ID_NOT_FOUND",
+            "TAXON_CONCEPT_ID_NOT_FOUND"
+          ]
+        }
+      },
+      "taxonKey": 3203716,
+      "kingdomKey": 4,
+      "phylumKey": 32,
+      "classKey": 8179345,
+      "orderKey": 1259,
+      "familyKey": 4785,
+      "genusKey": 3203589,
+      "speciesKey": 3203716,
+      "acceptedTaxonKey": 3203716,
+      "scientificName": "Phytophthora infestans (Mont.) de Bary",
+      "scientificNameAuthorship": "(Mont.) de Bary",
+      "acceptedScientificName": "Phytophthora infestans (Mont.) de Bary",
+      "kingdom": "Chromista",
+      "phylum": "Oomycota",
+      "order": "Peronosporales",
+      "family": "Peronosporaceae",
+      "genus": "Phytophthora",
+      "species": "Phytophthora infestans",
+      "genericName": "Phytophthora",
+      "specificEpithet": "infestans",
+      "taxonRank": "SPECIES",
+      "taxonomicStatus": "ACCEPTED",
+      "decimalLatitude": 11.37,
+      "decimalLongitude": 76.66,
+      "continent": "ASIA",
+      "gadm": {
+        "level0": {
+          "gid": "IND",
+          "name": "India"
+        },
+        "level1": {
+          "gid": "IND.31_1",
+          "name": "Tamil Nadu"
+        },
+        "level2": {
+          "gid": "IND.31.21_1",
+          "name": "The Nilgiris"
+        },
+        "level3": {
+          "gid": "IND.31.21.4_1",
+          "name": "Udagamandalam"
+        }
+      },
+      "year": 2023,
+      "month": 12,
+      "day": 16,
+      "eventDate": "2023-12-16",
+      "startDayOfYear": 350,
+      "endDayOfYear": 350,
+      "issues": [
+        "GEODETIC_DATUM_ASSUMED_WGS84",
+        "CONTINENT_DERIVED_FROM_COORDINATES",
+        "TAXON_CONCEPT_ID_NOT_FOUND",
+        "TAXON_ID_NOT_FOUND"
+      ],
+      "lastInterpreted": "2026-10-10T12:08:32.142+00:00",
+      "references": "https://www.ebi.ac.uk/ena/browser/view/PQ295890",
+      "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+      "isSequenced": true,
+      "associatedSequences": "https://www.ebi.ac.uk/ena/browser/api/embl/PQ295890",
+      "identifiers": [
+        {
+          "identifier": "PQ295890"
+        }
+      ],
+      "media": [],
+      "facts": [],
+      "relations": [],
+      "isInCluster": false,
+      "recordedBy": "Shajith Basha J",
+      "dnaSequenceID": [],
+      "nucleotideSequence": [],
+      "geodeticDatum": "WGS84",
+      "class": "Peronosporea",
+      "countryCode": "IN",
+      "recordedByIDs": [],
+      "identifiedByIDs": [],
+      "gbifRegion": "ASIA",
+      "country": "India",
+      "publishedByGbifRegion": "EUROPE",
+      "identifier": "PQ295890",
+      "http://unknown.org/crawl_attempt": "300",
+      "taxonConceptID": "https://www.ebi.ac.uk/ena/browser/view/Taxon:4787",
+      "associatedTaxa": "Solanum tuberosum",
+      "http://unknown.org/allowCoordinatesFlipping": "true",
+      "http://unknown.org/datasetCategory.gbif.org": "eDNA",
+      "occurrenceRemarks": "Phytophthora infestans isolate PTPI-01 ras-related protein Ypt1 (YPT1) gene, partial cds.",
+      "gbifID": "6189531791",
+      "occurrenceID": "PQ295890",
+      "taxonID": "ASV:38c9ec91e6d97f3af97dade8109e03a9"
+    },
+    {
+      "key": 6189583557,
+      "datasetKey": "393b8c26-e4e0-4dd0-a218-93fc074ebf4e",
+      "publishingOrgKey": "ada9d123-ddb4-467d-8891-806ea8d94230",
+      "datasetCategory": [
+        "eDNA"
+      ],
+      "installationKey": "17a83780-3060-4851-9d6f-029d5fcb81c9",
+      "hostingOrganizationKey": "fbca90e3-8aed-48b1-84e3-369afbd000ce",
+      "publishingCountry": "GB",
+      "protocol": "EML",
+      "lastCrawled": "2026-10-10T12:02:38.832+00:00",
+      "lastParsed": "2026-10-10T12:09:11.392+00:00",
+      "crawlId": 300,
+      "extensions": {},
+      "basisOfRecord": "MATERIAL_SAMPLE",
+      "occurrenceStatus": "PRESENT",
+      "classifications": {
+        "7ddf754f-d193-4cc9-b351-99906754a03b": {
+          "usage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "CS5HF",
+              "name": "Eukaryota",
+              "rank": "DOMAIN"
+            },
+            {
+              "key": "C",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "D3MRQ",
+              "name": "Harosa",
+              "rank": "SUBKINGDOM"
+            },
+            {
+              "key": "D3MRV",
+              "name": "Heterokonta",
+              "rank": "INFRAKINGDOM"
+            },
+            {
+              "key": "5K",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "G3",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "3SH",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "6266K",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "63MCM",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "4HNSM",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_ID_NOT_FOUND",
+            "TAXON_CONCEPT_ID_NOT_FOUND"
+          ]
+        },
+        "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c": {
+          "usage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "4",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "32",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "8179345",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "1259",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "4785",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "3203589",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "3203716",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_ID_NOT_FOUND",
+            "TAXON_CONCEPT_ID_NOT_FOUND"
+          ]
+        }
+      },
+      "taxonKey": 3203716,
+      "kingdomKey": 4,
+      "phylumKey": 32,
+      "classKey": 8179345,
+      "orderKey": 1259,
+      "familyKey": 4785,
+      "genusKey": 3203589,
+      "speciesKey": 3203716,
+      "acceptedTaxonKey": 3203716,
+      "scientificName": "Phytophthora infestans (Mont.) de Bary",
+      "scientificNameAuthorship": "(Mont.) de Bary",
+      "acceptedScientificName": "Phytophthora infestans (Mont.) de Bary",
+      "kingdom": "Chromista",
+      "phylum": "Oomycota",
+      "order": "Peronosporales",
+      "family": "Peronosporaceae",
+      "genus": "Phytophthora",
+      "species": "Phytophthora infestans",
+      "genericName": "Phytophthora",
+      "specificEpithet": "infestans",
+      "taxonRank": "SPECIES",
+      "taxonomicStatus": "ACCEPTED",
+      "continent": "ASIA",
+      "gadm": {},
+      "year": 2023,
+      "month": 12,
+      "day": 25,
+      "eventDate": "2023-12-25",
+      "startDayOfYear": 359,
+      "endDayOfYear": 359,
+      "issues": [
+        "CONTINENT_DERIVED_FROM_COUNTRY",
+        "TAXON_CONCEPT_ID_NOT_FOUND",
+        "TAXON_ID_NOT_FOUND"
+      ],
+      "lastInterpreted": "2026-10-10T12:09:11.392+00:00",
+      "references": "https://www.ebi.ac.uk/ena/browser/view/PQ295893",
+      "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+      "isSequenced": true,
+      "associatedSequences": "https://www.ebi.ac.uk/ena/browser/api/embl/PQ295893",
+      "identifiers": [
+        {
+          "identifier": "PQ295893"
+        }
+      ],
+      "media": [],
+      "facts": [],
+      "relations": [],
+      "isInCluster": false,
+      "recordedBy": "Shajith Basha J",
+      "dnaSequenceID": [],
+      "nucleotideSequence": [],
+      "class": "Peronosporea",
+      "countryCode": "IN",
+      "recordedByIDs": [],
+      "identifiedByIDs": [],
+      "gbifRegion": "ASIA",
+      "country": "India",
+      "publishedByGbifRegion": "EUROPE",
+      "identifier": "PQ295893",
+      "http://unknown.org/crawl_attempt": "300",
+      "taxonConceptID": "https://www.ebi.ac.uk/ena/browser/view/Taxon:4787",
+      "associatedTaxa": "Solanum tuberosum",
+      "http://unknown.org/allowCoordinatesFlipping": "true",
+      "http://unknown.org/datasetCategory.gbif.org": "eDNA",
+      "occurrenceRemarks": "Phytophthora infestans isolate PTPI-04 ras-related protein Ypt1 (YPT1) gene, partial cds.",
+      "gbifID": "6189583557",
+      "occurrenceID": "PQ295893",
+      "taxonID": "ASV:38c9ec91e6d97f3af97dade8109e03a9"
+    },
+    {
+      "key": 6189660115,
+      "datasetKey": "393b8c26-e4e0-4dd0-a218-93fc074ebf4e",
+      "publishingOrgKey": "ada9d123-ddb4-467d-8891-806ea8d94230",
+      "datasetCategory": [
+        "eDNA"
+      ],
+      "installationKey": "17a83780-3060-4851-9d6f-029d5fcb81c9",
+      "hostingOrganizationKey": "fbca90e3-8aed-48b1-84e3-369afbd000ce",
+      "publishingCountry": "GB",
+      "protocol": "EML",
+      "lastCrawled": "2026-10-10T12:02:38.832+00:00",
+      "lastParsed": "2026-10-10T12:09:36.601+00:00",
+      "crawlId": 300,
+      "extensions": {},
+      "basisOfRecord": "MATERIAL_SAMPLE",
+      "occurrenceStatus": "PRESENT",
+      "classifications": {
+        "7ddf754f-d193-4cc9-b351-99906754a03b": {
+          "usage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "CS5HF",
+              "name": "Eukaryota",
+              "rank": "DOMAIN"
+            },
+            {
+              "key": "C",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "D3MRQ",
+              "name": "Harosa",
+              "rank": "SUBKINGDOM"
+            },
+            {
+              "key": "D3MRV",
+              "name": "Heterokonta",
+              "rank": "INFRAKINGDOM"
+            },
+            {
+              "key": "5K",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "G3",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "3SH",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "6266K",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "63MCM",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "4HNSM",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_CONCEPT_ID_NOT_FOUND",
+            "TAXON_ID_NOT_FOUND"
+          ]
+        },
+        "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c": {
+          "usage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "4",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "32",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "8179345",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "1259",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "4785",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "3203589",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "3203716",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_CONCEPT_ID_NOT_FOUND",
+            "TAXON_ID_NOT_FOUND"
+          ]
+        }
+      },
+      "taxonKey": 3203716,
+      "kingdomKey": 4,
+      "phylumKey": 32,
+      "classKey": 8179345,
+      "orderKey": 1259,
+      "familyKey": 4785,
+      "genusKey": 3203589,
+      "speciesKey": 3203716,
+      "acceptedTaxonKey": 3203716,
+      "scientificName": "Phytophthora infestans (Mont.) de Bary",
+      "scientificNameAuthorship": "(Mont.) de Bary",
+      "acceptedScientificName": "Phytophthora infestans (Mont.) de Bary",
+      "kingdom": "Chromista",
+      "phylum": "Oomycota",
+      "order": "Peronosporales",
+      "family": "Peronosporaceae",
+      "genus": "Phytophthora",
+      "species": "Phytophthora infestans",
+      "genericName": "Phytophthora",
+      "specificEpithet": "infestans",
+      "taxonRank": "SPECIES",
+      "taxonomicStatus": "ACCEPTED",
+      "continent": "ASIA",
+      "gadm": {},
+      "year": 2023,
+      "month": 12,
+      "day": 16,
+      "eventDate": "2023-12-16",
+      "startDayOfYear": 350,
+      "endDayOfYear": 350,
+      "issues": [
+        "CONTINENT_DERIVED_FROM_COUNTRY",
+        "TAXON_CONCEPT_ID_NOT_FOUND",
+        "TAXON_ID_NOT_FOUND"
+      ],
+      "lastInterpreted": "2026-10-10T12:09:36.601+00:00",
+      "references": "https://www.ebi.ac.uk/ena/browser/view/PP800238",
+      "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+      "isSequenced": true,
+      "associatedSequences": "https://www.ebi.ac.uk/ena/browser/api/embl/PP800238",
+      "identifiers": [
+        {
+          "identifier": "PP800238"
+        }
+      ],
+      "media": [],
+      "facts": [],
+      "relations": [],
+      "isInCluster": false,
+      "dnaSequenceID": [],
+      "nucleotideSequence": [],
+      "class": "Peronosporea",
+      "countryCode": "IN",
+      "recordedByIDs": [],
+      "identifiedByIDs": [],
+      "gbifRegion": "ASIA",
+      "country": "India",
+      "publishedByGbifRegion": "EUROPE",
+      "identifier": "PP800238",
+      "http://unknown.org/crawl_attempt": "300",
+      "taxonConceptID": "https://www.ebi.ac.uk/ena/browser/view/Taxon:4787",
+      "associatedTaxa": "potato",
+      "http://unknown.org/allowCoordinatesFlipping": "true",
+      "http://unknown.org/datasetCategory.gbif.org": "eDNA",
+      "occurrenceRemarks": "Phytophthora infestans isolate PTPI-04 small subunit ribosomal RNA gene, partial sequence internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence and large subunit ribosomal RNA gene, partial sequence.",
+      "gbifID": "6189660115",
+      "occurrenceID": "PP800238",
+      "taxonID": "ASV:ccd35a5871a025ba0759ea99d3f784d2"
+    },
+    {
+      "key": 6189667773,
+      "datasetKey": "393b8c26-e4e0-4dd0-a218-93fc074ebf4e",
+      "publishingOrgKey": "ada9d123-ddb4-467d-8891-806ea8d94230",
+      "datasetCategory": [
+        "eDNA"
+      ],
+      "installationKey": "17a83780-3060-4851-9d6f-029d5fcb81c9",
+      "hostingOrganizationKey": "fbca90e3-8aed-48b1-84e3-369afbd000ce",
+      "publishingCountry": "GB",
+      "protocol": "EML",
+      "lastCrawled": "2026-10-10T12:02:38.832+00:00",
+      "lastParsed": "2026-10-10T12:09:08.150+00:00",
+      "crawlId": 300,
+      "extensions": {},
+      "basisOfRecord": "MATERIAL_SAMPLE",
+      "occurrenceStatus": "PRESENT",
+      "classifications": {
+        "7ddf754f-d193-4cc9-b351-99906754a03b": {
+          "usage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "CS5HF",
+              "name": "Eukaryota",
+              "rank": "DOMAIN"
+            },
+            {
+              "key": "C",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "D3MRQ",
+              "name": "Harosa",
+              "rank": "SUBKINGDOM"
+            },
+            {
+              "key": "D3MRV",
+              "name": "Heterokonta",
+              "rank": "INFRAKINGDOM"
+            },
+            {
+              "key": "5K",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "G3",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "3SH",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "6266K",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "63MCM",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "4HNSM",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_CONCEPT_ID_NOT_FOUND",
+            "TAXON_ID_NOT_FOUND"
+          ]
+        },
+        "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c": {
+          "usage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "4",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "32",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "8179345",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "1259",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "4785",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "3203589",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "3203716",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_CONCEPT_ID_NOT_FOUND",
+            "TAXON_ID_NOT_FOUND"
+          ]
+        }
+      },
+      "taxonKey": 3203716,
+      "kingdomKey": 4,
+      "phylumKey": 32,
+      "classKey": 8179345,
+      "orderKey": 1259,
+      "familyKey": 4785,
+      "genusKey": 3203589,
+      "speciesKey": 3203716,
+      "acceptedTaxonKey": 3203716,
+      "scientificName": "Phytophthora infestans (Mont.) de Bary",
+      "scientificNameAuthorship": "(Mont.) de Bary",
+      "acceptedScientificName": "Phytophthora infestans (Mont.) de Bary",
+      "kingdom": "Chromista",
+      "phylum": "Oomycota",
+      "order": "Peronosporales",
+      "family": "Peronosporaceae",
+      "genus": "Phytophthora",
+      "species": "Phytophthora infestans",
+      "genericName": "Phytophthora",
+      "specificEpithet": "infestans",
+      "taxonRank": "SPECIES",
+      "taxonomicStatus": "ACCEPTED",
+      "continent": "ASIA",
+      "gadm": {},
+      "year": 2023,
+      "month": 12,
+      "day": 25,
+      "eventDate": "2023-12-25",
+      "startDayOfYear": 359,
+      "endDayOfYear": 359,
+      "issues": [
+        "CONTINENT_DERIVED_FROM_COUNTRY",
+        "TAXON_CONCEPT_ID_NOT_FOUND",
+        "TAXON_ID_NOT_FOUND"
+      ],
+      "lastInterpreted": "2026-10-10T12:09:08.150+00:00",
+      "references": "https://www.ebi.ac.uk/ena/browser/view/PQ295892",
+      "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+      "isSequenced": true,
+      "associatedSequences": "https://www.ebi.ac.uk/ena/browser/api/embl/PQ295892",
+      "identifiers": [
+        {
+          "identifier": "PQ295892"
+        }
+      ],
+      "media": [],
+      "facts": [],
+      "relations": [],
+      "isInCluster": false,
+      "recordedBy": "Shajith Basha J",
+      "dnaSequenceID": [],
+      "nucleotideSequence": [],
+      "class": "Peronosporea",
+      "countryCode": "IN",
+      "recordedByIDs": [],
+      "identifiedByIDs": [],
+      "gbifRegion": "ASIA",
+      "country": "India",
+      "publishedByGbifRegion": "EUROPE",
+      "identifier": "PQ295892",
+      "http://unknown.org/crawl_attempt": "300",
+      "taxonConceptID": "https://www.ebi.ac.uk/ena/browser/view/Taxon:4787",
+      "associatedTaxa": "Solanum tuberosum",
+      "http://unknown.org/allowCoordinatesFlipping": "true",
+      "http://unknown.org/datasetCategory.gbif.org": "eDNA",
+      "occurrenceRemarks": "Phytophthora infestans isolate PTPI-03 ras-related protein Ypt1 (YPT1) gene, partial cds.",
+      "gbifID": "6189667773",
+      "occurrenceID": "PQ295892",
+      "taxonID": "ASV:38c9ec91e6d97f3af97dade8109e03a9"
+    },
+    {
+      "key": 6189757987,
+      "datasetKey": "393b8c26-e4e0-4dd0-a218-93fc074ebf4e",
+      "publishingOrgKey": "ada9d123-ddb4-467d-8891-806ea8d94230",
+      "datasetCategory": [
+        "eDNA"
+      ],
+      "installationKey": "17a83780-3060-4851-9d6f-029d5fcb81c9",
+      "hostingOrganizationKey": "fbca90e3-8aed-48b1-84e3-369afbd000ce",
+      "publishingCountry": "GB",
+      "protocol": "EML",
+      "lastCrawled": "2026-10-10T12:02:38.832+00:00",
+      "lastParsed": "2026-10-10T12:08:34.503+00:00",
+      "crawlId": 300,
+      "extensions": {},
+      "basisOfRecord": "MATERIAL_SAMPLE",
+      "occurrenceStatus": "PRESENT",
+      "classifications": {
+        "7ddf754f-d193-4cc9-b351-99906754a03b": {
+          "usage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "CS5HF",
+              "name": "Eukaryota",
+              "rank": "DOMAIN"
+            },
+            {
+              "key": "C",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "D3MRQ",
+              "name": "Harosa",
+              "rank": "SUBKINGDOM"
+            },
+            {
+              "key": "D3MRV",
+              "name": "Heterokonta",
+              "rank": "INFRAKINGDOM"
+            },
+            {
+              "key": "5K",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "G3",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "3SH",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "6266K",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "63MCM",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "4HNSM",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_CONCEPT_ID_NOT_FOUND",
+            "TAXON_ID_NOT_FOUND"
+          ]
+        },
+        "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c": {
+          "usage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "4",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "32",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "8179345",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "1259",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "4785",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "3203589",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "3203716",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_CONCEPT_ID_NOT_FOUND",
+            "TAXON_ID_NOT_FOUND"
+          ]
+        }
+      },
+      "taxonKey": 3203716,
+      "kingdomKey": 4,
+      "phylumKey": 32,
+      "classKey": 8179345,
+      "orderKey": 1259,
+      "familyKey": 4785,
+      "genusKey": 3203589,
+      "speciesKey": 3203716,
+      "acceptedTaxonKey": 3203716,
+      "scientificName": "Phytophthora infestans (Mont.) de Bary",
+      "scientificNameAuthorship": "(Mont.) de Bary",
+      "acceptedScientificName": "Phytophthora infestans (Mont.) de Bary",
+      "kingdom": "Chromista",
+      "phylum": "Oomycota",
+      "order": "Peronosporales",
+      "family": "Peronosporaceae",
+      "genus": "Phytophthora",
+      "species": "Phytophthora infestans",
+      "genericName": "Phytophthora",
+      "specificEpithet": "infestans",
+      "taxonRank": "SPECIES",
+      "taxonomicStatus": "ACCEPTED",
+      "continent": "ASIA",
+      "gadm": {},
+      "year": 2023,
+      "month": 12,
+      "day": 25,
+      "eventDate": "2023-12-25",
+      "startDayOfYear": 359,
+      "endDayOfYear": 359,
+      "issues": [
+        "CONTINENT_DERIVED_FROM_COUNTRY",
+        "TAXON_CONCEPT_ID_NOT_FOUND",
+        "TAXON_ID_NOT_FOUND"
+      ],
+      "lastInterpreted": "2026-10-10T12:08:34.503+00:00",
+      "references": "https://www.ebi.ac.uk/ena/browser/view/PP800231",
+      "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+      "isSequenced": true,
+      "associatedSequences": "https://www.ebi.ac.uk/ena/browser/api/embl/PP800231",
+      "identifiers": [
+        {
+          "identifier": "PP800231"
+        }
+      ],
+      "media": [],
+      "facts": [],
+      "relations": [],
+      "isInCluster": false,
+      "dnaSequenceID": [],
+      "nucleotideSequence": [],
+      "class": "Peronosporea",
+      "countryCode": "IN",
+      "recordedByIDs": [],
+      "identifiedByIDs": [],
+      "gbifRegion": "ASIA",
+      "country": "India",
+      "publishedByGbifRegion": "EUROPE",
+      "identifier": "PP800231",
+      "http://unknown.org/crawl_attempt": "300",
+      "taxonConceptID": "https://www.ebi.ac.uk/ena/browser/view/Taxon:4787",
+      "associatedTaxa": "potato",
+      "http://unknown.org/allowCoordinatesFlipping": "true",
+      "http://unknown.org/datasetCategory.gbif.org": "eDNA",
+      "occurrenceRemarks": "Phytophthora infestans isolate PTPI-02 small subunit ribosomal RNA gene, partial sequence internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence and large subunit ribosomal RNA gene, partial sequence.",
+      "gbifID": "6189757987",
+      "occurrenceID": "PP800231",
+      "taxonID": "ASV:a55210cb55f38fe1d80d623344f8cbf2"
+    },
+    {
+      "key": 6189798821,
+      "datasetKey": "393b8c26-e4e0-4dd0-a218-93fc074ebf4e",
+      "publishingOrgKey": "ada9d123-ddb4-467d-8891-806ea8d94230",
+      "datasetCategory": [
+        "eDNA"
+      ],
+      "installationKey": "17a83780-3060-4851-9d6f-029d5fcb81c9",
+      "hostingOrganizationKey": "fbca90e3-8aed-48b1-84e3-369afbd000ce",
+      "publishingCountry": "GB",
+      "protocol": "EML",
+      "lastCrawled": "2026-10-10T12:02:38.832+00:00",
+      "lastParsed": "2026-10-10T12:09:35.367+00:00",
+      "crawlId": 300,
+      "extensions": {},
+      "basisOfRecord": "MATERIAL_SAMPLE",
+      "occurrenceStatus": "PRESENT",
+      "classifications": {
+        "7ddf754f-d193-4cc9-b351-99906754a03b": {
+          "usage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "CS5HF",
+              "name": "Eukaryota",
+              "rank": "DOMAIN"
+            },
+            {
+              "key": "C",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "D3MRQ",
+              "name": "Harosa",
+              "rank": "SUBKINGDOM"
+            },
+            {
+              "key": "D3MRV",
+              "name": "Heterokonta",
+              "rank": "INFRAKINGDOM"
+            },
+            {
+              "key": "5K",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "G3",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "3SH",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "6266K",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "63MCM",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "4HNSM",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_ID_NOT_FOUND",
+            "TAXON_CONCEPT_ID_NOT_FOUND"
+          ]
+        },
+        "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c": {
+          "usage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "4",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "32",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "8179345",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "1259",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "4785",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "3203589",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "3203716",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_ID_NOT_FOUND",
+            "TAXON_CONCEPT_ID_NOT_FOUND"
+          ]
+        }
+      },
+      "taxonKey": 3203716,
+      "kingdomKey": 4,
+      "phylumKey": 32,
+      "classKey": 8179345,
+      "orderKey": 1259,
+      "familyKey": 4785,
+      "genusKey": 3203589,
+      "speciesKey": 3203716,
+      "acceptedTaxonKey": 3203716,
+      "scientificName": "Phytophthora infestans (Mont.) de Bary",
+      "scientificNameAuthorship": "(Mont.) de Bary",
+      "acceptedScientificName": "Phytophthora infestans (Mont.) de Bary",
+      "kingdom": "Chromista",
+      "phylum": "Oomycota",
+      "order": "Peronosporales",
+      "family": "Peronosporaceae",
+      "genus": "Phytophthora",
+      "species": "Phytophthora infestans",
+      "genericName": "Phytophthora",
+      "specificEpithet": "infestans",
+      "taxonRank": "SPECIES",
+      "taxonomicStatus": "ACCEPTED",
+      "continent": "ASIA",
+      "gadm": {},
+      "year": 2023,
+      "month": 12,
+      "day": 25,
+      "eventDate": "2023-12-25",
+      "startDayOfYear": 359,
+      "endDayOfYear": 359,
+      "issues": [
+        "CONTINENT_DERIVED_FROM_COUNTRY",
+        "TAXON_CONCEPT_ID_NOT_FOUND",
+        "TAXON_ID_NOT_FOUND"
+      ],
+      "lastInterpreted": "2026-10-10T12:09:35.367+00:00",
+      "references": "https://www.ebi.ac.uk/ena/browser/view/PP800232",
+      "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+      "isSequenced": true,
+      "associatedSequences": "https://www.ebi.ac.uk/ena/browser/api/embl/PP800232",
+      "identifiers": [
+        {
+          "identifier": "PP800232"
+        }
+      ],
+      "media": [],
+      "facts": [],
+      "relations": [],
+      "isInCluster": false,
+      "dnaSequenceID": [],
+      "nucleotideSequence": [],
+      "class": "Peronosporea",
+      "countryCode": "IN",
+      "recordedByIDs": [],
+      "identifiedByIDs": [],
+      "gbifRegion": "ASIA",
+      "country": "India",
+      "publishedByGbifRegion": "EUROPE",
+      "identifier": "PP800232",
+      "http://unknown.org/crawl_attempt": "300",
+      "taxonConceptID": "https://www.ebi.ac.uk/ena/browser/view/Taxon:4787",
+      "associatedTaxa": "potato",
+      "http://unknown.org/allowCoordinatesFlipping": "true",
+      "http://unknown.org/datasetCategory.gbif.org": "eDNA",
+      "occurrenceRemarks": "Phytophthora infestans isolate PTPI-03 small subunit ribosomal RNA gene, partial sequence internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence and large subunit ribosomal RNA gene, partial sequence.",
+      "gbifID": "6189798821",
+      "occurrenceID": "PP800232",
+      "taxonID": "ASV:c26e3150913fa60b7f6b08c824080156"
+    },
+    {
+      "key": 6191398739,
+      "datasetKey": "d8cd16ba-bb74-4420-821e-083f2bac17c2",
+      "publishingOrgKey": "ada9d123-ddb4-467d-8891-806ea8d94230",
+      "datasetCategory": [
+        "eDNA"
+      ],
+      "installationKey": "17a83780-3060-4851-9d6f-029d5fcb81c9",
+      "hostingOrganizationKey": "fbca90e3-8aed-48b1-84e3-369afbd000ce",
+      "publishingCountry": "GB",
+      "protocol": "EML",
+      "lastCrawled": "2026-09-26T12:05:00.250+00:00",
+      "lastParsed": "2026-09-26T12:16:47.067+00:00",
+      "crawlId": 296,
+      "extensions": {},
+      "basisOfRecord": "MATERIAL_SAMPLE",
+      "occurrenceStatus": "PRESENT",
+      "classifications": {
+        "7ddf754f-d193-4cc9-b351-99906754a03b": {
+          "usage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "CS5HF",
+              "name": "Eukaryota",
+              "rank": "DOMAIN"
+            },
+            {
+              "key": "C",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "D3MRQ",
+              "name": "Harosa",
+              "rank": "SUBKINGDOM"
+            },
+            {
+              "key": "D3MRV",
+              "name": "Heterokonta",
+              "rank": "INFRAKINGDOM"
+            },
+            {
+              "key": "5K",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "G3",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "3SH",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "6266K",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "63MCM",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "4HNSM",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_CONCEPT_ID_NOT_FOUND",
+            "TAXON_ID_NOT_FOUND"
+          ]
+        },
+        "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c": {
+          "usage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "4",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "32",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "8179345",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "1259",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "4785",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "3203589",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "3203716",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_CONCEPT_ID_NOT_FOUND",
+            "TAXON_ID_NOT_FOUND"
+          ]
+        }
+      },
+      "taxonKey": 3203716,
+      "kingdomKey": 4,
+      "phylumKey": 32,
+      "classKey": 8179345,
+      "orderKey": 1259,
+      "familyKey": 4785,
+      "genusKey": 3203589,
+      "speciesKey": 3203716,
+      "acceptedTaxonKey": 3203716,
+      "scientificName": "Phytophthora infestans (Mont.) de Bary",
+      "scientificNameAuthorship": "(Mont.) de Bary",
+      "acceptedScientificName": "Phytophthora infestans (Mont.) de Bary",
+      "kingdom": "Chromista",
+      "phylum": "Oomycota",
+      "order": "Peronosporales",
+      "family": "Peronosporaceae",
+      "genus": "Phytophthora",
+      "species": "Phytophthora infestans",
+      "genericName": "Phytophthora",
+      "specificEpithet": "infestans",
+      "taxonRank": "SPECIES",
+      "taxonomicStatus": "ACCEPTED",
+      "continent": "ASIA",
+      "gadm": {},
+      "year": 2023,
+      "month": 12,
+      "day": 12,
+      "eventDate": "2023-12-12",
+      "startDayOfYear": 346,
+      "endDayOfYear": 346,
+      "issues": [
+        "CONTINENT_DERIVED_FROM_COUNTRY",
+        "TAXON_CONCEPT_ID_NOT_FOUND",
+        "TAXON_ID_NOT_FOUND"
+      ],
+      "lastInterpreted": "2026-09-26T12:16:47.067+00:00",
+      "references": "https://www.ebi.ac.uk/ena/browser/view/PQ772632",
+      "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+      "isSequenced": true,
+      "associatedSequences": "https://www.ebi.ac.uk/ena/browser/api/embl/PQ772632",
+      "identifiers": [
+        {
+          "identifier": "PQ772632"
+        }
+      ],
+      "media": [],
+      "facts": [],
+      "relations": [],
+      "isInCluster": false,
+      "dnaSequenceID": [],
+      "nucleotideSequence": [],
+      "class": "Peronosporea",
+      "countryCode": "IN",
+      "recordedByIDs": [],
+      "identifiedByIDs": [],
+      "gbifRegion": "ASIA",
+      "country": "India",
+      "publishedByGbifRegion": "EUROPE",
+      "identifier": "PQ772632",
+      "http://unknown.org/crawl_attempt": "296",
+      "taxonConceptID": "https://www.ebi.ac.uk/ena/browser/view/Taxon:4787",
+      "http://unknown.org/datasetCategory.gbif.org": "eDNA",
+      "occurrenceRemarks": "Phytophthora infestans isolate UBKV_PI_CB internal transcribed spacer 1, partial sequence 5.8S ribosomal RNA gene, complete sequence and internal transcribed spacer 2, partial sequence.",
+      "gbifID": "6191398739",
+      "occurrenceID": "PQ772632",
+      "taxonID": "ASV:4880ad2a57d28af21f44b834c9105fa3"
+    },
+    {
+      "key": 6453298444,
+      "datasetKey": "d8cd16ba-bb74-4420-821e-083f2bac17c2",
+      "publishingOrgKey": "ada9d123-ddb4-467d-8891-806ea8d94230",
+      "datasetCategory": [
+        "eDNA"
+      ],
+      "installationKey": "17a83780-3060-4851-9d6f-029d5fcb81c9",
+      "hostingOrganizationKey": "fbca90e3-8aed-48b1-84e3-369afbd000ce",
+      "publishingCountry": "GB",
+      "protocol": "EML",
+      "lastCrawled": "2026-09-26T12:05:00.250+00:00",
+      "lastParsed": "2026-09-26T12:15:15.226+00:00",
+      "crawlId": 296,
+      "extensions": {},
+      "basisOfRecord": "MATERIAL_SAMPLE",
+      "occurrenceStatus": "PRESENT",
+      "classifications": {
+        "7ddf754f-d193-4cc9-b351-99906754a03b": {
+          "usage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "CS5HF",
+              "name": "Eukaryota",
+              "rank": "DOMAIN"
+            },
+            {
+              "key": "C",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "D3MRQ",
+              "name": "Harosa",
+              "rank": "SUBKINGDOM"
+            },
+            {
+              "key": "D3MRV",
+              "name": "Heterokonta",
+              "rank": "INFRAKINGDOM"
+            },
+            {
+              "key": "5K",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "G3",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "3SH",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "6266K",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "63MCM",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "4HNSM",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_CONCEPT_ID_NOT_FOUND",
+            "TAXON_ID_NOT_FOUND"
+          ]
+        },
+        "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c": {
+          "usage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "4",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "32",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "8179345",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "1259",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "4785",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "3203589",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "3203716",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_CONCEPT_ID_NOT_FOUND",
+            "TAXON_ID_NOT_FOUND"
+          ]
+        }
+      },
+      "taxonKey": 3203716,
+      "kingdomKey": 4,
+      "phylumKey": 32,
+      "classKey": 8179345,
+      "orderKey": 1259,
+      "familyKey": 4785,
+      "genusKey": 3203589,
+      "speciesKey": 3203716,
+      "acceptedTaxonKey": 3203716,
+      "scientificName": "Phytophthora infestans (Mont.) de Bary",
+      "scientificNameAuthorship": "(Mont.) de Bary",
+      "acceptedScientificName": "Phytophthora infestans (Mont.) de Bary",
+      "kingdom": "Chromista",
+      "phylum": "Oomycota",
+      "order": "Peronosporales",
+      "family": "Peronosporaceae",
+      "genus": "Phytophthora",
+      "species": "Phytophthora infestans",
+      "genericName": "Phytophthora",
+      "specificEpithet": "infestans",
+      "taxonRank": "SPECIES",
+      "taxonomicStatus": "ACCEPTED",
+      "continent": "ASIA",
+      "gadm": {},
+      "year": 2022,
+      "month": 1,
+      "day": 20,
+      "eventDate": "2022-01-20",
+      "startDayOfYear": 20,
+      "endDayOfYear": 20,
+      "issues": [
+        "CONTINENT_DERIVED_FROM_COUNTRY",
+        "TAXON_CONCEPT_ID_NOT_FOUND",
+        "TAXON_ID_NOT_FOUND"
+      ],
+      "lastInterpreted": "2026-09-26T12:15:15.226+00:00",
+      "references": "https://www.ebi.ac.uk/ena/browser/view/PZ716294",
+      "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+      "isSequenced": true,
+      "associatedSequences": "https://www.ebi.ac.uk/ena/browser/api/embl/PZ716294",
+      "identifiers": [
+        {
+          "identifier": "PZ716294"
+        }
+      ],
+      "media": [],
+      "facts": [],
+      "relations": [],
+      "isInCluster": false,
+      "dnaSequenceID": [],
+      "nucleotideSequence": [],
+      "class": "Peronosporea",
+      "countryCode": "IN",
+      "recordedByIDs": [],
+      "identifiedByIDs": [],
+      "gbifRegion": "ASIA",
+      "country": "India",
+      "publishedByGbifRegion": "EUROPE",
+      "identifier": "PZ716294",
+      "http://unknown.org/crawl_attempt": "296",
+      "taxonConceptID": "https://www.ebi.ac.uk/ena/browser/view/Taxon:4787",
+      "http://unknown.org/datasetCategory.gbif.org": "eDNA",
+      "occurrenceRemarks": "Phytophthora infestans isolate PAU-Pi-LDH-2022 small subunit ribosomal RNA gene, partial sequence internal transcribed spacer 1 and 5.8S ribosomal RNA gene, complete sequence and internal transcribed spacer 2, partial sequence.",
+      "gbifID": "6453298444",
+      "occurrenceID": "PZ716294",
+      "taxonID": "ASV:9bd5e2aeae8a44763220ad9c6fbafc01"
+    },
+    {
+      "key": 6191341685,
+      "datasetKey": "d8cd16ba-bb74-4420-821e-083f2bac17c2",
+      "publishingOrgKey": "ada9d123-ddb4-467d-8891-806ea8d94230",
+      "datasetCategory": [
+        "eDNA"
+      ],
+      "installationKey": "17a83780-3060-4851-9d6f-029d5fcb81c9",
+      "hostingOrganizationKey": "fbca90e3-8aed-48b1-84e3-369afbd000ce",
+      "publishingCountry": "GB",
+      "protocol": "EML",
+      "lastCrawled": "2026-09-26T12:05:00.250+00:00",
+      "lastParsed": "2026-09-26T12:16:29.265+00:00",
+      "crawlId": 296,
+      "extensions": {},
+      "basisOfRecord": "MATERIAL_SAMPLE",
+      "occurrenceStatus": "PRESENT",
+      "classifications": {
+        "7ddf754f-d193-4cc9-b351-99906754a03b": {
+          "usage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "CS5HF",
+              "name": "Eukaryota",
+              "rank": "DOMAIN"
+            },
+            {
+              "key": "C",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "D3MRQ",
+              "name": "Harosa",
+              "rank": "SUBKINGDOM"
+            },
+            {
+              "key": "D3MRV",
+              "name": "Heterokonta",
+              "rank": "INFRAKINGDOM"
+            },
+            {
+              "key": "5K",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "G3",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "3SH",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "6266K",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "63MCM",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "4HNSM",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_ID_NOT_FOUND",
+            "TAXON_CONCEPT_ID_NOT_FOUND"
+          ]
+        },
+        "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c": {
+          "usage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "4",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "32",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "8179345",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "1259",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "4785",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "3203589",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "3203716",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_ID_NOT_FOUND",
+            "TAXON_CONCEPT_ID_NOT_FOUND"
+          ]
+        }
+      },
+      "taxonKey": 3203716,
+      "kingdomKey": 4,
+      "phylumKey": 32,
+      "classKey": 8179345,
+      "orderKey": 1259,
+      "familyKey": 4785,
+      "genusKey": 3203589,
+      "speciesKey": 3203716,
+      "acceptedTaxonKey": 3203716,
+      "scientificName": "Phytophthora infestans (Mont.) de Bary",
+      "scientificNameAuthorship": "(Mont.) de Bary",
+      "acceptedScientificName": "Phytophthora infestans (Mont.) de Bary",
+      "kingdom": "Chromista",
+      "phylum": "Oomycota",
+      "order": "Peronosporales",
+      "family": "Peronosporaceae",
+      "genus": "Phytophthora",
+      "species": "Phytophthora infestans",
+      "genericName": "Phytophthora",
+      "specificEpithet": "infestans",
+      "taxonRank": "SPECIES",
+      "taxonomicStatus": "ACCEPTED",
+      "continent": "ASIA",
+      "gadm": {},
+      "year": 2022,
+      "month": 11,
+      "day": 1,
+      "eventDate": "2022-11-01",
+      "startDayOfYear": 305,
+      "endDayOfYear": 305,
+      "issues": [
+        "CONTINENT_DERIVED_FROM_COUNTRY",
+        "TAXON_CONCEPT_ID_NOT_FOUND",
+        "TAXON_ID_NOT_FOUND"
+      ],
+      "lastInterpreted": "2026-09-26T12:16:29.265+00:00",
+      "references": "https://www.ebi.ac.uk/ena/browser/view/PX149070",
+      "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+      "isSequenced": true,
+      "associatedSequences": "https://www.ebi.ac.uk/ena/browser/api/embl/PX149070",
+      "identifiers": [
+        {
+          "identifier": "PX149070"
+        }
+      ],
+      "media": [],
+      "facts": [],
+      "relations": [],
+      "isInCluster": false,
+      "dnaSequenceID": [],
+      "nucleotideSequence": [],
+      "class": "Peronosporea",
+      "countryCode": "IN",
+      "recordedByIDs": [],
+      "identifiedByIDs": [],
+      "gbifRegion": "ASIA",
+      "country": "India",
+      "publishedByGbifRegion": "EUROPE",
+      "identifier": "PX149070",
+      "http://unknown.org/crawl_attempt": "296",
+      "taxonConceptID": "https://www.ebi.ac.uk/ena/browser/view/Taxon:4787",
+      "http://unknown.org/datasetCategory.gbif.org": "eDNA",
+      "occurrenceRemarks": "Phytophthora infestans isolate PI_UBKV_27 internal transcribed spacer 1, partial sequence 5.8S ribosomal RNA gene, complete sequence and internal transcribed spacer 2, partial sequence.",
+      "gbifID": "6191341685",
+      "occurrenceID": "PX149070",
+      "taxonID": "ASV:d957aeef89c2430d508cf5e5813fa032"
+    },
+    {
+      "key": 3349036865,
+      "datasetKey": "393b8c26-e4e0-4dd0-a218-93fc074ebf4e",
+      "publishingOrgKey": "ada9d123-ddb4-467d-8891-806ea8d94230",
+      "datasetCategory": [
+        "eDNA"
+      ],
+      "installationKey": "17a83780-3060-4851-9d6f-029d5fcb81c9",
+      "hostingOrganizationKey": "fbca90e3-8aed-48b1-84e3-369afbd000ce",
+      "publishingCountry": "GB",
+      "protocol": "EML",
+      "lastCrawled": "2026-10-10T12:02:38.832+00:00",
+      "lastParsed": "2026-10-10T12:08:17.767+00:00",
+      "crawlId": 300,
+      "extensions": {},
+      "basisOfRecord": "MATERIAL_SAMPLE",
+      "occurrenceStatus": "PRESENT",
+      "classifications": {
+        "7ddf754f-d193-4cc9-b351-99906754a03b": {
+          "usage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "CS5HF",
+              "name": "Eukaryota",
+              "rank": "DOMAIN"
+            },
+            {
+              "key": "C",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "D3MRQ",
+              "name": "Harosa",
+              "rank": "SUBKINGDOM"
+            },
+            {
+              "key": "D3MRV",
+              "name": "Heterokonta",
+              "rank": "INFRAKINGDOM"
+            },
+            {
+              "key": "5K",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "G3",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "3SH",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "6266K",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "63MCM",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "4HNSM",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_CONCEPT_ID_NOT_FOUND",
+            "TAXON_ID_NOT_FOUND"
+          ]
+        },
+        "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c": {
+          "usage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "4",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "32",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "8179345",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "1259",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "4785",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "3203589",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "3203716",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_CONCEPT_ID_NOT_FOUND",
+            "TAXON_ID_NOT_FOUND"
+          ]
+        }
+      },
+      "taxonKey": 3203716,
+      "kingdomKey": 4,
+      "phylumKey": 32,
+      "classKey": 8179345,
+      "orderKey": 1259,
+      "familyKey": 4785,
+      "genusKey": 3203589,
+      "speciesKey": 3203716,
+      "acceptedTaxonKey": 3203716,
+      "scientificName": "Phytophthora infestans (Mont.) de Bary",
+      "scientificNameAuthorship": "(Mont.) de Bary",
+      "acceptedScientificName": "Phytophthora infestans (Mont.) de Bary",
+      "kingdom": "Chromista",
+      "phylum": "Oomycota",
+      "order": "Peronosporales",
+      "family": "Peronosporaceae",
+      "genus": "Phytophthora",
+      "species": "Phytophthora infestans",
+      "genericName": "Phytophthora",
+      "specificEpithet": "infestans",
+      "taxonRank": "SPECIES",
+      "taxonomicStatus": "ACCEPTED",
+      "continent": "ASIA",
+      "gadm": {},
+      "year": 2019,
+      "month": 2,
+      "day": 22,
+      "eventDate": "2019-02-22",
+      "startDayOfYear": 53,
+      "endDayOfYear": 53,
+      "issues": [
+        "CONTINENT_DERIVED_FROM_COUNTRY",
+        "TAXON_CONCEPT_ID_NOT_FOUND",
+        "TAXON_ID_NOT_FOUND"
+      ],
+      "lastInterpreted": "2026-10-10T12:08:17.767+00:00",
+      "references": "https://www.ebi.ac.uk/ena/browser/view/MN583047",
+      "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+      "isSequenced": true,
+      "associatedSequences": "https://www.ebi.ac.uk/ena/browser/api/embl/MN583047",
+      "identifiers": [
+        {
+          "identifier": "MN583047"
+        }
+      ],
+      "media": [],
+      "facts": [],
+      "relations": [],
+      "isInCluster": false,
+      "dnaSequenceID": [],
+      "nucleotideSequence": [],
+      "class": "Peronosporea",
+      "countryCode": "IN",
+      "recordedByIDs": [],
+      "identifiedByIDs": [],
+      "gbifRegion": "ASIA",
+      "country": "India",
+      "publishedByGbifRegion": "EUROPE",
+      "identifier": "MN583047",
+      "http://unknown.org/crawl_attempt": "300",
+      "taxonConceptID": "https://www.ebi.ac.uk/ena/browser/view/Taxon:4787",
+      "associatedTaxa": "Solanum lycopersicum",
+      "http://unknown.org/allowCoordinatesFlipping": "true",
+      "http://unknown.org/datasetCategory.gbif.org": "eDNA",
+      "occurrenceRemarks": "Phytophthora infestans isolate Ludhiana internal transcribed spacer 1, partial sequence 5.8S ribosomal RNA gene and internal transcribed spacer 2, complete sequence and large subunit ribosomal RNA gene, partial sequence.",
+      "gbifID": "3349036865",
+      "occurrenceID": "MN583047",
+      "taxonID": "ASV:410a21314f865bd4b8fe335748a63b7c"
+    },
+    {
+      "key": 3349137897,
+      "datasetKey": "393b8c26-e4e0-4dd0-a218-93fc074ebf4e",
+      "publishingOrgKey": "ada9d123-ddb4-467d-8891-806ea8d94230",
+      "datasetCategory": [
+        "eDNA"
+      ],
+      "installationKey": "17a83780-3060-4851-9d6f-029d5fcb81c9",
+      "hostingOrganizationKey": "fbca90e3-8aed-48b1-84e3-369afbd000ce",
+      "publishingCountry": "GB",
+      "protocol": "EML",
+      "lastCrawled": "2026-10-10T12:02:38.832+00:00",
+      "lastParsed": "2026-10-10T12:08:18.835+00:00",
+      "crawlId": 300,
+      "extensions": {},
+      "basisOfRecord": "MATERIAL_SAMPLE",
+      "occurrenceStatus": "PRESENT",
+      "classifications": {
+        "7ddf754f-d193-4cc9-b351-99906754a03b": {
+          "usage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "4HNSM",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "CS5HF",
+              "name": "Eukaryota",
+              "rank": "DOMAIN"
+            },
+            {
+              "key": "C",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "D3MRQ",
+              "name": "Harosa",
+              "rank": "SUBKINGDOM"
+            },
+            {
+              "key": "D3MRV",
+              "name": "Heterokonta",
+              "rank": "INFRAKINGDOM"
+            },
+            {
+              "key": "5K",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "G3",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "3SH",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "6266K",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "63MCM",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "4HNSM",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_ID_NOT_FOUND",
+            "TAXON_CONCEPT_ID_NOT_FOUND"
+          ]
+        },
+        "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c": {
+          "usage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "acceptedUsage": {
+            "key": "3203716",
+            "name": "Phytophthora infestans (Mont.) de Bary",
+            "rank": "SPECIES",
+            "code": "BOTANICAL",
+            "authorship": "(Mont.) de Bary",
+            "genericName": "Phytophthora",
+            "specificEpithet": "infestans",
+            "formattedName": "<i>Phytophthora</i> <i>infestans</i> (Mont.) de Bary"
+          },
+          "taxonomicStatus": "ACCEPTED",
+          "classification": [
+            {
+              "key": "4",
+              "name": "Chromista",
+              "rank": "KINGDOM"
+            },
+            {
+              "key": "32",
+              "name": "Oomycota",
+              "rank": "PHYLUM"
+            },
+            {
+              "key": "8179345",
+              "name": "Peronosporea",
+              "rank": "CLASS"
+            },
+            {
+              "key": "1259",
+              "name": "Peronosporales",
+              "rank": "ORDER"
+            },
+            {
+              "key": "4785",
+              "name": "Peronosporaceae",
+              "rank": "FAMILY"
+            },
+            {
+              "key": "3203589",
+              "name": "Phytophthora",
+              "rank": "GENUS"
+            },
+            {
+              "key": "3203716",
+              "name": "Phytophthora infestans",
+              "rank": "SPECIES"
+            }
+          ],
+          "issues": [
+            "TAXON_ID_NOT_FOUND",
+            "TAXON_CONCEPT_ID_NOT_FOUND"
+          ]
+        }
+      },
+      "taxonKey": 3203716,
+      "kingdomKey": 4,
+      "phylumKey": 32,
+      "classKey": 8179345,
+      "orderKey": 1259,
+      "familyKey": 4785,
+      "genusKey": 3203589,
+      "speciesKey": 3203716,
+      "acceptedTaxonKey": 3203716,
+      "scientificName": "Phytophthora infestans (Mont.) de Bary",
+      "scientificNameAuthorship": "(Mont.) de Bary",
+      "acceptedScientificName": "Phytophthora infestans (Mont.) de Bary",
+      "kingdom": "Chromista",
+      "phylum": "Oomycota",
+      "order": "Peronosporales",
+      "family": "Peronosporaceae",
+      "genus": "Phytophthora",
+      "species": "Phytophthora infestans",
+      "genericName": "Phytophthora",
+      "specificEpithet": "infestans",
+      "taxonRank": "SPECIES",
+      "taxonomicStatus": "ACCEPTED",
+      "continent": "ASIA",
+      "gadm": {},
+      "year": 2018,
+      "month": 1,
+      "day": 26,
+      "eventDate": "2018-01-26",
+      "startDayOfYear": 26,
+      "endDayOfYear": 26,
+      "issues": [
+        "CONTINENT_DERIVED_FROM_COUNTRY",
+        "TAXON_CONCEPT_ID_NOT_FOUND",
+        "TAXON_ID_NOT_FOUND"
+      ],
+      "lastInterpreted": "2026-10-10T12:08:18.835+00:00",
+      "references": "https://www.ebi.ac.uk/ena/browser/view/MT990516",
+      "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+      "isSequenced": true,
+      "associatedSequences": "https://www.ebi.ac.uk/ena/browser/api/embl/MT990516",
+      "identifiers": [
+        {
+          "identifier": "MT990516"
+        }
+      ],
+      "media": [],
+      "facts": [],
+      "relations": [],
+      "isInCluster": false,
+      "recordedBy": "Touseef Hussain",
+      "dnaSequenceID": [],
+      "nucleotideSequence": [],
+      "class": "Peronosporea",
+      "countryCode": "IN",
+      "recordedByIDs": [],
+      "identifiedByIDs": [],
+      "gbifRegion": "ASIA",
+      "country": "India",
+      "publishedByGbifRegion": "EUROPE",
+      "identifier": "MT990516",
+      "http://unknown.org/crawl_attempt": "300",
+      "taxonConceptID": "https://www.ebi.ac.uk/ena/browser/view/Taxon:4787",
+      "associatedTaxa": "Potato leaf",
+      "http://unknown.org/allowCoordinatesFlipping": "true",
+      "http://unknown.org/datasetCategory.gbif.org": "eDNA",
+      "occurrenceRemarks": "Phytophthora infestans isolate ALI-786 internal transcribed spacer 1, partial sequence 5.8S ribosomal RNA gene, complete sequence and internal transcribed spacer 2, partial sequence.",
+      "gbifID": "3349137897",
+      "occurrenceID": "MT990516",
+      "taxonID": "ASV:060efd84b0f0ecc1779fe76392701a3b"
+    }
+  ]
+}
