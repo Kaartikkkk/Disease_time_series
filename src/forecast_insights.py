@@ -201,10 +201,17 @@ def identify_peak_forecast_month(
             f"(80% prediction interval: {lower_80:.2f}–{upper_80:.2f}). "
             f"This represents a multi-month period of sustained epidemiological favorability rather than an isolated spike."
         )
+        simple_narrative = (
+            f"The model predicts sustained disease activity across {', '.join(months_list)}, with the highest recorded reports in {month_str} "
+            f"(around {max_val:.1f} reports). This period may be worth watching more closely."
+        )
     elif max_val <= 0.1:
         narrative = (
             f"Throughout the entire forecast horizon, predicted documented occurrences remain near zero "
             f"(maximum {max_val:.2f} in {month_str}). This reflects non-conducive seasonal periods or suppressed inoculum in historical records."
+        )
+        simple_narrative = (
+            f"The model predicts very low disease activity throughout this period (under 0.2 reports in {month_str})."
         )
     else:
         diff_str = f"+{max_val - avg_other:.2f}" if max_val > avg_other else "0.00"
@@ -212,6 +219,10 @@ def identify_peak_forecast_month(
             f"The highest predicted documented occurrence count in this forecast horizon is expected in {month_str} "
             f"at {max_val:.2f} occurrences (80% CI: {lower_80:.2f}–{upper_80:.2f}), exceeding other forecast months by an average of {diff_str}. "
             f"Note: This measures documented specimen discoveries deposited in research databases, not an absolute census of infected acreage."
+        )
+        simple_narrative = (
+            f"The highest predicted activity is in {month_str} (around {max_val:.1f} recorded disease reports). "
+            f"This month may be worth watching more closely."
         )
 
     return {
@@ -223,6 +234,7 @@ def identify_peak_forecast_month(
         "is_plateau": is_plateau,
         "avg_other": round(avg_other, 2),
         "narrative": narrative,
+        "simple_narrative": simple_narrative,
     }
 
 
@@ -235,6 +247,7 @@ def generate_monthly_disease_outlook(
     df_historical: pd.DataFrame,
     pathogen_name: str,
     target_col: str = "documented_occurrence_count",
+    region_name: str = "India",
 ) -> List[Dict[str, Any]]:
     """Build a comprehensive list of monthly outlook objects for the UI.
     
@@ -252,7 +265,8 @@ def generate_monthly_disease_outlook(
     - activity_level: str
     - activity_color: str
     - activity_note: str
-    - narrative: str
+    - narrative: str (Advanced / Technical)
+    - simple_explanation: str (Plain everyday English for farmers/students)
     """
     if df_forecast.empty:
         return []
@@ -262,6 +276,7 @@ def generate_monthly_disease_outlook(
 
     outlooks = []
     prev_val = last_hist_val
+    max_idx = int(df_forecast["forecast"].idxmax()) if not df_forecast.empty else -1
 
     for idx, row in df_forecast.reset_index(drop=True).iterrows():
         dt = pd.to_datetime(row["date"])
@@ -292,6 +307,26 @@ def generate_monthly_disease_outlook(
             f"Consider monitoring subsequent diagnostic accessions and local agro-weather conditions."
         )
 
+        # Build simple everyday explanation for farmers and students
+        if abs_change > 0.35:
+            comp_phrase = "higher"
+        elif abs_change < -0.35:
+            comp_phrase = "lower"
+        else:
+            comp_phrase = "about the same"
+
+        clean_disease_name = pathogen_name.split("(")[0].strip() if "(" in pathogen_name else pathogen_name
+
+        s1 = f"For {month_full}, the model predicts around {p_val:.1f} recorded disease reports for {clean_disease_name} in {region_name}. This is {comp_phrase} compared with the previous month."
+        
+        s2 = ""
+        if idx == max_idx and p_val > 0.1:
+            s2 = f" The highest predicted activity is in {month_full}. This month may be worth watching more closely."
+        
+        s3 = f" The prediction has some uncertainty (expected range: {l80:.1f} to {u80:.1f}), so actual recorded reports may be different."
+
+        simple_explanation = f"{s1}{s2}{s3}"
+
         outlooks.append({
             "month_label": month_full,
             "short_date": dt.strftime("%b %y"),
@@ -311,11 +346,13 @@ def generate_monthly_disease_outlook(
             "activity_color": activity_color,
             "activity_note": activity_note,
             "narrative": narrative,
+            "simple_explanation": simple_explanation,
         })
 
         prev_val = p_val
 
     return outlooks
+
 
 
 # ==============================================================================

@@ -23,6 +23,7 @@ from src.icons import (
     icon_forecast,
     icon_home,
     icon_india_map,
+    icon_info,
     icon_layers,
     icon_leaf,
     icon_logo,
@@ -1068,16 +1069,103 @@ def inject_custom_css():
             border-color: #102C26;
             color: #FFFFFF;
         }
+
+        /* What Does This Mean? Explanatory Card */
+        .what-does-this-mean-card {
+            background: #FFFEFA;
+            border: 1px solid rgba(82, 122, 80, 0.22);
+            border-left: 4px solid var(--botanical);
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin: 16px 0 22px 0;
+            box-shadow: 0 2px 10px rgba(16, 44, 38, 0.04);
+        }
+        .what-mean-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.84rem;
+            font-weight: 700;
+            color: var(--forest-deep);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .what-mean-body {
+            font-size: 0.88rem;
+            line-height: 1.55;
+            color: var(--charcoal);
+            margin: 0;
+        }
+        .what-mean-tech {
+            margin-top: 10px;
+            padding-top: 8px;
+            border-top: 1px dashed rgba(82, 122, 80, 0.2);
+            font-size: 0.8rem;
+            color: var(--charcoal-muted);
+            line-height: 1.5;
+        }
+        .mode-status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            background: rgba(82, 122, 80, 0.12);
+            color: var(--forest-deep);
+            border: 1px solid rgba(82, 122, 80, 0.25);
+            margin-bottom: 14px;
+        }
         </style>
         """,
         unsafe_allow_html=True,
     )
 
 
+def is_advanced_mode() -> bool:
+    """Return True if user toggled to Advanced View (for professors/evaluators), False for Simple View."""
+    return st.session_state.get("view_mode", "Simple View") == "Advanced View"
+
+
+def is_simple_mode() -> bool:
+    """Return True if in Simple View (default for farmers/students)."""
+    return not is_advanced_mode()
+
+
+def render_what_does_this_mean(simple_text: str, technical_details: Optional[str] = None):
+    """Render a dedicated, elegant 'What Does This Mean?' explanation card."""
+    tech_html = ""
+    if is_advanced_mode() and technical_details:
+        tech_html = f"""
+        <div class="what-mean-tech">
+            <strong>Technical Note / Formulation:</strong> {technical_details}
+        </div>
+        """
+    card_html = f"""
+    <div class="what-does-this-mean-card">
+        <div class="what-mean-header">
+            {icon_info(16, "#527A50")}
+            <span>What Does This Mean?</span>
+        </div>
+        <p class="what-mean-body">{simple_text}</p>
+        {tech_html}
+    </div>
+    """
+    st.html(card_html)
+
+
 def render_app_sidebar(active_page: str = "overview"):
     """Render the cohesive left sidebar matching the Verdant Intelligence platform mockup."""
     sprout_img_path = ASSETS_DIR / "seedling_sprout.jpg"
     sprout_b64 = get_image_base64(sprout_img_path)
+
+    # Initialize viewing mode if not set
+    if "view_mode" not in st.session_state:
+        st.session_state["view_mode"] = "Simple View"
 
     with st.sidebar:
         st.markdown(
@@ -1088,21 +1176,41 @@ def render_app_sidebar(active_page: str = "overview"):
                 </div>
                 <div>
                     <div class="sidebar-brand-title">Verdant Intelligence</div>
-                    <div class="sidebar-brand-subtitle">AGRICULTURAL SURVEILLANCE &amp; FORECASTING · INDIA</div>
+                    <div class="sidebar-brand-subtitle">PLANT DISEASE FORECASTING · INDIA</div>
                 </div>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
-        st.page_link("app.py", label="Overview", icon="🏠")
-        st.page_link("pages/1_Disease_Explorer.py", label="Disease Explorer", icon="🍃")
-        st.page_link("pages/2_Time_Series_Analysis.py", label="Time Series Analysis", icon="📊")
-        st.page_link("pages/3_Model_Comparison.py", label="Model Comparison", icon="📑")
-        st.page_link("pages/4_Forecasts.py", label="Forecasts", icon="📈")
-        st.page_link("pages/5_Weather_Intelligence.py", label="Weather Intelligence", icon="☁️")
-        st.page_link("pages/6_Research_and_Data.py", label="Research & Data", icon="📖")
-        st.page_link("pages/7_Methodology.py", label="Methodology", icon="⚙️")
+        # Simple View (Default) vs Advanced View Toggle
+        current_mode = st.session_state.get("view_mode", "Simple View")
+        selected_mode = st.radio(
+            "Viewing Mode",
+            options=["Simple View", "Advanced View"],
+            index=0 if current_mode == "Simple View" else 1,
+            help="Simple View uses everyday English for farmers and students. Advanced View displays statistical models (ARIMA/SARIMAX), equations, ADF/KPSS tests, and diagnostic plots for researchers.",
+            key="global_view_mode_selector",
+        )
+        st.session_state["view_mode"] = selected_mode
+
+        mode_badge = "🌿 Simple View" if selected_mode == "Simple View" else "🔬 Advanced View"
+        st.markdown(
+            f"""
+            <div class="mode-status-pill">
+                {mode_badge}
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        st.page_link("app.py", label="Home", icon="🏠")
+        st.page_link("pages/1_Disease_Explorer.py", label="Disease Records", icon="🍃")
+        st.page_link("pages/2_Time_Series_Analysis.py", label="Disease Trends", icon="📊")
+        st.page_link("pages/3_Model_Comparison.py", label="Compare Models", icon="📑")
+        st.page_link("pages/4_Forecasts.py", label="Future Predictions", icon="📈")
+        st.page_link("pages/5_Weather_Intelligence.py", label="Weather Insights", icon="☁️")
+        st.page_link("pages/6_About_the_Data.py", label="About the Data", icon="📖")
 
         st.markdown(
             f"""
@@ -1168,13 +1276,53 @@ def get_config_settings() -> Dict[str, Any]:
 
 
 @st.cache_data
+def get_pathogen_display_name(slug: str, force_scientific: bool = False) -> str:
+    """Return friendly display label: Common name first, with scientific name in parentheses in Advanced Mode."""
+    settings = get_config_settings()
+    pathogens = settings.get("pathogens", {})
+    info = pathogens.get(slug, {})
+    common = info.get("common_name", slug.replace("_", " ").title())
+    scientific = info.get("scientific_name", "")
+    if is_advanced_mode() or force_scientific:
+        return f"{common} ({scientific})" if scientific else common
+    return common
+
+
+@st.cache_data
+def get_disease_common_name(slug: str) -> str:
+    """Return common everyday disease name (e.g. 'Rice Blast')."""
+    settings = get_config_settings()
+    info = settings.get("pathogens", {}).get(slug, {})
+    return info.get("common_name", slug.replace("_", " ").title())
+
+
+@st.cache_data
+def get_disease_scientific_name(slug: str) -> str:
+    """Return scientific organism name (e.g. 'Pyricularia oryzae')."""
+    settings = get_config_settings()
+    info = settings.get("pathogens", {}).get(slug, {})
+    return info.get("scientific_name", slug)
+
+
+@st.cache_data
 def load_all_pathogen_options() -> Dict[str, str]:
-    """Return dictionary of pathogen slug -> formatted display label."""
+    """Return dictionary of pathogen slug -> formatted display label with familiar common name first."""
     settings = get_config_settings()
     pathogens = settings.get("pathogens", {})
     return {
         slug: f"{info.get('common_name')} ({info.get('scientific_name')})"
         for slug, info in pathogens.items()
+    }
+
+
+@st.cache_data
+def load_friendly_pathogen_options() -> Dict[str, str]:
+    """Return dictionary of pathogen slug -> common name in Simple View, or common (scientific) in Advanced View."""
+    settings = get_config_settings()
+    pathogens = settings.get("pathogens", {})
+    return {
+        slug: get_pathogen_display_name(slug)
+        for slug in pathogens.keys()
     }
 
 

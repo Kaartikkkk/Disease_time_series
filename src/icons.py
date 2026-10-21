@@ -300,3 +300,15 @@ def icon_india_map(size: int = 40, color: str = "#8A968E", css_class: str = "") 
   <path d="M42 5L48 10L55 8L60 14L55 20L62 25L58 35L65 40L75 35L85 42L80 48L72 45L65 52L68 62L60 68L62 78L55 85L50 95L48 108L44 115L40 105L35 92L32 80L28 72L22 68L25 58L20 52L18 42L25 38L30 28L35 25L32 18L38 12Z" stroke="{c}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.35"/>
 </svg>"""
     return _to_img(svg, size, css_class)
+
+
+def icon_info(size: int = 16, color: str = "#527A50", css_class: str = "") -> str:
+    """Information circle icon for tooltips and contextual explanations."""
+    c = _res_col(color, "#527A50")
+    svg = f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="12" cy="12" r="10" stroke="{c}" stroke-width="1.75"/>
+  <line x1="12" y1="16" x2="12" y2="11" stroke="{c}" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="12" cy="7.5" r="1.25" fill="{c}"/>
+</svg>"""
+    return _to_img(svg, size, css_class)
+
