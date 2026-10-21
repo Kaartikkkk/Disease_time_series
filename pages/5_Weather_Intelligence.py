@@ -22,15 +22,20 @@ from src.ui_helpers import (
     load_all_pathogen_options,
     load_monthly_series,
     load_weather_series,
+    render_app_sidebar,
+    render_top_header,
 )
 
 st.set_page_config(
     page_title="Weather Intelligence — Verdant Intelligence",
     page_icon="🌦️",
     layout="wide",
+    initial_sidebar_state="expanded",
 )
 
 inject_custom_css()
+render_app_sidebar(active_page="weather")
+render_top_header()
 
 # Editorial Header
 st.markdown(
@@ -167,6 +172,60 @@ fig_precip.update_layout(
 )
 format_plotly_figure(fig_precip, title="Monthly Precipitation & Relative Humidity Dynamics", height=340)
 st.plotly_chart(fig_precip, use_container_width=True)
+
+# Dual-Axis Disease & Climate Alignment
+if df_monthly is not None and not df_monthly.empty:
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.subheader(f"🌾 Dual-Axis Temporal Alignment: {pathogen_dict[selected_pathogen]} vs. Monsoon Rainfall")
+    st.markdown(
+        "Demonstrates how historical documented pathogen discoveries align temporally with monsoon rain spikes. "
+        "Notice how peak occurrences typically follow active rainfall peaks by 1 to 2 months (infection incubation lag)."
+    )
+
+    # Merge by date
+    df_merged = pd.merge(
+        df_monthly[["date", "documented_occurrence_count"]],
+        df_weather[["date", "precipitation_monthly_mm", "relative_humidity_pct", "temp_mean_c"]],
+        on="date",
+        how="inner",
+    ).sort_values("date")
+
+    if not df_merged.empty:
+        fig_dual = go.Figure()
+
+        # Monthly Rainfall on secondary axis
+        fig_dual.add_trace(
+            go.Bar(
+                x=df_merged["date"],
+                y=df_merged["precipitation_monthly_mm"],
+                name="Monthly Precipitation (mm)",
+                yaxis="y2",
+                marker_color="rgba(169, 190, 160, 0.45)",
+                hovertemplate="<b>Rainfall:</b> %{y:.1f} mm<extra></extra>",
+            )
+        )
+
+        # Disease Occurrences on primary axis
+        fig_dual.add_trace(
+            go.Scatter(
+                x=df_merged["date"],
+                y=df_merged["documented_occurrence_count"],
+                name=f"Documented Occurrences ({pathogen_dict[selected_pathogen].split('(')[0].strip()})",
+                yaxis="y",
+                mode="lines+markers",
+                line=dict(color="#102C26", width=2.75),
+                marker=dict(size=6, color="#102C26"),
+                hovertemplate="<b>Occurrences:</b> %{y:.1f}<extra></extra>",
+            )
+        )
+
+        fig_dual.update_layout(
+            yaxis=dict(title="Documented Occurrence Count", side="left", showgrid=True),
+            yaxis2=dict(title="Precipitation (mm)", overlaying="y", side="right", showgrid=False),
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1.0),
+        )
+        format_plotly_figure(fig_dual, title="Co-Occurring Trajectories: Documented Pathogen Count vs Precipitation (2015–2025)", height=400)
+        st.plotly_chart(fig_dual, use_container_width=True)
 
 # Cross Correlation
 st.markdown("<br>", unsafe_allow_html=True)

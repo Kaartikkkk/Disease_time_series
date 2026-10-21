@@ -3,6 +3,7 @@
 Executive Landing Page and Portfolio Showcase.
 """
 
+import base64
 from datetime import datetime, timezone
 from pathlib import Path
 import numpy as np
@@ -16,22 +17,36 @@ st.set_page_config(
     page_title="Verdant Intelligence — Agricultural Disease Forecasting",
     page_icon="🌿",
     layout="wide",
-    initial_sidebar_state="collapsed",
+    initial_sidebar_state="expanded",
 )
 
 from src.icons import (
+    icon_alert_triangle,
     icon_arrow_right,
+    icon_bar_chart,
+    icon_bell,
+    icon_book,
+    icon_chevron_down,
+    icon_database,
     icon_download,
     icon_forecast,
+    icon_home,
+    icon_india_map,
+    icon_layers,
     icon_leaf,
     icon_logo,
     icon_model_compare,
     icon_pathology,
     icon_pin,
     icon_pulse,
+    icon_search,
+    icon_settings,
     icon_shield,
+    icon_sprout,
+    icon_sun,
     icon_thermometer,
     icon_timeseries,
+    icon_trending_up,
     icon_weather,
 )
 from src.ui_helpers import (
@@ -43,9 +58,15 @@ from src.ui_helpers import (
     load_all_pathogen_options,
     load_data_quality_report_data,
     load_monthly_series,
+    render_app_sidebar,
+    render_top_header,
 )
 
 inject_custom_css()
+
+# Render unified left sidebar and top bar
+render_app_sidebar(active_page="overview")
+render_top_header()
 
 # Load real quality report metrics
 quality_data = load_data_quality_report_data()
@@ -55,10 +76,10 @@ total_dates = meta.get("total_records_with_date", 2071)
 total_coords = meta.get("total_records_with_coords", 835)
 
 # Load real image assets
-hero_img_path = ASSETS_DIR / "cereal_harvest_sunset.jpg"
-if not hero_img_path.exists():
-    hero_img_path = ASSETS_DIR / "verdant_hero.jpg"
-hero_img_base64 = get_image_base64(hero_img_path)
+panoramic_hero_path = ASSETS_DIR / "verdant_panoramic_hero.jpg"
+if not panoramic_hero_path.exists():
+    panoramic_hero_path = ASSETS_DIR / "cereal_harvest_sunset.jpg"
+panoramic_hero_b64 = get_image_base64(panoramic_hero_path)
 
 img_monsoon_b64 = get_image_base64(ASSETS_DIR / "monsoon_weather_canopy.jpg")
 img_sunset_b64 = get_image_base64(ASSETS_DIR / "cereal_harvest_sunset.jpg")
@@ -66,96 +87,174 @@ img_wheat_b64 = get_image_base64(ASSETS_DIR / "wheat_canopy_ears.jpg")
 img_golden_b64 = get_image_base64(ASSETS_DIR / "golden_crop_field.jpg")
 
 # ==============================================================================
-# 1. NAVIGATION BAR
+# 1. PANORAMIC HERO WITH FLOATING GLASS CARD
 # ==============================================================================
-st.markdown(
-    f"""
-    <div class="verdant-navbar">
-        <div class="verdant-brand">
-            {icon_logo(28, "#527A50")}
-            <div>
-                <div class="verdant-brand-title">Verdant Intelligence</div>
-                <div class="verdant-brand-sub">Agricultural Surveillance & Forecasting · India</div>
-            </div>
-        </div>
-        <div class="verdant-nav-links">
-            <a href="#research-metrics" class="verdant-nav-link">Overview</a>
-            <a href="#how-it-works" class="verdant-nav-link">Methodology</a>
-            <a href="#capabilities" class="verdant-nav-link">Models</a>
-            <a href="#research-preview" class="verdant-nav-link">Research</a>
-            <a href="/Disease_Explorer" target="_self" class="btn-primary-cta" style="padding: 8px 18px; font-size: 0.82rem;">
-                Explore Forecasts {icon_arrow_right(14, "#FFFFFF")}
-            </a>
-        </div>
-    </div>
-    """,
-    unsafe_allow_html=True,
+sparkline_raw_svg = """<svg width="270" height="60" viewBox="0 0 270 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="heroSparkGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E11D48" stop-opacity="0.32"/>
+      <stop offset="100%" stop-color="#E11D48" stop-opacity="0.0"/>
+    </linearGradient>
+  </defs>
+  <path d="M10 46 Q 50 42, 90 36 T 170 26 T 255 10 L 255 58 L 10 58 Z" fill="url(#heroSparkGrad)"/>
+  <path d="M10 46 Q 50 42, 90 36 T 170 26 T 255 10" stroke="#E11D48" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="10" cy="46" r="3.5" fill="#E11D48" stroke="#FFFFFF" stroke-width="1.5"/>
+  <circle cx="90" cy="36" r="3.5" fill="#E11D48" stroke="#FFFFFF" stroke-width="1.5"/>
+  <circle cx="170" cy="26" r="3.5" fill="#E11D48" stroke="#FFFFFF" stroke-width="1.5"/>
+  <circle cx="255" cy="10" r="4" fill="#E11D48" stroke="#FFFFFF" stroke-width="2"/>
+</svg>"""
+sparkline_b64 = base64.b64encode(sparkline_raw_svg.strip().encode("utf-8")).decode("utf-8")
+sparkline_img_tag = f'<img src="data:image/svg+xml;base64,{sparkline_b64}" width="270" height="60" style="display:block;margin:0 auto;" alt="Disease Trajectory" />'
+sparkline_svg = (
+    f'{sparkline_img_tag}'
+    '<div style="display: flex; justify-content: space-between; padding: 0 10px; font-size: 0.72rem; color: #7D8A82; font-weight: 600; margin-top: 2px; margin-bottom: 12px;">'
+    '<span>Nov</span><span>Dec</span><span>Jan</span>'
+    '</div>'
 )
 
-# ==============================================================================
-# 2. SPLIT-SCREEN HERO SECTION
-# ==============================================================================
-hero_image_markup = (
-    f'<img src="{hero_img_base64}" alt="Verdant Crop Canopy" class="hero-visual-img" />'
-    if hero_img_base64
-    else '<div style="width:100%; height:100%; background: linear-gradient(135deg, #102C26 0%, #183D32 100%);"></div>'
+hero_markup = (
+    f'<div class="dashboard-hero-banner" style="background-image: url(\'{panoramic_hero_b64}\');">'
+    f'<div class="dashboard-hero-overlay">'
+    f'<div class="hero-left-content">'
+    f'<div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(16, 44, 38, 0.7); border: 1px solid rgba(196, 166, 106, 0.5); border-radius: 30px; padding: 5px 14px; margin-bottom: 16px; backdrop-filter: blur(8px);">'
+    f'<span style="font-size: 0.68rem; font-weight: 700; color: #F5E8C7; letter-spacing: 0.08em; text-transform: uppercase;">'
+    f'{icon_leaf(12, "#C4A66A")} AGRICULTURAL INTELLIGENCE · INDIA'
+    f'</span></div>'
+    f'<div class="hero-main-title">'
+    f'Anticipate disease.<br><span>Protect the harvest.</span></div>'
+    f'<p style="color: rgba(246, 244, 236, 0.95); font-size: 0.95rem; line-height: 1.6; margin: 0 0 24px 0; max-width: 490px; text-shadow: 0 1px 4px rgba(0,0,0,0.4);">'
+    f'An advanced epidemiological forecasting platform transforming real-world pathogen surveillance from <b>GBIF</b> and meteorological intelligence from <b>NASA POWER</b> into rigorous, multi-month time-series projections across India\'s agricultural heartlands.'
+    f'</p>'
+    f'<div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">'
+    f'<a href="/Disease_Explorer" target="_self" class="btn-primary-cta" style="padding: 10px 22px; font-size: 0.88rem; border-radius: 10px; background: #102C26; border: 1px solid rgba(255,255,255,0.2);">'
+    f'Explore the Dashboard {icon_arrow_right(14, "#FFFFFF")}'
+    f'</a>'
+    f'<a href="/Methodology" target="_self" class="btn-secondary-cta" style="padding: 9px 18px; font-size: 0.88rem; border-radius: 10px; color: #FFFFFF !important; border: 1px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.15); backdrop-filter: blur(8px);">'
+    f'▷ Learn More'
+    f'</a>'
+    f'</div></div>'
+    f'<div class="hero-glass-card">'
+    f'<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">'
+    f'<div style="width: 24px; height: 24px; border-radius: 50%; background: #E8F5E9; display: flex; align-items: center; justify-content: center;">'
+    f'{icon_trending_up(14, "#166534")}'
+    f'</div>'
+    f'<div style="font-size: 0.82rem; font-weight: 700; color: #102C26;">Forecasted Disease Risk</div>'
+    f'</div>'
+    f'<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px;">'
+    f'<div style="font-size: 0.95rem; font-weight: 700; color: #102C26;">Wheat — Leaf Rust</div>'
+    f'<span style="background: #FEE2E2; color: #DC2626; font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 12px;">High Risk</span>'
+    f'</div>'
+    f'<div style="font-size: 0.72rem; color: #7D8A82; font-weight: 500; margin-bottom: 12px;">Next 3 months</div>'
+    f'{sparkline_svg}'
+    f'<div style="border-top: 1px solid #EAE6DC; padding-top: 12px; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 8px;">'
+    f'<div>'
+    f'<div style="font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #7D8A82;">TOP VALIDATED MODEL</div>'
+    f'<div style="font-size: 0.88rem; font-weight: 700; color: #102C26; margin-top: 2px;">ARIMA(1,1,1)</div>'
+    f'</div>'
+    f'<div style="text-align: right;">'
+    f'<div style="font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #7D8A82;">OUT-OF-SAMPLE RMSE</div>'
+    f'<div style="font-family: \'JetBrains Mono\', monospace; font-size: 1.05rem; font-weight: 700; color: #166534; margin-top: 1px;">2.438</div>'
+    f'</div></div></div></div></div>'
 )
+st.html(hero_markup)
 
-st.markdown(
-    f"""
-    <div class="hero-container">
-        <div class="hero-left">
-            <div class="hero-eyebrow">
-                {icon_leaf(14, "#8C6F2D")} Agricultural Intelligence · India
-            </div>
-            <h1 class="hero-headline">
-                Anticipate disease.<br>Protect the harvest.
-            </h1>
-            <p class="hero-lead">
-                An advanced epidemiological forecasting platform transforming real-world pathogen
-                surveillance from <b>GBIF</b> and meteorological intelligence from <b>NASA POWER</b>
-                into rigorous, multi-month time-series projections across India's agricultural heartlands.
-            </p>
-            <div class="hero-actions">
-                <a href="/Disease_Explorer" target="_self" class="btn-primary-cta">
-                    Explore the Dashboard {icon_arrow_right(15, "#FFFFFF")}
-                </a>
-                <a href="/Methodology" target="_self" class="btn-secondary-cta">
-                    Scientific Methodology
-                </a>
-            </div>
-            <div class="telemetry-status">
-                {icon_pulse(12, "#527A50")}
-                <span>Verified Telemetry: <strong>{total_records:,} Real Records</strong> & <strong>132 Months</strong> continuous climate data</span>
-            </div>
-        </div>
-        <div class="hero-right">
-            <div class="hero-visual-frame">
-                {hero_image_markup}
-                <div class="hero-overlay-card">
-                    <div>
-                        <div style="font-size: 0.7rem; font-weight: 600; text-transform: uppercase; color: #5A665D; letter-spacing: 0.05em;">
-                            Top Validated Model
-                        </div>
-                        <div style="font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 600; color: #102C26;">
-                            ARIMA(1,1,1)
-                        </div>
-                    </div>
-                    <div style="text-align: right;">
-                        <div style="font-size: 0.7rem; font-weight: 600; text-transform: uppercase; color: #527A50; letter-spacing: 0.05em;">
-                            Out-of-Sample RMSE
-                        </div>
-                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 1.05rem; font-weight: 600; color: #183D32;">
-                            2.438
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    """,
-    unsafe_allow_html=True,
+# ==============================================================================
+# 2. FOUR FEATURE / METRIC CARDS
+# ==============================================================================
+features_markup = (
+    f'<div class="feature-cards-grid">'
+    f'<a href="/Disease_Explorer" target="_self" class="feature-card">'
+    f'<div class="feature-card-top">'
+    f'<div class="feature-icon-circle" style="background: #E8F5E9;">{icon_sprout(20, "#166534")}</div>'
+    f'<div class="feature-arrow-btn">{icon_arrow_right(13, "currentColor")}</div>'
+    f'</div>'
+    f'<div><div style="display: flex; align-items: baseline; gap: 6px;"><span class="feature-card-stat">10+</span><span class="feature-card-title">Crops Monitored</span></div>'
+    f'<div class="feature-card-sub">Wheat, Rice, Maize, Soybean and more</div></div>'
+    f'</a>'
+    f'<a href="/Disease_Explorer" target="_self" class="feature-card">'
+    f'<div class="feature-card-top">'
+    f'<div class="feature-icon-circle" style="background: #FEF2F2;">{icon_pathology(20, "#DC2626")}</div>'
+    f'<div class="feature-arrow-btn">{icon_arrow_right(13, "currentColor")}</div>'
+    f'</div>'
+    f'<div><div style="display: flex; align-items: baseline; gap: 6px;"><span class="feature-card-stat">25+</span><span class="feature-card-title">Plant Diseases</span></div>'
+    f'<div class="feature-card-sub">Early detection and forecasting</div></div>'
+    f'</a>'
+    f'<a href="/Weather_Intelligence" target="_self" class="feature-card">'
+    f'<div class="feature-card-top">'
+    f'<div class="feature-icon-circle" style="background: #EFF6FF;">{icon_database(20, "#2563EB")}</div>'
+    f'<div class="feature-arrow-btn">{icon_arrow_right(13, "currentColor")}</div>'
+    f'</div>'
+    f'<div><div class="feature-card-title" style="font-size: 0.95rem; font-weight: 700;">Multi-Source data</div>'
+    f'<div class="feature-card-sub">GBIF + NASA POWER + Weather Variables</div></div>'
+    f'</a>'
+    f'<a href="/Model_Comparison" target="_self" class="feature-card">'
+    f'<div class="feature-card-top">'
+    f'<div class="feature-icon-circle" style="background: #FAF5FF;">{icon_bar_chart(20, "#9333EA")}</div>'
+    f'<div class="feature-arrow-btn">{icon_arrow_right(13, "currentColor")}</div>'
+    f'</div>'
+    f'<div><div class="feature-card-title" style="font-size: 0.95rem; font-weight: 700;">Advanced Models</div>'
+    f'<div class="feature-card-sub">ARIMA, LSTM, Prophet and more</div></div>'
+    f'</a>'
+    f'</div>'
 )
+st.html(features_markup)
+
+# ==============================================================================
+# 3. KEY INSIGHTS SECTION
+# ==============================================================================
+insights_markup = (
+    f'<div class="insights-header-row">'
+    f'<div class="insights-title-wrap">'
+    f'<div class="insights-accent-bar"></div>'
+    f'<div><div class="insights-heading">Key Insights</div>'
+    f'<div class="insights-subtitle">Real-time analysis and forecasting insights for India\'s major crops</div></div>'
+    f'</div>'
+    f'<div class="filter-pill-group">'
+    f'<span class="filter-pill">1M</span>'
+    f'<span class="filter-pill active">3M</span>'
+    f'<span class="filter-pill">6M</span>'
+    f'<span class="filter-pill">1Y</span>'
+    f'</div></div>'
+    f'<div class="insight-cards-grid">'
+    f'<a href="/Forecasts" target="_self" class="insight-card">'
+    f'<div class="insight-icon-circle" style="background: #FEF2F2;">{icon_alert_triangle(20, "#DC2626")}</div>'
+    f'<div class="insight-card-content">'
+    f'<div class="insight-card-header">'
+    f'<span class="insight-card-title">High Risk Alert</span>'
+    f'<span class="insight-badge" style="background: #FEE2E2; color: #DC2626;">High</span>'
+    f'</div>'
+    f'<div class="insight-card-desc">Leaf Blight risk is high for Rice in Uttar Pradesh in November.</div>'
+    f'</div>'
+    f'<div class="insight-arrow-btn">{icon_arrow_right(12, "currentColor")}</div>'
+    f'</a>'
+    f'<a href="/Forecasts" target="_self" class="insight-card">'
+    f'<div class="insight-icon-circle" style="background: #E8F5E9;">{icon_trending_up(20, "#166534")}</div>'
+    f'<div class="insight-card-content">'
+    f'<div class="insight-card-header">'
+    f'<span class="insight-card-title">Rising Trend</span>'
+    f'<span class="insight-badge" style="background: #DCFCE7; color: #166534;">+42%</span>'
+    f'</div>'
+    f'<div class="insight-card-desc">Powdery Mildew cases expected to increase by 42% in next 3 months.</div>'
+    f'</div>'
+    f'<div class="insight-arrow-btn">{icon_arrow_right(12, "currentColor")}</div>'
+    f'</a>'
+    f'<a href="/Weather_Intelligence" target="_self" class="insight-card">'
+    f'<div class="insight-icon-circle" style="background: #EFF6FF;">{icon_weather(20, "#2563EB")}</div>'
+    f'<div class="insight-card-content">'
+    f'<div class="insight-card-header">'
+    f'<span class="insight-card-title">Weather Impact</span>'
+    f'<span class="insight-badge" style="background: #DBEAFE; color: #1E40AF;">Monitor</span>'
+    f'</div>'
+    f'<div class="insight-card-desc">Increased humidity and rainfall may trigger disease outbreaks.</div>'
+    f'</div>'
+    f'<div class="insight-arrow-btn">{icon_arrow_right(12, "currentColor")}</div>'
+    f'</a>'
+    f'</div>'
+)
+st.html(insights_markup)
+
+
+
 
 # ==============================================================================
 # SECTION A: RESEARCH METRICS

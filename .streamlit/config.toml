@@ -11,5 +11,9 @@ enableCORS = false
 enableXsrfProtection = false
 maxUploadSize = 50
 
+[client]
+showSidebarNavigation = false
+
 [browser]
 gatherUsageStats = false
+

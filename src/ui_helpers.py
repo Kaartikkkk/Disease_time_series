@@ -12,18 +12,32 @@ import streamlit as st
 import yaml
 
 from src.icons import (
+    icon_alert_triangle,
     icon_arrow_right,
+    icon_bar_chart,
+    icon_bell,
+    icon_book,
+    icon_chevron_down,
+    icon_database,
     icon_download,
     icon_forecast,
+    icon_home,
+    icon_india_map,
+    icon_layers,
     icon_leaf,
     icon_logo,
     icon_model_compare,
     icon_pathology,
     icon_pin,
     icon_pulse,
+    icon_search,
+    icon_settings,
     icon_shield,
+    icon_sprout,
+    icon_sun,
     icon_thermometer,
     icon_timeseries,
+    icon_trending_up,
     icon_weather,
 )
 
@@ -565,28 +579,582 @@ def inject_custom_css():
             }
         }
 
-        /* Responsive Breakpoints */
-        @media (max-width: 960px) {
-            .hero-container {
-                grid-template-columns: 1fr;
-                padding: 32px 24px;
-            }
-            .metric-grid, .process-grid, .model-cards-grid {
-                grid-template-columns: 1fr 1fr;
-            }
+        /* Hide default Streamlit sidebar page list */
+        [data-testid="stSidebarNav"],
+        [data-testid="stSidebarNavItems"],
+        [data-testid="stSidebarNavSeparator"],
+        section[data-testid="stSidebar"] > div:first-child > div:first-child > ul,
+        section[data-testid="stSidebar"] nav {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
         }
-        @media (max-width: 600px) {
-            .metric-grid, .process-grid, .model-cards-grid {
-                grid-template-columns: 1fr;
-            }
-            .hero-headline {
-                font-size: 2.1rem !important;
-            }
+
+        .sidebar-brand-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 22px;
+            padding: 0 4px;
+            text-decoration: none;
+        }
+        .sidebar-logo-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #13382C;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(19, 56, 44, 0.25);
+        }
+        .sidebar-brand-title {
+            font-family: 'Fraunces', serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #102C26;
+            line-height: 1.1;
+            letter-spacing: -0.01em;
+        }
+        .sidebar-brand-subtitle {
+            font-size: 0.58rem;
+            font-weight: 700;
+            color: #527A50;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-top: 3px;
+        }
+
+        /* Custom Styling for st.page_link in Sidebar */
+        [data-testid="stSidebar"] [data-testid="stPageLink-NavLink"] a {
+            display: flex !important;
+            align-items: center !important;
+            gap: 12px !important;
+            padding: 9px 14px !important;
+            border-radius: 10px !important;
+            color: #4A554E !important;
+            font-size: 0.88rem !important;
+            font-weight: 500 !important;
+            text-decoration: none !important;
+            transition: all 0.15s ease !important;
+            border: none !important;
+            background: transparent !important;
+            margin-bottom: 2px !important;
+        }
+        [data-testid="stSidebar"] [data-testid="stPageLink-NavLink"] a:hover {
+            background: rgba(82, 122, 80, 0.08) !important;
+            color: #102C26 !important;
+        }
+        [data-testid="stSidebar"] [data-testid="stPageLink-NavLink"] a[aria-current="page"],
+        [data-testid="stSidebar"] [data-testid="stPageLink-NavLink"] a.st-emotion-cache-16g04fd {
+            background: #13382C !important;
+            color: #FFFFFF !important;
+            font-weight: 600 !important;
+            box-shadow: 0 4px 12px rgba(19, 56, 44, 0.2) !important;
+        }
+        [data-testid="stSidebar"] [data-testid="stPageLink-NavLink"] a[aria-current="page"] p,
+        [data-testid="stSidebar"] [data-testid="stPageLink-NavLink"] a[aria-current="page"] span,
+        [data-testid="stSidebar"] [data-testid="stPageLink-NavLink"] a.st-emotion-cache-16g04fd p,
+        [data-testid="stSidebar"] [data-testid="stPageLink-NavLink"] a.st-emotion-cache-16g04fd span {
+            color: #FFFFFF !important;
+        }
+
+        .sidebar-callout-card {
+            background: linear-gradient(135deg, #13382C 0%, #1F4D3C 100%);
+            border-radius: 14px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 22px;
+            box-shadow: 0 6px 16px rgba(19, 56, 44, 0.15);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .callout-thumb {
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .callout-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .callout-content {
+            flex: 1;
+        }
+        .callout-text {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #FFFFFF;
+            line-height: 1.35;
+        }
+        .callout-arrow-btn {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #2D6A4F;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            text-decoration: none !important;
+            transition: transform 0.2s ease;
+        }
+        .callout-arrow-btn:hover {
+            transform: scale(1.1);
+            background: #398363;
+        }
+
+        .sidebar-footer {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 6px 4px;
+        }
+        .sidebar-footer-text {
+            font-size: 0.72rem;
+            color: #7D8A82;
+            line-height: 1.4;
+            font-weight: 500;
+        }
+
+        /* Top App Bar */
+        .app-top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 22px;
+            padding-bottom: 4px;
+        }
+        .search-pill {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #FFFFFF;
+            border: 1px solid #EAE6DC;
+            border-radius: 24px;
+            padding: 8px 18px;
+            width: 440px;
+            max-width: 100%;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+        .search-placeholder {
+            font-size: 0.84rem;
+            color: #8A968E;
+            flex: 1;
+        }
+        .search-kbd {
+            background: #F6F4EC;
+            border: 1px solid #E2DDD0;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #7D8A82;
+            padding: 2px 7px;
+            font-family: -apple-system, sans-serif;
+        }
+        .top-util-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .top-icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            border: 1px solid #EAE6DC;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .top-icon-btn:hover {
+            background: #F6F4EC;
+            border-color: #527A50;
+        }
+        .user-profile-pill {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            cursor: pointer;
+            padding: 3px 10px;
+            border-radius: 20px;
+            background: #FFFFFF;
+            border: 1px solid #EAE6DC;
+            transition: background 0.15s ease;
+        }
+        .user-profile-pill:hover {
+            background: #F8F7F2;
+        }
+        .user-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #13382C;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.82rem;
+        }
+        .user-name {
+            font-size: 0.86rem;
+            font-weight: 600;
+            color: #102C26;
+        }
+
+        /* Overview Panoramic Hero Banner */
+        .dashboard-hero-banner {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 12px 36px rgba(16, 44, 38, 0.12);
+            margin-bottom: 28px;
+            background-size: cover;
+            background-position: center;
+        }
+        .dashboard-hero-overlay {
+            position: relative;
+            background: linear-gradient(90deg, rgba(14, 38, 32, 0.95) 0%, rgba(14, 38, 32, 0.88) 45%, rgba(14, 38, 32, 0.35) 80%, rgba(14, 38, 32, 0.15) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 42px 46px;
+            gap: 40px;
+        }
+        .hero-left-content {
+            max-width: 580px;
+            z-index: 2;
+        }
+        .hero-main-title {
+            font-family: 'Fraunces', Georgia, serif !important;
+            font-size: 2.85rem !important;
+            font-weight: 600 !important;
+            color: #FFFFFF !important;
+            line-height: 1.12 !important;
+            margin: 0 0 16px 0 !important;
+            letter-spacing: -0.02em !important;
+            text-shadow: 0 2px 14px rgba(0,0,0,0.45) !important;
+        }
+        .hero-main-title span {
+            color: #FAF7F0 !important;
+        }
+        .hero-glass-card {
+            width: 330px;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 18px 20px;
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.15);
+            z-index: 2;
+        }
+
+        /* Feature Stat Cards Grid */
+        .feature-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 32px;
+        }
+        .feature-card {
+            background: #FFFFFF;
+            border: 1px solid #EAE6DC;
+            border-radius: 16px;
+            padding: 18px 20px;
+            box-shadow: 0 2px 10px rgba(16, 44, 38, 0.03);
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 125px;
+            text-decoration: none !important;
+        }
+        .feature-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(16, 44, 38, 0.08);
+            border-color: #527A50;
+        }
+        .feature-card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        .feature-icon-circle {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .feature-arrow-btn {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            border: 1px solid #EAE6DC;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #7D8A82;
+            transition: all 0.2s ease;
+        }
+        .feature-card:hover .feature-arrow-btn {
+            background: #102C26;
+            border-color: #102C26;
+            color: #FFFFFF;
+        }
+        .feature-card-stat {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #102C26;
+            line-height: 1.1;
+            margin-bottom: 4px;
+        }
+        .feature-card-title {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #202822;
+            margin-bottom: 3px;
+        }
+        .feature-card-sub {
+            font-size: 0.78rem;
+            color: #6B7280;
+            line-height: 1.35;
+        }
+
+        /* Key Insights Section */
+        .insights-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        .insights-title-wrap {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .insights-accent-bar {
+            width: 3px;
+            height: 24px;
+            background: #527A50;
+            border-radius: 2px;
+            margin-top: 4px;
+        }
+        .insights-heading {
+            font-family: 'Fraunces', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #102C26;
+            line-height: 1.1;
+        }
+        .insights-subtitle {
+            font-size: 0.82rem;
+            color: #6B7280;
+            margin-top: 3px;
+        }
+        .filter-pill-group {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: #FFFFFF;
+            border: 1px solid #EAE6DC;
+            border-radius: 20px;
+            padding: 3px 5px;
+        }
+        .filter-pill {
+            padding: 4px 12px;
+            border-radius: 14px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #5A665D;
+            text-decoration: none !important;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .filter-pill.active {
+            background: #102C26;
+            color: #FFFFFF !important;
+        }
+
+        .insight-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 36px;
+        }
+        .insight-card {
+            background: #FFFFFF;
+            border: 1px solid #EAE6DC;
+            border-radius: 16px;
+            padding: 18px 20px;
+            box-shadow: 0 2px 10px rgba(16, 44, 38, 0.03);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            text-decoration: none !important;
+        }
+        .insight-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(16, 44, 38, 0.08);
+            border-color: #527A50;
+        }
+        .insight-icon-circle {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .insight-card-content {
+            flex: 1;
+        }
+        .insight-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+        .insight-card-title {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: #102C26;
+        }
+        .insight-badge {
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+        .insight-card-desc {
+            font-size: 0.82rem;
+            color: #4B5563;
+            line-height: 1.45;
+        }
+        .insight-arrow-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 1px solid #EAE6DC;
+            color: #7D8A82;
+            align-self: center;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+        .insight-card:hover .insight-arrow-btn {
+            background: #102C26;
+            border-color: #102C26;
+            color: #FFFFFF;
         }
         </style>
         """,
         unsafe_allow_html=True,
     )
+
+
+def render_app_sidebar(active_page: str = "overview"):
+    """Render the cohesive left sidebar matching the Verdant Intelligence platform mockup."""
+    sprout_img_path = ASSETS_DIR / "seedling_sprout.jpg"
+    sprout_b64 = get_image_base64(sprout_img_path)
+
+    with st.sidebar:
+        st.markdown(
+            f"""
+            <div class="sidebar-brand-header">
+                <div class="sidebar-logo-circle">
+                    {icon_leaf(20, "#FFFFFF")}
+                </div>
+                <div>
+                    <div class="sidebar-brand-title">Verdant Intelligence</div>
+                    <div class="sidebar-brand-subtitle">AGRICULTURAL SURVEILLANCE &amp; FORECASTING · INDIA</div>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        st.page_link("app.py", label="Overview", icon="🏠")
+        st.page_link("pages/1_Disease_Explorer.py", label="Disease Explorer", icon="🍃")
+        st.page_link("pages/2_Time_Series_Analysis.py", label="Time Series Analysis", icon="📊")
+        st.page_link("pages/3_Model_Comparison.py", label="Model Comparison", icon="📑")
+        st.page_link("pages/4_Forecasts.py", label="Forecasts", icon="📈")
+        st.page_link("pages/5_Weather_Intelligence.py", label="Weather Intelligence", icon="☁️")
+        st.page_link("pages/6_Research_and_Data.py", label="Research & Data", icon="📖")
+        st.page_link("pages/7_Methodology.py", label="Methodology", icon="⚙️")
+
+        st.markdown(
+            f"""
+            <div style="margin-top: 24px;"></div>
+            <div class="sidebar-callout-card">
+                <div class="callout-thumb">
+                    <img src="{sprout_b64}" alt="Sprout" />
+                </div>
+                <div class="callout-content">
+                    <div class="callout-text">Building healthier crops for a stronger India.</div>
+                </div>
+                <a href="/Forecasts" target="_self" class="callout-arrow-btn">
+                    {icon_arrow_right(13, "#FFFFFF")}
+                </a>
+            </div>
+            <div class="sidebar-footer">
+                <div class="sidebar-footer-map">
+                    {icon_india_map(36, "#8A968E")}
+                </div>
+                <div class="sidebar-footer-text">
+                    <div>India Focused</div>
+                    <div>Data Driven</div>
+                    <div>Farmer Empowered</div>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+
+def render_top_header():
+    """Render the top search and user profile bar matching the platform mockup."""
+    top_header_markup = (
+        f'<div class="app-top-bar">'
+        f'<div class="search-pill">'
+        f'<span class="search-icon">{icon_search(16, "#7D8A82")}</span>'
+        f'<span class="search-placeholder">Search crops, diseases, states, or insights...</span>'
+        f'<span class="search-kbd">⌘ K</span>'
+        f'</div>'
+        f'<div class="top-util-group">'
+        f'<div class="top-icon-btn" title="Light / Dark mode">{icon_sun(17, "#5A665D")}</div>'
+        f'<div class="top-icon-btn" title="Notifications">{icon_bell(17, "#5A665D", with_dot=True)}</div>'
+        f'<div class="user-profile-pill">'
+        f'<div class="user-avatar">K</div>'
+        f'<span class="user-name">Kartik</span>'
+        f'<span class="user-chevron">{icon_chevron_down(12, "#7D8A82")}</span>'
+        f'</div></div></div>'
+    )
+    st.html(top_header_markup)
+
+
+
 
 
 @st.cache_data

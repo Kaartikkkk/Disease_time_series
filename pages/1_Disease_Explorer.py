@@ -25,15 +25,20 @@ from src.ui_helpers import (
     load_clean_records,
     load_data_quality_report_data,
     load_monthly_series,
+    render_app_sidebar,
+    render_top_header,
 )
 
 st.set_page_config(
     page_title="Disease Explorer — Verdant Intelligence",
     page_icon="🌿",
     layout="wide",
+    initial_sidebar_state="expanded",
 )
 
 inject_custom_css()
+render_app_sidebar(active_page="disease_explorer")
+render_top_header()
 
 # ==============================================================================
 # EDITORIAL HEADER & TELEMETRY STATUS
