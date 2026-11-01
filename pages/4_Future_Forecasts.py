@@ -681,9 +681,9 @@ fig_f.update_layout(
 st.plotly_chart(fig_f, use_container_width=True)
 
 render_graph_explanation_card(
-    what_it_shows="Future disease reports (dashed line) alongside past observations, seasonal benchmark, and 80%/95% prediction intervals.",
-    key_observation=f"Predictions follow seasonal rhythms, reaching peak activity around {peak_info.get('peak_month', 'upcoming months')} (~{peak_info.get('peak_value', 0.0):.1f} reports).",
-    why_it_matters="Multi-month uncertainty intervals allow timing preventive actions without artificial single-number certainty.",
+    what_it_shows=f"Forward {horizon_months}-month disease trajectory forecast (dashed line) bounded by 80% and 95% uncertainty intervals, historical observations, and Seasonal Naive benchmark.",
+    parameters=f"Forecast horizon (h={horizon_months} months), Selected model ({chosen_model}), Confidence bounds (80% z=1.28, 95% z=1.96), Peak projection ({peak_info.get('peak_month', 'N/A')} ~ {peak_info.get('peak_value', 0.0):.1f} reports).",
+    what_it_compares="Future projected outbreak intensity against historical seasonal baseline to distinguish normal seasonal surges from elevated epidemic risk with calibrated uncertainty bands.",
 )
 
 # Dedicated Section 9 Forecast Summary Card
@@ -712,10 +712,13 @@ st.markdown(
 )
 
 st.markdown("<br>", unsafe_allow_html=True)
-col_nav1, col_nav2 = st.columns(2)
-with col_nav1:
-    st.page_link("pages/3_Model_Comparison.py", label="← Back to Model Comparison", use_container_width=True)
-with col_nav2:
-    st.page_link("pages/5_Data_and_Methodology.py", label="View Data & Methodology →", use_container_width=True)
+try:
+    col_nav1, col_nav2 = st.columns(2)
+    with col_nav1:
+        st.page_link("pages/3_Model_Comparison.py", label="← Back to Model Comparison", use_container_width=True)
+    with col_nav2:
+        st.page_link("pages/5_Data_and_Methodology.py", label="View Data & Methodology →", use_container_width=True)
+except Exception:
+    pass
 
 

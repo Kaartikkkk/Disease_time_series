@@ -235,9 +235,9 @@ with tab_monthly:
         st.plotly_chart(fig_m, use_container_width=True)
 
         render_graph_explanation_card(
-            what_it_shows="Verified disease reports recorded each calendar month alongside a 3-month rolling average trend line.",
-            key_observation="Cyclical surges appear during the Kharif monsoon (July–October) and early Rabi season.",
-            why_it_matters="Identifies seasonal outbreak patterns to plan preventive actions 4 to 6 weeks in advance.",
+            what_it_shows="Verified monthly disease occurrence reports plotted alongside a 3-month rolling mean smoothed trend line.",
+            parameters="Time domain (Monthly dates 2015–2026), Documented occurrence counts (Y_t), Smoothing parameter (rolling window w=3 months).",
+            what_it_compares="Short-term monthly reporting spikes against smoothed seasonal trends to identify true persistent outbreak periods versus isolated reporting anomalies.",
         )
     else:
         st.info("No monthly timeline series available for this disease selection.")
@@ -277,9 +277,9 @@ with tab_seasonal:
 
         peak_month = df_mb.sort_values("Reports", ascending=False).iloc[0]["Month"]
         render_graph_explanation_card(
-            what_it_shows="Historical disease occurrences aggregated by calendar month (January to December).",
-            key_observation=f"Reports concentrate heavily in {peak_month} and adjacent monsoon/post-monsoon months.",
-            why_it_matters="Establishes the empirical baseline for seasonal time series forecasting.",
+            what_it_shows="Total historical disease report counts aggregated across all surveillance years by calendar month (January to December).",
+            parameters="Calendar month (m in [1, 12]), Cumulative outbreak reports (sum of Y_m), Color-intensity gradient scale.",
+            what_it_compares=f"Monthly incidence burden across crop development stages, contrasting high-risk Kharif monsoon months (peaking in {peak_month}) against dormant post-harvest intervals.",
         )
     else:
         st.info("Seasonal month distribution data is being compiled for this selection.")
@@ -329,9 +329,9 @@ with tab_map:
         st.plotly_chart(fig_map, use_container_width=True)
 
         render_graph_explanation_card(
-            what_it_shows="GPS-verified field collection coordinates across Indian agricultural zones.",
-            key_observation="Reports cluster in high-intensity cropping tracts where universities actively sample crops.",
-            why_it_matters="Highlights geographic surveillance coverage across different agro-climatic zones.",
+            what_it_shows="Geographic distribution of GPS-referenced field sampling records and institutional herbarium voucher specimens across India.",
+            parameters="Spatial coordinates (decimal Latitude, decimal Longitude), Regional zones (region_id), Collection type (basisOfRecord).",
+            what_it_compares="Surveillance density across distinct agro-climatic zones, highlighting geographic clusters in high-intensity rice and wheat tracts versus sparser regions.",
         )
     else:
         st.info("Exact map coordinates are not available for this disease's past reports. The reports are recorded at the state and national level.")
@@ -382,11 +382,14 @@ with tab_summary:
             st.dataframe(summary_metrics_df, use_container_width=True, hide_index=True)
 
 st.markdown("<br>", unsafe_allow_html=True)
-col_exp_nav1, col_exp_nav2 = st.columns(2)
-with col_exp_nav1:
-    st.page_link("pages/2_Time_Series_Analysis.py", label="Run Time Series Analysis on this Disease ->", use_container_width=True)
-with col_exp_nav2:
-    st.page_link("pages/4_Future_Forecasts.py", label="Generate Future Predictions ->", use_container_width=True)
+try:
+    col_exp_nav1, col_exp_nav2 = st.columns(2)
+    with col_exp_nav1:
+        st.page_link("pages/2_Time_Series_Analysis.py", label="Run Time Series Analysis on this Disease ->", use_container_width=True)
+    with col_exp_nav2:
+        st.page_link("pages/4_Future_Forecasts.py", label="Generate Future Predictions ->", use_container_width=True)
+except Exception:
+    pass
 
 
 

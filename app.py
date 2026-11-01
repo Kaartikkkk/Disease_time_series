@@ -595,9 +595,9 @@ format_plotly_figure(
 st.plotly_chart(fig_preview, use_container_width=True)
 
 render_graph_explanation_card(
-    what_it_shows="Monthly recorded occurrences for Rice Blast and Brown Spot of Rice from 2015 to 2025.",
-    key_observation="Rice Blast reports consistently peak between August and October during the wet Kharif monsoon.",
-    why_it_matters="Identifies recurrent seasonal outbreak windows 1 to 2 months in advance.",
+    what_it_shows="Longitudinal monthly recorded disease occurrences for Rice Blast and Brown Spot of Rice from 2015 through 2025 across Indian agro-climatic zones.",
+    parameters="Timeline (Monthly date stamps 2015–2025), Occurrence volume (confirmed report count Y_t), Pathogen class (Rice Blast vs. Brown Spot).",
+    what_it_compares="Historical outbreak severity and seasonal surge amplitude between episodic epidemic surges (Rice Blast, Kharif peaks) and continuous endemic background reports (Brown Spot).",
 )
 
 # ==============================================================================

@@ -415,9 +415,9 @@ with tab_actual:
     st.plotly_chart(fig_val, use_container_width=True)
 
     render_graph_explanation_card(
-        what_it_shows="Ground-truth disease reports (bold dark line) alongside out-of-sample forecast trajectories from top models during the held-out test window.",
-        key_observation=f"The top-ranked model ({best_model}) tracks actual surge and lull points most closely.",
-        why_it_matters="Direct out-of-sample testing confirms real predictive accuracy without data leakage.",
+        what_it_shows="Ground-truth disease reports (bold dark line) alongside out-of-sample forecast trajectories from candidate models across the held-out validation window.",
+        parameters=f"Evaluation protocol ({eval_protocol}), Horizon (h={len(val_dates)} months), Validation period ({val_dates.iloc[0].strftime('%b %Y')} to {val_dates.iloc[-1].strftime('%b %Y')}), Prediction targets (Y_hat).",
+        what_it_compares="Predicted surge timing, peak amplitude, and lull behavior of each candidate model directly against actual recorded field outbreak counts.",
     )
 
 with tab_rmse:
@@ -456,9 +456,9 @@ with tab_rmse:
     st.plotly_chart(fig_rmse, use_container_width=True)
 
     render_graph_explanation_card(
-        what_it_shows="Root Mean Squared Error (RMSE) for each forecasting model during chronological testing.",
-        key_observation=f"{best_model} achieves the lowest RMSE of {best_rmse:.3f}, outperforming the seasonal baseline by {abs(improvement_pct):.1f}%.",
-        why_it_matters="RMSE penalizes large prediction errors, making it key for preventing surprise outbreak underestimation.",
+        what_it_shows="Out-of-sample Root Mean Squared Error (RMSE) ranked across all candidate models alongside the Seasonal Naive benchmark line.",
+        parameters=f"Loss metric (RMSE = sqrt(mean((Y - Y_hat)^2))), Candidate algorithms (n={len(model_names)}), Seasonal Naive reference threshold ({baseline_rmse:.2f} reports).",
+        what_it_compares=f"Quadratic error penalty across models; highlights how {best_model} (RMSE={best_rmse:.3f}, {abs(improvement_pct):.1f}% better than baseline) penalizes and avoids catastrophic outbreak spikes.",
     )
 
 with tab_mae:
@@ -488,9 +488,9 @@ with tab_mae:
     st.plotly_chart(fig_mae, use_container_width=True)
 
     render_graph_explanation_card(
-        what_it_shows="Mean Absolute Error (MAE) measuring average monthly report difference.",
-        key_observation=f"{best_model} produces an average error of {best_row.get('mae', 0.0):.3f} reports per month.",
-        why_it_matters="Measures expected monthly variance for planning agricultural resources.",
+        what_it_shows="Mean Absolute Error (MAE) comparing average monthly error magnitudes across candidate models on the held-out validation window.",
+        parameters=f"Loss metric (MAE = mean(|Y - Y_hat|)), Top performer ({best_model} MAE={best_row.get('mae', 0.0):.3f} reports), Evaluated models (n={len(model_names)}).",
+        what_it_compares="Linear expected deviation per month across algorithms, measuring typical operational accuracy without disproportionate outlier penalty.",
     )
 
 with tab_zero_hurdle:
@@ -554,6 +554,12 @@ with tab_zero_hurdle:
         )
         fig_hurdle.update_layout(xaxis_title="Month", yaxis_title="Disease Reports")
         st.plotly_chart(fig_hurdle, use_container_width=True)
+
+        render_graph_explanation_card(
+            what_it_shows="Two-stage hurdle model forecasts (P(Y>0) x E[Y|Y>0]) tracking actual intermittent zero-inflated disease occurrences.",
+            parameters=f"Stage 1 occurrence probability P(Y>0), Stage 2 positive intensity E[Y|Y>0], Zero-inflation rate ({pct_zeros_total:.1f}% zero months across timeline).",
+            what_it_compares="Expected hurdle predictions against actual seasonal zero-report dormancy periods and positive surge outbreaks, demonstrating how decoupling occurrence from severity prevents fractional false alarms.",
+        )
 
     # Explanatory Technical Cards
     col_hz1, col_hz2 = st.columns(2)
@@ -628,9 +634,9 @@ with tab_residuals:
                 st.info("Testing sample size is too compact for multi-month pattern checks.")
 
         render_graph_explanation_card(
-            what_it_shows="Model prediction error distribution and residual autocorrelation check.",
-            key_observation=f"Residuals for {best_model} are centered around zero with no residual lags exceeding confidence bands.",
-            why_it_matters="Zero-centered, uncorrelated residuals verify that the model has captured systematic patterns.",
+            what_it_shows=f"Residual error diagnostic suite for {best_model}, displaying prediction error histogram and residual autocorrelation function (ACF).",
+            parameters=f"Residual errors (e_t = Y_t - Y_hat_t), Zero-bias line (e=0), Residual ACF lags (k <= {min(len(residuals) - 1, 5) if len(residuals) >= 4 else 5}), 95% Bartlett confidence limits (+/- 1.96/sqrt(N)).",
+            what_it_compares="Empirical forecast errors against white noise assumptions to verify that errors are unbiased (centered at zero) with no uncaptured serial correlation.",
         )
 
         if adv_mode:

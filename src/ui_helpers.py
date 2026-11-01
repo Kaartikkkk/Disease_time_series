@@ -1387,21 +1387,53 @@ def render_what_does_this_mean(simple_text: str, technical_details: Optional[str
 
 def render_graph_explanation_card(
     what_it_shows: str,
-    key_observation: str,
-    why_it_matters: str,
+    parameters: Optional[str] = None,
+    what_it_compares: Optional[str] = None,
+    key_observation: Optional[str] = None,
+    why_it_matters: Optional[str] = None,
     technical_details: Optional[str] = None,
 ):
-    """Render a concise, 2-line takeaway card directly below important graphs."""
+    """Render a structured summary card directly below graphs detailing what it shows, parameters & variables, and what it compares."""
+    param_text = parameters or key_observation or ""
+    compare_text = what_it_compares or why_it_matters or ""
+
+    lines_html = []
+    if what_it_shows:
+        lines_html.append(f"""
+        <div class="expl-line">
+            <span class="expl-label">{icon_target(14, "#183D32")} <strong>What It Shows:</strong></span>
+            <span class="expl-text">{what_it_shows}</span>
+        </div>
+        """)
+    if param_text:
+        label = "Parameters & Variables:" if parameters else "Observation:"
+        icon = icon_pulse(14, "#2E5C4D") if parameters else icon_target(14, "#183D32")
+        lines_html.append(f"""
+        <div class="expl-line">
+            <span class="expl-label">{icon} <strong>{label}</strong></span>
+            <span class="expl-text">{param_text}</span>
+        </div>
+        """)
+    if compare_text:
+        label = "What It Compares:" if what_it_compares else "Takeaway:"
+        icon = icon_model_compare(14, "#527A50") if what_it_compares else icon_leaf(14, "#527A50")
+        lines_html.append(f"""
+        <div class="expl-line">
+            <span class="expl-label">{icon} <strong>{label}</strong></span>
+            <span class="expl-text">{compare_text}</span>
+        </div>
+        """)
+    if technical_details:
+        lines_html.append(f"""
+        <div class="expl-line" style="margin-top: 4px; padding-top: 4px; border-top: 1px dashed rgba(82, 122, 80, 0.2);">
+            <span class="expl-label">{icon_info(14, "#527A50")} <strong>Technical Note:</strong></span>
+            <span class="expl-text">{technical_details}</span>
+        </div>
+        """)
+
     card_html = f"""
     <div class="graph-explanation-card">
-        <div class="expl-line">
-            <span class="expl-label">{icon_target(14, "#183D32")} <strong>Observation:</strong></span>
-            <span class="expl-text">{key_observation}</span>
-        </div>
-        <div class="expl-line">
-            <span class="expl-label">{icon_leaf(14, "#527A50")} <strong>Takeaway:</strong></span>
-            <span class="expl-text">{why_it_matters}</span>
-        </div>
+        {''.join(lines_html)}
     </div>
     """
     st.html(card_html)

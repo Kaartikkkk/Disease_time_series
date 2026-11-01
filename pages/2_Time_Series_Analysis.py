@@ -239,9 +239,9 @@ with tab_missing:
         st.plotly_chart(fig_miss, use_container_width=True)
 
         render_graph_explanation_card(
-            what_it_shows="Observational integrity of each month from 2015 to 2026 (green = confirmed reports, red = unobserved intervals).",
-            key_observation="Most months reflect active scientific surveillance, with gaps occurring during off-season dry intervals.",
-            why_it_matters="Distinguishing between confirmed zero disease presence and unobserved intervals prevents under-prediction bias.",
+            what_it_shows="Observational integrity timeline from 2015 to 2026 showing active surveillance months (green) versus unobserved gaps (red).",
+            parameters="Temporal index (t in monthly increments), Surveillance binary state (is_missing boolean flag).",
+            what_it_compares="Active surveillance periods against unobserved gaps to verify whether zero report months reflect genuine disease dormancy versus missing survey effort.",
         )
 
 # ----------------- Tab 3: Stationarity Testing (Rolling Envelope) -----------------
@@ -281,9 +281,9 @@ with tab_patterns:
     st.plotly_chart(fig_trend, use_container_width=True)
 
     render_graph_explanation_card(
-        what_it_shows=f"Monthly disease reports alongside {window_size}-month rolling smoothed trend line and volatility envelope (+/- 1 standard deviation).",
-        key_observation=f"Reports average {series_summary['mean_monthly_occurrences']} reports/month, with recurring seasonal peaks reaching above the normal volatility band.",
-        why_it_matters="Identifies variance expansion and seasonal surge patterns across the historical timeline.",
+        what_it_shows=f"Monthly recorded disease reports plotted with a {window_size}-month rolling mean and dynamic volatility envelope (+/- 1 standard deviation).",
+        parameters=f"Rolling window size (k={window_size} months), Rolling mean (smoothed mu_t), Volatility envelope (mu_t +/- 1 sigma), Monthly incidence (Y_t).",
+        what_it_compares="Current monthly report volume against the historical moving dispersion band to distinguish normal fluctuations from statistically significant outbreak surge events.",
     )
 
 # ----------------- Tab 4: ADF & KPSS Results -----------------
@@ -360,9 +360,9 @@ with tab_adf_kpss:
         )
 
     render_graph_explanation_card(
-        what_it_shows="Formal statistical hypothesis tests (ADF and KPSS) for unit root and stationarity.",
-        key_observation=f"Series classification: {decision['classification']} (ADF p={adf_res.get('p_value')}).",
-        why_it_matters=f"Determines whether differencing is required for forecasting models ({decision['action']}).",
+        what_it_shows="Formal statistical hypothesis tests (Augmented Dickey-Fuller and KPSS) evaluating stationarity and unit root behavior.",
+        parameters=f"ADF statistic & p-value (p={adf_res.get('p_value')}), KPSS statistic & critical values, Significance threshold (alpha=0.05).",
+        what_it_compares=f"Unit root non-stationarity against trend-stationarity to rigorously establish integration order ({decision['classification']}).",
     )
 
 # ----------------- Tab 5: Differencing Analysis -----------------
@@ -398,9 +398,9 @@ with tab_diff:
     st.plotly_chart(fig_diff, use_container_width=True)
 
     render_graph_explanation_card(
-        what_it_shows="Original disease reports (dark green) compared with first-differenced series (gold).",
-        key_observation="Differencing stabilizes the mean directly around zero and removes multi-year level drift.",
-        why_it_matters="Confirms that first-order differencing (d=1) stabilizes the series for model training.",
+        what_it_shows="Original disease report series (dark green) plotted alongside its first-order differenced series (gold).",
+        parameters=f"Differencing order (d=1, Delta Y_t = Y_t - Y_t-1), Original variance ({diff_analysis['original']['variance']:.2f}), Differenced variance ({diff_analysis['first_difference']['variance']:.2f}).",
+        what_it_compares="Non-stationary raw counts against first-order differences to verify mean stabilization around zero and confirm whether variance was effectively reduced without overdifferencing.",
     )
 
     st.markdown(
@@ -434,9 +434,9 @@ with tab_decomp:
         st.plotly_chart(fig_d, use_container_width=True)
 
         render_graph_explanation_card(
-            what_it_shows="Decomposition of disease history into trend, 12-month seasonal cycle, and residuals.",
-            key_observation="Seasonal component exhibits regular periodic recurrence matching annual crop cycles.",
-            why_it_matters="Confirms predictable seasonality that models can leverage for forward projections.",
+            what_it_shows="Classical additive seasonal decomposition splitting the disease timeline into Trend, 12-Month Seasonal cycle, and Random Irregular Residuals.",
+            parameters="Decomposition model (Additive: Y_t = Trend + Seasonal + Residual), Periodicity (s=12 calendar months), Two-sided moving average filter.",
+            what_it_compares="Long-term multi-year directional trend against repeating annual agricultural seasonality and irregular stochastic shocks.",
         )
 
     # Seasonal Heatmap
@@ -467,9 +467,9 @@ with tab_decomp:
     st.plotly_chart(fig_heat, use_container_width=True)
 
     render_graph_explanation_card(
-        what_it_shows="Recorded disease reports across all 12 calendar months from 2015 to 2026.",
-        key_observation="Reports consistently concentrate in specific calendar months across multiple years.",
-        why_it_matters="Confirms recurrent seasonal surge windows across Indian cropping seasons.",
+        what_it_shows="Two-dimensional annual seasonality matrix mapping disease report volumes across calendar months (Jan–Dec) and historical years (2015–2026).",
+        parameters="Horizontal axis (Calendar Month), Vertical axis (Surveillance Year), Color intensity (Monthly aggregate report volume).",
+        what_it_compares="Inter-annual outbreak recurrence across months to identify stable seasonal vulnerability windows versus anomalous epidemic years.",
     )
 
 # ----------------- Tab 7: ACF & PACF Memory -----------------
@@ -500,9 +500,9 @@ with tab_acf:
             st.plotly_chart(fig_p, use_container_width=True)
 
         render_graph_explanation_card(
-            what_it_shows="Correlation between disease reports and past values up to 20 months ago.",
-            key_observation="Significant correlation at Lag 1 and Lag 12 confirms month-to-month and annual memory.",
-            why_it_matters="Directly guides autoregressive (AR) and seasonal parameter selection for forecasting.",
+            what_it_shows="Autocorrelation (ACF) and Partial Autocorrelation (PACF) coefficients across 20 monthly lags with 95% Bartlett confidence limits.",
+            parameters=f"Lag horizon (k in [1, 20] months), 95% significance threshold (+/- {ci:.3f}), Correlation bounds [-1.0, 1.0].",
+            what_it_compares="Direct past lag influence (PACF spikes identifying AR order p) against compound moving-average memory (ACF persistence identifying MA order q and annual seasonality s=12).",
         )
 
 # ----------------- Tab 8: Weather Patterns, Lags & Partitions -----------------
@@ -552,9 +552,9 @@ with tab_weather:
         st.plotly_chart(fig_w, use_container_width=True)
 
         render_graph_explanation_card(
-            what_it_shows="Monthly disease reports compared against NASA POWER satellite rainfall measurements.",
-            key_observation="Peaks in disease occurrence follow peak monsoon rainfall with a 1-month delayed shift.",
-            why_it_matters="Supports using 1-month-lagged weather features in forecasting models without lookahead leakage.",
+            what_it_shows="Dual-axis time series aligning monthly crop disease counts with NASA POWER satellite rainfall measurements (mm).",
+            parameters="Primary axis (Confirmed disease reports Y_t), Secondary axis (Precipitation in mm), Cross-correlation lag window (k in [0, 3] months).",
+            what_it_compares="Monsoon rainfall timing and intensity against subsequent disease outbreaks, revealing delayed pathogen incubation cycles (typically 1-month lag).",
         )
 
         # Cross-Correlation Table & Analysis
@@ -582,16 +582,19 @@ with tab_weather:
     st.plotly_chart(split_fig, use_container_width=True)
 
     render_graph_explanation_card(
-        what_it_shows="Chronological partition into training (70%), validation (15%), and testing (15%) windows.",
-        key_observation="Data boundaries follow sequential calendar dates with zero temporal overlap.",
-        why_it_matters="Ensures all model evaluation metrics reflect genuine out-of-sample forecasting ability.",
+        what_it_shows="Strict chronological data partitioning dividing the disease timeline into Training (70%), Validation (15%), and Out-of-Sample Testing (15%).",
+        parameters=f"Split fractions (70% Train: {len(train_df)}m, 15% Val: {len(val_df)}m, 15% Test: {len(test_df)}m), Temporal boundaries (strictly sequential, zero lookahead leakage).",
+        what_it_compares="Historical model fitting domain against completely unseen future evaluation windows, ensuring honest out-of-sample metrics without future data snooping.",
     )
 
 st.markdown("<br>", unsafe_allow_html=True)
-col_c1, col_c2 = st.columns(2)
-with col_c1:
-    st.page_link("pages/3_Model_Comparison.py", label="Compare All 11 Forecasting Models ->", use_container_width=True)
-with col_c2:
-    st.page_link("pages/4_Future_Forecasts.py", label="Generate Future Outbreak Forecasts ->", use_container_width=True)
+try:
+    col_c1, col_c2 = st.columns(2)
+    with col_c1:
+        st.page_link("pages/3_Model_Comparison.py", label="Compare All 11 Forecasting Models ->", use_container_width=True)
+    with col_c2:
+        st.page_link("pages/4_Future_Forecasts.py", label="Generate Future Outbreak Forecasts ->", use_container_width=True)
+except Exception:
+    pass
 
 
