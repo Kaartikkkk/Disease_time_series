@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Generate a publication-grade PDF report and oral viva defense guide
-for Verdant Intelligence - Phase 2 Mid-Semester Evaluation.
+for Agricultural Disease Forecasting Using Time Series - Phase 2 Mid-Semester Evaluation.
 
 Strict 6-Page Architecture:
 - Page 1: Executive Summary, Rubric Alignment (10 Marks), Data Pipeline & Provenance
@@ -76,7 +76,7 @@ class NumberedCanvas(canvas.Canvas):
         self.restoreState()
 
 
-def build_pdf(filename="reports/Verdant_Intelligence_Phase_2_Evaluation_Report_and_Viva_Guide.pdf"):
+def build_pdf(filename="reports/Agricultural_Disease_Forecasting_Phase_2_Evaluation_Report_and_Viva_Guide.pdf"):
     os.makedirs(os.path.dirname(filename), exist_ok=True)
     
     # 36 pt (0.5 in) margins -> 540 pt printable width on Letter (612 x 792 pt)
@@ -626,7 +626,7 @@ def build_pdf(filename="reports/Verdant_Intelligence_Phase_2_Evaluation_Report_a
     ))
     story.append(Paragraph(
         "• <b>Zero-Denominator Policy (Why Raw MAPE Fails):</b> In disease surveillance, actual counts y<sub>t</sub> can be zero. Raw MAPE involves division by zero (1/0 = &infin;). "
-        "Silently adding arbitrary constants produces misleading percentages. Verdant Intelligence computes: "
+        "Silently adding arbitrary constants produces misleading percentages. The platform computes: "
         "<br/>1. <b>Symmetric MAPE (sMAPE &le; 200%):</b> Denominator (|y<sub>t</sub>| + |y<sub>t</sub><sup>pred</sup>|)/2 bounds percentage error safely. "
         "<br/>2. <b>Weighted Absolute Percentage Error (WAPE):</b> &Sigma; |y<sub>t</sub> - y<sub>t</sub><sup>pred</sup>| / &Sigma; y<sub>t</sub>. "
         "ARIMA(1,1,1) achieves WAPE = 85.73%, beating the Seasonal Naive baseline (96.55%) by 10.8 percentage points.",
@@ -646,7 +646,7 @@ def build_pdf(filename="reports/Verdant_Intelligence_Phase_2_Evaluation_Report_a
     story.append(Paragraph("7. Plant Pathology & Agronomic Domain Interpretation", h1_style))
     story.append(Paragraph(
         "A forecasting model in agriculture is only valuable if its outputs reflect true biological mechanisms. "
-        "Verdant Intelligence grounds all quantitative outputs in Indian agro-ecological realities:",
+        "The platform grounds all quantitative outputs in Indian agro-ecological realities:",
         body_style
     ))
     story.append(Paragraph(
@@ -833,7 +833,7 @@ def build_pdf(filename="reports/Verdant_Intelligence_Phase_2_Evaluation_Report_a
             "Q9. Why is standard Mean Absolute Percentage Error (MAPE) mathematically problematic in this dataset?",
             "The formula for MAPE is (1/n) &Sigma; |(y<sub>t</sub> - y<sub>t</sub><sup>pred</sup>) / y<sub>t</sub>| &times; 100%. When actual occurrence count y<sub>t</sub> = 0, the denominator is zero, "
             "making MAPE mathematically undefined (&infin;). Silently replacing zero with an arbitrary epsilon like 0.001 produces wildly inflated, distorted percentages (e.g., 50,000%). "
-            "To uphold scientific integrity, Verdant Intelligence computes: "
+            "To uphold scientific integrity, the platform computes: "
             "<br/>1. <b>sMAPE (Symmetric MAPE):</b> Bounds percentage error between 0% and 200% via denominator (|y<sub>t</sub>| + |y<sub>t</sub><sup>pred</sup>|)/2. "
             "<br/>2. <b>WAPE (Weighted Absolute Percentage Error):</b> &Sigma; |y<sub>t</sub> - y<sub>t</sub><sup>pred</sup>| / &Sigma; y<sub>t</sub>, which aggregates deviations over total incidence, eliminating zero-division entirely."
         ),
@@ -904,7 +904,7 @@ def build_pdf(filename="reports/Verdant_Intelligence_Phase_2_Evaluation_Report_a
         [
             Paragraph(
                 "<b>EXECUTIVE 5-MINUTE ORAL VIVA PITCH (MEMORIZE FOR EVALUATION OPENING):</b><br/>"
-                "<i>'Respected Evaluators, Verdant Intelligence addresses the critical challenge of forecasting crop pathogen outbreaks across India. "
+                "<i>'Respected Evaluators, our platform Agricultural Disease Forecasting Using Time Series addresses the critical challenge of forecasting crop pathogen outbreaks across India. "
                 "Our empirical pipeline combines 11 years of GBIF disease records with NASA POWER agrometeorology across 132 continuous months. "
                 "Through joint ADF and KPSS tests, we proved raw pathogen series exhibit stochastic unit roots, establishing that first differencing (d=1) is mathematically essential. "
                 "Across an 11-model out-of-sample benchmark evaluated on held-out data with zero lookahead leakage, classical ARIMA(1,1,1) achieved top performance (RMSE 1.823, MAE 1.243), "

@@ -34,6 +34,7 @@ from src.models import (
     forecast_arimax,
     forecast_gradient_boosting,
     forecast_holt_winters,
+    forecast_hurdle,
     forecast_ma,
     forecast_ml_autoregressor,
     forecast_prophet,
@@ -339,6 +340,30 @@ def run_model_comparison(
     except Exception as e:
         logger.warning("Random Forest autoregressor failed: %s", e)
 
+    # 12. Two-Stage Hurdle Model for Zero-Inflated Disease Counts
+    try:
+        p_hurdle, lb_hurdle, ub_hurdle, res_hurdle = forecast_hurdle(
+            y_train,
+            horizon=eval_horizon,
+            train_exog=train_exog,
+            future_exog=val_exog,
+            train_dates=train_df["date"],
+            future_dates=val_dates,
+        )
+        param_str = getattr(res_hurdle, "param_summary", "Stage 1 Logistic P(Y>0) + Stage 2 Positive Intensity")
+        m_hurdle = compute_forecast_metrics(
+            y_val, p_hurdle, lb_hurdle, ub_hurdle,
+            model_name="Two-Stage Hurdle (Zero-Inflated)",
+            y_train=y_train.values,
+            season_length=12,
+            parameters=param_str,
+            model_family="Intermittent Hurdle",
+        )
+        models_results.append(m_hurdle)
+        forecasts_dict["Two-Stage Hurdle (Zero-Inflated)"] = p_hurdle
+    except Exception as e:
+        logger.warning("Two-Stage Hurdle failed: %s", e)
+
     # Rank models by RMSE
     models_results = sorted(models_results, key=lambda x: x.get("rmse") if x.get("rmse") is not None else float("inf"))
     best_model_name = models_results[0]["model_name"] if models_results else "None"
@@ -349,6 +374,296 @@ def run_model_comparison(
         "validation_actual": y_val,
         "validation_dates": val_dates,
         "forecasts": forecasts_dict,
+        "train_df": train_df,
+        "val_df": val_df,
+        "test_df": test_df,
+    }
+
+
+# ==============================================================================
+# ROLLING WALK-FORWARD VALIDATION RUNNER
+# ==============================================================================
+
+def run_rolling_walk_forward_evaluation(
+    df: pd.DataFrame,
+    horizon: Optional[int] = None,
+    step_ahead: int = 1,
+    window_type: str = "expanding",
+    fixed_window_size: int = 92,
+    target_col: str = "documented_occurrence_count",
+    apply_threshold: bool = False,
+    tau: float = 0.5,
+    use_log1p: bool = False,
+) -> Dict[str, Any]:
+    """Execute rolling-origin walk-forward evaluation across all models without temporal lookahead.
+
+    In each step k:
+        1. Historical slice: [0 : n_train + k] (expanding) or [max(0, n_train + k - fixed_window) : n_train + k] (rolling).
+        2. Fits each model strictly on the historical slice.
+        3. Forecasts step_ahead months ahead.
+        4. Out-of-sample prediction is compared with ground truth at target_idx = n_train + k + step_ahead - 1.
+        5. Origin rolls forward by 1 month, incorporating the newly available actual observation.
+
+    Args:
+        df: Pathogen time series DataFrame.
+        horizon: Optional number of walk-forward steps (defaults to validation set length).
+        step_ahead: Forecasting horizon (1 for next month, 2 or 3 for multi-step operational planning).
+        window_type: "expanding" (accumulates history) or "rolling" (fixed history length).
+        fixed_window_size: Window size when window_type == "rolling" (default 92).
+        target_col: Name of disease occurrence count column.
+        apply_threshold: If True, small non-negative predictions below tau are set to 0.0.
+        tau: Rounding/dormancy threshold (default 0.5 reports).
+        use_log1p: If True, transforms target z = log(1+y) before fitting and back-transforms.
+
+    Returns:
+        Dictionary containing comparative walk-forward metrics, actual values, and step forecasts.
+    """
+    train_df, val_df, test_df = chronological_split(df, train_ratio=0.70, val_ratio=0.15)
+    n_train = len(train_df)
+    total_val_len = len(val_df)
+
+    max_eval_steps = max(1, total_val_len - step_ahead + 1)
+    if horizon is not None and 0 < horizon <= max_eval_steps:
+        eval_steps = horizon
+    else:
+        eval_steps = max_eval_steps
+
+    weather_exog_cols = ["temp_mean_c_lag1", "precipitation_monthly_mm_lag1", "relative_humidity_pct_lag1"]
+    has_weather = all(c in df.columns for c in weather_exog_cols)
+
+    # Initial order optimization on baseline training window (prevents repetitive order-search overhead)
+    initial_y_train = train_df[target_col].copy()
+    if use_log1p:
+        initial_y_fit = np.log1p(np.maximum(0.0, initial_y_train.values))
+    else:
+        initial_y_fit = initial_y_train.values
+
+    try:
+        _, _, _, r_arima = forecast_arima(pd.Series(initial_y_fit), horizon=step_ahead, auto_optimize=True)
+        cached_arima_order = getattr(r_arima, "best_order", (1, 0, 1))
+    except Exception:
+        cached_arima_order = (1, 0, 1)
+
+    try:
+        _, _, _, r_sarima = forecast_sarima(pd.Series(initial_y_fit), horizon=step_ahead, auto_optimize=True)
+        cached_sarima_order = getattr(r_sarima, "best_order", ((1, 0, 1), (1, 0, 1, 12)))
+    except Exception:
+        cached_sarima_order = ((1, 0, 1), (1, 0, 1, 12))
+
+    # Initialize forecast accumulators
+    model_names = [
+        "Seasonal Naive (Baseline)",
+        "AR(1)",
+        "MA(1)",
+        "ARIMA(1,1,1)",
+        "SARIMA(1,0,1)(1,0,1)[12]",
+        "Holt-Winters",
+        "ARIMAX (Weather Regressors)",
+        "SARIMAX (Seasonal + Weather)",
+        "Two-Stage Hurdle (Zero-Inflated)",
+        "Random Forest (Autoregressive)",
+        "Hist Gradient Boosting (Autoregressive)",
+    ]
+    if HAS_PROPHET:
+        model_names.append("Prophet (Trend + Seasonality)")
+
+    step_predictions: Dict[str, List[float]] = {m: [] for m in model_names}
+    actuals: List[float] = []
+    eval_dates: List[pd.Timestamp] = []
+
+    for step in range(eval_steps):
+        target_idx = n_train + step + step_ahead - 1
+        curr_train_end = n_train + step
+
+        if window_type == "rolling":
+            curr_train_start = max(0, curr_train_end - fixed_window_size)
+            sub_df = df.iloc[curr_train_start:curr_train_end].copy().reset_index(drop=True)
+        else:
+            sub_df = df.iloc[:curr_train_end].copy().reset_index(drop=True)
+
+        future_sub_df = df.iloc[curr_train_end:target_idx + 1].copy().reset_index(drop=True)
+
+        y_true = float(df[target_col].iloc[target_idx])
+        dt_val = pd.to_datetime(df["date"].iloc[target_idx])
+        actuals.append(y_true)
+        eval_dates.append(dt_val)
+
+        y_sub_raw = sub_df[target_col].copy()
+        if use_log1p:
+            y_sub = pd.Series(np.log1p(np.maximum(0.0, y_sub_raw.values)), index=y_sub_raw.index)
+        else:
+            y_sub = y_sub_raw
+
+        sub_train_exog = sub_df[weather_exog_cols].bfill().fillna(0) if has_weather else None
+        sub_fut_exog = future_sub_df[weather_exog_cols].bfill().fillna(0) if has_weather else None
+
+        def _invert_and_clean(pred_array: np.ndarray) -> float:
+            val = float(pred_array[-1])
+            if use_log1p:
+                val = float(np.expm1(val))
+            val = max(0.0, val)
+            if apply_threshold and val < tau:
+                val = 0.0
+            return val
+
+        # 1. Seasonal Naive
+        try:
+            p_sn, _, _ = forecast_seasonal_naive(y_sub, horizon=step_ahead, season_length=12)
+            step_predictions["Seasonal Naive (Baseline)"].append(_invert_and_clean(p_sn))
+        except Exception:
+            step_predictions["Seasonal Naive (Baseline)"].append(0.0)
+
+        # 2. AR(1)
+        try:
+            p_ar, _, _, _ = forecast_ar(y_sub, horizon=step_ahead, p=1)
+            step_predictions["AR(1)"].append(_invert_and_clean(p_ar))
+        except Exception:
+            step_predictions["AR(1)"].append(0.0)
+
+        # 3. MA(1)
+        try:
+            p_ma, _, _, _ = forecast_ma(y_sub, horizon=step_ahead, q=1)
+            step_predictions["MA(1)"].append(_invert_and_clean(p_ma))
+        except Exception:
+            step_predictions["MA(1)"].append(0.0)
+
+        # 4. ARIMA
+        try:
+            p_arima, _, _, _ = forecast_arima(y_sub, horizon=step_ahead, order=cached_arima_order, auto_optimize=False)
+            step_predictions["ARIMA(1,1,1)"].append(_invert_and_clean(p_arima))
+        except Exception:
+            step_predictions["ARIMA(1,1,1)"].append(0.0)
+
+        # 5. SARIMA
+        try:
+            p_sarima, _, _, _ = forecast_sarima(
+                y_sub, horizon=step_ahead, order=cached_sarima_order[0], seasonal_order=cached_sarima_order[1], auto_optimize=False
+            )
+            step_predictions["SARIMA(1,0,1)(1,0,1)[12]"].append(_invert_and_clean(p_sarima))
+        except Exception:
+            step_predictions["SARIMA(1,0,1)(1,0,1)[12]"].append(0.0)
+
+        # 6. Holt-Winters
+        try:
+            p_hw, _, _, _ = forecast_holt_winters(y_sub, horizon=step_ahead, seasonal_periods=12, auto_optimize=False)
+            step_predictions["Holt-Winters"].append(_invert_and_clean(p_hw))
+        except Exception:
+            step_predictions["Holt-Winters"].append(0.0)
+
+        # 7. ARIMAX
+        if has_weather and sub_train_exog is not None and sub_fut_exog is not None:
+            try:
+                p_arimax, _, _, _ = forecast_arimax(
+                    y_sub, horizon=step_ahead, train_exog=sub_train_exog, future_exog=sub_fut_exog, order=cached_arima_order, auto_optimize=False
+                )
+                step_predictions["ARIMAX (Weather Regressors)"].append(_invert_and_clean(p_arimax))
+            except Exception:
+                step_predictions["ARIMAX (Weather Regressors)"].append(0.0)
+
+        # 8. SARIMAX
+        if has_weather and sub_train_exog is not None and sub_fut_exog is not None:
+            try:
+                p_sarimax, _, _, _ = forecast_sarimax_model(
+                    y_sub,
+                    horizon=step_ahead,
+                    order=cached_sarima_order[0],
+                    seasonal_order=cached_sarima_order[1],
+                    train_exog=sub_train_exog,
+                    future_exog=sub_fut_exog,
+                    auto_optimize=False,
+                )
+                step_predictions["SARIMAX (Seasonal + Weather)"].append(_invert_and_clean(p_sarimax))
+            except Exception:
+                step_predictions["SARIMAX (Seasonal + Weather)"].append(0.0)
+
+        # 9. Two-Stage Hurdle
+        try:
+            p_hurdle, _, _, _ = forecast_hurdle(
+                y_sub,
+                horizon=step_ahead,
+                train_exog=sub_train_exog,
+                future_exog=sub_fut_exog,
+                train_dates=sub_df["date"],
+                future_dates=future_sub_df["date"],
+            )
+            step_predictions["Two-Stage Hurdle (Zero-Inflated)"].append(_invert_and_clean(p_hurdle))
+        except Exception:
+            step_predictions["Two-Stage Hurdle (Zero-Inflated)"].append(0.0)
+
+        # 10. Random Forest
+        try:
+            p_rf, _, _, _ = forecast_random_forest(
+                sub_df,
+                horizon=step_ahead,
+                lags=[1, 2, 3, 12],
+                weather_lag_cols=weather_exog_cols if has_weather else None,
+                future_weather_df=future_sub_df if has_weather else None,
+            )
+            step_predictions["Random Forest (Autoregressive)"].append(_invert_and_clean(p_rf))
+        except Exception:
+            step_predictions["Random Forest (Autoregressive)"].append(0.0)
+
+        # 11. Hist Gradient Boosting
+        try:
+            p_gb, _, _, _ = forecast_gradient_boosting(
+                sub_df,
+                horizon=step_ahead,
+                lags=[1, 2, 3, 12],
+                weather_lag_cols=weather_exog_cols if has_weather else None,
+                future_weather_df=future_sub_df if has_weather else None,
+            )
+            step_predictions["Hist Gradient Boosting (Autoregressive)"].append(_invert_and_clean(p_gb))
+        except Exception:
+            step_predictions["Hist Gradient Boosting (Autoregressive)"].append(0.0)
+
+        # 12. Meta Prophet (optional in walk-forward due to fitting cost)
+        if HAS_PROPHET and "Prophet (Trend + Seasonality)" in step_predictions:
+            try:
+                p_prophet, _, _, _ = forecast_prophet(
+                    sub_df,
+                    horizon=step_ahead,
+                    future_dates=future_sub_df["date"],
+                    weather_cols=weather_exog_cols if has_weather else None,
+                    future_weather_df=future_sub_df if has_weather else None,
+                )
+                step_predictions["Prophet (Trend + Seasonality)"].append(_invert_and_clean(p_prophet))
+            except Exception:
+                step_predictions["Prophet (Trend + Seasonality)"].append(0.0)
+
+    y_actual_arr = np.array(actuals, dtype=float)
+    y_train_init = train_df[target_col].values
+
+    eval_results: List[Dict[str, Any]] = []
+    forecasts_dict: Dict[str, np.ndarray] = {}
+
+    for name in model_names:
+        preds = np.array(step_predictions[name], dtype=float)
+        if len(preds) == len(y_actual_arr):
+            m = compute_forecast_metrics(
+                actual=y_actual_arr,
+                predicted=preds,
+                model_name=name,
+                y_train=y_train_init,
+                season_length=12,
+                parameters=f"Walk-Forward {step_ahead}-Step Ahead ({window_type.capitalize()} Window)",
+                model_family="Rolling Origin Benchmark",
+            )
+            eval_results.append(m)
+            forecasts_dict[name] = preds
+
+    # Sort models by RMSE ascending
+    eval_results = sorted(eval_results, key=lambda x: x.get("rmse") if x.get("rmse") is not None else float("inf"))
+    best_model_name = eval_results[0]["model_name"] if eval_results else "None"
+
+    return {
+        "evaluation_metrics": eval_results,
+        "best_model": best_model_name,
+        "validation_actual": y_actual_arr,
+        "validation_dates": pd.Series(eval_dates),
+        "forecasts": forecasts_dict,
+        "step_ahead": step_ahead,
+        "window_type": window_type,
+        "n_eval_steps": eval_steps,
         "train_df": train_df,
         "val_df": val_df,
         "test_df": test_df,

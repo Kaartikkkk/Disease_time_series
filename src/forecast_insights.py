@@ -1,4 +1,4 @@
-"""Verdant Intelligence — Programmatic Forecast Insights & Monthly Outlook Engine.
+"""Agricultural Disease Forecasting Using Time Series — Programmatic Forecast Insights & Monthly Outlook Engine.
 
 Translates econometric and time-series model projections into clear, data-driven,
 interpretable scientific narratives and structured insight cards.

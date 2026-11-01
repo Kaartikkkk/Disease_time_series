@@ -1,4 +1,4 @@
-"""Shared UI Components, Styling, and Data Loaders for Verdant Intelligence."""
+"""Shared UI Components, Styling, and Data Loaders for Agricultural Disease Forecasting Using Time Series."""
 
 import base64
 import json
@@ -71,7 +71,7 @@ def get_image_base64(image_path: Path) -> str:
 
 
 def inject_custom_css():
-    """Inject Verdant Intelligence editorial design system into Streamlit."""
+    """Inject editorial design system into Streamlit."""
     st.markdown(
         """
         <style>

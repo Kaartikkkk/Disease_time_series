@@ -1,6 +1,6 @@
-"""Verdant Intelligence — Individual Time Series Forecasting Model Suite.
+"""Agricultural Disease Forecasting Using Time Series — Individual Model Suite.
 
-This package provides standalone, modular implementations for all 11 benchmark models:
+This package provides standalone, modular implementations for benchmark models:
 
 1. Baseline & Smoothing:
    - Seasonal Naive (baseline): `from src.models.seasonal_naive import forecast_seasonal_naive`
@@ -16,7 +16,10 @@ This package provides standalone, modular implementations for all 11 benchmark m
    - ARIMAX: `from src.models.arimax_model import forecast_arimax`
    - SARIMAX: `from src.models.sarimax_model import forecast_sarimax_model`
 
-4. Modern Machine Learning & Additive:
+4. Zero-Inflated / Intermittent Models:
+   - Two-Stage Hurdle: `from src.models.hurdle_model import forecast_hurdle`
+
+5. Modern Machine Learning & Additive:
    - Meta Prophet: `from src.models.prophet_model import forecast_prophet, HAS_PROPHET`
    - Hist Gradient Boosting: `from src.models.gradient_boosting import forecast_gradient_boosting`
    - Random Forest: `from src.models.random_forest import forecast_random_forest`
@@ -28,6 +31,7 @@ from src.models.arima_model import forecast_arima
 from src.models.arimax_model import forecast_arimax
 from src.models.gradient_boosting import forecast_gradient_boosting
 from src.models.holt_winters import forecast_holt_winters
+from src.models.hurdle_model import forecast_hurdle
 from src.models.ma_model import forecast_ma
 from src.models.ml_autoregressor import forecast_ml_autoregressor
 from src.models.prophet_model import HAS_PROPHET, forecast_prophet
@@ -45,6 +49,7 @@ __all__ = [
     "forecast_sarima",
     "forecast_arimax",
     "forecast_sarimax_model",
+    "forecast_hurdle",
     "forecast_prophet",
     "forecast_gradient_boosting",
     "forecast_random_forest",

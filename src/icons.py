@@ -1,4 +1,4 @@
-"""Verdant Intelligence — Custom SVG Icon System.
+"""Agricultural Disease Forecasting Using Time Series — Custom SVG Icon System.
 
 Consistent stroke-based iconography tailored for agricultural intelligence,
 climate-tech, and scientific time-series platforms.
@@ -26,7 +26,7 @@ def _res_col(color: str, default: str = "#102C26") -> str:
 
 
 def icon_logo(size: int = 24, color: str = "#13382C", css_class: str = "") -> str:
-    """Verdant Intelligence brand mark: germinating embryo inside a climate circle."""
+    """Platform brand mark: germinating embryo inside a climate circle."""
     c = _res_col(color, "#13382C")
     svg = f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
   <circle cx="12" cy="12" r="10" stroke="{c}" stroke-width="1.75" opacity="0.25"/>

@@ -91,3 +91,26 @@ def test_model_comparison_table_formatting():
     assert table.iloc[0]["Model"] == "Model_B"
     assert table.iloc[1]["Rank"] == "#2"
     assert table.iloc[1]["Model"] == "Model_A"
+
+
+def test_mase_scaling_calculation():
+    """Verify MASE scaled against in-sample seasonal naive differences."""
+    # Training series with known seasonal step
+    y_train = np.array([10.0, 12.0, 14.0, 16.0, 20.0, 22.0, 24.0, 26.0])
+    # 4-period seasonal difference: [20-10, 22-12, 24-14, 26-16] = [10, 10, 10, 10], mean = 10.0
+    y_true = np.array([30.0, 32.0])
+    # Error is 5 units off: [35, 37] -> MAE = 5.0
+    y_pred = np.array([35.0, 37.0])
+    res = compute_forecast_metrics(y_true, y_pred, y_train=y_train, season_length=4)
+    # MASE = MAE / scale = 5.0 / 10.0 = 0.50
+    assert res["mase"] == 0.50
+
+
+def test_mase_constant_train_series_handled_safely():
+    """Verify MASE returns None when in-sample differences are zero (scale == 0)."""
+    y_train = np.array([5.0, 5.0, 5.0, 5.0, 5.0])
+    y_true = np.array([5.0, 5.0])
+    y_pred = np.array([6.0, 7.0])
+    res = compute_forecast_metrics(y_true, y_pred, y_train=y_train, season_length=1)
+    assert res["mase"] is None
+
