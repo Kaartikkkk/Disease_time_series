@@ -1386,16 +1386,17 @@ def render_what_does_this_mean(simple_text: str, technical_details: Optional[str
 
 
 def render_graph_explanation_card(
-    what_it_shows: str,
+    what_it_shows: str = "",
     parameters: Optional[str] = None,
     what_it_compares: Optional[str] = None,
     key_observation: Optional[str] = None,
     why_it_matters: Optional[str] = None,
     technical_details: Optional[str] = None,
+    **kwargs,
 ):
     """Render a structured summary card directly below graphs detailing what it shows, parameters & variables, and what it compares."""
-    param_text = parameters or key_observation or ""
-    compare_text = what_it_compares or why_it_matters or ""
+    param_text = parameters or kwargs.get("parameters") or key_observation or kwargs.get("key_observation") or ""
+    compare_text = what_it_compares or kwargs.get("what_it_compares") or why_it_matters or kwargs.get("why_it_matters") or ""
 
     lines_html = []
     if what_it_shows:
