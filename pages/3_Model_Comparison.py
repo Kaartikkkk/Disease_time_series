@@ -663,9 +663,12 @@ with tab_assumptions:
     st.dataframe(df_dyn_summary, use_container_width=True, hide_index=True)
 
 st.markdown("<br>", unsafe_allow_html=True)
-col_nav_comp1, col_nav_comp2 = st.columns(2)
-with col_nav_comp1:
-    st.page_link("pages/2_Time_Series_Analysis.py", label="<- Back to Time Series Analysis", use_container_width=True)
-with col_nav_comp2:
-    st.page_link("pages/4_Future_Forecasts.py", label="Generate Future Predictions with Top Model ->", use_container_width=True)
+try:
+    col_nav_comp1, col_nav_comp2 = st.columns(2)
+    with col_nav_comp1:
+        st.page_link("pages/2_Time_Series_Analysis.py", label="<- Back to Time Series Analysis", use_container_width=True)
+    with col_nav_comp2:
+        st.page_link("pages/4_Future_Forecasts.py", label="Generate Future Predictions with Top Model ->", use_container_width=True)
+except Exception:
+    pass
 
