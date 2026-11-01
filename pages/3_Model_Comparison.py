@@ -246,19 +246,20 @@ st.markdown(
 st.markdown("<div style='font-size: 1.25rem; font-family: Fraunces, serif; color: #102C26; margin-top: 18px; margin-bottom: 6px;'>Prediction Methods Ranked by Accuracy</div>", unsafe_allow_html=True)
 
 if not adv_mode:
-    simple_cols = [c for c in ["Rank", "Model", "RMSE", "MAE", "sMAPE (%)"] if c in table_df.columns]
+    simple_cols = [c for c in ["Rank", "Model", "Selected Parameters", "RMSE", "MAE", "sMAPE (%)", "WAPE (%)", "Accuracy (%)", "Performance"] if c in table_df.columns]
     table_display = table_df[simple_cols].copy()
-    col_rename = {
-        "Rank": "Rank",
-        "Model": "Prediction Method",
-        "RMSE": "Average Error (RMSE)",
-        "MAE": "Mean Difference (MAE)",
-        "sMAPE (%)": "Percentage Error (sMAPE %)",
-    }
-    table_display = table_display.rename(columns=col_rename)
     st.dataframe(table_display, use_container_width=True, hide_index=True)
 else:
     st.dataframe(table_df, use_container_width=True, hide_index=True)
+
+st.markdown(
+    """
+    <div style="font-size: 0.78rem; color: #5A665D; margin-top: 4px; margin-bottom: 12px;">
+        <strong>Metric Definitions:</strong> <code>RMSE</code> & <code>MAE</code> in report counts. <code>Accuracy (%)</code> defined as <code>max(0, 100 - WAPE)</code>. <code>MASE &lt; 1.0</code> proves out-of-sample performance exceeds the historical seasonal persistence baseline.
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 # Export Leaderboard
 csv_bytes = table_df.to_csv(index=False).encode("utf-8")
@@ -475,14 +476,21 @@ with tab_residuals:
 
 with tab_assumptions:
     st.subheader("Model Parameters & Architecture Summary")
-    models_summary = pd.DataFrame([
-        {"Model": "ARIMA(1, 1, 1)", "Type": "Classical Integrated Autoregressive", "Parameters": "p=1, d=1, q=1", "Holdout RMSE": f"{best_rmse:.3f}"},
-        {"Model": "SARIMA(1, 0, 1)(1, 0, 1)[12]", "Type": "Seasonal Autoregressive", "Parameters": "p=1, d=0, q=1, P=1, D=0, Q=1, s=12", "Holdout RMSE": "2.012"},
-        {"Model": "Holt-Winters", "Type": "Additive Exponential Smoothing", "Parameters": "Level, Trend, Seasonal (m=12)", "Holdout RMSE": "1.889"},
-        {"Model": "Seasonal Naive", "Type": "Persistence Baseline", "Parameters": "Same-month prior year (s=12)", "Holdout RMSE": f"{baseline_rmse:.3f}"},
-        {"Model": "ARIMAX", "Type": "Exogenous Climate Regressors", "Parameters": "ARIMA terms + NASA Weather Lags (t-1)", "Holdout RMSE": "1.873"},
-    ])
-    st.dataframe(models_summary, use_container_width=True, hide_index=True)
+    dynamic_summary = []
+    for m in eval_metrics:
+        m_acc = m.get("accuracy_pct")
+        m_mase = m.get("mase")
+        dynamic_summary.append({
+            "Model": m.get("model_name"),
+            "Architecture Family": m.get("model_family", "Time Series"),
+            "Selected Parameters": m.get("parameters", "Auto-Optimized"),
+            "Holdout RMSE": f"{m.get('rmse', 0.0):.3f}",
+            "Holdout MAE": f"{m.get('mae', 0.0):.3f}",
+            "MASE": f"{m_mase:.3f}" if m_mase is not None else "N/A",
+            "Accuracy": f"{m_acc:.1f}%" if m_acc is not None else "N/A",
+        })
+    df_dyn_summary = pd.DataFrame(dynamic_summary)
+    st.dataframe(df_dyn_summary, use_container_width=True, hide_index=True)
 
 st.markdown("<br>", unsafe_allow_html=True)
 col_nav_comp1, col_nav_comp2 = st.columns(2)

@@ -121,7 +121,14 @@ def run_model_comparison(
     # 1. Seasonal Naive Baseline (src/models/seasonal_naive.py)
     try:
         p_snaive, lb_snaive, ub_snaive = forecast_seasonal_naive(y_train, horizon=eval_horizon, season_length=12)
-        m_snaive = compute_forecast_metrics(y_val, p_snaive, lb_snaive, ub_snaive, model_name="Seasonal Naive (Baseline)")
+        m_snaive = compute_forecast_metrics(
+            y_val, p_snaive, lb_snaive, ub_snaive,
+            model_name="Seasonal Naive (Baseline)",
+            y_train=y_train.values,
+            season_length=12,
+            parameters="Same-Month Prior Year (s=12)",
+            model_family="Persistence Baseline",
+        )
         models_results.append(m_snaive)
         forecasts_dict["Seasonal Naive (Baseline)"] = p_snaive
     except Exception as e:
@@ -129,8 +136,15 @@ def run_model_comparison(
 
     # 2. AR(1) / ARIMA(1,0,0) (src/models/ar_model.py)
     try:
-        p_ar, lb_ar, ub_ar, _ = forecast_ar(y_train, horizon=eval_horizon, p=1)
-        m_ar = compute_forecast_metrics(y_val, p_ar, lb_ar, ub_ar, model_name="AR(1)")
+        p_ar, lb_ar, ub_ar, res_ar = forecast_ar(y_train, horizon=eval_horizon, p=1)
+        m_ar = compute_forecast_metrics(
+            y_val, p_ar, lb_ar, ub_ar,
+            model_name="AR(1)",
+            y_train=y_train.values,
+            season_length=12,
+            parameters="p=1, d=0, q=0",
+            model_family="Box-Jenkins Univariate",
+        )
         models_results.append(m_ar)
         forecasts_dict["AR(1)"] = p_ar
     except Exception as e:
@@ -138,8 +152,15 @@ def run_model_comparison(
 
     # 3. MA(1) / ARIMA(0,0,1) (src/models/ma_model.py)
     try:
-        p_ma, lb_ma, ub_ma, _ = forecast_ma(y_train, horizon=eval_horizon, q=1)
-        m_ma = compute_forecast_metrics(y_val, p_ma, lb_ma, ub_ma, model_name="MA(1)")
+        p_ma, lb_ma, ub_ma, res_ma = forecast_ma(y_train, horizon=eval_horizon, q=1)
+        m_ma = compute_forecast_metrics(
+            y_val, p_ma, lb_ma, ub_ma,
+            model_name="MA(1)",
+            y_train=y_train.values,
+            season_length=12,
+            parameters="p=0, d=0, q=1",
+            model_family="Box-Jenkins Univariate",
+        )
         models_results.append(m_ma)
         forecasts_dict["MA(1)"] = p_ma
     except Exception as e:
@@ -147,8 +168,16 @@ def run_model_comparison(
 
     # 4. ARIMA(1, 1, 1) (src/models/arima_model.py)
     try:
-        p_arima, lb_arima, ub_arima, _ = forecast_arima(y_train, horizon=eval_horizon, order=(1, 1, 1))
-        m_arima = compute_forecast_metrics(y_val, p_arima, lb_arima, ub_arima, model_name="ARIMA(1,1,1)")
+        p_arima, lb_arima, ub_arima, res_arima = forecast_arima(y_train, horizon=eval_horizon, order=(1, 1, 1), auto_optimize=True)
+        param_str = getattr(res_arima, "param_summary", "p=1, d=1, q=1")
+        m_arima = compute_forecast_metrics(
+            y_val, p_arima, lb_arima, ub_arima,
+            model_name="ARIMA(1,1,1)",
+            y_train=y_train.values,
+            season_length=12,
+            parameters=param_str,
+            model_family="Box-Jenkins Integrated",
+        )
         models_results.append(m_arima)
         forecasts_dict["ARIMA(1,1,1)"] = p_arima
     except Exception as e:
@@ -156,10 +185,18 @@ def run_model_comparison(
 
     # 5. SARIMA(1, 0, 1)(1, 0, 1, 12) (src/models/sarima_model.py)
     try:
-        p_sarima, lb_sarima, ub_sarima, _ = forecast_sarima(
-            y_train, horizon=eval_horizon, order=(1, 0, 1), seasonal_order=(1, 0, 1, 12)
+        p_sarima, lb_sarima, ub_sarima, res_sarima = forecast_sarima(
+            y_train, horizon=eval_horizon, order=(1, 0, 1), seasonal_order=(1, 0, 1, 12), auto_optimize=True
         )
-        m_sarima = compute_forecast_metrics(y_val, p_sarima, lb_sarima, ub_sarima, model_name="SARIMA(1,0,1)(1,0,1)[12]")
+        param_str = getattr(res_sarima, "param_summary", "(1,0,1)(1,0,1)[12]")
+        m_sarima = compute_forecast_metrics(
+            y_val, p_sarima, lb_sarima, ub_sarima,
+            model_name="SARIMA(1,0,1)(1,0,1)[12]",
+            y_train=y_train.values,
+            season_length=12,
+            parameters=param_str,
+            model_family="Seasonal Box-Jenkins",
+        )
         models_results.append(m_sarima)
         forecasts_dict["SARIMA(1,0,1)(1,0,1)[12]"] = p_sarima
     except Exception as e:
@@ -167,8 +204,16 @@ def run_model_comparison(
 
     # 6. Holt-Winters Exponential Smoothing (src/models/holt_winters.py)
     try:
-        p_hw, lb_hw, ub_hw, _ = forecast_holt_winters(y_train, horizon=eval_horizon, seasonal_periods=12)
-        m_hw = compute_forecast_metrics(y_val, p_hw, lb_hw, ub_hw, model_name="Holt-Winters Exponential Smoothing")
+        p_hw, lb_hw, ub_hw, res_hw = forecast_holt_winters(y_train, horizon=eval_horizon, seasonal_periods=12, auto_optimize=True)
+        param_str = getattr(res_hw, "param_summary", "Additive Level + Trend + Season (m=12)")
+        m_hw = compute_forecast_metrics(
+            y_val, p_hw, lb_hw, ub_hw,
+            model_name="Holt-Winters Exponential Smoothing",
+            y_train=y_train.values,
+            season_length=12,
+            parameters=param_str,
+            model_family="Exponential Smoothing",
+        )
         models_results.append(m_hw)
         forecasts_dict["Holt-Winters Exponential Smoothing"] = p_hw
     except Exception as e:
@@ -177,10 +222,18 @@ def run_model_comparison(
     # 7. ARIMAX with Exogenous Weather Lags (src/models/arimax_model.py)
     if has_weather and train_exog is not None and val_exog is not None:
         try:
-            p_arimax, lb_arimax, ub_arimax, _ = forecast_arimax(
-                y_train, horizon=eval_horizon, train_exog=train_exog, future_exog=val_exog, order=(1, 0, 1)
+            p_arimax, lb_arimax, ub_arimax, res_arimax = forecast_arimax(
+                y_train, horizon=eval_horizon, train_exog=train_exog, future_exog=val_exog, order=(1, 0, 1), auto_optimize=True
             )
-            m_arimax = compute_forecast_metrics(y_val, p_arimax, lb_arimax, ub_arimax, model_name="ARIMAX (Weather Regressors)")
+            param_str = getattr(res_arimax, "param_summary", "ARIMA + 3 NASA Weather Lags (t-1)")
+            m_arimax = compute_forecast_metrics(
+                y_val, p_arimax, lb_arimax, ub_arimax,
+                model_name="ARIMAX (Weather Regressors)",
+                y_train=y_train.values,
+                season_length=12,
+                parameters=param_str,
+                model_family="Exogenous Econometric",
+            )
             models_results.append(m_arimax)
             forecasts_dict["ARIMAX (Weather Regressors)"] = p_arimax
         except Exception as e:
@@ -189,15 +242,24 @@ def run_model_comparison(
     # 8. SARIMAX Seasonal + Exogenous Weather Lags (src/models/sarimax_model.py)
     if has_weather and train_exog is not None and val_exog is not None:
         try:
-            p_sarimax, lb_sarimax, ub_sarimax, _ = forecast_sarimax_model(
+            p_sarimax, lb_sarimax, ub_sarimax, res_sarimax = forecast_sarimax_model(
                 y_train,
                 horizon=eval_horizon,
                 order=(1, 0, 1),
                 seasonal_order=(1, 0, 1, 12),
                 train_exog=train_exog,
                 future_exog=val_exog,
+                auto_optimize=True,
             )
-            m_sarimax = compute_forecast_metrics(y_val, p_sarimax, lb_sarimax, ub_sarimax, model_name="SARIMAX (Seasonal + Weather)")
+            param_str = getattr(res_sarimax, "param_summary", "SARIMA(1,0,1)(1,0,1)[12] + NASA Weather")
+            m_sarimax = compute_forecast_metrics(
+                y_val, p_sarimax, lb_sarimax, ub_sarimax,
+                model_name="SARIMAX (Seasonal + Weather)",
+                y_train=y_train.values,
+                season_length=12,
+                parameters=param_str,
+                model_family="Exogenous Econometric",
+            )
             models_results.append(m_sarimax)
             forecasts_dict["SARIMAX (Seasonal + Weather)"] = p_sarimax
         except Exception as e:
@@ -211,7 +273,14 @@ def run_model_comparison(
                 weather_cols=weather_exog_cols if has_weather else None,
                 future_weather_df=val_df if has_weather else None,
             )
-            m_prophet = compute_forecast_metrics(y_val, p_prophet, lb_prophet, ub_prophet, model_name="Prophet (Trend + Seasonality)")
+            m_prophet = compute_forecast_metrics(
+                y_val, p_prophet, lb_prophet, ub_prophet,
+                model_name="Prophet (Trend + Seasonality)",
+                y_train=y_train.values,
+                season_length=12,
+                parameters="Piecewise Trend + Yearly Fourier (m=12) + Weather",
+                model_family="Generalized Additive",
+            )
             models_results.append(m_prophet)
             forecasts_dict["Prophet (Trend + Seasonality)"] = p_prophet
         except Exception as e:
@@ -225,7 +294,14 @@ def run_model_comparison(
             weather_lag_cols=weather_exog_cols if has_weather else None,
             future_weather_df=val_df if has_weather else None,
         )
-        m_gb = compute_forecast_metrics(y_val, p_gb, lb_gb, ub_gb, model_name="Hist Gradient Boosting (Autoregressive)")
+        m_gb = compute_forecast_metrics(
+            y_val, p_gb, lb_gb, ub_gb,
+            model_name="Hist Gradient Boosting (Autoregressive)",
+            y_train=y_train.values,
+            season_length=12,
+            parameters="Lags [1, 2, 3, 12] + Cyclical Harmonics + Weather",
+            model_family="Tree Ensemble ML",
+        )
         models_results.append(m_gb)
         forecasts_dict["Hist Gradient Boosting (Autoregressive)"] = p_gb
     except Exception as e:
@@ -239,7 +315,14 @@ def run_model_comparison(
             weather_lag_cols=weather_exog_cols if has_weather else None,
             future_weather_df=val_df if has_weather else None,
         )
-        m_rf = compute_forecast_metrics(y_val, p_rf, lb_rf, ub_rf, model_name="Random Forest (Autoregressive)")
+        m_rf = compute_forecast_metrics(
+            y_val, p_rf, lb_rf, ub_rf,
+            model_name="Random Forest (Autoregressive)",
+            y_train=y_train.values,
+            season_length=12,
+            parameters="100 Trees + Lags [1, 2, 3, 12] + Weather",
+            model_family="Tree Ensemble ML",
+        )
         models_results.append(m_rf)
         forecasts_dict["Random Forest (Autoregressive)"] = p_rf
     except Exception as e:

@@ -687,6 +687,9 @@ render_graph_explanation_card(
 )
 
 # Dedicated Section 9 Forecast Summary Card
+hist_baseline_mean = float(np.mean(df_forecast_out["baseline_seasonal_naive"])) if "baseline_seasonal_naive" in df_forecast_out else 0.0
+trend_diff = float(mean_forecast - hist_baseline_mean)
+trend_sign = "+" if trend_diff > 0 else ""
 trend_label = "Increasing Activity" if trend_diff > 0.5 else ("Decreasing Activity" if trend_diff < -0.5 else "Stable Seasonal Pattern")
 
 st.markdown(
