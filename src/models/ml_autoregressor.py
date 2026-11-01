@@ -65,9 +65,21 @@ def forecast_ml_autoregressor(
     y_train = df_train_clean[target_col].values
 
     if model_type == "random_forest":
-        model = RandomForestRegressor(n_estimators=100, random_state=42)
+        # Regularized tree depth and leaf size to prevent memorizing sparse counts
+        model = RandomForestRegressor(
+            n_estimators=100,
+            max_depth=3,
+            min_samples_leaf=2,
+            random_state=42,
+        )
     else:
-        model = HistGradientBoostingRegressor(random_state=42)
+        # Regularized gradient boosting with depth limits and L2 penalty
+        model = HistGradientBoostingRegressor(
+            max_depth=3,
+            min_samples_leaf=5,
+            l2_regularization=2.0,
+            random_state=42,
+        )
 
     model.fit(X_train, y_train)
 

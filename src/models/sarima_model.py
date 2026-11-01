@@ -23,29 +23,33 @@ def optimize_sarima_order(
 ) -> Tuple[Tuple[int, int, int], Tuple[int, int, int, int]]:
     """Select the best (order, seasonal_order) minimizing AIC on training data."""
     candidates = [
+        ((1, 0, 0), (1, 0, 0, seasonal_period)),
+        ((1, 0, 1), (1, 0, 0, seasonal_period)),
+        ((0, 0, 1), (1, 0, 0, seasonal_period)),
         ((1, 0, 1), (1, 0, 1, seasonal_period)),
+        ((1, 1, 1), (1, 0, 0, seasonal_period)),
         ((1, 1, 1), (1, 0, 1, seasonal_period)),
         ((1, 0, 1), (0, 1, 1, seasonal_period)),
         ((0, 1, 1), (1, 0, 1, seasonal_period)),
         ((1, 1, 0), (1, 0, 1, seasonal_period)),
-        ((1, 0, 0), (1, 0, 0, seasonal_period)),
-        ((1, 0, 1), (1, 0, 0, seasonal_period)),
     ]
 
     best_aic = float("inf")
-    best_order = (1, 0, 1)
-    best_seasonal = (1, 0, 1, seasonal_period)
+    best_order = (1, 0, 0)
+    best_seasonal = (1, 0, 0, seasonal_period)
 
     for ord_cand, s_cand in candidates:
+        trend = "c" if ord_cand[1] == 0 and s_cand[1] == 0 else None
         try:
             model = SARIMAX(
                 y,
                 order=ord_cand,
                 seasonal_order=s_cand,
+                trend=trend,
                 enforce_stationarity=False,
                 enforce_invertibility=False,
             )
-            res = model.fit(disp=False, maxiter=50)
+            res = model.fit(disp=False, maxiter=60)
             if res.aic is not None and not np.isnan(res.aic) and res.aic < best_aic:
                 best_aic = res.aic
                 best_order = ord_cand
@@ -83,10 +87,15 @@ def forecast_sarima(
         sel_order = order or (1, 0, 1)
         sel_seasonal = seasonal_order or (1, 0, 1, 12)
 
+    d = sel_order[1]
+    D = sel_seasonal[1]
+    trend = "c" if d == 0 and D == 0 else None
+
     model = SARIMAX(
         y,
         order=sel_order,
         seasonal_order=sel_seasonal,
+        trend=trend,
         enforce_stationarity=False,
         enforce_invertibility=False,
     )

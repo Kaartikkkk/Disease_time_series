@@ -1,6 +1,6 @@
 # Phase 2: Mid-Semester Evaluation Report
 **Course / Subject**: Time Series Analysis & Forecasting (SEM-5)  
-**Project Title**: Verdant Intelligence — Plant Disease Outbreak Surveillance & Forecasting System for Indian Agriculture  
+**Project Title**: Agricultural Disease Forecasting Using Time Series — Plant Disease Outbreak Surveillance & Forecasting System for Indian Agriculture  
 **Evaluation Period**: 19-Oct-2026 to 30-Oct-2026  
 **Status**: Completed & Verified  
 

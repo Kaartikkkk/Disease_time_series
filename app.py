@@ -1,6 +1,6 @@
-"""Verdant Intelligence — Plant Disease Outbreak Forecasting & Climate Intelligence.
+"""Agricultural Disease Forecasting Using Time Series.
 
-Executive Landing Page and Portfolio Showcase.
+Plant Disease Outbreak Forecasting & Climate Intelligence Platform.
 """
 
 import base64
@@ -14,7 +14,7 @@ import streamlit as st
 
 # Configure main app page
 st.set_page_config(
-    page_title="Verdant Intelligence — Agricultural Disease Forecasting",
+    page_title="Agricultural Disease Forecasting Using Time Series",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
@@ -119,9 +119,9 @@ sparkline_svg = (
 )
 
 hero_stat_label = "TOP VALIDATED MODEL" if adv_mode else "TOP METHOD"
-hero_stat_val = "ARIMA(1,1,1)" if adv_mode else "ARIMA"
+hero_stat_val = "ARIMA" if adv_mode else "ARIMA"
 hero_metric_label = "OUT-OF-SAMPLE RMSE" if adv_mode else "AVERAGE ERROR"
-hero_metric_val = "2.438" if adv_mode else "2.4 reports"
+hero_metric_val = "2.437" if adv_mode else "2.4 reports"
 
 hero_markup = (
     f'<div class="dashboard-hero-banner" style="background-image: url(\'{panoramic_hero_b64}\');">'
@@ -467,7 +467,7 @@ st.markdown(
             </div>
             <div class="model-stat-row">
                 <span>Top Validation RMSE:</span>
-                <span class="model-stat-val">2.438 (ARIMA 1,1,1)</span>
+                <span class="model-stat-val">2.437 (ARIMA)</span>
             </div>
         </div>
         <div class="model-card">
@@ -624,7 +624,7 @@ st.markdown(
     <div class="verdant-footer">
         <div style="display: flex; align-items: center; gap: 8px;">
             {icon_logo(20, "#527A50")}
-            <span style="font-family: 'Fraunces', serif; font-weight: 600; color: #102C26;">Verdant Intelligence</span>
+            <span style="font-family: 'Fraunces', serif; font-weight: 600; color: #102C26;">Agricultural Disease Forecasting Using Time Series</span>
             <span>· Academic & Research Portfolio Platform</span>
         </div>
         <div>

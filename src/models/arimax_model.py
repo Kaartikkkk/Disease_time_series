@@ -19,6 +19,9 @@ import pandas as pd
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 
 
+from sklearn.preprocessing import StandardScaler
+
+
 def forecast_arimax(
     train_y: pd.Series,
     horizon: int,
@@ -41,25 +44,36 @@ def forecast_arimax(
         Tuple of (point_predictions, lower_95_ci, upper_95_ci, fitted_model_result).
     """
     y = train_y.astype(float).values
-    exog_data = train_exog.bfill().fillna(0).values if train_exog is not None and not train_exog.empty else None
-    fut_exog_data = future_exog.bfill().fillna(0).values if future_exog is not None and not future_exog.empty else None
+
+    exog_data = None
+    fut_exog_data = None
+    if train_exog is not None and not train_exog.empty:
+        scaler = StandardScaler()
+        clean_train_exog = train_exog.bfill().ffill().fillna(0)
+        exog_data = scaler.fit_transform(clean_train_exog)
+
+        if future_exog is not None and not future_exog.empty:
+            clean_fut_exog = future_exog.bfill().ffill().fillna(0)
+            fut_exog_data = scaler.transform(clean_fut_exog)
 
     selected_order = order
     best_res = None
 
     if auto_optimize and exog_data is not None:
-        candidates = [(1, 0, 1), (1, 1, 1), (1, 0, 0), (0, 0, 1), (2, 0, 1)]
+        candidates = [(1, 0, 0), (1, 0, 1), (0, 0, 1), (1, 1, 1), (0, 1, 1)]
         best_aic = float("inf")
         for cand in candidates:
+            trend = "c" if cand[1] == 0 else None
             try:
                 m = SARIMAX(
                     y,
                     exog=exog_data,
                     order=cand,
+                    trend=trend,
                     enforce_stationarity=False,
                     enforce_invertibility=False,
                 )
-                fit_cand = m.fit(disp=False, maxiter=50)
+                fit_cand = m.fit(disp=False, maxiter=60)
                 if fit_cand.aic is not None and not np.isnan(fit_cand.aic) and fit_cand.aic < best_aic:
                     best_aic = fit_cand.aic
                     selected_order = cand
@@ -68,10 +82,12 @@ def forecast_arimax(
                 continue
 
     if best_res is None:
+        trend = "c" if selected_order[1] == 0 else None
         model = SARIMAX(
             y,
             exog=exog_data,
             order=selected_order,
+            trend=trend,
             enforce_stationarity=False,
             enforce_invertibility=False,
         )

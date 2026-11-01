@@ -33,6 +33,7 @@ def forecast_ma(
     model = SARIMAX(
         y,
         order=(0, 0, q),
+        trend="c",
         enforce_stationarity=False,
         enforce_invertibility=False,
     )
@@ -43,5 +44,7 @@ def forecast_ma(
     conf_int = forecast_res.conf_int(alpha=0.05)
     lower_95 = np.maximum(0.0, conf_int[:, 0])
     upper_95 = conf_int[:, 1]
+
+    setattr(res, "param_summary", f"p=0, d=0, q={q} (mu={res.params[0]:.2f}, theta1={res.params[1] if len(res.params)>1 else 0.0:.2f})")
 
     return point_pred, lower_95, upper_95, res

@@ -89,8 +89,13 @@ def compute_forecast_metrics(
         mape_val = None
 
     # 5. sMAPE (Symmetric MAPE bounded between 0% and 200%)
-    denom_smape = np.abs(y_true) + np.abs(y_pred) + 1e-8
-    smape_val = float(np.mean(2.0 * abs_errors / denom_smape) * 100)
+    # Standard time-series convention: if both actual and predicted are zero, error is 0.0%
+    both_zero_mask = (np.abs(y_true) < 1e-6) & (np.abs(y_pred) < 1e-6)
+    denom_smape = np.abs(y_true) + np.abs(y_pred)
+    denom_smape = np.where(both_zero_mask, 1.0, denom_smape)
+    smape_terms = 2.0 * abs_errors / denom_smape
+    smape_terms = np.where(both_zero_mask, 0.0, smape_terms)
+    smape_val = float(np.mean(smape_terms) * 100)
 
     # 6. WAPE (Weighted Absolute Percentage Error = sum(|errors|) / sum(|actual|))
     sum_actual = float(np.sum(np.abs(y_true)))
@@ -157,25 +162,34 @@ def build_model_comparison_table(eval_results: List[Dict[str, Any]]) -> pd.DataF
         m_wape = res.get("wape")
         m_acc = res.get("accuracy_pct")
 
-        # Performance badge
-        if baseline_rmse and m_rmse and m_rmse < baseline_rmse:
-            imp = ((baseline_rmse - m_rmse) / baseline_rmse) * 100
-            perf_str = f"Beats Baseline (+{imp:.1f}%)"
-        elif "Seasonal Naive" in res.get("model_name", ""):
-            perf_str = "Baseline Reference"
+        # Performance badge and baseline improvement relative to Seasonal Naive
+        if baseline_rmse and m_rmse is not None and baseline_rmse > 0:
+            if "Seasonal Naive" in res.get("model_name", ""):
+                perf_str = "Baseline Reference"
+                imp_str = "0.0% (Ref)"
+            else:
+                imp = ((baseline_rmse - m_rmse) / baseline_rmse) * 100
+                if imp > 0:
+                    perf_str = f"Beats Baseline (+{imp:.1f}%)"
+                    imp_str = f"+{imp:.1f}%"
+                else:
+                    perf_str = f"Below Baseline ({imp:.1f}%)"
+                    imp_str = f"{imp:.1f}%"
         else:
-            perf_str = "Below Baseline"
+            perf_str = "N/A"
+            imp_str = "N/A"
 
         rows.append({
             "Model": res.get("model_name"),
             "Selected Parameters": res.get("parameters", "Auto-Optimized"),
             "RMSE": m_rmse,
             "MAE": res.get("mae"),
-            "sMAPE (%)": res.get("smape"),
+            "sMAPE (%)": f"{res.get('smape'):.2f}%" if res.get("smape") is not None else "N/A",
             "WAPE (%)": f"{m_wape:.1f}%" if m_wape is not None else "N/A",
+            "Baseline Improvement": imp_str,
             "MASE": f"{m_mase:.3f}" if m_mase is not None else "N/A",
-            "Accuracy (%)": f"{m_acc:.1f}%" if m_acc is not None else "N/A",
             "Performance": perf_str,
+            "Forecast Score (%)": f"{m_acc:.1f}%" if m_acc is not None else "N/A",
             "Interval Coverage (%)": f"{res.get('picp')}%" if res.get("picp") is not None else "N/A",
         })
 

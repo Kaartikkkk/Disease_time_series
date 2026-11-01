@@ -47,6 +47,19 @@ def test_seasonal_naive_standalone(sample_monthly_series):
     assert np.all(lb <= ub)
 
 
+def test_seasonal_naive_multicycle_horizon():
+    """Verify seasonal naive correctly cycles modulo 12 for horizon > 12."""
+    cycle = list(range(1, 13))  # 1 to 12
+    series = pd.Series(cycle * 2)  # 24 observations
+    preds, _, _ = forecast_seasonal_naive(series, horizon=16, season_length=12)
+    assert len(preds) == 16
+    # Month 13 should be month 1 (value 1), month 14 should be month 2 (value 2)
+    assert preds[12] == 1.0
+    assert preds[13] == 2.0
+    assert preds[14] == 3.0
+    assert preds[15] == 4.0
+
+
 def test_holt_winters_standalone(sample_monthly_series):
     preds, lb, ub, res = forecast_holt_winters(sample_monthly_series, horizon=6)
     assert len(preds) == 6

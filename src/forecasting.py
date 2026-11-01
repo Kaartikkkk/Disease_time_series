@@ -95,7 +95,7 @@ def forecast_sarimax(
 
 def run_model_comparison(
     df: pd.DataFrame,
-    horizon: int = 6,
+    horizon: Optional[int] = None,
     target_col: str = "documented_occurrence_count",
 ) -> Dict[str, Any]:
     """Execute all eligible models on fixed chronological split and return comparative metrics."""
@@ -104,16 +104,25 @@ def run_model_comparison(
 
     # We evaluate models on the validation set
     y_train = train_df[target_col]
-    y_val = val_df[target_col].values
-    val_dates = pd.to_datetime(val_df["date"])
-    eval_horizon = len(y_val)
+
+    # If a specific horizon is requested and within validation set length, evaluate on that horizon
+    if horizon is not None and 0 < horizon <= len(val_df):
+        eval_horizon = horizon
+        y_val = val_df[target_col].values[:eval_horizon]
+        val_dates = pd.to_datetime(val_df["date"]).iloc[:eval_horizon]
+        eval_val_df = val_df.iloc[:eval_horizon].copy()
+    else:
+        eval_horizon = len(val_df)
+        y_val = val_df[target_col].values
+        val_dates = pd.to_datetime(val_df["date"])
+        eval_val_df = val_df.copy()
 
     # Weather regressors
     weather_exog_cols = ["temp_mean_c_lag1", "precipitation_monthly_mm_lag1", "relative_humidity_pct_lag1"]
     has_weather = all(c in train_df.columns for c in weather_exog_cols)
 
     train_exog = train_df[weather_exog_cols].bfill().fillna(0) if has_weather else None
-    val_exog = val_df[weather_exog_cols].bfill().fillna(0) if has_weather else None
+    val_exog = eval_val_df[weather_exog_cols].bfill().fillna(0) if has_weather else None
 
     models_results: List[Dict[str, Any]] = []
     forecasts_dict: Dict[str, np.ndarray] = {}
@@ -137,12 +146,13 @@ def run_model_comparison(
     # 2. AR(1) / ARIMA(1,0,0) (src/models/ar_model.py)
     try:
         p_ar, lb_ar, ub_ar, res_ar = forecast_ar(y_train, horizon=eval_horizon, p=1)
+        param_str = getattr(res_ar, "param_summary", "p=1, d=0, q=0 (c=est, phi1=est)")
         m_ar = compute_forecast_metrics(
             y_val, p_ar, lb_ar, ub_ar,
             model_name="AR(1)",
             y_train=y_train.values,
             season_length=12,
-            parameters="p=1, d=0, q=0",
+            parameters=param_str,
             model_family="Box-Jenkins Univariate",
         )
         models_results.append(m_ar)
@@ -153,12 +163,13 @@ def run_model_comparison(
     # 3. MA(1) / ARIMA(0,0,1) (src/models/ma_model.py)
     try:
         p_ma, lb_ma, ub_ma, res_ma = forecast_ma(y_train, horizon=eval_horizon, q=1)
+        param_str = getattr(res_ma, "param_summary", "p=0, d=0, q=1 (mu=est, theta1=est)")
         m_ma = compute_forecast_metrics(
             y_val, p_ma, lb_ma, ub_ma,
             model_name="MA(1)",
             y_train=y_train.values,
             season_length=12,
-            parameters="p=0, d=0, q=1",
+            parameters=param_str,
             model_family="Box-Jenkins Univariate",
         )
         models_results.append(m_ma)
@@ -271,14 +282,14 @@ def run_model_comparison(
             p_prophet, lb_prophet, ub_prophet, _ = forecast_prophet(
                 train_df, horizon=eval_horizon, future_dates=val_dates,
                 weather_cols=weather_exog_cols if has_weather else None,
-                future_weather_df=val_df if has_weather else None,
+                future_weather_df=eval_val_df if has_weather else None,
             )
             m_prophet = compute_forecast_metrics(
                 y_val, p_prophet, lb_prophet, ub_prophet,
                 model_name="Prophet (Trend + Seasonality)",
                 y_train=y_train.values,
                 season_length=12,
-                parameters="Piecewise Trend + Yearly Fourier (m=12) + Weather",
+                parameters="Piecewise Trend + Regularized Fourier (m=12) + Weather",
                 model_family="Generalized Additive",
             )
             models_results.append(m_prophet)
@@ -292,7 +303,7 @@ def run_model_comparison(
             train_df, horizon=eval_horizon,
             lags=[1, 2, 3, 12],
             weather_lag_cols=weather_exog_cols if has_weather else None,
-            future_weather_df=val_df if has_weather else None,
+            future_weather_df=eval_val_df if has_weather else None,
         )
         m_gb = compute_forecast_metrics(
             y_val, p_gb, lb_gb, ub_gb,
@@ -313,14 +324,14 @@ def run_model_comparison(
             train_df, horizon=eval_horizon,
             lags=[1, 2, 3, 12],
             weather_lag_cols=weather_exog_cols if has_weather else None,
-            future_weather_df=val_df if has_weather else None,
+            future_weather_df=eval_val_df if has_weather else None,
         )
         m_rf = compute_forecast_metrics(
             y_val, p_rf, lb_rf, ub_rf,
             model_name="Random Forest (Autoregressive)",
             y_train=y_train.values,
             season_length=12,
-            parameters="100 Trees + Lags [1, 2, 3, 12] + Weather",
+            parameters="Regularized Trees (Depth 3) + Lags + Weather",
             model_family="Tree Ensemble ML",
         )
         models_results.append(m_rf)

@@ -56,17 +56,20 @@ def optimize_arima_order(
             ]
 
     best_aic = float("inf")
-    best_order = (1, 1, 1)
+    best_order = (1, 0, 1)
 
     for order in candidate_orders:
+        d = order[1]
+        trend = "c" if d == 0 else None
         try:
             model = SARIMAX(
                 y,
                 order=order,
+                trend=trend,
                 enforce_stationarity=False,
                 enforce_invertibility=False,
             )
-            res = model.fit(disp=False, maxiter=60)
+            res = model.fit(disp=False, maxiter=80)
             if res.aic is not None and not np.isnan(res.aic) and res.aic < best_aic:
                 best_aic = res.aic
                 best_order = order
@@ -98,11 +101,15 @@ def forecast_arima(
     if auto_optimize:
         selected_order = optimize_arima_order(y)
     else:
-        selected_order = order or (1, 1, 1)
+        selected_order = order or (1, 0, 1)
+
+    d = selected_order[1]
+    trend = "c" if d == 0 else None
 
     model = SARIMAX(
         y,
         order=selected_order,
+        trend=trend,
         enforce_stationarity=False,
         enforce_invertibility=False,
     )

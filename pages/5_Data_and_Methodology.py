@@ -29,7 +29,7 @@ from src.ui_helpers import (
 )
 
 st.set_page_config(
-    page_title="Data & Methodology — Verdant Intelligence",
+    page_title="Data & Methodology — Agricultural Disease Forecasting Using Time Series",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
@@ -435,7 +435,7 @@ st.markdown(
             <h4 style="margin: 0; color: #183D32; font-size: 1.05rem;">Data & Methodology Conclusion</h4>
         </div>
         <p style="margin: 0; font-size: 0.88rem; color: #5A665D; line-height: 1.6;">
-            Verdant Intelligence is built upon open-science data provenance, rigorous chronological validation, and zero-safe percentage error metrics. By uniting 11 years of verified GBIF occurrences with NASA POWER satellite meteorology, the platform provides an academically sound and reproducible forecasting framework for Indian agriculture.
+            Agricultural Disease Forecasting Using Time Series is built upon open-science data provenance, rigorous chronological validation, and zero-safe percentage error metrics. By uniting 11 years of verified GBIF occurrences with NASA POWER satellite meteorology, the platform provides an academically sound and reproducible forecasting framework for Indian agriculture.
         </p>
     </div>
     """,

@@ -49,11 +49,14 @@ def forecast_prophet(
     })
 
     model = Prophet(
-        yearly_seasonality=True,
+        yearly_seasonality=False,
         weekly_seasonality=False,
         daily_seasonality=False,
         interval_width=0.95,
+        changepoint_prior_scale=0.05,
     )
+    # Parsimonious yearly seasonality (Fourier order 3, prior scale 0.01) to prevent overfitting sparse series
+    model.add_seasonality(name="yearly", period=365.25, fourier_order=3, prior_scale=0.01)
 
     if weather_cols:
         for col in weather_cols:

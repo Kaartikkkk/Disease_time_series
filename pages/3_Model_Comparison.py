@@ -39,7 +39,7 @@ from src.ui_helpers import (
 )
 
 st.set_page_config(
-    page_title="Model Comparison — Verdant Intelligence",
+    page_title="Model Comparison — Agricultural Disease Forecasting Using Time Series",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
@@ -246,7 +246,7 @@ st.markdown(
 st.markdown("<div style='font-size: 1.25rem; font-family: Fraunces, serif; color: #102C26; margin-top: 18px; margin-bottom: 6px;'>Prediction Methods Ranked by Accuracy</div>", unsafe_allow_html=True)
 
 if not adv_mode:
-    simple_cols = [c for c in ["Rank", "Model", "Selected Parameters", "RMSE", "MAE", "sMAPE (%)", "WAPE (%)", "Accuracy (%)", "Performance"] if c in table_df.columns]
+    simple_cols = [c for c in ["Rank", "Model", "Selected Parameters", "RMSE", "MAE", "sMAPE (%)", "WAPE (%)", "Baseline Improvement", "Performance"] if c in table_df.columns]
     table_display = table_df[simple_cols].copy()
     st.dataframe(table_display, use_container_width=True, hide_index=True)
 else:
@@ -254,8 +254,13 @@ else:
 
 st.markdown(
     """
-    <div style="font-size: 0.78rem; color: #5A665D; margin-top: 4px; margin-bottom: 12px;">
-        <strong>Metric Definitions:</strong> <code>RMSE</code> & <code>MAE</code> in report counts. <code>Accuracy (%)</code> defined as <code>max(0, 100 - WAPE)</code>. <code>MASE &lt; 1.0</code> proves out-of-sample performance exceeds the historical seasonal persistence baseline.
+    <div style="font-size: 0.82rem; color: #374151; margin-top: 6px; margin-bottom: 14px; background: rgba(82, 122, 80, 0.08); padding: 12px 16px; border-radius: 10px; border: 1px solid rgba(82, 122, 80, 0.2);">
+        <strong>Metric Definitions & Mathematical Interpretation:</strong><br>
+        • <strong>RMSE & MAE:</strong> Absolute errors in monthly report counts (RMSE heavily penalizes outbreak spikes quadratically, while MAE measures average linear deviation).<br>
+        • <strong>Baseline Improvement (%):</strong> Out-of-sample error reduction relative to the Seasonal Naive baseline (<code>y_{t-12}</code>). Positive percentages prove genuine predictive gain on unseen data.<br>
+        • <strong>WAPE (%):</strong> Total absolute error divided by total actual disease volume (<code>sum(|y - y_hat|) / sum(y) * 100</code>). Recommended for sparse count series.<br>
+        • <strong>sMAPE (%):</strong> Symmetric percentage error. On zero-count months with fractional predictions, standard sMAPE incurs a theoretical maximum 200% penalty.<br>
+        • <strong>MASE:</strong> Mean Absolute Scaled Error. <code>MASE &lt; 1.0</code> mathematically confirms superior accuracy compared to the in-sample seasonal persistence baseline.
     </div>
     """,
     unsafe_allow_html=True,

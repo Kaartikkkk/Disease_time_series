@@ -57,7 +57,7 @@ from src.ui_helpers import (
 )
 
 st.set_page_config(
-    page_title="Future Predictions — Verdant Intelligence",
+    page_title="Future Predictions — Agricultural Disease Forecasting Using Time Series",
     layout="wide",
     initial_sidebar_state="collapsed",
 )

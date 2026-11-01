@@ -56,7 +56,7 @@ from src.ui_helpers import (
 )
 
 st.set_page_config(
-    page_title="Time Series Analysis — Verdant Intelligence",
+    page_title="Time Series Analysis — Agricultural Disease Forecasting Using Time Series",
     layout="wide",
     initial_sidebar_state="collapsed",
 )

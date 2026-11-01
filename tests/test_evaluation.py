@@ -45,6 +45,18 @@ def test_smape_bounded_range():
     assert 0.0 <= res["smape"] <= 200.0
 
 
+def test_smape_both_zero_convention():
+    """Verify that when actual and predicted are both zero, sMAPE assigns zero error."""
+    actual = np.array([0.0, 0.0, 10.0])
+    predicted = np.array([0.0, 0.0, 10.0])
+
+    res = compute_forecast_metrics(actual, predicted)
+    assert res["smape"] == 0.0
+    assert res["wape"] == 0.0
+    assert res["mae"] == 0.0
+    assert res["rmse"] == 0.0
+
+
 def test_wape_calculation():
     """Verify Weighted Absolute Percentage Error (WAPE)."""
     actual = np.array([10.0, 20.0, 30.0])  # sum = 60

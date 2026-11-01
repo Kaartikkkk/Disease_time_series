@@ -1,17 +1,17 @@
-# 🌾 Verdant Intelligence: Plant Disease Outbreak Forecasting Platform
+# 🌾 Agricultural Disease Forecasting Using Time Series: Plant Disease Outbreak Forecasting Platform
 
 [![Python Version](https://img.shields.io/badge/Python-3.11%20%7C%203.14-blue.svg)](https://www.python.org/)
 [![Framework](https://img.shields.io/badge/Streamlit-1.66.0-FF4B4B.svg)](https://streamlit.io/)
 [![Statistical Suite](https://img.shields.io/badge/Statsmodels-0.15.0-brightgreen.svg)](https://www.statsmodels.org/)
 [![Prophet](https://img.shields.io/badge/Meta%20Prophet-1.5.0-orange.svg)](https://facebook.github.io/prophet/)
-[![Testing](https://img.shields.io/badge/Pytest-15%20Passed-success.svg)](https://pytest.org/)
-[![Design System](https://img.shields.io/badge/Design%20System-Verdant%20Editorial-102C26.svg)](https://github.com)
+[![Testing](https://img.shields.io/badge/Pytest-31%20Passed-success.svg)](https://pytest.org/)
+[![Design System](https://img.shields.io/badge/Design%20System-Editorial%20Climate--Tech-102C26.svg)](https://github.com)
 [![License](https://img.shields.io/badge/License-CC--BY--4.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 
 > **Academic and Portfolio-Grade Time-Series Surveillance & Forecasting System for Indian Agriculture**  
 > An end-to-end epidemiological forecasting and agro-meteorological intelligence platform utilizing **100% real, publicly available scientific surveillance data** from the **Global Biodiversity Information Facility (GBIF)**, climate analytics from **NASA POWER**, and phytosanitary records from the **European and Mediterranean Plant Protection Organization (EPPO)**.
 >
-> Redesigned with the **Verdant Intelligence** design system: high-end climate-tech typography (*Fraunces* + *Plus Jakarta Sans* + *JetBrains Mono*), earthy botanical palette (`#102C26`, `#527A50`, `#F6F4EC`, `#C4A66A`), custom inline SVG iconography, split-screen landing page, and scientific dashboard modules.
+> Built with the **Agricultural Disease Forecasting Using Time Series** design system: high-end climate-tech typography (*Fraunces* + *Plus Jakarta Sans* + *JetBrains Mono*), earthy botanical palette (`#102C26`, `#527A50`, `#F6F4EC`, `#C4A66A`), custom inline SVG iconography, split-screen landing page, and scientific dashboard modules.
 
 ---
 
@@ -36,7 +36,7 @@
 
 Plant diseases cause severe yield losses across India's staple cereal, pulse, and horticultural tracts. Reliable multi-step forecasting enables agricultural extension services, state departments of agriculture, and farming cooperatives to implement timely, targeted preventative interventions.
 
-Unlike synthetic or simulated demonstrations, **AgroCast India** enforces strict real-world data provenance:
+Unlike synthetic or simulated demonstrations, **Agricultural Disease Forecasting Using Time Series** enforces strict real-world data provenance:
 - **No Synthetic Records:** Rejects manufactured or interpolated disease counts.
 - **Explicit Missingness:** Distinguishes between zero documented events during active surveillance and unobserved intervals (`is_missing = True`).
 - **Leakage-Free Weather Conditioning:** Strictly aligns historical climate regressors by month and enforces lagged dependencies ($t-1, t-2$) so future weather is never leaked into training models.
@@ -46,7 +46,7 @@ Unlike synthetic or simulated demonstrations, **AgroCast India** enforces strict
 
 ## 🎨 Creative Direction & Design System
 
-The frontend has been completely redesigned into **Verdant Intelligence**, an editorial climate-tech and agricultural intelligence interface tailored for academic demonstration, recruiters, and scientific portfolios:
+The frontend has been completely redesigned into **Agricultural Disease Forecasting Using Time Series**, an editorial climate-tech and agricultural intelligence interface tailored for academic demonstration, recruiters, and scientific portfolios:
 
 ### 1. Earthy Scientific Palette
 - **Deep Forest Green** (`#102C26`): Deep foundation tone for headers, brand accents, and primary actions.
@@ -197,19 +197,21 @@ The system audits **10 candidate plant pathogens** across India from 2015 to 202
 
 Models are compared across fixed **chronological out-of-sample validation horizons** (Train 70% / Val 15% / Test 15%):
 
-| Model Family | Architecture | RMSE | MAE | sMAPE (%) | WAPE (%) | Bias | Rank |
-|---|---|---|---|---|---|---|---|
-| **ARIMA(1,1,1)** | Classical Integrated ARMA | **2.438** | **1.406** | 153.75% | 104.1% | +0.41 | 🥇 **Best** |
-| **ARIMAX** | ARIMA + NASA POWER Lagged Weather | **2.506** | 1.462 | 151.09% | 108.3% | +0.38 | 🥈 Runner-Up |
-| **SARIMAX** | Seasonal SARIMA + Climate Regressors | **2.599** | 1.480 | 147.25% | 109.6% | +0.22 | 🥉 3rd |
-| **Seasonal Naive** | Baseline ($y_{t-12}$) | 2.693 | 1.350 | **90.00%** | **100.0%** | -0.15 | 4th |
-| **AR(1)** | Autoregressive Order 1 | 2.693 | 1.350 | 90.00% | 100.0% | -0.15 | 5th |
-| **MA(1)** | Moving Average Order 1 | 2.693 | 1.350 | 90.00% | 100.0% | -0.15 | 6th |
-| **SARIMA(1,0,1)(1,0,1)[12]** | Seasonal ARIMA (Annual Period 12) | 2.730 | 1.522 | 177.85% | 112.7% | +0.55 | 7th |
-| **Random Forest** | Autoregressive Lags + Month Cyclical | 2.763 | 1.578 | 154.89% | 116.9% | +0.48 | 8th |
-| **Meta Prophet** | Additive Fourier Seasonality + Climate | 2.809 | 1.605 | 118.50% | 118.9% | +0.31 | 9th |
-| **Hist Gradient Boosting** | Non-linear Tree Autoregressor | 2.888 | 1.789 | 139.78% | 132.5% | +0.62 | 10th |
-| **Holt-Winters** | Additive Trend & Seasonal Smoothing | 3.074 | 1.862 | 133.33% | 137.9% | +0.70 | 11th |
+| Model | Selected Specification | RMSE | MAE | sMAPE (%) | WAPE (%) | Baseline Improvement | MASE | Rank |
+|---|---|---|---|---|---|---|---|---|
+| **MA(1)** | $p=0, d=0, q=1$ with constant | **2.437** | 1.408 | 153.50% | 104.3% | **+9.5%** | 1.544 | 🥇 **Best RMSE** |
+| **ARIMA** | AIC-selected $(0,0,1)$ with constant | **2.437** | 1.408 | 153.50% | 104.3% | **+9.5%** | 1.544 | 🥇 **Joint Best** |
+| **AR(1)** | $p=1, d=0, q=0$ ($c=0.51, \phi_1=0.18$) | **2.438** | **1.406** | 153.75% | 104.1% | **+9.5%** | 1.541 | 🥈 **Best MAE** |
+| **ARIMAX** | $(0,1,1)$ + 3 Standardized Weather Lags | 2.670 | 1.523 | 117.48% | 112.8% | **+0.9%** | 1.669 | 🥉 4th |
+| **Seasonal Naive** | Persistence Benchmark ($y_{t-12}$) | 2.693 | 1.350 | **90.00%** | **100.0%** | 0.0% (Ref) | 1.479 | 5th (Reference) |
+| **Meta Prophet** | Piecewise Trend + Regularized Fourier ($m=12$) | 2.729 | 1.568 | 120.30% | 116.1% | -1.3% | 1.718 | 6th |
+| **SARIMAX** | $(1,0,1) \times (0,1,1)_{12}$ + Standardized Weather | 2.835 | 1.677 | 126.21% | 124.3% | -5.3% | 1.838 | 7th |
+| **SARIMA** | $(1,0,1) \times (0,1,1)_{12}$ with Constant | 2.843 | 1.723 | 164.91% | 127.6% | -5.6% | 1.888 | 8th |
+| **Random Forest** | Regularized Autoregressor (Depth 3, Lags 1-12) | 2.943 | 1.753 | 186.77% | 129.9% | -9.3% | 1.921 | 9th |
+| **Holt-Winters** | Damped Exponential Smoothing ($m=12$) | 3.099 | 1.894 | 181.59% | 140.3% | -15.1% | 2.075 | 10th |
+| **Hist Gradient Boosting** | Regularized L2 Tree Autoregressor | 3.163 | 1.914 | 139.88% | 141.8% | -17.5% | 2.098 | 11th |
+
+> **Operational Walk-Forward (1-Step Ahead) Performance:** Under realistic monthly rolling-origin deployment, **ARIMA achieves RMSE = 2.141, MAE = 1.256, and WAPE = 93.0%**, outperforming the Seasonal Naive baseline (RMSE = 3.578, WAPE = 163.0%) by **+40.2% on RMSE** and **+42.9% on MAE**.
 
 ---
 

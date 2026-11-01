@@ -47,7 +47,7 @@ def forecast_holt_winters(
     has_zeros = bool(np.any(y <= 0))
 
     best_res = None
-    best_sse = float("inf")
+    best_aic = float("inf")
     best_config = {"trend": "add", "damped": False, "seasonal": use_seasonal}
 
     if auto_optimize:
@@ -55,10 +55,15 @@ def forecast_holt_winters(
         # 1. Additive trend + Additive season (undamped)
         # 2. Additive trend + Additive season (damped)
         # 3. No trend + Additive season
+        # 4. Holt's Linear (trend="add", seasonal=None, damped) - protects sparse series from seasonal overfitting
+        # 5. Simple Exponential Smoothing (trend=None, seasonal=None)
         configs = [
             {"trend": "add", "damped": False, "seasonal": use_seasonal},
             {"trend": "add", "damped": True, "seasonal": use_seasonal},
             {"trend": None, "damped": False, "seasonal": use_seasonal},
+            {"trend": "add", "damped": True, "seasonal": None},
+            {"trend": "add", "damped": False, "seasonal": None},
+            {"trend": None, "damped": False, "seasonal": None},
         ]
 
         # If data is strictly positive, also test multiplicative seasonal
@@ -76,9 +81,9 @@ def forecast_holt_winters(
                     initialization_method="estimated",
                 )
                 res = model.fit(optimized=True)
-                sse = float(np.sum(res.resid ** 2))
-                if sse < best_sse:
-                    best_sse = sse
+                aic_val = float(res.aic) if hasattr(res, "aic") and res.aic is not None and not np.isnan(res.aic) else float(np.sum(res.resid ** 2))
+                if aic_val < best_aic:
+                    best_aic = aic_val
                     best_res = res
                     best_config = cfg
             except Exception:

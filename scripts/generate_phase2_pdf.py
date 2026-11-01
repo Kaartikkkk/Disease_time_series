@@ -53,7 +53,7 @@ class NumberedCanvas(canvas.Canvas):
         if self._pageNumber > 1:
             self.setFont("Helvetica-Bold", 8)
             self.setFillColor(primary_accent)
-            self.drawString(36, 762, "VERDANT INTELLIGENCE")
+            self.drawString(36, 762, "AGRICULTURAL DISEASE FORECASTING USING TIME SERIES")
             self.setFont("Helvetica", 8)
             self.setFillColor(header_text_color)
             self.drawString(142, 762, "|  Phase 2 Mid-Semester Evaluation: Comprehensive Report & Oral Defense Guide")
@@ -251,7 +251,7 @@ def build_pdf(filename="reports/Verdant_Intelligence_Phase_2_Evaluation_Report_a
     # ==================================================================
     # PAGE 1: COVER, EXECUTIVE SUMMARY, RUBRIC & PREPROCESSING
     # ==================================================================
-    story.append(Paragraph("VERDANT INTELLIGENCE", title_style))
+    story.append(Paragraph("AGRICULTURAL DISEASE FORECASTING USING TIME SERIES", title_style))
     story.append(Paragraph(
         "<b>Agricultural Plant Disease Outbreak Forecasting & Surveillance System for India</b><br/>"
         "Phase 2 Mid-Semester Comprehensive Evaluation Report & Faculty Oral Defense Guide",
@@ -294,7 +294,7 @@ def build_pdf(filename="reports/Verdant_Intelligence_Phase_2_Evaluation_Report_a
 
     story.append(Paragraph("1. Executive Summary & Evaluation Rubric Alignment", h1_style))
     story.append(Paragraph(
-        "<b>Verdant Intelligence</b> is an econometric and machine-learning intelligence platform designed to model, "
+        "<b>Agricultural Disease Forecasting Using Time Series</b> is an econometric and machine-learning intelligence platform designed to model, "
         "test for stationarity, and forecast monthly agricultural plant disease report trajectories across India. "
         "The project addresses fungal and bacterial pathogens threatening staple crops (Rice, Groundnut, Pigeonpea, Chickpea, Wheat, Mustard) "
         "by combining real-world Global Biodiversity Information Facility (GBIF) spatial occurrences with NASA POWER meteorological reanalysis. "

@@ -32,12 +32,15 @@ def forecast_seasonal_naive(
     """
     y = train_series.values
     preds = []
-    for h in range(1, horizon + 1):
-        idx = len(y) + h - 1 - season_length
-        if 0 <= idx < len(y):
+    if len(y) >= season_length:
+        for h in range(1, horizon + 1):
+            offset = (h - 1) % season_length
+            idx = len(y) - season_length + offset
             preds.append(y[idx])
-        else:
-            preds.append(y[-1])  # Fallback to simple persistence if history < 12
+    else:
+        # Fallback to simple last-observation persistence if series is shorter than one full season
+        for h in range(1, horizon + 1):
+            preds.append(y[-1])
 
     preds_arr = np.array(preds, dtype=float)
 

@@ -179,11 +179,11 @@ def inject_custom_css():
         }
         .verdant-brand-name {
             font-family: 'Fraunces', Georgia, serif;
-            font-size: 1.25rem;
+            font-size: clamp(0.92rem, 1.5vw, 1.15rem);
             font-weight: 700;
             color: #102C26;
-            line-height: 1.1;
-            letter-spacing: -0.02em;
+            line-height: 1.15;
+            letter-spacing: -0.01em;
         }
         .verdant-brand-subtag {
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -1439,8 +1439,8 @@ def render_top_navigation(active_page: str = "overview"):
         <a href="/" target="_self" class="verdant-top-brand">
             {icon_leaf(22, "#166534")}
             <div>
-                <div class="verdant-brand-name">Verdant Intelligence</div>
-                <div class="verdant-brand-subtag">Agricultural Plant Disease Forecasting · India</div>
+                <div class="verdant-brand-name">Agricultural Disease Forecasting Using Time Series</div>
+                <div class="verdant-brand-subtag">Plant Disease Surveillance & Climate Modeling · India</div>
             </div>
         </a>
         <nav class="verdant-nav-links-wrap">

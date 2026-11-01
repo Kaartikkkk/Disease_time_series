@@ -40,7 +40,7 @@ from src.ui_helpers import (
 )
 
 st.set_page_config(
-    page_title="Disease Records — Verdant Intelligence",
+    page_title="Disease Records — Agricultural Disease Forecasting Using Time Series",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
