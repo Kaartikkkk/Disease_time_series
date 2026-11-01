@@ -61,6 +61,7 @@ from src.ui_helpers import (
     load_data_quality_report_data,
     load_monthly_series,
     render_app_sidebar,
+    render_graph_explanation_card,
     render_top_header,
     render_what_does_this_mean,
 )
@@ -139,8 +140,8 @@ hero_markup = (
     f'<a href="/Disease_Explorer" target="_self" class="btn-primary-cta" style="padding: 10px 22px; font-size: 0.88rem; border-radius: 10px; background: #102C26; border: 1px solid rgba(255,255,255,0.2);">'
     f'View Disease Records {icon_arrow_right(14, "#FFFFFF")}'
     f'</a>'
-    f'<a href="/About_the_Data" target="_self" class="btn-secondary-cta" style="padding: 9px 18px; font-size: 0.88rem; border-radius: 10px; color: #FFFFFF !important; border: 1px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.15); backdrop-filter: blur(8px);">'
-    f'▷ About the Data'
+    f'<a href="/Data_and_Methodology" target="_self" class="btn-secondary-cta" style="padding: 9px 18px; font-size: 0.88rem; border-radius: 10px; color: #FFFFFF !important; border: 1px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.15); backdrop-filter: blur(8px);">'
+    f'▷ Data & Methodology'
     f'</a>'
     f'</div></div>'
     f'<div class="hero-glass-card">'
@@ -189,13 +190,13 @@ features_markup = (
     f'<div><div style="display: flex; align-items: baseline; gap: 6px;"><span class="feature-card-stat">10</span><span class="feature-card-title">Plant Diseases</span></div>'
     f'<div class="feature-card-sub">Rice Blast, Stem Rust, Blight & more</div></div>'
     f'</a>'
-    f'<a href="/Weather_Intelligence" target="_self" class="feature-card">'
+    f'<a href="/Time_Series_Analysis" target="_self" class="feature-card">'
     f'<div class="feature-card-top">'
-    f'<div class="feature-icon-circle" style="background: #EFF6FF;">{icon_weather(20, "#2563EB")}</div>'
+    f'<div class="feature-icon-circle" style="background: #EFF6FF;">{icon_timeseries(20, "#2563EB")}</div>'
     f'<div class="feature-arrow-btn">{icon_arrow_right(13, "currentColor")}</div>'
     f'</div>'
-    f'<div><div class="feature-card-title" style="font-size: 0.95rem; font-weight: 700;">Weather Insights</div>'
-    f'<div class="feature-card-sub">Rainfall, humidity & temperature trends</div></div>'
+    f'<div><div class="feature-card-title" style="font-size: 0.95rem; font-weight: 700;">Time Series Analysis</div>'
+    f'<div class="feature-card-sub">Seasonality, stationarity & weather lags</div></div>'
     f'</a>'
     f'<a href="/Model_Comparison" target="_self" class="feature-card">'
     f'<div class="feature-card-top">'
@@ -221,7 +222,7 @@ insights_markup = (
     f'</div>'
     f'</div>'
     f'<div class="insight-cards-grid">'
-    f'<a href="/Forecasts" target="_self" class="insight-card">'
+    f'<a href="/Future_Forecasts" target="_self" class="insight-card">'
     f'<div class="insight-icon-circle" style="background: #FEF2F2;">{icon_alert_triangle(20, "#DC2626")}</div>'
     f'<div class="insight-card-content">'
     f'<div class="insight-card-header">'
@@ -232,7 +233,7 @@ insights_markup = (
     f'</div>'
     f'<div class="insight-arrow-btn">{icon_arrow_right(12, "currentColor")}</div>'
     f'</a>'
-    f'<a href="/Forecasts" target="_self" class="insight-card">'
+    f'<a href="/Future_Forecasts" target="_self" class="insight-card">'
     f'<div class="insight-icon-circle" style="background: #E8F5E9;">{icon_trending_up(20, "#166534")}</div>'
     f'<div class="insight-card-content">'
     f'<div class="insight-card-header">'
@@ -243,7 +244,7 @@ insights_markup = (
     f'</div>'
     f'<div class="insight-arrow-btn">{icon_arrow_right(12, "currentColor")}</div>'
     f'</a>'
-    f'<a href="/Weather_Intelligence" target="_self" class="insight-card">'
+    f'<a href="/Time_Series_Analysis" target="_self" class="insight-card">'
     f'<div class="insight-icon-circle" style="background: #EFF6FF;">{icon_weather(20, "#2563EB")}</div>'
     f'<div class="insight-card-content">'
     f'<div class="insight-card-header">'
@@ -650,7 +651,7 @@ st.markdown(
         <p class="final-cta-lead">
             Explore recorded disease reports, seasonal patterns, and future predictions across Indian farming regions.
         </p>
-        <a href="/Forecasts" target="_self" class="btn-gold-cta">
+        <a href="/Future_Forecasts" target="_self" class="btn-gold-cta">
             View Future Predictions {icon_arrow_right(16, "#102C26")}
         </a>
     </div>

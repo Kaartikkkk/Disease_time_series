@@ -28,6 +28,7 @@ from src.ui_helpers import (
     load_data_quality_report_data,
     load_monthly_series,
     render_app_sidebar,
+    render_graph_explanation_card,
     render_top_header,
     render_what_does_this_mean,
 )
@@ -52,17 +53,17 @@ last_sync_time = datetime.now(timezone.utc).strftime("%d %b %Y · %H:%M UTC")
 
 st.markdown(
     f"""
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(82, 122, 80, 0.16);">
-        <div>
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(82, 122, 80, 0.16);">
+        <div style="flex: 1 1 300px; min-width: 250px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
                 {icon_pathology(26, "#527A50")}
-                <h1 style="font-size: 2.2rem; margin: 0; color: #102C26;">Disease Records</h1>
+                <h1 style="font-size: clamp(1.6rem, 3.2vw, 2.2rem); margin: 0; color: #102C26; word-break: normal; hyphens: none; line-height: 1.2;">Disease Records</h1>
             </div>
-            <p style="color: #5A665D; font-size: 0.95rem; margin: 0;">
+            <p style="color: #5A665D; font-size: 0.95rem; margin: 0; line-height: 1.45;">
                 Explore recorded crop disease observations, mapped collection sites, and historical reports across India.
             </p>
         </div>
-        <div style="text-align: right; background: #FFFEFA; border: 1px solid rgba(82, 122, 80, 0.2); border-radius: 12px; padding: 8px 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+        <div style="text-align: right; background: #FFFEFA; border: 1px solid rgba(82, 122, 80, 0.2); border-radius: 12px; padding: 8px 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); flex-shrink: 0; align-self: flex-start;">
             <div style="display: flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; color: #527A50; letter-spacing: 0.05em;">
                 {icon_pulse(8, "#527A50")} Live Verified Database
             </div>
@@ -255,9 +256,11 @@ with tab_monthly:
         )
         st.plotly_chart(fig_m, use_container_width=True)
 
-        render_what_does_this_mean(
-            "This chart shows how many disease reports were recorded each month. A higher bar means more reports were deposited in research databases in that month. Spikes often correspond to monsoon or post-monsoon months when crop leaves stay wet.",
-            "Monthly aggregated count from GBIF occurrence accessions. Months without documented collection events preserve is_missing = True to avoid false-zero bias."
+        render_graph_explanation_card(
+            what_it_shows="This timeline displays the number of verified disease reports deposited each calendar month along with a 3-month rolling average trend line.",
+            key_observation="Distinct cyclical surges appear regularly during the Kharif monsoon (July–October) and early Rabi season, while dry summer months exhibit near-zero reporting activity.",
+            why_it_matters="Identifying recurring seasonal peaks helps agronomists anticipate when fungal spores are actively multiplying, enabling preventative spray schedules 4 to 6 weeks before maximum disease incidence.",
+            technical_details="Monthly aggregation y_t = sum(qualifying occurrence records in month t). Missing intervals are preserved as is_missing=True rather than arbitrary zero imputation."
         )
 
 # ----------------- Tab 2: Geospatial Map -----------------
@@ -304,9 +307,11 @@ with tab_map:
         )
         st.plotly_chart(fig_map, use_container_width=True)
 
-        render_what_does_this_mean(
-            "Each pin on the map marks a recorded observation of this disease in India. Locations without pins may simply have fewer research reporting stations rather than being disease-free.",
-            "Georeferenced occurrence records from GBIF with verified latitude/longitude coordinates within the sovereign territory of India."
+        render_graph_explanation_card(
+            what_it_shows="This geospatial map marks the GPS-verified field collection and research accession coordinates across Indian agricultural zones.",
+            key_observation="Reports cluster heavily in high-intensity cropping tracts (such as the Eastern Rice Belt and Indo-Gangetic Plains) where university extension centers actively sample crops.",
+            why_it_matters="Spatial clustering indicates surveillance density. Unmarked districts do not guarantee disease absence; they often reflect lower monitoring density, necessitating regional agro-climatic zone modeling.",
+            technical_details="Georeferenced GBIF accessions bounded within the Indian subcontinent (6.0°N–37.5°N, 68.0°E–97.5°E) with spatial deduplication."
         )
     else:
         st.info("Exact map coordinates are not available for this disease's past reports. The reports are recorded at the state and national level.")
@@ -366,4 +371,9 @@ with tab_audit:
                 fig_mb = px.bar(df_mb, x="Month", y="Reports", text_auto=True, color_discrete_sequence=["#527A50"])
                 format_plotly_figure(fig_mb, title="Reports by Calendar Month", height=280)
                 st.plotly_chart(fig_mb, use_container_width=True)
+                render_graph_explanation_card(
+                    what_it_shows="This bar chart shows the total distribution of historical disease reports aggregated by calendar month (1 = January to 12 = December).",
+                    key_observation="Reports concentrate heavily during peak crop growth and heading periods, with distinct lulls during high-heat dry seasons.",
+                    why_it_matters="Knowing the baseline calendar month risk profile helps agricultural extension officers establish early monitoring before seasonal infection windows begin."
+                )
 

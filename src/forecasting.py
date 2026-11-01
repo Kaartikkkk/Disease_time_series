@@ -232,6 +232,8 @@ def forecast_ml_autoregressor(
     
     # Feature construction on training data
     df_feat = train_df.copy()
+    if not pd.api.types.is_datetime64_any_dtype(df_feat["date"]):
+        df_feat["date"] = pd.to_datetime(df_feat["date"])
     feature_cols = []
     
     for l in lags:

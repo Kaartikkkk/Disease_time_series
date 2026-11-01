@@ -26,22 +26,22 @@ from src.ui_helpers import (
 )
 
 st.set_page_config(
-    page_title="About the Data — Verdant Intelligence",
+    page_title="Data & Methodology — Verdant Intelligence",
     page_icon="📖",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
 inject_custom_css()
-render_app_sidebar(active_page="about_data")
+render_app_sidebar(active_page="methodology")
 render_top_header()
 
 adv = is_advanced_mode()
 
 # Header
-title_text = "About the Data &amp; How It Works" if not adv else "Data Provenance, Econometric Architecture &amp; Governance"
+title_text = "Data &amp; Methodology" if not adv else "Data Provenance, Econometric Architecture &amp; Governance"
 subtitle_text = (
-    "Learn where our plant disease and weather data comes from, how models make predictions, and how to use these results responsibly."
+    "Learn where our plant disease and satellite weather data comes from, how forecasting models operate, and how to interpret predictions responsibly."
     if not adv
     else "Verified biodiversity accessions (GBIF), NASA POWER agrometeorology, mathematical model formulations, and reproducible data exports."
 )
@@ -49,17 +49,17 @@ badge_text = "OPEN ACCESS · CC-BY 4.0 / CC0" if not adv else "PEER REVIEW ARCHI
 
 st.markdown(
     f"""
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(82, 122, 80, 0.16);">
-        <div>
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(82, 122, 80, 0.16);">
+        <div style="flex: 1 1 300px; min-width: 250px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
                 {icon_book(26, "#527A50")}
-                <h1 style="font-size: 2.2rem; margin: 0; color: #102C26;">{title_text}</h1>
+                <h1 style="font-size: clamp(1.6rem, 3.2vw, 2.2rem); margin: 0; color: #102C26; word-break: normal; hyphens: none; line-height: 1.2;">{title_text}</h1>
             </div>
-            <p style="color: #5A665D; font-size: 0.95rem; margin: 0;">
+            <p style="color: #5A665D; font-size: 0.95rem; margin: 0; line-height: 1.45;">
                 {subtitle_text}
             </p>
         </div>
-        <div style="background: rgba(82, 122, 80, 0.08); border: 1px solid rgba(82, 122, 80, 0.2); border-radius: 8px; padding: 6px 14px; font-size: 0.82rem; color: #183D32; font-family: 'JetBrains Mono', monospace;">
+        <div style="background: rgba(82, 122, 80, 0.08); border: 1px solid rgba(82, 122, 80, 0.2); border-radius: 8px; padding: 6px 14px; font-size: 0.82rem; color: #183D32; font-family: 'JetBrains Mono', monospace; flex-shrink: 0; white-space: nowrap; align-self: flex-start;">
             {badge_text}
         </div>
     </div>

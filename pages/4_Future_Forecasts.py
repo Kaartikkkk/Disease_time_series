@@ -50,6 +50,7 @@ from src.ui_helpers import (
     load_friendly_pathogen_options,
     load_monthly_series,
     render_app_sidebar,
+    render_graph_explanation_card,
     render_top_header,
     render_what_does_this_mean,
 )
@@ -81,17 +82,17 @@ page_subheading = (
 
 st.markdown(
     f"""
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(82, 122, 80, 0.16);">
-        <div>
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(82, 122, 80, 0.16);">
+        <div style="flex: 1 1 300px; min-width: 250px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
                 {icon_forecast(28, "#527A50")}
-                <h1 style="font-size: 2.3rem; margin: 0; color: #102C26;">{page_heading}</h1>
+                <h1 style="font-size: clamp(1.6rem, 3.2vw, 2.2rem); margin: 0; color: #102C26; word-break: normal; hyphens: none; line-height: 1.2;">{page_heading}</h1>
             </div>
-            <p style="color: #5A665D; font-size: 0.95rem; margin: 0;">
+            <p style="color: #5A665D; font-size: 0.95rem; margin: 0; line-height: 1.45;">
                 {page_subheading}
             </p>
         </div>
-        <div style="text-align: right; background: #FFFEFA; border: 1px solid rgba(82, 122, 80, 0.2); border-radius: 12px; padding: 8px 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+        <div style="text-align: right; background: #FFFEFA; border: 1px solid rgba(82, 122, 80, 0.2); border-radius: 12px; padding: 8px 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); flex-shrink: 0; align-self: flex-start;">
             <div style="display: flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; color: #527A50; letter-spacing: 0.05em;">
                 {icon_pulse(8, "#527A50")} {"Active Modeling Runtime" if adv_mode else "Prediction System Ready"}
             </div>
@@ -668,10 +669,36 @@ fig_f.update_layout(
 )
 st.plotly_chart(fig_f, use_container_width=True)
 
-# What Does This Mean card for Disease Prediction Chart
-render_what_does_this_mean(
-    simple_text="This chart shows past disease reports and what the model predicts for the coming months. The shaded area shows a range of possible results. A wider range means the prediction is less precise.",
-    technical_details="The model uses historical monthly rhythms to project future values. The 80% and 95% shaded bands represent statistical prediction intervals. Values are strictly bounded at zero.",
+render_graph_explanation_card(
+    what_it_shows="This chart projects future disease reports (dashed line with diamond markers) alongside past observations (solid line), seasonal benchmark (dotted gold), and nested 80%/95% prediction intervals.",
+    key_observation=f"Predictions follow historical seasonal rhythms, reaching peak activity around {peak_info.get('peak_month', 'upcoming months')} (~{peak_info.get('peak_value', 0.0):.1f} reports) before tapering during dry intervals.",
+    why_it_matters="Visualizing the multi-month trajectory with nested uncertainty intervals enables farm managers and extension officers to time preventative actions weeks in advance without assuming artificial single-number certainty.",
+    technical_details="Forward projections with non-negative lower bounds (max(0, y_hat)) and nested prediction intervals: 80% CI (Z=1.28) and 95% CI (Z=1.96)."
+)
+
+# Dedicated Section 9 Forecast Summary Card
+trend_label = "Increasing Activity" if trend_diff > 0.5 else ("Decreasing Activity" if trend_diff < -0.5 else "Stable Seasonal Pattern")
+
+st.markdown(
+    f"""
+    <div style="background: #FFFEFA; border: 1.5px solid #527A50; border-radius: 12px; padding: 20px 24px; margin-top: 10px; margin-bottom: 24px; box-shadow: 0 4px 14px rgba(16, 44, 38, 0.06);">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+            {icon_forecast(22, "#527A50")}
+            <h3 style="margin: 0; font-size: 1.25rem; color: #102C26;">FORECAST SUMMARY</h3>
+        </div>
+        <ul style="font-size: 0.88rem; color: #202822; line-height: 1.6; margin: 0; padding-left: 20px;">
+            <li><strong>What is expected in upcoming months?</strong> Disease reports are projected to follow historical seasonal patterns, averaging ~{float(np.mean(p_fut)):.1f} reports per month across the {horizon_months}-month horizon.</li>
+            <li><strong>Which month has the highest predicted activity?</strong> Peak activity is expected in <strong>{peak_info.get('peak_month', 'N/A')}</strong> (~{peak_info.get('peak_value', 0.0):.1f} reports, likely range: {peak_info.get('lower_80', 0.0):.1f} to {peak_info.get('upper_80', 0.0):.1f} reports).</li>
+            <li><strong>Is the predicted activity increasing, decreasing or stable?</strong> Overall trend is <strong>{trend_label}</strong> ({trend_sign}{trend_diff:.1f} reports compared to historical seasonal baseline).</li>
+            <li><strong>How uncertain are the predictions?</strong> The 80% likely prediction interval spans ±{mean_ci_width / 2.0:.1f} reports around the forecast mean, reflecting natural environmental variability.</li>
+            <li><strong>What should agricultural stakeholders monitor?</strong> Monitor canopy leaf wetness and rainfall surges 3 to 4 weeks prior to {peak_info.get('peak_month', 'peak month')}, and verify local field conditions rather than treating forecasts as absolute outbreak guarantees.</li>
+        </ul>
+        <div style="font-size: 0.76rem; color: #5A665D; margin-top: 10px; border-top: 1px dashed rgba(82, 122, 80, 0.2); padding-top: 8px;">
+            <em>Notice: Predictions represent documented scientific occurrence reports deposited in public repositories, not the total census of infected field acreage. Forecasts indicate seasonal risk windows, not disease certainties.</em>
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
 
 # ==============================================================================

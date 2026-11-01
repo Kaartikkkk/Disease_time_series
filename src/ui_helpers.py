@@ -109,16 +109,19 @@ def inject_custom_css():
             color: var(--forest-deep) !important;
             letter-spacing: -0.025em;
             font-feature-settings: "liga" 1, "kern" 1;
+            word-break: normal !important;
+            overflow-wrap: break-word !important;
+            hyphens: none !important;
         }
 
         h1 {
-            font-size: 2.5rem !important;
+            font-size: clamp(1.6rem, 3.5vw, 2.3rem) !important;
             font-weight: 600 !important;
-            line-height: 1.18 !important;
+            line-height: 1.2 !important;
         }
 
         h2 {
-            font-size: 1.85rem !important;
+            font-size: clamp(1.3rem, 2.5vw, 1.85rem) !important;
             font-weight: 500 !important;
             line-height: 1.25 !important;
         }
@@ -733,6 +736,8 @@ def inject_custom_css():
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
             margin-bottom: 22px;
             padding-bottom: 4px;
         }
@@ -744,14 +749,18 @@ def inject_custom_css():
             border: 1px solid #EAE6DC;
             border-radius: 24px;
             padding: 8px 18px;
-            width: 440px;
-            max-width: 100%;
+            flex: 1 1 240px;
+            max-width: 440px;
+            min-width: 180px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.02);
         }
         .search-placeholder {
             font-size: 0.84rem;
             color: #8A968E;
             flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .search-kbd {
             background: #F6F4EC;
@@ -762,11 +771,13 @@ def inject_custom_css():
             color: #7D8A82;
             padding: 2px 7px;
             font-family: -apple-system, sans-serif;
+            flex-shrink: 0;
         }
         .top-util-group {
             display: flex;
             align-items: center;
             gap: 12px;
+            flex-shrink: 0;
         }
         .top-icon-btn {
             width: 36px;
@@ -1158,6 +1169,58 @@ def render_what_does_this_mean(simple_text: str, technical_details: Optional[str
     st.html(card_html)
 
 
+def render_graph_explanation_card(
+    what_it_shows: str,
+    key_observation: str,
+    why_it_matters: str,
+    technical_details: Optional[str] = None,
+):
+    """Render the standard compact 3-part graph explanation card required across all dashboard pages.
+    
+    Structure:
+    - WHAT DOES THIS GRAPH SHOW? (2-3 simple sentences)
+    - KEY OBSERVATION: (the most important pattern visible)
+    - AGRICULTURAL INTERPRETATION / WHY DOES IT MATTER? (connection to disease monitoring)
+    """
+    tech_html = ""
+    if is_advanced_mode() and technical_details:
+        tech_html = f"""
+        <div style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed rgba(82, 122, 80, 0.25); font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; color: #183D32;">
+            <strong>Econometric / Statistical Note:</strong> {technical_details}
+        </div>
+        """
+    card_html = f"""
+    <div style="background: #FFFEFA; border: 1px solid rgba(82, 122, 80, 0.22); border-left: 4px solid #527A50; border-radius: 10px; padding: 14px 18px; margin-top: 12px; margin-bottom: 22px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+        <div style="margin-bottom: 8px;">
+            <div style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #527A50; margin-bottom: 2px;">
+                WHAT DOES THIS GRAPH SHOW?
+            </div>
+            <p style="font-size: 0.86rem; color: #202822; margin: 0; line-height: 1.48;">
+                {what_it_shows}
+            </p>
+        </div>
+        <div style="margin-bottom: 8px;">
+            <div style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #183D32; margin-bottom: 2px;">
+                KEY OBSERVATION:
+            </div>
+            <p style="font-size: 0.86rem; color: #202822; margin: 0; line-height: 1.48;">
+                {key_observation}
+            </p>
+        </div>
+        <div>
+            <div style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #C4A66A; margin-bottom: 2px;">
+                AGRICULTURAL INTERPRETATION / WHY DOES IT MATTER?
+            </div>
+            <p style="font-size: 0.86rem; color: #202822; margin: 0; line-height: 1.48;">
+                {why_it_matters}
+            </p>
+        </div>
+        {tech_html}
+    </div>
+    """
+    st.html(card_html)
+
+
 def render_app_sidebar(active_page: str = "overview"):
     """Render the cohesive left sidebar matching the Verdant Intelligence platform mockup."""
     sprout_img_path = ASSETS_DIR / "seedling_sprout.jpg"
@@ -1204,13 +1267,12 @@ def render_app_sidebar(active_page: str = "overview"):
             unsafe_allow_html=True,
         )
 
-        st.page_link("app.py", label="Home", icon="🏠")
-        st.page_link("pages/1_Disease_Explorer.py", label="Disease Records", icon="🍃")
-        st.page_link("pages/2_Time_Series_Analysis.py", label="Disease Trends", icon="📊")
-        st.page_link("pages/3_Model_Comparison.py", label="Compare Models", icon="📑")
-        st.page_link("pages/4_Forecasts.py", label="Future Predictions", icon="📈")
-        st.page_link("pages/5_Weather_Intelligence.py", label="Weather Insights", icon="☁️")
-        st.page_link("pages/6_About_the_Data.py", label="About the Data", icon="📖")
+        st.page_link("app.py", label="1. Overview", icon="🏠")
+        st.page_link("pages/1_Disease_Explorer.py", label="2. Disease Explorer", icon="🍃")
+        st.page_link("pages/2_Time_Series_Analysis.py", label="3. Time Series Analysis", icon="📊")
+        st.page_link("pages/3_Model_Comparison.py", label="4. Model Comparison", icon="⚖️")
+        st.page_link("pages/4_Future_Forecasts.py", label="5. Future Forecasts", icon="🔮")
+        st.page_link("pages/5_Data_and_Methodology.py", label="6. Data & Methodology", icon="📖")
 
         st.markdown(
             f"""
