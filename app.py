@@ -134,7 +134,7 @@ hero_markup = (
     f'<div class="hero-main-title">'
     f'Anticipate disease.<br><span>Protect the harvest.</span></div>'
     f'<p style="color: rgba(246, 244, 236, 0.95); font-size: 0.95rem; line-height: 1.6; margin: 0 0 24px 0; max-width: 490px; text-shadow: 0 1px 4px rgba(0,0,0,0.4);">'
-    f'A clear, data-driven plant disease forecasting platform transforming real-world disease records from <b>GBIF</b> and weather data from <b>NASA POWER</b> into simple, reliable future predictions across India\'s crop regions.'
+    f'Forecasting plant disease outbreaks across India using GBIF field surveillance and NASA POWER satellite weather.'
     f'</p>'
     f'<div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">'
     f'<a href="/Disease_Explorer" target="_self" class="btn-primary-cta" style="padding: 10px 22px; font-size: 0.88rem; border-radius: 10px; background: #102C26; border: 1px solid rgba(255,255,255,0.2);">'
@@ -306,41 +306,25 @@ st.markdown(
 st.markdown('<div id="how-it-works"></div>', unsafe_allow_html=True)
 st.markdown("---")
 
-p1_title = "01 · Collect Disease Records" if not adv_mode else "01 · Surveillance Ingestion"
-p1_desc = (
-    "Pulls verified disease reports for 10 plant diseases across India from GBIF and botanical research herbaria."
-    if not adv_mode
-    else "Pulls verified occurrence records for 10 candidate agricultural pathogens across India from GBIF REST API and EPPO."
-)
+p1_title = "01 · Ingest Surveillance" if adv_mode else "01 · Collect Records"
+p1_desc = "Ingests verified disease reports from GBIF and research herbaria across India."
 
-p2_title = "02 · Add Weather Data" if not adv_mode else "02 · Climate Integration"
-p2_desc = (
-    "Retrieves 11 years of monthly temperature, rainfall, and relative humidity data from NASA POWER satellites."
-    if not adv_mode
-    else "Retrieves 132 continuous months of agrometeorology from NASA POWER across five Indian agro-climatic zones."
-)
+p2_title = "02 · Climate Telemetry" if adv_mode else "02 · Add Weather"
+p2_desc = "Integrates 11 years of monthly climate telemetry from NASA POWER satellites."
 
-p3_title = "03 · Check Data Patterns" if not adv_mode else "03 · Stationarity & Diagnostics"
-p3_desc = (
-    "Tests whether disease reports follow steady seasonal patterns each year and adjusts for long-term changes."
-    if not adv_mode
-    else "Performs ADF and KPSS unit-root hypothesis testing, variance differencing, and ACF/PACF Bartlett confidence bands."
-)
+p3_title = "03 · Diagnostics & Lags" if adv_mode else "03 · Data Diagnostics"
+p3_desc = "Runs stationarity, seasonal decomposition, and lag correlation checks."
 
-p4_title = "04 · Predict Future Reports" if not adv_mode else "04 · Multi-Model Forecasting"
-p4_desc = (
-    "Tests 11 forecasting methods on past history to find the most accurate model and predict future monthly disease activity."
-    if not adv_mode
-    else "Executes chronological out-of-sample benchmarking across 11 model families, computing RMSE, MAE, and prediction intervals."
-)
+p4_title = "04 · Model Forecasting" if adv_mode else "04 · Generate Forecasts"
+p4_desc = "Benchmarks 11 forecasting models to predict monthly disease activity."
 
 st.markdown(
     f"""
     <div style="text-align: center; max-width: 680px; margin: 36px auto 12px auto;">
-        <div class="hero-eyebrow" style="margin-bottom: 8px;">Step-by-Step Architecture</div>
+        <div class="hero-eyebrow" style="margin-bottom: 8px;">Architecture</div>
         <h2 style="font-size: 2.1rem; margin-bottom: 12px;">How Predictions Are Made</h2>
         <p style="color: #5A665D; font-size: 0.95rem; line-height: 1.6;">
-            A transparent four-stage pipeline connecting verified field records and satellite weather data to accurate forecasting models.
+            Four-stage pipeline connecting field records and satellite weather to predictive models.
         </p>
     </div>
     <div class="process-grid">
@@ -376,10 +360,10 @@ st.markdown("---")
 st.markdown(
     """
     <div style="text-align: center; max-width: 720px; margin: 36px auto 20px auto;">
-        <div class="hero-eyebrow" style="margin-bottom: 8px;">Field Surveillance Environments</div>
-        <h2 style="font-size: 2.1rem; margin-bottom: 12px;">Agro-Ecological Terrains & Micro-Climate Regimes</h2>
+        <div class="hero-eyebrow" style="margin-bottom: 8px;">Surveillance Environments</div>
+        <h2 style="font-size: 2.1rem; margin-bottom: 12px;">Agro-Ecological Terrains & Micro-Climates</h2>
         <p style="color: #5A665D; font-size: 0.95rem; line-height: 1.6;">
-            Understanding crop growth, localized humidity in leaf canopies, and seasonal monsoon rains across India's agricultural heartlands.
+            Environmental factors driving pathogen incubation across major cropping seasons.
         </p>
     </div>
     """,
@@ -393,13 +377,13 @@ st.markdown(
             <div style="height: 190px; overflow: hidden; position: relative;">
                 <img src="{img_monsoon_b64}" style="width: 100%; height: 100%; object-fit: cover;" alt="Monsoon Precipitation Front" />
                 <div style="position: absolute; bottom: 8px; left: 10px; background: rgba(16, 44, 38, 0.85); backdrop-filter: blur(8px); color: #FFF; font-size: 0.68rem; font-weight: 600; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.05em;">
-                    MONSOON RAIN PATTERNS
+                    MONSOON REGIME
                 </div>
             </div>
             <div style="padding: 16px;">
                 <h4 style="margin: 0 0 6px 0; font-size: 1.05rem; color: #102C26;">Leaf Wetness & Rain Splashing</h4>
                 <p style="font-size: 0.82rem; color: #5A665D; line-height: 1.5; margin: 0;">
-                    Monsoon rain across the plains keeps crop leaves wet for over 10 hours, creating favorable conditions for blast and blight fungi to multiply.
+                    Extended leaf wetness (>10h) during monsoon rains accelerates spore germination for blast and blight.
                 </p>
             </div>
         </div>
@@ -411,9 +395,9 @@ st.markdown(
                 </div>
             </div>
             <div style="padding: 16px;">
-                <h4 style="margin: 0 0 6px 0; font-size: 1.05rem; color: #102C26;">Grain Growth & Timing Protection</h4>
+                <h4 style="margin: 0 0 6px 0; font-size: 1.05rem; color: #102C26;">Grain Growth & Dew Cycles</h4>
                 <p style="font-size: 0.82rem; color: #5A665D; line-height: 1.5; margin: 0;">
-                    Cool winter temperatures and evening dew determine the critical weeks when wheat and pulses are most susceptible to rusts.
+                    Cool temperatures and heavy morning dew drive seasonal rust susceptibility in winter cereals.
                 </p>
             </div>
         </div>
@@ -421,13 +405,13 @@ st.markdown(
             <div style="height: 190px; overflow: hidden; position: relative;">
                 <img src="{img_wheat_b64}" style="width: 100%; height: 100%; object-fit: cover;" alt="Vegetative Canopy Tillering" />
                 <div style="position: absolute; bottom: 8px; left: 10px; background: rgba(16, 44, 38, 0.85); backdrop-filter: blur(8px); color: #FFF; font-size: 0.68rem; font-weight: 600; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.05em;">
-                    DENSE CROP CANOPY
+                    CANOPY MICRO-CLIMATE
                 </div>
             </div>
             <div style="padding: 16px;">
-                <h4 style="margin: 0 0 6px 0; font-size: 1.05rem; color: #102C26;">Foliar Micro-Climates</h4>
+                <h4 style="margin: 0 0 6px 0; font-size: 1.05rem; color: #102C26;">Foliar Humidity Traps</h4>
                 <p style="font-size: 0.82rem; color: #5A665D; line-height: 1.5; margin: 0;">
-                    Dense plant canopies trap moisture near the ground, providing an ideal micro-climate for leaf spots and rot pathogens to develop.
+                    Dense canopy foliage traps humidity (>80%), creating favorable micro-climates for foliar lesions.
                 </p>
             </div>
         </div>
@@ -435,13 +419,13 @@ st.markdown(
             <div style="height: 190px; overflow: hidden; position: relative;">
                 <img src="{img_golden_b64}" style="width: 100%; height: 100%; object-fit: cover;" alt="Golden Crop Field" />
                 <div style="position: absolute; bottom: 8px; left: 10px; background: rgba(16, 44, 38, 0.85); backdrop-filter: blur(8px); color: #FFF; font-size: 0.68rem; font-weight: 600; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.05em;">
-                    HARVEST PRESERVATION
+                    PREVENTATIVE ACTION
                 </div>
             </div>
             <div style="padding: 16px;">
                 <h4 style="margin: 0 0 6px 0; font-size: 1.05rem; color: #102C26;">Protecting Crop Yields</h4>
                 <p style="font-size: 0.82rem; color: #5A665D; line-height: 1.5; margin: 0;">
-                    Knowing disease trends months in advance helps farmers and agricultural advisors take preventive action before damage spreads.
+                    Multi-month advance risk indicators enable timely preventative crop protection and resource planning.
                 </p>
             </div>
         </div>
@@ -475,10 +459,10 @@ st.markdown(
     <div class="model-cards-grid">
         <div class="model-card">
             <div>
-                <span class="model-badge">Time-Tested Method</span>
+                <span class="model-badge">Econometric</span>
                 <div class="model-card-title">ARIMA &amp; SARIMA</div>
                 <div class="model-card-desc">
-                    Captures past patterns and 12-month annual seasonality, reflecting India's Kharif (monsoon) and Rabi (winter) crop cycles.
+                    Captures autoregressive lag dynamics, trend integration, and 12-month annual seasonality.
                 </div>
             </div>
             <div class="model-stat-row">
@@ -488,10 +472,10 @@ st.markdown(
         </div>
         <div class="model-card">
             <div>
-                <span class="model-badge" style="background: rgba(196, 166, 106, 0.15); color: #8C6F2D;">Weather-Informed</span>
+                <span class="model-badge" style="background: rgba(196, 166, 106, 0.15); color: #8C6F2D;">Exogenous Climate</span>
                 <div class="model-card-title">SARIMAX &amp; ARIMAX</div>
                 <div class="model-card-desc">
-                    Includes past temperature, rainfall, and humidity readings to see how upcoming weather may influence disease reports.
+                    Extends seasonal ARIMA with lagged NASA satellite temperature, rainfall, and humidity.
                 </div>
             </div>
             <div class="model-stat-row">
@@ -501,10 +485,10 @@ st.markdown(
         </div>
         <div class="model-card">
             <div>
-                <span class="model-badge">Adaptive Smoothing</span>
+                <span class="model-badge">Exponential Smoothing</span>
                 <div class="model-card-title">Holt-Winters</div>
                 <div class="model-card-desc">
-                    Exponential smoothing with trend and seasonality, adapting quickly to recent shifts in disease reports.
+                    Triple exponential smoothing with adaptive level, trend, and seasonal factors.
                 </div>
             </div>
             <div class="model-stat-row">
@@ -514,10 +498,10 @@ st.markdown(
         </div>
         <div class="model-card">
             <div>
-                <span class="model-badge" style="background: rgba(37, 99, 235, 0.12); color: #2563EB;">Modern Decomposition</span>
+                <span class="model-badge" style="background: rgba(37, 99, 235, 0.12); color: #2563EB;">Decomposition</span>
                 <div class="model-card-title">Meta Prophet</div>
                 <div class="model-card-desc">
-                    Separates overall trend, yearly seasonal patterns, and weather factors into intuitive, individual components.
+                    Additive model decomposing trend changepoints, annual seasonality, and climate regressors.
                 </div>
             </div>
             <div class="model-stat-row">
@@ -530,7 +514,7 @@ st.markdown(
                 <span class="model-badge" style="background: rgba(16, 44, 38, 0.1); color: #102C26;">Machine Learning</span>
                 <div class="model-card-title">Gradient Boosting &amp; Trees</div>
                 <div class="model-card-desc">
-                    Modern decision-tree algorithms learning non-linear relationships between calendar months, weather, and reports.
+                    Decision-tree ensembles modeling non-linear interactions across lagged weather factors.
                 </div>
             </div>
             <div class="model-stat-row">
@@ -540,10 +524,10 @@ st.markdown(
         </div>
         <div class="model-card">
             <div>
-                <span class="model-badge">Simple Benchmark</span>
+                <span class="model-badge">Baseline Benchmark</span>
                 <div class="model-card-title">Seasonal Naive</div>
                 <div class="model-card-desc">
-                    A simple baseline that assumes disease reports this year will equal the same month last year.
+                    Academic baseline carrying forward observations from the same month of the previous year.
                 </div>
             </div>
             <div class="model-stat-row">
@@ -562,101 +546,58 @@ st.markdown(
 st.markdown('<div id="research-preview"></div>', unsafe_allow_html=True)
 st.markdown("---")
 
-col_prev_left, col_prev_right = st.columns([1.1, 0.9])
-
-with col_prev_left:
-    st.markdown(
-        """
-        <div class="hero-eyebrow" style="margin-bottom: 6px;">Recorded History</div>
-        <h2 style="font-size: 2.1rem; margin-bottom: 12px;">Recorded Disease Reports in India</h2>
-        <p style="color: #5A665D; font-size: 0.92rem; line-height: 1.6;">
-            Recorded reports over the past 10 years for <b>Rice Blast</b> and <b>Brown Spot of Rice</b>.
-            Notice how reports rise during the Kharif monsoon and harvest season (August–November).
-        </p>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    # Plot miniature multi-pathogen trend chart from real processed data
-    df_rice_blast = load_monthly_series("pyricularia_oryzae")
-    df_brown_spot = load_monthly_series("bipolaris_oryzae")
-
-    fig_preview = go.Figure()
-    if df_rice_blast is not None and not df_rice_blast.empty:
-        fig_preview.add_trace(
-            go.Scatter(
-                x=df_rice_blast["date"],
-                y=df_rice_blast["documented_occurrence_count"],
-                name="Rice Blast",
-                line=dict(color="#047857", width=2.5),
-                mode="lines+markers",
-                marker=dict(size=4),
-            )
-        )
-    if df_brown_spot is not None and not df_brown_spot.empty:
-        fig_preview.add_trace(
-            go.Scatter(
-                x=df_brown_spot["date"],
-                y=df_brown_spot["documented_occurrence_count"],
-                name="Brown Spot of Rice",
-                line=dict(color="#C4A66A", width=2),
-                mode="lines+markers",
-                marker=dict(size=4),
-            )
-        )
-
-    format_plotly_figure(
-        fig_preview,
-        title="Monthly Recorded Disease Reports (2015–2025)",
-        height=320,
-    )
-    st.plotly_chart(fig_preview, use_container_width=True)
-
-    render_graph_explanation_card(
-        what_it_shows="Monthly recorded disease occurrences for Rice Blast and Brown Spot of Rice in India from 2015 to 2025.",
-        key_observation="Rice Blast reports consistently peak between August and October during the wet Kharif monsoon, while dry summer months show near-zero activity.",
-        why_it_matters="Identifying these recurrent seasonal windows gives agricultural extension officers and farmers 1 to 2 months of advance warning before peak pathogen pressure.",
-        technical_details="Zero-bounded continuous monthly timeline aggregated from 3,076 GBIF accessions with strict temporal deduplication."
-    )
-
-with col_prev_right:
-    st.markdown(
-        """
-        <div style="background: #FFFEFA; border: 1px solid rgba(82, 122, 80, 0.16); border-radius: 18px; padding: 26px; box-shadow: 0 4px 20px rgba(16, 44, 38, 0.05); margin-top: 10px;">
-            <div style="font-family: 'Fraunces', serif; font-size: 1.25rem; font-weight: 600; color: #102C26; margin-bottom: 12px;">
-                Scientific Integrity Safeguards
-            </div>
-            <div style="font-size: 0.85rem; color: #5A665D; line-height: 1.6; margin-bottom: 16px;">
-                <b style="color: #102C26;">1. Honest Records:</b> Months with no search or recording activity are marked as missing rather than assumed to be zero.
-            </div>
-            <div style="font-size: 0.85rem; color: #5A665D; line-height: 1.6; margin-bottom: 16px;">
-                <b style="color: #102C26;">2. No Future Cheating:</b> Weather information uses only past and current values, never future weather.
-            </div>
-            <div style="font-size: 0.85rem; color: #5A665D; line-height: 1.6; margin-bottom: 16px;">
-                <b style="color: #102C26;">3. Weather Creates Conditions:</b> Favorable weather creates the right environment, but plants must also be vulnerable for a disease to occur.
-            </div>
-            <div style="font-size: 0.85rem; color: #5A665D; line-height: 1.6;">
-                <b style="color: #102C26;">4. Real-World Findings:</b> The absence of Wheat Stem Rust reports post-2015 reflects successful rust-resistant wheat varieties grown in India.
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-# Page Conclusion
 st.markdown(
-    f"""
-    <div class="verdant-card" style="background: #F6F4EC; border: 1px solid rgba(82, 122, 80, 0.2); border-radius: 14px; padding: 20px 24px; margin-top: 28px; margin-bottom: 24px;">
-        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-            {icon_target(18, "#183D32")}
-            <h4 style="margin: 0; color: #183D32; font-size: 1.05rem;">Overview Summary</h4>
-        </div>
-        <p style="margin: 0; font-size: 0.88rem; color: #5A665D; line-height: 1.6;">
-            Verdant Intelligence establishes an end-to-end econometric forecasting pipeline for Indian agricultural diseases. By combining 11 years of verified GBIF occurrences with NASA POWER meteorological records, the platform benchmarks 11 forecasting models—demonstrating that classical statistical models (ARIMA 1,1,1) achieve the highest forecasting accuracy for proactive crop protection.
+    """
+    <div style="text-align: center; max-width: 720px; margin: 36px auto 16px auto;">
+        <div class="hero-eyebrow" style="margin-bottom: 6px;">Surveillance Timeline</div>
+        <h2 style="font-size: 2.1rem; margin-bottom: 8px;">Recorded Disease Reports in India</h2>
+        <p style="color: #5A665D; font-size: 0.95rem; line-height: 1.5;">
+            Monthly historical reports for Rice Blast and Brown Spot of Rice showing Kharif monsoon surges.
         </p>
     </div>
     """,
     unsafe_allow_html=True,
+)
+
+# Plot miniature multi-pathogen trend chart from real processed data
+df_rice_blast = load_monthly_series("pyricularia_oryzae")
+df_brown_spot = load_monthly_series("bipolaris_oryzae")
+
+fig_preview = go.Figure()
+if df_rice_blast is not None and not df_rice_blast.empty:
+    fig_preview.add_trace(
+        go.Scatter(
+            x=df_rice_blast["date"],
+            y=df_rice_blast["documented_occurrence_count"],
+            name="Rice Blast",
+            line=dict(color="#047857", width=2.5),
+            mode="lines+markers",
+            marker=dict(size=4),
+        )
+    )
+if df_brown_spot is not None and not df_brown_spot.empty:
+    fig_preview.add_trace(
+        go.Scatter(
+            x=df_brown_spot["date"],
+            y=df_brown_spot["documented_occurrence_count"],
+            name="Brown Spot of Rice",
+            line=dict(color="#C4A66A", width=2),
+            mode="lines+markers",
+            marker=dict(size=4),
+        )
+    )
+
+format_plotly_figure(
+    fig_preview,
+    title="Monthly Recorded Disease Reports (2015–2025)",
+    height=340,
+)
+st.plotly_chart(fig_preview, use_container_width=True)
+
+render_graph_explanation_card(
+    what_it_shows="Monthly recorded occurrences for Rice Blast and Brown Spot of Rice from 2015 to 2025.",
+    key_observation="Rice Blast reports consistently peak between August and October during the wet Kharif monsoon.",
+    why_it_matters="Identifies recurrent seasonal outbreak windows 1 to 2 months in advance.",
 )
 
 # ==============================================================================

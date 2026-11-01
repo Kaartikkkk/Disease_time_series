@@ -80,10 +80,7 @@ tab_sources, tab_prep, tab_methods, tab_eval, tab_downloads = st.tabs([
 # ----------------- Tab 1: Data Sources & Coverage -----------------
 with tab_sources:
     st.subheader("Public Data Sources & Field Surveillance")
-    st.markdown(
-        "All disease occurrence and meteorological telemetry in Verdant Intelligence comes from established, open-access "
-        "scientific and intergovernmental institutions. We do not use synthetic or simulated disease records."
-    )
+    st.markdown("All occurrence records and satellite meteorological telemetry originate from verified open-access institutions.")
 
     c1, c2, c3 = st.columns(3)
     with c1:
@@ -98,11 +95,10 @@ with tab_sources:
                     Global Biodiversity Facility · Open Data
                 </div>
                 <p style="font-size: 0.88rem; color: #404B43; line-height: 1.5; margin-bottom: 12px;">
-                    Verified research plant pathogen records collected by agricultural universities, field scientists, and botanical herbaria across India.
+                    Verified research plant pathogen records collected by agricultural universities and botanical herbaria.
                 </p>
                 <div style="font-size: 0.8rem; color: #5A665D; border-top: 1px solid rgba(82,122,80,0.12); padding-top: 8px;">
-                    <strong>Source:</strong> Global Biodiversity Information Facility<br>
-                    <strong>Region:</strong> All Indian States (2015–2026)<br>
+                    <strong>Source:</strong> GBIF India (2015–2026)<br>
                     <strong>Verification:</strong> Taxonomically matched specimens
                 </div>
             </div>
@@ -122,12 +118,11 @@ with tab_sources:
                     NASA POWER Climate Service
                 </div>
                 <p style="font-size: 0.88rem; color: #404B43; line-height: 1.5; margin-bottom: 12px;">
-                    Continuous monthly temperature, rainfall, and humidity satellite observations aligned with India's agricultural cropping regions.
+                    Monthly temperature, precipitation, and relative humidity aligned with crop zones.
                 </p>
                 <div style="font-size: 0.8rem; color: #5A665D; border-top: 1px solid rgba(82,122,80,0.12); padding-top: 8px;">
-                    <strong>Source:</strong> NASA Langley Research Center<br>
-                    <strong>Features:</strong> Temperature, Rainfall, Relative Humidity<br>
-                    <strong>Continuity:</strong> 132 uninterrupted months
+                    <strong>Source:</strong> NASA Langley Center<br>
+                    <strong>Features:</strong> Temp, Rain, Relative Humidity (132 continuous months)
                 </div>
             </div>
             """,
@@ -146,12 +141,11 @@ with tab_sources:
                     European &amp; Med. Plant Protection
                 </div>
                 <p style="font-size: 0.88rem; color: #404B43; line-height: 1.5; margin-bottom: 12px;">
-                    Official quarantine lists and regional pest surveillance records used to confirm host crops and historical disease occurrence in India.
+                    Quarantine lists and surveillance alerts used to confirm host associations and outbreak dates.
                 </p>
                 <div style="font-size: 0.8rem; color: #5A665D; border-top: 1px solid rgba(82,122,80,0.12); padding-top: 8px;">
                     <strong>Role:</strong> Qualitative ground-truth confirmation<br>
-                    <strong>Distinction:</strong> Outbreak date vs publication date<br>
-                    <strong>Taxa Covered:</strong> Major Indian food and cash crops
+                    <strong>Coverage:</strong> Major Indian staple and cash crops
                 </div>
             </div>
             """,
@@ -188,10 +182,10 @@ with tab_prep:
                     <h4 style="margin: 0; color: #102C26; font-size: 1.1rem;">Preprocessing Pipeline</h4>
                 </div>
                 <ul style="font-size: 0.86rem; color: #404B43; line-height: 1.6; padding-left: 20px; margin: 0;">
-                    <li><strong>Temporal Aggregation:</strong> Accession timestamps parsed via ISO 8601 and aggregated to calendar Month-Start (<code>MS</code>) frequency.</li>
-                    <li><strong>Deduplication:</strong> Cryptographic hashing across <code>gbifID</code>, temporal date, and geographic coordinates eliminates redundant submissions.</li>
-                    <li><strong>Spatial Bounding:</strong> Coordinates filtered strictly within India's territorial boundaries (6.0°N–37.5°N, 68.0°E–97.5°E).</li>
-                    <li><strong>Outlier Fences:</strong> Non-parametric Tukey fences ($Q_3 + 1.5 \\times \\text{{IQR}}$) identify anomalous field testing surges.</li>
+                    <li><strong>Temporal Aggregation:</strong> Parsed via ISO 8601 to calendar Month-Start (<code>MS</code>) frequency.</li>
+                    <li><strong>Deduplication:</strong> Cryptographic hashing across ID, timestamp, and coordinates eliminates duplicates.</li>
+                    <li><strong>Spatial Bounding:</strong> Filtered strictly within India (6.0°N–37.5°N, 68.0°E–97.5°E).</li>
+                    <li><strong>Outlier Fences:</strong> Tukey fences ($Q_3 + 1.5 \\times \\text{{IQR}}$) identify anomalous sampling surges.</li>
                 </ul>
             </div>
             """,
@@ -204,13 +198,13 @@ with tab_prep:
             <div class="verdant-card" style="height: 100%;">
                 <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
                     {icon_shield(20, "#527A50")}
-                    <h4 style="margin: 0; color: #102C26; font-size: 1.1rem;">Missing-Value Epistemology</h4>
+                    <h4 style="margin: 0; color: #102C26; font-size: 1.1rem;">Missing-Value Policy</h4>
                 </div>
                 <ul style="font-size: 0.86rem; color: #404B43; line-height: 1.6; padding-left: 20px; margin: 0;">
-                    <li><strong>No Artificial Zeroes:</strong> Gaps during unmonitored intervals are flagged with <code>is_missing = True</code> rather than assumed to be zero.</li>
-                    <li><strong>Preserving Off-Season Reality:</strong> Dry summer periods naturally feature near-zero disease reports due to lack of host canopy foliage.</li>
-                    <li><strong>Bias Prevention:</strong> Explicit missingness tracking prevents downward forecast bias and avoids skewing out-of-sample error metrics.</li>
-                    <li><strong>Continuous Regularity:</strong> The timeline maintains an uninterrupted monthly sequence for econometric stability.</li>
+                    <li><strong>Explicit Tracking:</strong> Unmonitored intervals flagged with <code>is_missing = True</code> rather than assumed zero.</li>
+                    <li><strong>Seasonal Reality:</strong> Off-season dry months naturally feature low reports due to absent foliage.</li>
+                    <li><strong>Bias Prevention:</strong> Explicit tracking prevents downward bias in out-of-sample metrics.</li>
+                    <li><strong>Index Regularity:</strong> Maintains continuous monthly sequence across the 132-month horizon.</li>
                 </ul>
             </div>
             """,
@@ -220,60 +214,16 @@ with tab_prep:
 # ----------------- Tab 3: Model Methodology -----------------
 with tab_methods:
     st.subheader("Model Architectures & Mathematical Foundations")
-    st.markdown(
-        "Verdant Intelligence implements a multi-model forecasting suite, spanning classical statistical econometrics, "
-        "exponential smoothing, and machine learning regressors:"
-    )
-
-    models_method_data = [
-        {
-            "name": "ARIMA(1, 1, 1)",
-            "family": "Classical Econometrics",
-            "equation": r"\Delta y_t = c + \phi_1 \Delta y_{t-1} + \theta_1 \epsilon_{t-1} + \epsilon_t",
-            "description": "Combines first differencing (d=1) to eliminate stochastic trend with autoregressive (p=1) and moving average (q=1) terms to model persistence.",
-        },
-        {
-            "name": "SARIMA(1, 0, 1)(1, 0, 1)[12]",
-            "family": "Seasonal Econometrics",
-            "equation": r"\Phi(B^{12}) \phi(B) y_t = \Theta(B^{12}) \theta(B) \epsilon_t",
-            "description": "Extends ARIMA with 12-month seasonal polynomials to model recurring annual monsoon Kharif and winter Rabi infection surges.",
-        },
-        {
-            "name": "Holt-Winters Triple Exponential Smoothing",
-            "family": "State Space Smoothing",
-            "equation": r"\hat{y}_{t+h} = (\ell_t + h b_t) + s_{t+h-m}",
-            "description": "Recursive updating of level (alpha), trend (beta), and additive seasonal factors (gamma) with 12-month periodicity.",
-        },
-        {
-            "name": "Seasonal Naive (Benchmark Baseline)",
-            "family": "Deterministic Benchmark",
-            "equation": r"\hat{y}_{t+h} = y_{t+h-12}",
-            "description": "Mandatory academic benchmark carrying forward last year's same-month observation; any viable model must beat this baseline.",
-        },
-        {
-            "name": "ARIMAX / SARIMAX with Lagged Weather",
-            "family": "Econometric Exogenous",
-            "equation": r"y_t = \beta_1 \text{Temp}_{t-1} + \beta_2 \text{Rain}_{t-1} + \beta_3 \text{RH}_{t-1} + \eta_t",
-            "description": "Incorporates NASA POWER satellite agrometeorology with strictly lagged predictors (t-1) to avoid lookahead data leakage.",
-        },
-    ]
-
-    for m in models_method_data:
-        st.markdown(
-            f"""
-            <div style="background: #FFFEFA; border: 1px solid rgba(82, 122, 80, 0.2); border-left: 4px solid #527A50; border-radius: 8px; padding: 14px 18px; margin-bottom: 14px;">
-                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
-                    <div style="font-family: 'Fraunces', serif; font-size: 1.15rem; color: #102C26; font-weight: 600;">{m['name']}</div>
-                    <span style="font-size: 0.75rem; color: #527A50; font-weight: 600; text-transform: uppercase;">{m['family']}</span>
-                </div>
-                <div style="font-size: 0.85rem; color: #404B43; margin-bottom: 6px;">{m['description']}</div>
-                <div style="background: rgba(16, 44, 38, 0.04); border-radius: 4px; padding: 6px 12px; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #183D32;">
-                    Mathematical Form: {m['equation']}
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+    
+    methods_df = pd.DataFrame([
+        {"Model": "ARIMA(1,1,1)", "Family": "Classical Econometrics", "Formulation": "d=1 differencing + AR(1) + MA(1)", "Primary Role": "Eliminates stochastic drift; models monthly persistence."},
+        {"Model": "SARIMA(1,0,1)(1,0,1)[12]", "Family": "Seasonal Econometrics", "Formulation": "ARIMA + 12-month seasonal polynomial", "Primary Role": "Captures annual Kharif monsoon and Rabi winter surges."},
+        {"Model": "Holt-Winters", "Family": "Exponential Smoothing", "Formulation": "Level (alpha) + Trend (beta) + Additive Season (gamma)", "Primary Role": "Adaptive exponential smoothing responding to recent shifts."},
+        {"Model": "ARIMAX / SARIMAX", "Family": "Exogenous Econometrics", "Formulation": "SARIMA + Lagged (t-1) Temp, Rain, RH", "Primary Role": "Integrates satellite weather without lookahead data leakage."},
+        {"Model": "Seasonal Naive", "Family": "Deterministic Benchmark", "Formulation": "y(t+h) = y(t+h-12)", "Primary Role": "Academic baseline carrying forward last year's same-month value."},
+        {"Model": "Random Forest / GBDT", "Family": "Machine Learning Ensemble", "Formulation": "Ensemble of orthogonal decision splits", "Primary Role": "Models non-linear thresholds in humidity and temperature lags."},
+    ])
+    st.dataframe(methods_df, use_container_width=True, hide_index=True)
 
 # ----------------- Tab 4: Evaluation & Responsible Use -----------------
 with tab_eval:
@@ -330,26 +280,26 @@ with tab_eval:
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="verdant-card" style="border-left: 4px solid #102C26;">
                 <h4 style="margin: 0 0 4px 0; color: #102C26; font-size: 0.98rem;">1. Documented Reports vs. Total Acreage</h4>
-                <p style="font-size: 0.82rem; color: #404B43; line-height: 1.5; margin: 0;">
-                    Numbers represent documented research herbaria and surveillance accessions, not an absolute census of infected farm acreage.
+                <p style="font-size: 0.82rem; color: #404B43; line-height: 1.4; margin: 0;">
+                    Counts reflect verified research accessions, not an absolute census of affected farm acreage.
                 </p>
             </div>
             <div class="verdant-card" style="border-left: 4px solid #2563EB;">
                 <h4 style="margin: 0 0 4px 0; color: #102C26; font-size: 0.98rem;">2. Weather Conditions vs. Infection</h4>
-                <p style="font-size: 0.82rem; color: #404B43; line-height: 1.5; margin: 0;">
-                    Favorable micro-climates create permissive incubation conditions, but actual disease requires susceptible host crop phenology and physical spore presence.
+                <p style="font-size: 0.82rem; color: #404B43; line-height: 1.4; margin: 0;">
+                    Permissive weather enables pathogen growth, but active disease requires susceptible crop phenology.
                 </p>
             </div>
             <div class="verdant-card" style="border-left: 4px solid #527A50;">
-                <h4 style="margin: 0 0 4px 0; color: #102C26; font-size: 0.98rem;">3. Real-World Disease Control</h4>
-                <p style="font-size: 0.82rem; color: #404B43; line-height: 1.5; margin: 0;">
-                    Zero post-2015 reports for Wheat Stem Rust reflect successful widespread adoption of ICAR rust-resistant cultivars across India.
+                <h4 style="margin: 0 0 4px 0; color: #102C26; font-size: 0.98rem;">3. Cultivar Resistance Impact</h4>
+                <p style="font-size: 0.82rem; color: #404B43; line-height: 1.4; margin: 0;">
+                    Zero post-2015 reports for Wheat Stem Rust reflect successful nationwide adoption of resistant cultivars.
                 </p>
             </div>
             <div class="verdant-card" style="border-left: 4px solid #C4A66A;">
                 <h4 style="margin: 0 0 4px 0; color: #102C26; font-size: 0.98rem;">4. Predictive Uncertainty</h4>
-                <p style="font-size: 0.82rem; color: #404B43; line-height: 1.5; margin: 0;">
-                    Forecasts convey seasonal risk probabilities with nested 80%/95% confidence bands rather than single-number guarantees.
+                <p style="font-size: 0.82rem; color: #404B43; line-height: 1.4; margin: 0;">
+                    Forecasts provide seasonal risk probabilities with 80%/95% confidence intervals, not deterministic guarantees.
                 </p>
             </div>
         </div>

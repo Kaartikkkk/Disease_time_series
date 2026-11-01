@@ -160,9 +160,25 @@ with st.container():
     if HAS_PROPHET:
         available_models.append("Meta Prophet")
 
+    RECOMMENDED_MODELS = {
+        "pyricularia_oryzae": "ARIMA(1,1,1)",
+        "bipolaris_oryzae": "Seasonal Naive (Baseline)",
+        "fusarium_oxysporum": "Holt-Winters Exponential Smoothing",
+        "ralstonia_solanacearum": "Hist Gradient Boosting (Autoregressive)",
+        "rhizoctonia_solani": "Holt-Winters Exponential Smoothing",
+        "macrophomina_phaseolina": "ARIMA(1,1,1)",
+        "alternaria_solani": "ARIMA(1,1,1)",
+        "xanthomonas_oryzae": "SARIMAX (Seasonal + Weather Regressors)",
+        "puccinia_striiformis": "Seasonal Naive (Baseline)",
+        "phytophthora_infestans": "Hist Gradient Boosting (Autoregressive)",
+    }
+    rec_model = RECOMMENDED_MODELS.get(selected_slug, "SARIMA(1,0,1)(1,0,1)[12]")
+    default_model_idx = available_models.index(rec_model) if rec_model in available_models else 0
+
     def format_model_choice(m: str) -> str:
+        rec_tag = " [Top Validated]" if m == rec_model else ""
         if adv_mode:
-            return m
+            return f"{m}{rec_tag}"
         friendly_names = {
             "SARIMA(1,0,1)(1,0,1)[12]": "SARIMA (Seasonal Pattern)",
             "SARIMAX (Seasonal + Weather Regressors)": "SARIMAX (Seasonal + Weather Factors)",
@@ -172,15 +188,17 @@ with st.container():
             "Hist Gradient Boosting (Autoregressive)": "Machine Learning (Gradient Boosting)",
             "Meta Prophet": "Prophet (Trend & Seasonality)",
         }
-        return friendly_names.get(m, m)
+        base_name = friendly_names.get(m, m)
+        return f"{base_name}{rec_tag}"
 
     with cfg_c4:
         chosen_model = st.selectbox(
             "Prediction Method" if not adv_mode else "Forecasting Architecture",
             options=available_models,
             format_func=format_model_choice,
-            index=0,
-            key="fc_model",
+            index=default_model_idx,
+            key=f"fc_model_{selected_slug}",
+            help=f"Top validated method for {pathogen_dict.get(selected_slug, 'this disease')} based on historical holdout testing is {format_model_choice(rec_model)}.",
         )
 
     with cfg_c5:
@@ -299,30 +317,31 @@ df_forecast_out = pd.DataFrame({
     "baseline_seasonal_naive": np.round(p_baseline, 2),
 })
 
+# Peak forecast detection across horizon
+peak_info = identify_peak_forecast_month(df_forecast_out, pathogen_name=pathogen_dict[selected_slug])
+peak_text = peak_info.get("simple_narrative") if not adv_mode else peak_info.get("narrative")
+
 # ==============================================================================
 # C. FORECAST SUMMARY CARDS (4 KPIS)
 # ==============================================================================
 latest_obs_val = float(df_monthly[target_col].dropna().iloc[-1])
-endpoint_forecast = float(df_forecast_out["forecast"].iloc[-1])
-
-cal_baselines = compute_calendar_month_baselines(df_monthly, target_col=target_col)
-endpoint_cal_m = future_dates[-1].month
-endpoint_hist_mean = cal_baselines.get(endpoint_cal_m, {}).get("mean", df_monthly[target_col].mean())
-trend_diff = endpoint_forecast - endpoint_hist_mean
-trend_sign = "+" if trend_diff >= 0 else ""
+mean_forecast = float(np.mean(df_forecast_out["forecast"]))
+total_forecast = float(np.sum(df_forecast_out["forecast"]))
 mean_ci_width = float(np.mean(df_forecast_out["upper_80"] - df_forecast_out["lower_80"]))
 
 card1_title = "Latest Recorded Reports" if not adv_mode else "Latest Observed Count"
-card1_sub = f"Recorded in {last_obs_date.strftime('%b %Y')}" if not adv_mode else f"Deposited in {last_obs_date.strftime('%b %Y')}"
+card1_sub = f"Recorded in {last_obs_date.strftime('%b %Y')} · Annual avg: {df_monthly[target_col].mean():.1f}/mo"
 
-card2_title = "Predicted (End of Period)" if not adv_mode else "Horizon Endpoint Forecast"
-card2_sub = f"Predicted for {future_dates[-1].strftime('%b %Y')}"
+card2_title = "Peak Forecast Month" if not adv_mode else "Horizon Peak Activity"
+card2_val = f"{peak_info.get('peak_value', 0.0):.1f} reports"
+card2_sub = f"Expected in {peak_info.get('peak_month', 'N/A')}"
 
-card3_title = "Trend vs Usual Season" if not adv_mode else "Trend vs Historical Season"
-card3_sub = f"vs {future_dates[-1].strftime('%B')} average ({endpoint_hist_mean:.1f})"
+card3_title = "Average Monthly Forecast" if not adv_mode else "Mean Monthly Forecast"
+card3_val = f"~{mean_forecast:.1f} / mo"
+card3_sub = f"Total: {total_forecast:.1f} reports ({horizon_months} mos)"
 
 card4_title = "Prediction Uncertainty" if not adv_mode else "Uncertainty Spread (80% CI)"
-card4_sub = "Likely deviation from prediction" if not adv_mode else "Mean prediction interval half-width"
+card4_sub = "80% prediction interval" if not adv_mode else "Mean prediction interval half-width"
 
 st.markdown(
     f"""
@@ -336,13 +355,13 @@ st.markdown(
         <div class="research-metric-card">
             <div class="metric-icon-wrap">{icon_forecast(20, "#183D32")}</div>
             <div class="metric-label-text">{card2_title}</div>
-            <div class="metric-value-text">{endpoint_forecast:.1f} reports</div>
+            <div class="metric-value-text">{card2_val}</div>
             <div class="metric-note-text">{card2_sub}</div>
         </div>
         <div class="research-metric-card">
             <div class="metric-icon-wrap">{icon_model_compare(20, "#C4A66A")}</div>
             <div class="metric-label-text">{card3_title}</div>
-            <div class="metric-value-text">{trend_sign}{trend_diff:.1f}</div>
+            <div class="metric-value-text">{card3_val}</div>
             <div class="metric-note-text">{card3_sub}</div>
         </div>
         <div class="research-metric-card">
@@ -373,8 +392,6 @@ st.markdown(
 )
 
 # 1. Peak Forecast Month Callout Card
-peak_info = identify_peak_forecast_month(df_forecast_out, pathogen_name=pathogen_dict[selected_slug])
-peak_text = peak_info.get("simple_narrative") if not adv_mode else peak_info.get("narrative")
 
 st.markdown(
     f"""
@@ -465,12 +482,6 @@ for i, outlook in enumerate(monthly_outlooks):
             """,
             unsafe_allow_html=True,
         )
-
-# What Does This Mean card for Monthly Outlook
-render_what_does_this_mean(
-    simple_text="This section shows what the model predicts for each upcoming month and highlights whether disease activity is expected to rise, stay steady, or decline.",
-    technical_details="Monthly values are estimated by fitting autoregressive and seasonal lags. The uncertainty range reflects natural variability in past data.",
-)
 
 # 3. Month-by-Month Forecast Summary Table & Export
 st.markdown("<div style='margin-top: 14px; margin-bottom: 6px; font-size: 1.1rem; font-family: Fraunces, serif; color: #102C26;'>Month-by-Month Forecast Summary</div>", unsafe_allow_html=True)
@@ -670,10 +681,9 @@ fig_f.update_layout(
 st.plotly_chart(fig_f, use_container_width=True)
 
 render_graph_explanation_card(
-    what_it_shows="This chart projects future disease reports (dashed line with diamond markers) alongside past observations (solid line), seasonal benchmark (dotted gold), and nested 80%/95% prediction intervals.",
-    key_observation=f"Predictions follow historical seasonal rhythms, reaching peak activity around {peak_info.get('peak_month', 'upcoming months')} (~{peak_info.get('peak_value', 0.0):.1f} reports) before tapering during dry intervals.",
-    why_it_matters="Visualizing the multi-month trajectory with nested uncertainty intervals enables farm managers and extension officers to time preventative actions weeks in advance without assuming artificial single-number certainty.",
-    technical_details="Forward projections with non-negative lower bounds (max(0, y_hat)) and nested prediction intervals: 80% CI (Z=1.28) and 95% CI (Z=1.96)."
+    what_it_shows="Future disease reports (dashed line) alongside past observations, seasonal benchmark, and 80%/95% prediction intervals.",
+    key_observation=f"Predictions follow seasonal rhythms, reaching peak activity around {peak_info.get('peak_month', 'upcoming months')} (~{peak_info.get('peak_value', 0.0):.1f} reports).",
+    why_it_matters="Multi-month uncertainty intervals allow timing preventive actions without artificial single-number certainty.",
 )
 
 # Dedicated Section 9 Forecast Summary Card
@@ -687,107 +697,22 @@ st.markdown(
             <h3 style="margin: 0; font-size: 1.25rem; color: #102C26;">FORECAST SUMMARY</h3>
         </div>
         <ul style="font-size: 0.88rem; color: #202822; line-height: 1.6; margin: 0; padding-left: 20px;">
-            <li><strong>What is expected in upcoming months?</strong> Disease reports are projected to follow historical seasonal patterns, averaging ~{float(np.mean(p_fut)):.1f} reports per month across the {horizon_months}-month horizon.</li>
-            <li><strong>Which month has the highest predicted activity?</strong> Peak activity is expected in <strong>{peak_info.get('peak_month', 'N/A')}</strong> (~{peak_info.get('peak_value', 0.0):.1f} reports, likely range: {peak_info.get('lower_80', 0.0):.1f} to {peak_info.get('upper_80', 0.0):.1f} reports).</li>
-            <li><strong>Is the predicted activity increasing, decreasing or stable?</strong> Overall trend is <strong>{trend_label}</strong> ({trend_sign}{trend_diff:.1f} reports compared to historical seasonal baseline).</li>
-            <li><strong>How uncertain are the predictions?</strong> The 80% likely prediction interval spans ±{mean_ci_width / 2.0:.1f} reports around the forecast mean, reflecting natural environmental variability.</li>
-            <li><strong>What should agricultural stakeholders monitor?</strong> Monitor canopy leaf wetness and rainfall surges 3 to 4 weeks prior to {peak_info.get('peak_month', 'peak month')}, and verify local field conditions rather than treating forecasts as absolute outbreak guarantees.</li>
+            <li><strong>Projected Average:</strong> ~{float(np.mean(p_fut)):.1f} reports/month across the {horizon_months}-month horizon.</li>
+            <li><strong>Peak Activity Month:</strong> <strong>{peak_info.get('peak_month', 'N/A')}</strong> (~{peak_info.get('peak_value', 0.0):.1f} reports, 80% range: {peak_info.get('lower_80', 0.0):.1f} to {peak_info.get('upper_80', 0.0):.1f}).</li>
+            <li><strong>Activity Trend:</strong> <strong>{trend_label}</strong> ({trend_sign}{trend_diff:.1f} reports vs historical seasonal baseline).</li>
+            <li><strong>Prediction Uncertainty:</strong> ±{mean_ci_width / 2.0:.1f} reports (80% interval).</li>
+            <li><strong>Action:</strong> Prioritize scouting 3 to 4 weeks prior to {peak_info.get('peak_month', 'peak month')}.</li>
         </ul>
-        <div style="font-size: 0.76rem; color: #5A665D; margin-top: 10px; border-top: 1px dashed rgba(82, 122, 80, 0.2); padding-top: 8px;">
-            <em>Notice: Predictions represent documented scientific occurrence reports deposited in public repositories, not the total census of infected field acreage. Forecasts indicate seasonal risk windows, not disease certainties.</em>
-        </div>
     </div>
     """,
     unsafe_allow_html=True,
 )
 
-# ==============================================================================
-# F. WEATHER CONTEXT & FORECAST INTERPRETATION PANEL
-# ==============================================================================
-col_w, col_i = st.columns([1, 1.2])
+st.markdown("<br>", unsafe_allow_html=True)
+col_nav1, col_nav2 = st.columns(2)
+with col_nav1:
+    st.page_link("pages/3_Model_Comparison.py", label="← Back to Model Comparison", use_container_width=True)
+with col_nav2:
+    st.page_link("pages/5_Data_and_Methodology.py", label="View Data & Methodology →", use_container_width=True)
 
-with col_w:
-    st.markdown(
-        f"""
-        <div class="verdant-card" style="height: 100%;">
-            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
-                {icon_weather(22, "#527A50")}
-                <h3 style="margin: 0; font-size: 1.15rem; color: #102C26;">{"Weather Context & Seasonal Climate" if not adv_mode else "Weather Context & Climatology"}</h3>
-            </div>
-            <p style="font-size: 0.86rem; color: #404B43; line-height: 1.5; margin-bottom: 12px;">
-                {"Past weather observations up to " + last_obs_date.strftime('%B %Y') + " come from NASA satellite telemetry. Future months assume typical 10-year average weather patterns for each season." if not adv_mode else "Observed historical weather variables up to " + last_obs_date.strftime('%B %Y') + " originate from NASA POWER. Forward forecasts beyond observed satellite telemetry assume Baseline Climatology (10-year monthly historical means)."}
-            </p>
-            <div style="background: rgba(16, 44, 38, 0.04); border-left: 3px solid #527A50; padding: 10px 14px; font-size: 0.8rem; color: #183D32; margin-bottom: 12px;">
-                <strong>{"Key Weather Conditions:" if not adv_mode else "Key Permissive Regimes:"}</strong> {"Fungal and bacterial plant diseases often develop faster when humidity exceeds 80% and temperatures stay between 22°C and 30°C." if not adv_mode else "Fungal spore germination peaks when relative humidity exceeds 80% and ambient temperatures range between 22°C–30°C."}
-            </div>
-            <p style="font-size: 0.8rem; color: #5A665D; margin: 0;">
-                {"Note: Favorable weather creates an environment where disease can spread more easily, but timely crop management can prevent damage." if not adv_mode else "Scientific Disclaimer: Weather correlations define physiologically permissive incubation windows, not direct biological causation."}
-            </p>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
 
-with col_i:
-    st.markdown(
-        f"""
-        <div class="verdant-card" style="height: 100%;">
-            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
-                {icon_shield(22, "#527A50")}
-                <h3 style="margin: 0; font-size: 1.15rem; color: #102C26;">{"How to Understand This Forecast" if not adv_mode else "How to Interpret This Forecast"}</h3>
-            </div>
-            <ul style="font-size: 0.85rem; color: #404B43; line-height: 1.55; padding-left: 18px; margin-bottom: 10px;">
-                <li><strong>{"Recorded Reports, Not Infected Acres:" if not adv_mode else "Modeled Target:"}</strong> {"These numbers represent documented disease occurrences from research herbaria and public surveillance databases, not the total number of affected fields or farms." if not adv_mode else "The series reflects documented occurrence accessions deposited in research herbaria and public surveillance databases, not an absolute acreage census."}</li>
-                <li><strong>{"Predictions Have Natural Uncertainty:" if not adv_mode else "Prediction Intervals:"}</strong> {"Weather and biology vary from year to year. The shaded uncertainty range shows where actual results are expected to fall." if not adv_mode else "The 80% and 95% bands convey uncertainty due to process noise and parameter estimation."}</li>
-                <li><strong>{"Predictions Cannot Be Negative:" if not adv_mode else "Non-Negative Bounding:"}</strong> {"Report counts are mathematically kept at zero or above." if not adv_mode else "Count estimates are mathematically lower-bounded at zero."}</li>
-                <li><strong>{"Seasonal Timing:" if not adv_mode else "Reporting Seasonality:"}</strong> {"Peaks often happen around harvest or rainy months when researchers and extension workers conduct active field testing." if not adv_mode else "Peaks often align with academic field collection campaigns and agricultural university diagnostic submissions during harvest months."}</li>
-            </ul>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-# Operational harvest defense banner
-golden_img_path = ASSETS_DIR / "golden_crop_field.jpg"
-golden_b64 = get_image_base64(golden_img_path)
-if golden_b64:
-    st.markdown(
-        f"""
-        <div class="verdant-card" style="padding: 0; overflow: hidden; margin-top: 24px; margin-bottom: 24px; display: grid; grid-template-columns: 240px 1fr; border: 1px solid rgba(82,122,80,0.18);">
-            <div style="height: 130px; overflow: hidden; position: relative;">
-                <img src="{golden_b64}" style="width: 100%; height: 100%; object-fit: cover;" alt="Crop Protection Advice" />
-                <div style="position: absolute; bottom: 8px; left: 10px; background: rgba(16, 44, 38, 0.85); backdrop-filter: blur(8px); color: #FFF; font-size: 0.65rem; font-weight: 600; padding: 2px 7px; border-radius: 4px; letter-spacing: 0.05em;">
-                    CROP PROTECTION
-                </div>
-            </div>
-            <div style="padding: 14px 20px; display: flex; flex-direction: column; justify-content: center; background: #FFFEFA;">
-                <div style="font-size: 0.72rem; font-weight: 600; text-transform: uppercase; color: #527A50; letter-spacing: 0.05em;">
-                    {"Planning & Prevention Guidance" if not adv_mode else "Operational Preventive Horizon"}
-                </div>
-                <div style="font-family: 'Fraunces', serif; font-size: 1.1rem; color: #102C26; margin: 2px 0;">
-                    {"Field Scouting & Early Advisory" if not adv_mode else "Preventative Spray & Scouting Triggers"}
-                </div>
-                <p style="font-size: 0.82rem; color: #5A665D; line-height: 1.45; margin: 0;">
-                    {"When predicted disease activity rises above normal seasonal levels, farmers and extension officers can plan early field inspections and use approved preventive treatments before crop health is affected." if not adv_mode else "When upper 80% prediction intervals exceed seasonal baselines, extension advisors should recommend prophylactic biocontrols before visible canopy necrosis occurs."}
-                </p>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-# Page Conclusion
-st.markdown(
-    f"""
-    <div class="verdant-card" style="background: #F6F4EC; border: 1px solid rgba(82, 122, 80, 0.2); border-radius: 14px; padding: 20px 24px; margin-top: 14px; margin-bottom: 24px;">
-        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-            {icon_target(18, "#183D32")}
-            <h4 style="margin: 0; color: #183D32; font-size: 1.05rem;">Future Forecasts Conclusion</h4>
-        </div>
-        <p style="margin: 0; font-size: 0.88rem; color: #5A665D; line-height: 1.6;">
-            Future projections across the {horizon_months}-month horizon indicate that {pathogen_dict.get(selected_slug, 'disease')} activity will reach peak incidence in <strong>{peak_info.get('peak_month', 'upcoming months')}</strong> (~{peak_info.get('peak_value', 0.0):.1f} reports). Nested prediction intervals and transparent limitation disclosures ensure forecasts provide reliable early advisory windows for regional agricultural planning without false certainty.
-        </p>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)

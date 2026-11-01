@@ -188,34 +188,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Host crop canopy context banner
-wheat_img_path = ASSETS_DIR / "wheat_canopy_ears.jpg"
-wheat_b64 = get_image_base64(wheat_img_path)
-if wheat_b64:
-    st.markdown(
-        f"""
-        <div class="verdant-card" style="padding: 0; overflow: hidden; margin-top: 18px; margin-bottom: 22px; display: grid; grid-template-columns: 240px 1fr; border: 1px solid rgba(82,122,80,0.18);">
-            <div style="height: 130px; overflow: hidden; position: relative;">
-                <img src="{wheat_b64}" style="width: 100%; height: 100%; object-fit: cover;" alt="Host Crop Foliage" />
-                <div style="position: absolute; bottom: 8px; left: 10px; background: rgba(16, 44, 38, 0.85); backdrop-filter: blur(8px); color: #FFF; font-size: 0.65rem; font-weight: 600; padding: 2px 7px; border-radius: 4px; letter-spacing: 0.05em;">
-                    HOST CANOPY CONTEXT
-                </div>
-            </div>
-            <div style="padding: 14px 20px; display: flex; flex-direction: column; justify-content: center; background: #FFFEFA;">
-                <div style="font-size: 0.72rem; font-weight: 600; text-transform: uppercase; color: #527A50; letter-spacing: 0.05em;">
-                    Host Phenology & Foliar Micro-Climate
-                </div>
-                <div style="font-family: 'Fraunces', serif; font-size: 1.1rem; color: #102C26; margin: 2px 0;">
-                    {host_crop}
-                </div>
-                <p style="font-size: 0.82rem; color: #5A665D; line-height: 1.45; margin: 0;">
-                    Foliar lesions and blights proliferate during active vegetative and heading stages when canopy relative humidity exceeds 80%.
-                </p>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
 
 # ==============================================================================
 # TABS: TIMELINE, SEASONAL CYCLE, LOCATION MAP, DATA TABLE, SUMMARY
@@ -263,10 +235,9 @@ with tab_monthly:
         st.plotly_chart(fig_m, use_container_width=True)
 
         render_graph_explanation_card(
-            what_it_shows="This timeline displays the number of verified disease reports recorded each calendar month alongside a 3-month rolling average trend line.",
-            key_observation="Distinct cyclical surges appear regularly during the Kharif monsoon (July–October) and early Rabi season, while dry summer months exhibit near-zero reporting activity.",
-            why_it_matters="Identifying recurring seasonal peaks helps agronomists anticipate when fungal spores are actively multiplying, enabling preventative spray schedules 4 to 6 weeks before maximum disease incidence.",
-            technical_details="Monthly aggregation y_t = sum(qualifying occurrence records in month t). Missing intervals are preserved as is_missing=True rather than arbitrary zero imputation."
+            what_it_shows="Verified disease reports recorded each calendar month alongside a 3-month rolling average trend line.",
+            key_observation="Cyclical surges appear during the Kharif monsoon (July–October) and early Rabi season.",
+            why_it_matters="Identifies seasonal outbreak patterns to plan preventive actions 4 to 6 weeks in advance.",
         )
     else:
         st.info("No monthly timeline series available for this disease selection.")
@@ -306,9 +277,9 @@ with tab_seasonal:
 
         peak_month = df_mb.sort_values("Reports", ascending=False).iloc[0]["Month"]
         render_graph_explanation_card(
-            what_it_shows="This chart aggregates all historical disease occurrences by calendar month from January through December.",
-            key_observation=f"Reports concentrate heavily in {peak_month} and adjacent monsoon/post-monsoon months, reflecting seasonal crop phenology and favorable moisture regimes.",
-            why_it_matters="Understanding the fixed calendar distribution establishes an empirical baseline for seasonal naive forecasting and crop risk management."
+            what_it_shows="Historical disease occurrences aggregated by calendar month (January to December).",
+            key_observation=f"Reports concentrate heavily in {peak_month} and adjacent monsoon/post-monsoon months.",
+            why_it_matters="Establishes the empirical baseline for seasonal time series forecasting.",
         )
     else:
         st.info("Seasonal month distribution data is being compiled for this selection.")
@@ -358,10 +329,9 @@ with tab_map:
         st.plotly_chart(fig_map, use_container_width=True)
 
         render_graph_explanation_card(
-            what_it_shows="This geospatial map marks the GPS-verified field collection and research accession coordinates across Indian agricultural zones.",
-            key_observation="Reports cluster heavily in high-intensity cropping tracts (such as the Eastern Rice Belt and Indo-Gangetic Plains) where university extension centers actively sample crops.",
-            why_it_matters="Spatial clustering indicates surveillance density. Unmarked districts reflect lower monitoring density rather than confirmed disease absence, supporting regional climate modeling.",
-            technical_details="Georeferenced GBIF accessions bounded within the Indian subcontinent (6.0°N–37.5°N, 68.0°E–97.5°E) with spatial deduplication."
+            what_it_shows="GPS-verified field collection coordinates across Indian agricultural zones.",
+            key_observation="Reports cluster in high-intensity cropping tracts where universities actively sample crops.",
+            why_it_matters="Highlights geographic surveillance coverage across different agro-climatic zones.",
         )
     else:
         st.info("Exact map coordinates are not available for this disease's past reports. The reports are recorded at the state and national level.")
@@ -411,20 +381,12 @@ with tab_summary:
             ])
             st.dataframe(summary_metrics_df, use_container_width=True, hide_index=True)
 
-# Page Conclusion
-st.markdown(
-    f"""
-    <div class="verdant-card" style="background: #F6F4EC; border: 1px solid rgba(82, 122, 80, 0.2); border-radius: 14px; padding: 20px 24px; margin-top: 28px;">
-        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-            {icon_target(18, "#183D32")}
-            <h4 style="margin: 0; color: #183D32; font-size: 1.05rem;">Disease Explorer Conclusion</h4>
-        </div>
-        <p style="margin: 0; font-size: 0.88rem; color: #5A665D; line-height: 1.6;">
-            The empirical records for {pathogen_dict.get(selected_slug, 'selected crop disease')} confirm strong seasonal clustering aligned with regional cropping and monsoon calendars. With high temporal verification and spatial geocoding, this continuous series provides robust ground-truth data for econometric time series benchmarking.
-        </p>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
+st.markdown("<br>", unsafe_allow_html=True)
+col_exp_nav1, col_exp_nav2 = st.columns(2)
+with col_exp_nav1:
+    st.page_link("pages/2_Time_Series_Analysis.py", label="Run Time Series Analysis on this Disease ->", use_container_width=True)
+with col_exp_nav2:
+    st.page_link("pages/4_Future_Forecasts.py", label="Generate Future Predictions ->", use_container_width=True)
+
 
 

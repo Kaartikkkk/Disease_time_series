@@ -178,40 +178,7 @@ tab_prep, tab_missing, tab_patterns, tab_adf_kpss, tab_diff, tab_decomp, tab_acf
 
 # ----------------- Tab 1: Data Preparation & Resampling -----------------
 with tab_prep:
-    st.subheader("1. Preparing Historical Outbreaks for Predictive Forecasting")
-    
-    _render_forecast_purpose_badge(
-        "Predictive time series algorithms (ARIMA, SARIMA, ARIMAX) cannot operate on sporadic, unorganized field reports. They require an unbroken, continuous monthly calendar timeline (132 consecutive calendar months from Jan 2015 to Apr 2026). Resampling ensures models calculate real outbreak momentum without confusing off-season gaps with disease eradication."
-    )
-
-    st.markdown(
-        f"""
-        <div style="background: #FFFEFA; border: 1px solid rgba(82, 122, 80, 0.22); border-left: 4px solid #527A50; border-radius: 12px; padding: 16px 20px; margin-bottom: 20px;">
-            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-                {icon_info(18, "#527A50")}
-                <h4 style="margin: 0; color: #102C26; font-size: 1.02rem;">Why Data Preparation is the Foundation of Disease Forecasting</h4>
-            </div>
-            <p style="font-size: 0.86rem; color: #404B43; line-height: 1.55; margin: 0 0 12px 0;">
-                Forecasting future crop epidemics requires transforming raw biodiversity and research field notes into a mathematically regular, stationary-ready time series. Here is how our data engineering pipeline prepares records for forecasting:
-            </p>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px;">
-                <div style="background: #F6F4EC; padding: 12px 14px; border-radius: 8px; border-top: 2px solid #527A50;">
-                    <div style="font-size: 0.74rem; font-weight: 700; color: #527A50; text-transform: uppercase;">1. Continuous Month Index (MS)</div>
-                    <div style="font-size: 0.82rem; color: #2B3830; margin-top: 4px; line-height: 1.5;">Raw dates aggregated to 132 consecutive calendar months (2015–2026). Lag operators ($y_{{t-1}}, y_{{t-12}}$) require evenly spaced intervals.</div>
-                </div>
-                <div style="background: #F6F4EC; padding: 12px 14px; border-radius: 8px; border-top: 2px solid #183D32;">
-                    <div style="font-size: 0.74rem; font-weight: 700; color: #183D32; text-transform: uppercase;">2. Preserving Zero vs. Missing</div>
-                    <div style="font-size: 0.82rem; color: #2B3830; margin-top: 4px; line-height: 1.5;">Months with no reports are marked explicitly (`is_missing=True`). Prevents models from confusing unobserved intervals with complete disease eradication.</div>
-                </div>
-                <div style="background: #F6F4EC; padding: 12px 14px; border-radius: 8px; border-top: 2px solid #C4A66A;">
-                    <div style="font-size: 0.74rem; font-weight: 700; color: #C4A66A; text-transform: uppercase;">3. NASA Weather Telemetry</div>
-                    <div style="font-size: 0.82rem; color: #2B3830; margin-top: 4px; line-height: 1.5;">Coupled with NASA POWER rainfall, temperature, and humidity lagged strictly by 1 month ($t-1$) for forward predictive power without leakage.</div>
-                </div>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    st.subheader("Data Preparation & Time Index Regularity")
 
     outliers_data = detect_outliers(df_monthly, target_col=target_col)
     prep_col1, prep_col2, prep_col3 = st.columns(3)
@@ -221,7 +188,7 @@ with tab_prep:
             <div class="research-metric-card">
                 <div class="metric-label-text">Time Index Regularity</div>
                 <div class="metric-value-text" style="font-size: 1.25rem; color: #527A50;">Valid (Monthly MS)</div>
-                <div class="metric-note-text">132 unbroken intervals for lag math</div>
+                <div class="metric-note-text">132 unbroken intervals (2015–2026)</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -232,7 +199,7 @@ with tab_prep:
             <div class="research-metric-card">
                 <div class="metric-label-text">Zero vs Missing Policy</div>
                 <div class="metric-value-text" style="font-size: 1.25rem; color: #183D32;">Explicit is_missing</div>
-                <div class="metric-note-text">Prevents under-prediction bias</div>
+                <div class="metric-note-text">Unobserved intervals tracked explicitly</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -249,40 +216,11 @@ with tab_prep:
             unsafe_allow_html=True,
         )
 
-    st.markdown(
-        f"""
-        <div style="background: rgba(82, 122, 80, 0.06); border: 1px solid rgba(82, 122, 80, 0.18); border-radius: 12px; padding: 14px 18px; margin-top: 20px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-            <div>
-                <div style="font-size: 0.88rem; font-weight: 700; color: #102C26;">
-                    Status: Outbreak Data is 100% Prepared & Forecast-Ready
-                </div>
-                <div style="font-size: 0.8rem; color: #5A665D;">
-                    Explore subsequent diagnostic tabs to inspect stationarity and seasonality, or jump directly to evaluate and generate forecasts.
-                </div>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-    
-    col_nav1, col_nav2 = st.columns(2)
-    with col_nav1:
-        st.page_link("pages/3_Model_Comparison.py", label="Compare 11 Forecasting Models (ARIMA, SARIMA, ARIMAX) ->", use_container_width=True)
-    with col_nav2:
-        st.page_link("pages/4_Future_Forecasts.py", label="Generate Future Disease Predictions ->", use_container_width=True)
+
 
 # ----------------- Tab 2: Missing Values & Data Quality -----------------
 with tab_missing:
     st.subheader("Missing Values, Surveillance Coverage & Data Quality")
-    _render_forecast_purpose_badge(
-        "Distinguishing between true off-season zero disease presence and unobserved intervals prevents models from underestimating future outbreak resurgence."
-    )
-    st.markdown(
-        """
-        Passive surveillance datasets feature uneven sampling intervals. Months with unmonitored intervals are tracked explicitly
-        rather than assumed to have zero disease presence, preventing systematic under-estimation in out-of-sample evaluations.
-        """
-    )
     if "is_missing" in df_monthly.columns:
         fig_miss = go.Figure()
         miss_colors = ["#C24134" if m else "#527A50" for m in df_monthly["is_missing"]]
@@ -301,22 +239,14 @@ with tab_missing:
         st.plotly_chart(fig_miss, use_container_width=True)
 
         render_graph_explanation_card(
-            what_it_shows="This timeline displays the observational integrity of each month from 2015 to 2026, marking months with confirmed reports in green and unobserved intervals in red.",
-            key_observation="Most months reflect active scientific surveillance, with gaps primarily occurring during off-season dry periods when crops are not cultivated.",
-            why_it_matters="Distinguishing between genuine zero disease presence and unobserved intervals prevents models from falsely assuming diseases completely vanish, preserving true baseline risk.",
-            technical_details="Timeline resampled to DateOffset(months=1) with explicit boolean is_missing indicator."
+            what_it_shows="Observational integrity of each month from 2015 to 2026 (green = confirmed reports, red = unobserved intervals).",
+            key_observation="Most months reflect active scientific surveillance, with gaps occurring during off-season dry intervals.",
+            why_it_matters="Distinguishing between confirmed zero disease presence and unobserved intervals prevents under-prediction bias.",
         )
 
 # ----------------- Tab 3: Stationarity Testing (Rolling Envelope) -----------------
 with tab_patterns:
     st.subheader(f"Historical Trajectory & {window_size}-Month Rolling Volatility Envelope")
-    _render_forecast_purpose_badge(
-        "Forecasting models require stable historical baselines. The rolling envelope shows whether variance expands during outbreaks, dictating whether models need variance stabilization before training."
-    )
-    st.markdown(
-        "Stationarity means that statistical properties such as the mean and variance remain consistent over time. "
-        "A rolling average and volatility envelope show how mean levels and seasonal surges shift across the 11-year history."
-    )
     df_roll = compute_rolling_statistics(df_monthly, target_col=target_col, window=window_size)
 
     fig_trend = go.Figure()
@@ -351,26 +281,14 @@ with tab_patterns:
     st.plotly_chart(fig_trend, use_container_width=True)
 
     render_graph_explanation_card(
-        what_it_shows="This chart shows monthly disease reports alongside a rolling smoothed trend line and shaded volatility envelope (+/- 1 standard deviation).",
-        key_observation=f"Reports fluctuate strongly around an average of {series_summary['mean_monthly_occurrences']} reports/month, with recurring seasonal peaks reaching above the normal volatility band.",
-        why_it_matters="The rolling envelope illustrates variance non-stationarity: seasonal disease outbreaks produce sharp variance bursts that justify variance-stabilizing or differenced models.",
-        technical_details="Rolling mean mu_t = (1/k) sum_{i=0}^{k-1} y_{t-i} with standard deviation sigma_t over window k=" + str(window_size)
+        what_it_shows=f"Monthly disease reports alongside {window_size}-month rolling smoothed trend line and volatility envelope (+/- 1 standard deviation).",
+        key_observation=f"Reports average {series_summary['mean_monthly_occurrences']} reports/month, with recurring seasonal peaks reaching above the normal volatility band.",
+        why_it_matters="Identifies variance expansion and seasonal surge patterns across the historical timeline.",
     )
 
 # ----------------- Tab 4: ADF & KPSS Results -----------------
 with tab_adf_kpss:
     st.subheader("Stationarity Hypothesis Testing (ADF and KPSS Suite)")
-    _render_forecast_purpose_badge(
-        "Proves whether the disease series has a stochastic unit root. If non-stationary, forecasting models must use differencing (d=1) to prevent runaway predictions."
-    )
-    st.markdown(
-        r"""
-        Classical models (ARIMA) require stationary inputs where the mean and variance do not drift over time.
-        We apply a **dual testing framework**:
-        - **Augmented Dickey-Fuller (ADF)**: $H_0$: Unit root present (Non-stationary). Rejecting $H_0$ ($p < 0.05$) favors stationarity.
-        - **KPSS Test**: $H_0$: Series is level/trend stationary. Failing to reject $H_0$ ($p \ge 0.05$) favors stationarity.
-        """
-    )
 
     adf_res = perform_adf_test(df_monthly[target_col])
     kpss_res = perform_kpss_test(df_monthly[target_col])
@@ -442,24 +360,14 @@ with tab_adf_kpss:
         )
 
     render_graph_explanation_card(
-        what_it_shows="This suite applies formal statistical hypothesis tests (ADF and KPSS) to verify whether the disease series possesses a stochastic unit root or needs differencing.",
-        key_observation=f"Raw disease reports exhibit unit-root non-stationarity (ADF p={adf_res.get('p_value')}), confirming that raw series cannot be fed into ARIMA without differencing.",
-        why_it_matters="Non-stationary time series lead to spurious predictions. Establishing that first-order differencing achieves stationarity confirms the mathematical necessity of an integrated model (ARIMA with d=1).",
-        technical_details="ADF test: Delta y_t = alpha + beta t + gamma y_{t-1} + sum delta_i Delta y_{t-i} + eps_t with AIC lag selection."
+        what_it_shows="Formal statistical hypothesis tests (ADF and KPSS) for unit root and stationarity.",
+        key_observation=f"Series classification: {decision['classification']} (ADF p={adf_res.get('p_value')}).",
+        why_it_matters=f"Determines whether differencing is required for forecasting models ({decision['action']}).",
     )
 
 # ----------------- Tab 5: Differencing Analysis -----------------
 with tab_diff:
     st.subheader("Differencing & Variance Reduction Analysis")
-    _render_forecast_purpose_badge(
-        "First-order differencing (d=1) centers disease changes around zero, removing multi-year drift and giving ARIMA a stable foundation for realistic future predictions."
-    )
-    st.markdown(
-        r"""
-        Differencing subtracts the previous observation from the current observation: $\Delta y_t = y_t - y_{t-1}$.
-        This transformation removes non-stationary trends and shifts the series around a constant mean of zero.
-        """
-    )
     diff_analysis = analyze_differencing(df_monthly[target_col])
 
     # Plot original vs differenced series
@@ -490,10 +398,9 @@ with tab_diff:
     st.plotly_chart(fig_diff, use_container_width=True)
 
     render_graph_explanation_card(
-        what_it_shows="This chart overlays the original raw disease reports (dark green) with the first-differenced series (gold) computed as current month minus previous month.",
-        key_observation="Differencing stabilizes the mean directly around zero and removes multi-year level drift, converting the non-stationary series into a mean-reverting stationary process.",
-        why_it_matters="Achieving a constant mean of zero confirms that setting ARIMA parameter d=1 is statistically justified and avoids over-differencing (which would inflate variance).",
-        technical_details=f"Raw variance: {diff_analysis['original']['variance']} | d=1 variance: {diff_analysis['first_difference']['variance']} | Verdict: {diff_analysis['recommendation']}"
+        what_it_shows="Original disease reports (dark green) compared with first-differenced series (gold).",
+        key_observation="Differencing stabilizes the mean directly around zero and removes multi-year level drift.",
+        why_it_matters="Confirms that first-order differencing (d=1) stabilizes the series for model training.",
     )
 
     st.markdown(
@@ -504,7 +411,7 @@ with tab_diff:
                 - <strong>Original Level Variance:</strong> <code>{diff_analysis['original']['variance']}</code><br>
                 - <strong>First-Difference Variance (d=1):</strong> <code>{diff_analysis['first_difference']['variance']}</code><br>
                 - <strong>Seasonal-Difference Variance (D=1):</strong> <code>{diff_analysis['seasonal_difference']['variance']}</code><br>
-                - <strong>Econometric Recommendation:</strong> {diff_analysis['recommendation']}
+                - <strong>Recommendation:</strong> {diff_analysis['recommendation']}
             </div>
         </div>
         """,
@@ -514,13 +421,6 @@ with tab_diff:
 # ----------------- Tab 6: Seasonal Decomposition -----------------
 with tab_decomp:
     st.subheader("Trend & Seasonal Component Breakdown (12-Month Annual Cycle)")
-    _render_forecast_purpose_badge(
-        "Decomposes disease counts into long-term Trend, Kharif Monsoon Seasonality, and Random Spikes — allowing SARIMA to predict exact high-risk calendar months 12 months ahead."
-    )
-    st.markdown(
-        "Seasonal decomposition separates the observed disease timeline into three independent signals: "
-        "an overall trend, a 12-month repeating seasonal cycle, and irregular residual noise."
-    )
     decomp_df = perform_seasonal_decomposition(df_monthly, target_col=target_col, period=12, model="additive")
 
     if decomp_df is not None:
@@ -534,10 +434,9 @@ with tab_decomp:
         st.plotly_chart(fig_d, use_container_width=True)
 
         render_graph_explanation_card(
-            what_it_shows="This decomposition separates disease history into three distinct underlying signals: long-term multi-year trend, 12-month repeating seasonal cycle, and irregular residual noise.",
-            key_observation="The seasonal component exhibits regular periodic amplitudes corresponding to India's agricultural calendar, while the residual component remains centered around zero.",
-            why_it_matters="Proving that a large fraction of variance is explained by seasonal recurrence mathematically justifies using seasonal autoregressive moving average models.",
-            technical_details="Classical additive decomposition: y_t = Trend_t + Seasonal_t + Residual_t with fixed period s=12."
+            what_it_shows="Decomposition of disease history into trend, 12-month seasonal cycle, and residuals.",
+            key_observation="Seasonal component exhibits regular periodic recurrence matching annual crop cycles.",
+            why_it_matters="Confirms predictable seasonality that models can leverage for forward projections.",
         )
 
     # Seasonal Heatmap
@@ -568,25 +467,14 @@ with tab_decomp:
     st.plotly_chart(fig_heat, use_container_width=True)
 
     render_graph_explanation_card(
-        what_it_shows="This matrix maps recorded disease reports across all 12 calendar months (X-axis) for each year from 2015 to 2026 (Y-axis).",
-        key_observation="Darker vertical bands consistently line up along specific calendar months each year, confirming strong recurring annual seasonality.",
-        why_it_matters="Recurring month-specific peaks confirm that seasonal time-series models (such as SARIMA with period s=12 or Holt-Winters) are highly relevant for capturing recurring crop disease risks."
+        what_it_shows="Recorded disease reports across all 12 calendar months from 2015 to 2026.",
+        key_observation="Reports consistently concentrate in specific calendar months across multiple years.",
+        why_it_matters="Confirms recurrent seasonal surge windows across Indian cropping seasons.",
     )
 
 # ----------------- Tab 7: ACF & PACF Memory -----------------
 with tab_acf:
     st.subheader("Past Month Memory (Autocorrelation & Partial Autocorrelation Diagnostics)")
-    _render_forecast_purpose_badge(
-        "Autocorrelation (ACF) and Partial Autocorrelation (PACF) tell the forecasting model exactly how many past months of infection history (p) and random shocks (q) predict next month's disease."
-    )
-    st.markdown(
-        """
-        The **ACF** and **PACF** plots guide the selection of parameters for classical ARIMA($p, d, q$) models:
-        - **PACF (Partial Autocorrelation)**: Cuts off after lag $p$, determining the **Autoregressive Order ($p$)**.
-        - **ACF (Autocorrelation)**: Cuts off after lag $q$, determining the **Moving Average Order ($q$)**.
-        - Bars crossing the horizontal dashed lines indicate statistically significant persistence ($p < 0.05$).
-        """
-    )
     acf_pacf = compute_acf_pacf_values(df_monthly, target_col=target_col, nlags=20)
 
     if acf_pacf["lags"]:
@@ -612,24 +500,14 @@ with tab_acf:
             st.plotly_chart(fig_p, use_container_width=True)
 
         render_graph_explanation_card(
-            what_it_shows="These correlograms display the correlation between disease reports and past values up to 20 months ago. Dashed lines indicate the 95% Bartlett confidence limits.",
-            key_observation="Significant correlation at Lag 1 and Lag 12 confirms strong month-to-month persistence alongside annual seasonal memory.",
-            why_it_matters="The significant spike at Lag 1 in PACF justifies an AR(1) autoregressive component, while the Lag 12 peak justifies a seasonal order of P=1, directly informing ARIMA(1,d,q) and SARIMA parameter choices.",
-            technical_details="Sample ACF r_k = sum((y_t - y_bar)(y_{t-k} - y_bar)) / sum((y_t - y_bar)^2); PACF computed via Yule-Walker equations with Bartlett 95% CI (+/- 1.96 / sqrt(N))."
+            what_it_shows="Correlation between disease reports and past values up to 20 months ago.",
+            key_observation="Significant correlation at Lag 1 and Lag 12 confirms month-to-month and annual memory.",
+            why_it_matters="Directly guides autoregressive (AR) and seasonal parameter selection for forecasting.",
         )
 
 # ----------------- Tab 8: Weather Patterns, Lags & Partitions -----------------
 with tab_weather:
     st.subheader("Weather Cross-Correlation & Validation Partitions")
-    _render_forecast_purpose_badge(
-        "Demonstrates that rainfall and humidity 1 month prior (t-1) act as early warning indicators, proving that weather-informed models (ARIMAX) can forecast disease before crop damage occurs."
-    )
-    st.markdown(
-        """
-        Fungal sporulation and disease lesion expansion depend directly on temperature, precipitation, and canopy relative humidity.
-        Using **NASA POWER** monthly climatology across Indian agro-zones, we examine how weather variables correlate with disease reports over time and across time lags.
-        """
-    )
 
     weather_cols = ["temp_mean_c", "precipitation_monthly_mm", "relative_humidity_pct"]
     has_weather_cols = any(c in df_monthly.columns for c in weather_cols)
@@ -674,10 +552,9 @@ with tab_weather:
         st.plotly_chart(fig_w, use_container_width=True)
 
         render_graph_explanation_card(
-            what_it_shows="This dual-axis chart compares monthly disease reports (green line, left axis) against NASA POWER satellite monthly rainfall measurements (blue bars, right axis).",
-            key_observation="Peaks in disease occurrence follow peak monsoon rainfall months with a 1-month delayed shift, reflecting biological spore incubation periods.",
-            why_it_matters="Understanding the 1-month delayed response allows models like ARIMAX and SARIMAX to use strictly lagged weather features (t-1) for predictive forecasting without leaking future weather.",
-            technical_details="Precipitation from NASA POWER MERRA-2/GEOS-5 assimilation joined on calendar month-start frequency."
+            what_it_shows="Monthly disease reports compared against NASA POWER satellite rainfall measurements.",
+            key_observation="Peaks in disease occurrence follow peak monsoon rainfall with a 1-month delayed shift.",
+            why_it_matters="Supports using 1-month-lagged weather features in forecasting models without lookahead leakage.",
         )
 
         # Cross-Correlation Table & Analysis
@@ -690,21 +567,6 @@ with tab_weather:
             df_corr_disp = df_corr[["label", "lag_months", "pearson_r", "pearson_p_value", "is_statistically_significant"]].copy()
             df_corr_disp.columns = ["Weather Factor", "Lag (Months)", "Pearson Correlation (r)", "p-value", "Significant?"]
             st.dataframe(df_corr_disp, use_container_width=True, hide_index=True)
-
-        # Scientific Disclaimer Card (Clean SVG, no emoji)
-        st.markdown(
-            f"""
-            <div style="background: rgba(196, 166, 106, 0.1); border-left: 4px solid #C4A66A; border-radius: 8px; padding: 12px 18px; margin-top: 14px; margin-bottom: 24px;">
-                <div style="display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.84rem; color: #695221; margin-bottom: 3px;">
-                    {icon_alert_triangle(16, "#C4A66A")} Scientific Notice: Correlation Does Not Prove Biological Causation
-                </div>
-                <p style="font-size: 0.82rem; color: #404B43; line-height: 1.5; margin: 0;">
-                    {corr_results.get('scientific_disclaimer')}
-                </p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
 
     # Chronological Split
     st.markdown("#### Chronological Data Partitions (Zero Future Leakage)")
@@ -720,31 +582,16 @@ with tab_weather:
     st.plotly_chart(split_fig, use_container_width=True)
 
     render_graph_explanation_card(
-        what_it_shows="This chart shows the strict chronological partition of the dataset into training (70%, dark green), validation (15%, gold), and testing (15%, blue) windows.",
-        key_observation="Data boundaries follow sequential calendar dates with zero temporal overlap or random shuffling.",
-        why_it_matters="Randomly shuffling time-series data leaks future patterns into the past. Chronological splitting ensures all model evaluation metrics reflect genuine out-of-sample forecasting ability.",
-        technical_details="Sequential non-overlapping partition: Train [t_0 .. t_k], Validation [t_{k+1} .. t_m], Test [t_{m+1} .. t_N]."
+        what_it_shows="Chronological partition into training (70%), validation (15%), and testing (15%) windows.",
+        key_observation="Data boundaries follow sequential calendar dates with zero temporal overlap.",
+        why_it_matters="Ensures all model evaluation metrics reflect genuine out-of-sample forecasting ability.",
     )
 
-# Page Conclusion
-st.markdown(
-    f"""
-    <div class="verdant-card" style="background: #F6F4EC; border: 1px solid rgba(82, 122, 80, 0.2); border-radius: 14px; padding: 20px 24px; margin-top: 28px; margin-bottom: 16px;">
-        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-            {icon_target(18, "#183D32")}
-            <h4 style="margin: 0; color: #183D32; font-size: 1.05rem;">Diagnostic Conclusion: Foundation for Disease Forecasting</h4>
-        </div>
-        <p style="margin: 0; font-size: 0.88rem; color: #5A665D; line-height: 1.6;">
-            The diagnostics above confirm that crop disease outbreaks follow structured, predictable mathematical dynamics: strong 12-month monsoon seasonality, unit-root non-stationarity requiring first-order differencing ($d=1$), and 1-month-lagged weather sensitivity. These findings directly justify training <strong>ARIMA(1,1,1)</strong>, <strong>SARIMA(1,0,1)(1,0,1)[12]</strong>, and <strong>ARIMAX</strong> against seasonal baselines.
-        </p>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
+st.markdown("<br>", unsafe_allow_html=True)
 col_c1, col_c2 = st.columns(2)
 with col_c1:
     st.page_link("pages/3_Model_Comparison.py", label="Compare All 11 Forecasting Models ->", use_container_width=True)
 with col_c2:
     st.page_link("pages/4_Future_Forecasts.py", label="Generate Future Outbreak Forecasts ->", use_container_width=True)
+
 

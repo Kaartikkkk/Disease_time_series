@@ -154,6 +154,21 @@ def inject_custom_css():
             flex-wrap: wrap;
             gap: 12px;
         }
+        @media (max-width: 900px) {
+            .verdant-top-navbar {
+                padding: 8px 12px;
+                gap: 8px;
+                margin-left: -1rem;
+                margin-right: -1rem;
+            }
+            .verdant-nav-links-wrap {
+                gap: 3px;
+            }
+            .verdant-nav-tab {
+                padding: 4px 8px;
+                font-size: 0.76rem;
+            }
+        }
         .verdant-top-brand {
             display: flex;
             align-items: center;
@@ -516,19 +531,34 @@ def inject_custom_css():
         /* Research Metric Cards */
         .metric-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 18px;
-            margin-bottom: 36px;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+        @media (max-width: 768px) {
+            .metric-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+        }
+        @media (max-width: 480px) {
+            .metric-grid {
+                grid-template-columns: 1fr;
+            }
         }
         .research-metric-card {
             background: var(--paper-white);
             border: 1px solid var(--border-subtle);
             border-radius: 16px;
-            padding: 20px 22px;
+            padding: 18px 20px;
             box-shadow: var(--shadow-subtle);
             transition: all 0.25s ease;
             position: relative;
             overflow: hidden;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
         }
         .research-metric-card::after {
             content: '';
@@ -1361,35 +1391,17 @@ def render_graph_explanation_card(
     why_it_matters: str,
     technical_details: Optional[str] = None,
 ):
-    """Render the standard compact graph explanation card directly below every important graph.
-    
-    Format:
-    - What this shows: One simple sentence.
-    - Key finding: One or two sentences based on actual data.
-    - Why it matters: One sentence connecting it to agriculture.
-    """
-    tech_html = ""
-    if is_advanced_mode() and technical_details:
-        tech_html = f"""
-        <div style="margin-top: 8px; padding-top: 6px; border-top: 1px dashed rgba(82, 122, 80, 0.22); font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; color: #183D32;">
-            <strong>Econometric / Statistical Note:</strong> {technical_details}
-        </div>
-        """
+    """Render a concise, 2-line takeaway card directly below important graphs."""
     card_html = f"""
     <div class="graph-explanation-card">
         <div class="expl-line">
-            <span class="expl-label">{icon_info(14, "#527A50")} <strong>What this shows:</strong></span>
-            <span class="expl-text">{what_it_shows}</span>
-        </div>
-        <div class="expl-line">
-            <span class="expl-label">{icon_target(14, "#183D32")} <strong>Key finding:</strong></span>
+            <span class="expl-label">{icon_target(14, "#183D32")} <strong>Observation:</strong></span>
             <span class="expl-text">{key_observation}</span>
         </div>
         <div class="expl-line">
-            <span class="expl-label">{icon_leaf(14, "#C4A66A")} <strong>Why it matters:</strong></span>
+            <span class="expl-label">{icon_leaf(14, "#527A50")} <strong>Takeaway:</strong></span>
             <span class="expl-text">{why_it_matters}</span>
         </div>
-        {tech_html}
     </div>
     """
     st.html(card_html)

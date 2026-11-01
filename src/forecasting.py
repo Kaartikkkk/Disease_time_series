@@ -1,24 +1,22 @@
 """Comprehensive Time Series Forecasting Engine for Indian Plant Disease Surveillance.
 
-Implements:
-1. Classical Models:
-   - Seasonal Naive (Benchmark baseline)
-   - AR(p) Autoregressive
-   - MA(q) Moving Average
-   - ARMA(p, q)
-   - ARIMA(p, d, q)
-   - SARIMA(p, d, q)(P, D, Q, 12)
-   - Holt-Winters Exponential Smoothing (Additive/Multiplicative)
-   - ARIMAX (Exogenous Weather Regressors)
-   - SARIMAX (Seasonal Terms + Exogenous Weather Regressors)
-2. Modern Libraries:
-   - Prophet (Facebook / Meta Prophet with yearly seasonality & weather regressors)
-   - AutoTS (Automated time series search, lightweight mode)
-   - Machine Learning Autoregressors (Gradient Boosting / Random Forest with strictly lagged climate features)
-3. Chronological Splits & Future Scenario Forecasting:
-   - Strict chronological train/validation/test splits
-   - 80% and 95% forecast prediction intervals
-   - Future weather scenarios (Historical Mean, High Monsoon, Heatwave/Drought)
+Architecture:
+- Individual forecasting models are modularized in `src/models/`:
+    * `src/models/seasonal_naive.py` (Persistence baseline)
+    * `src/models/holt_winters.py` (Triple exponential smoothing)
+    * `src/models/ar_model.py` (AR(1) Autoregressive)
+    * `src/models/ma_model.py` (MA(1) Moving average)
+    * `src/models/arima_model.py` (ARIMA(1,1,1) Integrated Box-Jenkins)
+    * `src/models/sarima_model.py` (SARIMA seasonal cycle)
+    * `src/models/arimax_model.py` (ARIMAX with NASA weather lags)
+    * `src/models/sarimax_model.py` (SARIMAX seasonal + NASA weather lags)
+    * `src/models/prophet_model.py` (Meta Prophet piecewise trend + Fourier)
+    * `src/models/gradient_boosting.py` (HistGradientBoosting autoregressor)
+    * `src/models/random_forest.py` (RandomForest autoregressor)
+- This module orchestrates:
+    1. Chronological holdout splitting (70% train / 15% validation / 15% test)
+    2. Comprehensive 11-model benchmarking with out-of-sample RMSE/MAE rankings
+    3. Future scenario weather simulation (Monsoon, Drought, Climatology)
 """
 
 from datetime import datetime, timedelta
@@ -26,28 +24,26 @@ import logging
 from typing import Any, Dict, List, Optional, Tuple
 import numpy as np
 import pandas as pd
-from sklearn.ensemble import HistGradientBoostingRegressor, RandomForestRegressor
-from statsmodels.tsa.api import ExponentialSmoothing
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 
 from src.evaluation import compute_forecast_metrics
+from src.models import (
+    HAS_PROPHET,
+    forecast_ar,
+    forecast_arima,
+    forecast_arimax,
+    forecast_gradient_boosting,
+    forecast_holt_winters,
+    forecast_ma,
+    forecast_ml_autoregressor,
+    forecast_prophet,
+    forecast_random_forest,
+    forecast_sarima,
+    forecast_sarimax_model,
+    forecast_seasonal_naive,
+)
 
 logger = logging.getLogger(__name__)
-
-# Check optional library availability
-HAS_PROPHET = False
-try:
-    from prophet import Prophet
-    HAS_PROPHET = True
-except ImportError:
-    pass
-
-HAS_AUTOTS = False
-try:
-    from autots import AutoTS
-    HAS_AUTOTS = True
-except (ImportError, Exception):
-    pass
 
 
 # ==============================================================================
@@ -71,33 +67,8 @@ def chronological_split(
 
 
 # ==============================================================================
-# CLASSICAL FORECASTING MODELS
+# GENERAL SARIMAX ADAPTER (Backwards Compatibility)
 # ==============================================================================
-
-def forecast_seasonal_naive(
-    train_series: pd.Series,
-    horizon: int,
-    season_length: int = 12,
-) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """Seasonal Naive baseline: repeats observation from s periods ago."""
-    y = train_series.values
-    preds = []
-    for h in range(1, horizon + 1):
-        idx = len(y) + h - 1 - season_length
-        if idx >= 0 and idx < len(y):
-            preds.append(y[idx])
-        else:
-            preds.append(y[-1])  # Fallback to persistence
-    
-    preds_arr = np.array(preds, dtype=float)
-    # Estimate simple empirical standard error for intervals
-    residuals = y[season_length:] - y[:-season_length] if len(y) > season_length else y[1:] - y[:-1]
-    se = np.std(residuals) if len(residuals) > 0 else 1.0
-    
-    lower_95 = np.maximum(0.0, preds_arr - 1.96 * se)
-    upper_95 = preds_arr + 1.96 * se
-    return preds_arr, lower_95, upper_95
-
 
 def forecast_sarimax(
     train_y: pd.Series,
@@ -107,201 +78,15 @@ def forecast_sarimax(
     train_exog: Optional[pd.DataFrame] = None,
     future_exog: Optional[pd.DataFrame] = None,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, Any]:
-    """Fit SARIMAX / ARIMAX / ARIMA model and generate point forecast with intervals."""
-    # Ensure float series
-    y = train_y.astype(float).values
-    
-    exog_data = train_exog.values if train_exog is not None and not train_exog.empty else None
-    fut_exog_data = future_exog.values if future_exog is not None and not future_exog.empty else None
-
-    # Fit SARIMAX
-    model = SARIMAX(
-        y,
-        exog=exog_data,
+    """General SARIMAX dispatcher supporting flexible (p,d,q)(P,D,Q,s) orders and exogenous lags."""
+    return forecast_sarimax_model(
+        train_y=train_y,
+        horizon=horizon,
         order=order,
         seasonal_order=seasonal_order,
-        enforce_stationarity=False,
-        enforce_invertibility=False,
+        train_exog=train_exog,
+        future_exog=future_exog,
     )
-    res = model.fit(disp=False, maxiter=100)
-
-    # Forecast
-    forecast_res = res.get_forecast(steps=horizon, exog=fut_exog_data)
-    point_pred = np.maximum(0.0, forecast_res.predicted_mean)
-    conf_int = forecast_res.conf_int(alpha=0.05)
-    lower_95 = np.maximum(0.0, conf_int[:, 0])
-    upper_95 = conf_int[:, 1]
-
-    return point_pred, lower_95, upper_95, res
-
-
-def forecast_holt_winters(
-    train_series: pd.Series,
-    horizon: int,
-    seasonal_periods: int = 12,
-    trend: str = "add",
-    seasonal: Optional[str] = "add",
-) -> Tuple[np.ndarray, np.ndarray, np.ndarray, Any]:
-    """Fit Holt-Winters Exponential Smoothing model."""
-    y = train_series.astype(float).values
-    
-    # If seasonal requested but series length < 2 * periods, disable seasonality
-    if len(y) < 2 * seasonal_periods:
-        seasonal = None
-
-    model = ExponentialSmoothing(
-        y,
-        trend=trend,
-        seasonal=seasonal,
-        seasonal_periods=seasonal_periods if seasonal else None,
-        initialization_method="estimated",
-    )
-    res = model.fit()
-    point_pred = np.maximum(0.0, res.forecast(horizon))
-
-    # Empirical interval estimate from training residuals
-    residuals = res.resid
-    se = np.std(residuals) if len(residuals) > 0 else 1.0
-    lower_95 = np.maximum(0.0, point_pred - 1.96 * se)
-    upper_95 = point_pred + 1.96 * se
-
-    return point_pred, lower_95, upper_95, res
-
-
-# ==============================================================================
-# MODERN FORECASTING MODELS
-# ==============================================================================
-
-def forecast_prophet(
-    train_df: pd.DataFrame,
-    horizon: int,
-    future_dates: pd.DatetimeIndex,
-    weather_cols: Optional[List[str]] = None,
-    future_weather_df: Optional[pd.DataFrame] = None,
-) -> Tuple[np.ndarray, np.ndarray, np.ndarray, Any]:
-    """Forecast using Meta Prophet with yearly seasonality and climate regressors."""
-    if not HAS_PROPHET:
-        raise ImportError("Prophet is not installed or unavailable in this environment.")
-
-    df_p = pd.DataFrame({
-        "ds": pd.to_datetime(train_df["date"]),
-        "y": train_df["documented_occurrence_count"].values,
-    })
-
-    model = Prophet(
-        yearly_seasonality=True,
-        weekly_seasonality=False,
-        daily_seasonality=False,
-        interval_width=0.95,
-    )
-
-    if weather_cols:
-        for col in weather_cols:
-            if col in train_df.columns:
-                df_p[col] = train_df[col].fillna(train_df[col].mean()).values
-                model.add_regressor(col)
-
-    model.fit(df_p)
-
-    future_p = pd.DataFrame({"ds": future_dates})
-    if weather_cols and future_weather_df is not None:
-        for col in weather_cols:
-            if col in future_weather_df.columns:
-                future_p[col] = future_weather_df[col].values
-            else:
-                future_p[col] = df_p[col].mean()
-
-    forecast = model.predict(future_p)
-    point_pred = np.maximum(0.0, forecast["yhat"].values)
-    lower_95 = np.maximum(0.0, forecast["yhat_lower"].values)
-    upper_95 = np.maximum(0.0, forecast["yhat_upper"].values)
-
-    return point_pred, lower_95, upper_95, model
-
-
-def forecast_ml_autoregressor(
-    train_df: pd.DataFrame,
-    horizon: int,
-    model_type: str = "gradient_boosting",
-    lags: List[int] = [1, 2, 3, 12],
-    weather_lag_cols: Optional[List[str]] = None,
-    future_weather_df: Optional[pd.DataFrame] = None,
-) -> Tuple[np.ndarray, np.ndarray, np.ndarray, Any]:
-    """Autoregressive ML model (Gradient Boosting / Random Forest) with strictly lagged regressors."""
-    target_col = "documented_occurrence_count"
-    
-    # Feature construction on training data
-    df_feat = train_df.copy()
-    if not pd.api.types.is_datetime64_any_dtype(df_feat["date"]):
-        df_feat["date"] = pd.to_datetime(df_feat["date"])
-    feature_cols = []
-    
-    for l in lags:
-        col_name = f"lag_{l}"
-        df_feat[col_name] = df_feat[target_col].shift(l)
-        feature_cols.append(col_name)
-
-    # Add month cyclical features
-    df_feat["month_sin"] = np.sin(2 * np.pi * df_feat["date"].dt.month / 12.0)
-    df_feat["month_cos"] = np.cos(2 * np.pi * df_feat["date"].dt.month / 12.0)
-    feature_cols.extend(["month_sin", "month_cos"])
-
-    # Add lagged weather features (strictly lagged to avoid leakage)
-    if weather_lag_cols:
-        for w_col in weather_lag_cols:
-            if w_col in df_feat.columns:
-                feature_cols.append(w_col)
-
-    # Drop initial NaN rows created by lags
-    df_train_clean = df_feat.dropna(subset=feature_cols).copy()
-    X_train = df_train_clean[feature_cols].values
-    y_train = df_train_clean[target_col].values
-
-    if model_type == "random_forest":
-        model = RandomForestRegressor(n_estimators=100, random_state=42)
-    else:
-        model = HistGradientBoostingRegressor(random_state=42)
-
-    model.fit(X_train, y_train)
-
-    # Recursive multi-step out-of-sample forecasting
-    current_history = list(train_df[target_col].values)
-    preds = []
-    
-    last_date = pd.to_datetime(train_df["date"].iloc[-1])
-    for step in range(1, horizon + 1):
-        step_date = last_date + pd.DateOffset(months=step)
-        row_feat = []
-        for l in lags:
-            val = current_history[-l] if len(current_history) >= l else current_history[-1]
-            row_feat.append(val)
-        
-        row_feat.append(np.sin(2 * np.pi * step_date.month / 12.0))
-        row_feat.append(np.cos(2 * np.pi * step_date.month / 12.0))
-
-        if weather_lag_cols:
-            for w_col in weather_lag_cols:
-                if future_weather_df is not None and w_col in future_weather_df.columns and len(future_weather_df) >= step:
-                    row_feat.append(future_weather_df[w_col].iloc[step - 1])
-                else:
-                    # Fallback to mean historical lagged value
-                    row_feat.append(df_train_clean[w_col].mean() if w_col in df_train_clean else 0.0)
-
-        step_pred = float(model.predict([row_feat])[0])
-        step_pred = max(0.0, step_pred)
-        preds.append(step_pred)
-        current_history.append(step_pred)
-
-    preds_arr = np.array(preds)
-    # Estimate prediction intervals from training residuals
-    train_preds = model.predict(X_train)
-    resids = y_train - train_preds
-    se = np.std(resids) if len(resids) > 0 else 1.0
-
-    lower_95 = np.maximum(0.0, preds_arr - 1.96 * se)
-    upper_95 = preds_arr + 1.96 * se
-
-    return preds_arr, lower_95, upper_95, model
 
 
 # ==============================================================================
@@ -316,7 +101,7 @@ def run_model_comparison(
     """Execute all eligible models on fixed chronological split and return comparative metrics."""
     # Split into train (70%), val (15%), test (15%)
     train_df, val_df, test_df = chronological_split(df, train_ratio=0.70, val_ratio=0.15)
-    
+
     # We evaluate models on the validation set
     y_train = train_df[target_col]
     y_val = val_df[target_col].values
@@ -326,14 +111,14 @@ def run_model_comparison(
     # Weather regressors
     weather_exog_cols = ["temp_mean_c_lag1", "precipitation_monthly_mm_lag1", "relative_humidity_pct_lag1"]
     has_weather = all(c in train_df.columns for c in weather_exog_cols)
-    
+
     train_exog = train_df[weather_exog_cols].bfill().fillna(0) if has_weather else None
     val_exog = val_df[weather_exog_cols].bfill().fillna(0) if has_weather else None
 
     models_results: List[Dict[str, Any]] = []
     forecasts_dict: Dict[str, np.ndarray] = {}
 
-    # 1. Seasonal Naive Baseline
+    # 1. Seasonal Naive Baseline (src/models/seasonal_naive.py)
     try:
         p_snaive, lb_snaive, ub_snaive = forecast_seasonal_naive(y_train, horizon=eval_horizon, season_length=12)
         m_snaive = compute_forecast_metrics(y_val, p_snaive, lb_snaive, ub_snaive, model_name="Seasonal Naive (Baseline)")
@@ -342,36 +127,36 @@ def run_model_comparison(
     except Exception as e:
         logger.warning("Seasonal Naive failed: %s", e)
 
-    # 2. AR(1) / ARIMA(1,0,0)
+    # 2. AR(1) / ARIMA(1,0,0) (src/models/ar_model.py)
     try:
-        p_ar, lb_ar, ub_ar, _ = forecast_sarimax(y_train, horizon=eval_horizon, order=(1, 0, 0))
+        p_ar, lb_ar, ub_ar, _ = forecast_ar(y_train, horizon=eval_horizon, p=1)
         m_ar = compute_forecast_metrics(y_val, p_ar, lb_ar, ub_ar, model_name="AR(1)")
         models_results.append(m_ar)
         forecasts_dict["AR(1)"] = p_ar
     except Exception as e:
         logger.warning("AR(1) failed: %s", e)
 
-    # 3. MA(1) / ARIMA(0,0,1)
+    # 3. MA(1) / ARIMA(0,0,1) (src/models/ma_model.py)
     try:
-        p_ma, lb_ma, ub_ma, _ = forecast_sarimax(y_train, horizon=eval_horizon, order=(0, 0, 1))
+        p_ma, lb_ma, ub_ma, _ = forecast_ma(y_train, horizon=eval_horizon, q=1)
         m_ma = compute_forecast_metrics(y_val, p_ma, lb_ma, ub_ma, model_name="MA(1)")
         models_results.append(m_ma)
         forecasts_dict["MA(1)"] = p_ma
     except Exception as e:
         logger.warning("MA(1) failed: %s", e)
 
-    # 4. ARIMA(1, 1, 1)
+    # 4. ARIMA(1, 1, 1) (src/models/arima_model.py)
     try:
-        p_arima, lb_arima, ub_arima, _ = forecast_sarimax(y_train, horizon=eval_horizon, order=(1, 1, 1))
+        p_arima, lb_arima, ub_arima, _ = forecast_arima(y_train, horizon=eval_horizon, order=(1, 1, 1))
         m_arima = compute_forecast_metrics(y_val, p_arima, lb_arima, ub_arima, model_name="ARIMA(1,1,1)")
         models_results.append(m_arima)
         forecasts_dict["ARIMA(1,1,1)"] = p_arima
     except Exception as e:
         logger.warning("ARIMA(1,1,1) failed: %s", e)
 
-    # 5. SARIMA(1, 0, 1)(1, 0, 1, 12)
+    # 5. SARIMA(1, 0, 1)(1, 0, 1, 12) (src/models/sarima_model.py)
     try:
-        p_sarima, lb_sarima, ub_sarima, _ = forecast_sarimax(
+        p_sarima, lb_sarima, ub_sarima, _ = forecast_sarima(
             y_train, horizon=eval_horizon, order=(1, 0, 1), seasonal_order=(1, 0, 1, 12)
         )
         m_sarima = compute_forecast_metrics(y_val, p_sarima, lb_sarima, ub_sarima, model_name="SARIMA(1,0,1)(1,0,1)[12]")
@@ -380,7 +165,7 @@ def run_model_comparison(
     except Exception as e:
         logger.warning("SARIMA failed: %s", e)
 
-    # 6. Holt-Winters Exponential Smoothing
+    # 6. Holt-Winters Exponential Smoothing (src/models/holt_winters.py)
     try:
         p_hw, lb_hw, ub_hw, _ = forecast_holt_winters(y_train, horizon=eval_horizon, seasonal_periods=12)
         m_hw = compute_forecast_metrics(y_val, p_hw, lb_hw, ub_hw, model_name="Holt-Winters Exponential Smoothing")
@@ -389,11 +174,11 @@ def run_model_comparison(
     except Exception as e:
         logger.warning("Holt-Winters failed: %s", e)
 
-    # 7. ARIMAX (with Exogenous Weather Lags)
-    if has_weather:
+    # 7. ARIMAX with Exogenous Weather Lags (src/models/arimax_model.py)
+    if has_weather and train_exog is not None and val_exog is not None:
         try:
-            p_arimax, lb_arimax, ub_arimax, _ = forecast_sarimax(
-                y_train, horizon=eval_horizon, order=(1, 0, 1), train_exog=train_exog, future_exog=val_exog
+            p_arimax, lb_arimax, ub_arimax, _ = forecast_arimax(
+                y_train, horizon=eval_horizon, train_exog=train_exog, future_exog=val_exog, order=(1, 0, 1)
             )
             m_arimax = compute_forecast_metrics(y_val, p_arimax, lb_arimax, ub_arimax, model_name="ARIMAX (Weather Regressors)")
             models_results.append(m_arimax)
@@ -401,10 +186,10 @@ def run_model_comparison(
         except Exception as e:
             logger.warning("ARIMAX failed: %s", e)
 
-    # 8. SARIMAX (Seasonal + Exogenous Weather Lags)
-    if has_weather:
+    # 8. SARIMAX Seasonal + Exogenous Weather Lags (src/models/sarimax_model.py)
+    if has_weather and train_exog is not None and val_exog is not None:
         try:
-            p_sarimax, lb_sarimax, ub_sarimax, _ = forecast_sarimax(
+            p_sarimax, lb_sarimax, ub_sarimax, _ = forecast_sarimax_model(
                 y_train,
                 horizon=eval_horizon,
                 order=(1, 0, 1),
@@ -418,7 +203,7 @@ def run_model_comparison(
         except Exception as e:
             logger.warning("SARIMAX failed: %s", e)
 
-    # 9. Meta Prophet (if available)
+    # 9. Meta Prophet (src/models/prophet_model.py)
     if HAS_PROPHET:
         try:
             p_prophet, lb_prophet, ub_prophet, _ = forecast_prophet(
@@ -432,10 +217,10 @@ def run_model_comparison(
         except Exception as e:
             logger.warning("Prophet failed: %s", e)
 
-    # 10. Gradient Boosting Machine Learning Autoregressor
+    # 10. Gradient Boosting Regressor (src/models/gradient_boosting.py)
     try:
-        p_gb, lb_gb, ub_gb, _ = forecast_ml_autoregressor(
-            train_df, horizon=eval_horizon, model_type="gradient_boosting",
+        p_gb, lb_gb, ub_gb, _ = forecast_gradient_boosting(
+            train_df, horizon=eval_horizon,
             lags=[1, 2, 3, 12],
             weather_lag_cols=weather_exog_cols if has_weather else None,
             future_weather_df=val_df if has_weather else None,
@@ -446,10 +231,10 @@ def run_model_comparison(
     except Exception as e:
         logger.warning("HistGradientBoosting autoregressor failed: %s", e)
 
-    # 11. Random Forest Machine Learning Autoregressor
+    # 11. Random Forest Regressor (src/models/random_forest.py)
     try:
-        p_rf, lb_rf, ub_rf, _ = forecast_ml_autoregressor(
-            train_df, horizon=eval_horizon, model_type="random_forest",
+        p_rf, lb_rf, ub_rf, _ = forecast_random_forest(
+            train_df, horizon=eval_horizon,
             lags=[1, 2, 3, 12],
             weather_lag_cols=weather_exog_cols if has_weather else None,
             future_weather_df=val_df if has_weather else None,
@@ -487,14 +272,7 @@ def generate_future_weather_scenario(
     temp_shift_c: float = 0.0,
     precip_factor: float = 1.0,
 ) -> pd.DataFrame:
-    """Generate future weather regressors based on transparent, documented climate scenarios.
-    
-    Scenarios:
-    - baseline_climatology: historical monthly mean for each calendar month (no artificial trends)
-    - high_monsoon: baseline precipitation increased by precip_factor (e.g. +20%), temp_shift_c
-    - drought_heatwave: precipitation reduced, temperatures elevated
-    - custom: explicit user shifts
-    """
+    """Generate future weather regressors based on transparent, documented climate scenarios."""
     last_date = pd.to_datetime(historical_df["date"].max())
     future_dates = pd.date_range(start=last_date + pd.DateOffset(months=1), periods=horizon_months, freq="MS")
 
