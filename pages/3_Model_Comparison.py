@@ -8,6 +8,10 @@ import streamlit as st
 from statsmodels.tsa.stattools import acf
 
 from src.evaluation import build_model_comparison_table
+import importlib
+import src.forecasting
+if not hasattr(src.forecasting, "run_rolling_walk_forward_evaluation"):
+    importlib.reload(src.forecasting)
 from src.forecasting import chronological_split, run_model_comparison, run_rolling_walk_forward_evaluation
 from src.icons import (
     icon_arrow_right,
