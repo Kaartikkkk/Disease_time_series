@@ -11,12 +11,15 @@ from src.evaluation import build_model_comparison_table
 from src.forecasting import chronological_split, run_model_comparison
 from src.icons import (
     icon_arrow_right,
+    icon_bar_chart,
+    icon_check_circle,
     icon_download,
     icon_forecast,
     icon_info,
     icon_model_compare,
     icon_pulse,
     icon_shield,
+    icon_target,
     icon_timeseries,
 )
 from src.stationarity import perform_ljung_box_test
@@ -37,13 +40,12 @@ from src.ui_helpers import (
 
 st.set_page_config(
     page_title="Model Comparison — Verdant Intelligence",
-    page_icon="⚖️",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
 inject_custom_css()
-render_app_sidebar(active_page="models")
+render_app_sidebar(active_page="comparison")
 render_top_header()
 
 adv_mode = is_advanced_mode()
@@ -105,7 +107,7 @@ with col_p2:
 with col_p3:
     st.write("")
     run_btn = st.button(
-        "🚀 Compare Models" if not adv_mode else "🚀 Re-Run Benchmark",
+        "Compare Models" if not adv_mode else "Re-Run Benchmark",
         type="primary",
         use_container_width=True,
     )
@@ -191,8 +193,8 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Top Model Champion Award Banner
-banner_badge = "🏆 BEST PERFORMING PREDICTION METHOD" if not adv_mode else "🏆 OPTIMAL CHRONOLOGICAL BENCHMARK CHAMPION"
+# Top Model Champion Award Banner (Clean SVG icon, zero emojis)
+banner_badge = f"{icon_target(14, '#C4A66A')} TOP PERFORMING PREDICTION METHOD" if not adv_mode else f"{icon_target(14, '#C4A66A')} OPTIMAL CHRONOLOGICAL BENCHMARK CHAMPION"
 banner_desc = (
     f"Ranked #1 out of {len(eval_metrics)} methods tested on past real data. It produced the lowest prediction error ({best_rmse:.2f} reports on average) during the {len(val_dates)}-month test period."
     if not adv_mode
@@ -204,7 +206,7 @@ st.markdown(
     <div style="background: linear-gradient(135deg, #102C26 0%, #183D32 100%); border-radius: 16px; padding: 22px 28px; color: #FFFFFF; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(16, 44, 38, 0.15);">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
             <div>
-                <div style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #C4A66A; letter-spacing: 0.1em; margin-bottom: 4px;">
+                <div style="display: flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #C4A66A; letter-spacing: 0.1em; margin-bottom: 4px;">
                     {banner_badge}
                 </div>
                 <div style="font-family: 'Fraunces', serif; font-size: 1.85rem; font-weight: 600; color: #FFFFFF; line-height: 1.2;">
@@ -245,19 +247,27 @@ st.markdown("<div style='font-size: 1.25rem; font-family: Fraunces, serif; color
 
 # Documented Zero-Denominator Policy Callout
 st.markdown(
-    r"""
+    """
     <div style="background: rgba(82, 122, 80, 0.06); border-left: 3px solid #527A50; padding: 10px 16px; border-radius: 4px; font-size: 0.82rem; color: #202822; margin-bottom: 14px;">
         <strong>Policy on Sparse Counts & Zero-Denominator Metrics:</strong> 
         Because agricultural disease occurrence time series contain low-activity or zero-count intervals, standard MAPE is mathematically undefined (division by zero) during zero-report months. 
-        We calculate MAPE strictly over non-zero observations and report <strong>sMAPE</strong> (Symmetric MAPE, bounded in $[0\%, 200\%]$) and <strong>WAPE</strong> (Weighted Absolute Percentage Error = $\sum |e_t| / \sum y_t$) so rankings are never skewed by division-by-zero artifacts.
+        We calculate MAPE strictly over non-zero observations and report <strong>sMAPE</strong> (Symmetric MAPE, bounded in [0%, 200%]) and <strong>WAPE</strong> (Weighted Absolute Percentage Error = &Sigma; |e<sub>t</sub>| / &Sigma; y<sub>t</sub>) so rankings are never skewed by division-by-zero artifacts.
     </div>
     """,
     unsafe_allow_html=True,
 )
 
 if not adv_mode:
-    table_display = table_df[["Model", "RMSE", "MAE", "sMAPE (%)", "Rank"]].copy()
-    table_display.columns = ["Prediction Method", "Average Error (RMSE)", "Mean Difference (MAE)", "Percentage Error (sMAPE %)", "Rank"]
+    simple_cols = [c for c in ["Rank", "Model", "RMSE", "MAE", "sMAPE (%)"] if c in table_df.columns]
+    table_display = table_df[simple_cols].copy()
+    col_rename = {
+        "Rank": "Rank",
+        "Model": "Prediction Method",
+        "RMSE": "Average Error (RMSE)",
+        "MAE": "Mean Difference (MAE)",
+        "sMAPE (%)": "Percentage Error (sMAPE %)",
+    }
+    table_display = table_display.rename(columns=col_rename)
     st.dataframe(table_display, use_container_width=True, hide_index=True)
 else:
     st.dataframe(table_df, use_container_width=True, hide_index=True)
@@ -265,7 +275,7 @@ else:
 # Export Leaderboard
 csv_bytes = table_df.to_csv(index=False).encode("utf-8")
 st.download_button(
-    label="📥 Download Benchmark Results (CSV)",
+    label="Download Benchmark Results (CSV)",
     data=csv_bytes,
     file_name=f"model_comparison_{selected_slug}_{horizon}m.csv",
     mime="text/csv",
@@ -288,11 +298,12 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-tab_actual, tab_errors, tab_residuals, tab_assumptions = st.tabs([
-    "📈 Actual vs. Predicted Reports",
-    "📊 Error Metrics Comparison (RMSE & MAE)",
-    "🔬 Residual Diagnostics & Autocorrelation",
-    "📋 Model Formulations & Assumptions",
+tab_actual, tab_rmse, tab_mae, tab_residuals, tab_assumptions = st.tabs([
+    "Actual vs. Predicted",
+    "RMSE Comparison",
+    "MAE Comparison",
+    "Residual Diagnostics",
+    "Model Formulations",
 ])
 
 with tab_actual:
@@ -348,50 +359,79 @@ with tab_actual:
         technical_details="Holdout evaluation over horizon h=" + str(horizon) + " months. Predictions generated iteratively from training cutoffs."
     )
 
-with tab_errors:
+with tab_rmse:
+    st.subheader("Root Mean Squared Error (RMSE) Comparison")
     model_names = [m["model_name"] for m in eval_metrics]
     rmse_vals = [m.get("rmse", 0.0) for m in eval_metrics]
-    mae_vals = [m.get("mae", 0.0) for m in eval_metrics]
+    rmse_colors = ["#102C26" if m == best_model else "#527A50" for m in model_names]
 
-    fig_err = go.Figure()
-    fig_err.add_trace(
+    fig_rmse = go.Figure()
+    fig_rmse.add_trace(
         go.Bar(
             x=model_names,
             y=rmse_vals,
-            name="RMSE (Root Mean Squared Error)",
-            marker_color="#102C26",
-            hovertemplate="<b>%{x}</b><br>RMSE: %{y:.3f}<extra></extra>",
+            marker_color=rmse_colors,
+            name="RMSE",
+            hovertemplate="<b>%{x}</b><br>RMSE: %{y:.3f} reports<extra></extra>",
+            text=[f"{v:.2f}" for v in rmse_vals],
+            textposition="outside",
         )
     )
-    fig_err.add_trace(
+    if baseline_rmse > 0:
+        fig_rmse.add_hline(
+            y=baseline_rmse,
+            line_dash="dash",
+            line_color="#C4A66A",
+            annotation_text=f"Seasonal Naive Baseline ({baseline_rmse:.2f})",
+            annotation_position="top right",
+        )
+
+    format_plotly_figure(fig_rmse, title="Out-of-Sample RMSE Across Models (Lower is Better)", height=420)
+    fig_rmse.update_layout(
+        xaxis_title="Prediction Method",
+        yaxis_title="RMSE (Reports)",
+        xaxis_tickangle=-35,
+    )
+    st.plotly_chart(fig_rmse, use_container_width=True)
+
+    render_graph_explanation_card(
+        what_it_shows="This chart shows the Root Mean Squared Error (RMSE) for each forecasting model during the chronological holdout testing period.",
+        key_observation=f"{best_model} achieves the lowest RMSE of {best_rmse:.3f}, beating the Seasonal Naive baseline by {abs(improvement_pct):.1f}%.",
+        why_it_matters="RMSE penalizes large unexpected prediction errors heavily, making it the most important metric for avoiding severe surprise disease outbreaks in agriculture.",
+        technical_details="RMSE = sqrt((1/H) sum_{t=1}^H (y_t - y_hat_t)^2)."
+    )
+
+with tab_mae:
+    st.subheader("Mean Absolute Error (MAE) Comparison")
+    mae_vals = [m.get("mae", 0.0) for m in eval_metrics]
+    mae_colors = ["#C4A66A" if m == best_model else "#A9BEA0" for m in model_names]
+
+    fig_mae = go.Figure()
+    fig_mae.add_trace(
         go.Bar(
             x=model_names,
             y=mae_vals,
-            name="MAE (Mean Absolute Error)",
-            marker_color="#C4A66A",
-            hovertemplate="<b>%{x}</b><br>MAE: %{y:.3f}<extra></extra>",
+            marker_color=mae_colors,
+            name="MAE",
+            hovertemplate="<b>%{x}</b><br>MAE: %{y:.3f} reports<extra></extra>",
+            text=[f"{v:.2f}" for v in mae_vals],
+            textposition="outside",
         )
     )
 
-    format_plotly_figure(
-        fig_err,
-        title="Prediction Errors Across Models (Lower Bars Indicate Higher Accuracy)",
-        height=420,
-    )
-    fig_err.update_layout(
-        barmode="group",
+    format_plotly_figure(fig_mae, title="Out-of-Sample MAE Across Models (Lower is Better)", height=420)
+    fig_mae.update_layout(
         xaxis_title="Prediction Method",
-        yaxis_title="Error Size (Reports)",
+        yaxis_title="MAE (Reports)",
         xaxis_tickangle=-35,
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1.0),
     )
-    st.plotly_chart(fig_err, use_container_width=True)
+    st.plotly_chart(fig_mae, use_container_width=True)
 
     render_graph_explanation_card(
-        what_it_shows="This grouped bar chart compares the Root Mean Squared Error (RMSE) and Mean Absolute Error (MAE) for all 11 evaluated models.",
-        key_observation=f"Classical models ({best_model} and Seasonal Naive) achieve lower error rates than complex non-linear machine learning regressors on this monthly count series.",
-        why_it_matters="RMSE penalizes large unexpected outbreak errors quadratically, whereas MAE measures expected monthly deviation. Parsimonious models perform best because monthly epidemiology data has limited sample length where complex models overfit.",
-        technical_details="RMSE = sqrt(mean((y - y_hat)^2)); MAE = mean(|y - y_hat|)."
+        what_it_shows="This chart shows the Mean Absolute Error (MAE) measuring the average monthly difference between predicted and actual disease reports.",
+        key_observation=f"{best_model} produces an average monthly error of only {best_row.get('mae', 0.0):.3f} reports, maintaining the most consistent month-by-month precision.",
+        why_it_matters="Unlike RMSE, MAE gives each error equal linear weight, providing a realistic estimate of expected monthly reporting variation for planning field interventions.",
+        technical_details="MAE = (1/H) sum_{t=1}^H |y_t - y_hat_t|."
     )
 
 with tab_residuals:
@@ -450,7 +490,7 @@ with tab_residuals:
             )
 
 with tab_assumptions:
-    st.subheader("📋 Classical Model Formulations, Assumptions & Parameter Justification")
+    st.subheader("Classical Model Formulations, Assumptions & Parameter Justification")
     st.markdown(
         """
         Below is the formal specification of each classical and comparative forecasting technique implemented in this platform:
@@ -551,6 +591,22 @@ st.markdown(
                 </p>
             </div>
         </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+# Page Conclusion
+st.markdown(
+    f"""
+    <div class="verdant-card" style="background: #F6F4EC; border: 1px solid rgba(82, 122, 80, 0.2); border-radius: 14px; padding: 20px 24px; margin-top: 24px;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+            {icon_target(18, "#183D32")}
+            <h4 style="margin: 0; color: #183D32; font-size: 1.05rem;">Model Comparison Conclusion</h4>
+        </div>
+        <p style="margin: 0; font-size: 0.88rem; color: #5A665D; line-height: 1.6;">
+            Across chronological holdout testing, <strong>{best_model}</strong> consistently achieves the highest forecasting accuracy with an RMSE of {best_rmse:.3f} and MAE of {best_row.get('mae', 0.0):.3f}. Parsimonious statistical models outperform high-capacity machine learning algorithms on passive surveillance monthly records by avoiding overfitting on zero-count months.
+        </p>
     </div>
     """,
     unsafe_allow_html=True,

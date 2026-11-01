@@ -34,6 +34,7 @@ from src.icons import (
     icon_pin,
     icon_pulse,
     icon_shield,
+    icon_target,
     icon_thermometer,
     icon_timeseries,
     icon_weather,
@@ -57,9 +58,8 @@ from src.ui_helpers import (
 
 st.set_page_config(
     page_title="Future Predictions — Verdant Intelligence",
-    page_icon="🔮",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
 inject_custom_css()
@@ -504,14 +504,14 @@ st.dataframe(df_summary_table, use_container_width=True, hide_index=True)
 
 csv_summary = df_summary_table.to_csv(index=False).encode("utf-8")
 st.download_button(
-    label="📥 Download Forecast Table (CSV)",
+    label="Download Forecast Table (CSV)",
     data=csv_summary,
     file_name=f"monthly_predictions_{selected_slug}_{horizon_months}m.csv",
     mime="text/csv",
 )
 
 # 4. Multi-Disease Attention Summary
-with st.expander("🔍 Compare Predicted Activity Across All 10 Plant Diseases", expanded=False):
+with st.expander("Compare Predicted Activity Across All 10 Plant Diseases", expanded=False):
     st.markdown(
         "See how future predicted activity compares across all monitored plant diseases in India."
     )
@@ -775,3 +775,19 @@ if golden_b64:
         """,
         unsafe_allow_html=True,
     )
+
+# Page Conclusion
+st.markdown(
+    f"""
+    <div class="verdant-card" style="background: #F6F4EC; border: 1px solid rgba(82, 122, 80, 0.2); border-radius: 14px; padding: 20px 24px; margin-top: 14px; margin-bottom: 24px;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+            {icon_target(18, "#183D32")}
+            <h4 style="margin: 0; color: #183D32; font-size: 1.05rem;">Future Forecasts Conclusion</h4>
+        </div>
+        <p style="margin: 0; font-size: 0.88rem; color: #5A665D; line-height: 1.6;">
+            Future projections across the {horizon_months}-month horizon indicate that {pathogen_dict.get(selected_slug, 'disease')} activity will reach peak incidence in <strong>{peak_info.get('peak_month', 'upcoming months')}</strong> (~{peak_info.get('peak_value', 0.0):.1f} reports). Nested prediction intervals and transparent limitation disclosures ensure forecasts provide reliable early advisory windows for regional agricultural planning without false certainty.
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)

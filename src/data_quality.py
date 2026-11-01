@@ -163,7 +163,7 @@ def generate_data_quality_report(
     # Save Markdown report
     md_path = reports_dir / "data_quality_report.md"
     with open(md_path, "w", encoding="utf-8") as f:
-        f.write("# 📋 Data Quality & Temporal Coverage Audit: Indian Plant Disease Records\n\n")
+        f.write("# Data Quality & Temporal Coverage Audit: Indian Plant Disease Records\n\n")
         f.write(f"**Audit Timestamp (UTC):** {report_data['report_metadata']['audit_timestamp_utc']}  \n")
         f.write(f"**Country:** India (`IN`)  \n")
         f.write(f"**Total Retrieved Real Records:** {total_records_all:,}  \n")
@@ -174,7 +174,7 @@ def generate_data_quality_report(
         f.write("| Pathogen | Disease | Host Crop | Raw Records | Date Span | With Dates (%) | Coordinates | Suitability |\n")
         f.write("|---|---|---|---|---|---|---|---|\n")
         for item in summary_list:
-            suit_badge = "✅ High" if item.get("is_suitable_for_monthly_forecasting") else "⚠️ Low/Sparse"
+            suit_badge = "[High]" if item.get("is_suitable_for_monthly_forecasting") else "[Low/Sparse]"
             f.write(
                 f"| *{item['scientific_name']}* | {item['common_name']} | {item['host_crop']} | "
                 f"{item['total_records']} | {item['min_date']} to {item['max_date']} | "

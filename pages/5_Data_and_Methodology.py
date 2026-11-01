@@ -7,12 +7,15 @@ import streamlit as st
 
 from src.icons import (
     icon_book,
+    icon_check_circle,
     icon_database,
     icon_download,
     icon_leaf,
     icon_model_compare,
     icon_settings,
     icon_shield,
+    icon_table,
+    icon_target,
     icon_timeseries,
     icon_weather,
 )
@@ -27,9 +30,8 @@ from src.ui_helpers import (
 
 st.set_page_config(
     page_title="Data & Methodology — Verdant Intelligence",
-    page_icon="📖",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
 inject_custom_css()
@@ -67,26 +69,20 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-tab_sources, tab_roster, tab_methods, tab_limits, tab_exports = st.tabs([
-    "📡 Where Data Comes From",
-    "🌿 Diseases We Track",
-    "🔬 How Predictions Work",
-    "🛡️ Responsible Use",
-    "📥 Download Data Files",
+tab_sources, tab_prep, tab_methods, tab_eval, tab_downloads = st.tabs([
+    "Data Sources & Coverage",
+    "Preprocessing & Missing Values",
+    "Model Methodology",
+    "Evaluation & Responsible Use",
+    "Downloads & References",
 ])
 
-# ----------------- Tab 1: Where Data Comes From -----------------
+# ----------------- Tab 1: Data Sources & Coverage -----------------
 with tab_sources:
-    st.markdown("### Public Data Sources & Verification")
+    st.subheader("Public Data Sources & Field Surveillance")
     st.markdown(
-        "All disease and weather information in Verdant Intelligence comes from established, open-access "
-        "scientific and intergovernmental institutions. We do not use invented or synthetic disease records."
-    )
-
-    render_what_does_this_mean(
-        "Our system downloads real recorded sightings from botanical museums and agricultural research institutes (GBIF) "
-        "and combines them with satellite weather measurements from NASA. This ensures predictions reflect real-world agricultural conditions.",
-        "GBIF REST query filters country=IN, year=2015..2026 with taxonomic matching against GBIF Backbone Taxonomy. NASA POWER provides monthly assimilation derived from MERRA-2 and GEOS-5.",
+        "All disease occurrence and meteorological telemetry in Verdant Intelligence comes from established, open-access "
+        "scientific and intergovernmental institutions. We do not use synthetic or simulated disease records."
     )
 
     c1, c2, c3 = st.columns(3)
@@ -96,7 +92,7 @@ with tab_sources:
             <div class="verdant-card" style="height: 100%;">
                 <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
                     {icon_leaf(22, "#527A50")}
-                    <h3 style="margin: 0; font-size: 1.15rem; color: #102C26;">GBIF Disease Sightings</h3>
+                    <h3 style="margin: 0; font-size: 1.15rem; color: #102C26;">GBIF Pathogen Records</h3>
                 </div>
                 <div style="display: inline-block; background: rgba(82, 122, 80, 0.1); border-radius: 4px; padding: 2px 8px; font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; color: #183D32; margin-bottom: 12px;">
                     Global Biodiversity Facility · Open Data
@@ -162,12 +158,8 @@ with tab_sources:
             unsafe_allow_html=True,
         )
 
-# ----------------- Tab 2: Diseases We Track -----------------
-with tab_roster:
-    st.markdown("### Plant Diseases Monitored in This Project")
-    st.markdown(
-        "Overview of the major Indian crop diseases analyzed in the 2015–2026 continuous monthly timeline."
-    )
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.subheader("Monitored Plant Diseases & Dataset Coverage")
     taxa_table = [
         {"Common Disease Name": "Rice Blast", "Host Crops": "Rice / Paddy, Finger Millet", "Scientific Name": "Pyricularia oryzae", "Recorded Reports (2015-2026)": "312", "Status": "Active Series"},
         {"Common Disease Name": "Brown Spot of Rice", "Host Crops": "Rice / Paddy", "Scientific Name": "Bipolaris oryzae", "Recorded Reports (2015-2026)": "184", "Status": "Active Series"},
@@ -180,275 +172,323 @@ with tab_roster:
         {"Common Disease Name": "Sugarcane Red Rot", "Host Crops": "Sugarcane", "Scientific Name": "Colletotrichum falcatum", "Recorded Reports (2015-2026)": "98", "Status": "Active Series"},
         {"Common Disease Name": "Wheat Stem Rust", "Host Crops": "Wheat, Barley", "Scientific Name": "Puccinia graminis", "Recorded Reports (2015-2026)": "0 (Controlled)", "Status": "Successfully Controlled Nationwide"},
     ]
-    st.dataframe(pd.DataFrame(taxa_table), width="stretch")
+    st.dataframe(pd.DataFrame(taxa_table), use_container_width=True, hide_index=True)
 
-# ----------------- Tab 3: How Predictions Work -----------------
-with tab_methods:
-    st.markdown("### How the Forecasting Models Make Predictions")
-
-    render_what_does_this_mean(
-        "The computer analyzes past seasonal patterns over 10 years (such as how disease reports rise during monsoon and drop in winter) "
-        "and tests multiple forecasting methods on unseen historical years to find the most reliable one.",
-        "Evaluation strictly adheres to forward chronological splitting (Train 70%, Val 15%, Test 15%) without lookahead bias. Error metrics use zero-safe sMAPE and WAPE.",
-    )
-
-    m1, m2 = st.columns(2)
-    with m1:
+# ----------------- Tab 2: Preprocessing & Missing Values -----------------
+with tab_prep:
+    st.subheader("Data Preprocessing & Missing-Value Protocols")
+    
+    col_pr1, col_pr2 = st.columns(2)
+    with col_pr1:
         st.markdown(
             f"""
-            <div class="verdant-card">
-                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                    {icon_timeseries(20, "#527A50")}
-                    <h3 style="margin: 0; font-size: 1.15rem; color: #102C26;">What We Are Predicting</h3>
+            <div class="verdant-card" style="height: 100%;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                    {icon_settings(20, "#527A50")}
+                    <h4 style="margin: 0; color: #102C26; font-size: 1.1rem;">Preprocessing Pipeline</h4>
                 </div>
-                <p style="font-size: 0.9rem; color: #404B43; line-height: 1.55;">
-                    The model predicts the monthly count of <strong>recorded disease reports</strong> across India:
-                </p>
-                <div style="background: rgba(16, 44, 38, 0.04); border-left: 3px solid #527A50; padding: 10px 14px; font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; margin: 10px 0;">
-                    Predicted Reports = Number of verified specimens deposited in Month t
-                </div>
-                <p style="font-size: 0.84rem; color: #5A665D;">
-                    This reflects confirmed surveillance intensity and seasonal disease activity, serving as an early warning for regional crop health.
-                </p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-        st.markdown(
-            f"""
-            <div class="verdant-card" style="margin-top: 16px;">
-                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                    {icon_model_compare(20, "#527A50")}
-                    <h3 style="margin: 0; font-size: 1.15rem; color: #102C26;">Prediction Methods Compared</h3>
-                </div>
-                <ul style="font-size: 0.88rem; color: #404B43; padding-left: 20px; line-height: 1.6;">
-                    <li><strong>Last Year's Same Month:</strong> Uses disease levels from the same month last year as a baseline.</li>
-                    <li><strong>Seasonal Trend Models (ARIMA &amp; SARIMA):</strong> Capture repeating yearly agricultural cycles (Kharif monsoon vs. Rabi winter).</li>
-                    <li><strong>Weather-Enhanced Models (SARIMAX):</strong> Combine past disease history with temperature and rainfall trends.</li>
-                    <li><strong>Modern Machine Learning (Prophet &amp; LightGBM):</strong> Learn complex non-linear seasonal interactions and multiple weather factors.</li>
+                <ul style="font-size: 0.86rem; color: #404B43; line-height: 1.6; padding-left: 20px; margin: 0;">
+                    <li><strong>Temporal Aggregation:</strong> Accession timestamps parsed via ISO 8601 and aggregated to calendar Month-Start (<code>MS</code>) frequency.</li>
+                    <li><strong>Deduplication:</strong> Cryptographic hashing across <code>gbifID</code>, temporal date, and geographic coordinates eliminates redundant submissions.</li>
+                    <li><strong>Spatial Bounding:</strong> Coordinates filtered strictly within India's territorial boundaries (6.0°N–37.5°N, 68.0°E–97.5°E).</li>
+                    <li><strong>Outlier Fences:</strong> Non-parametric Tukey fences ($Q_3 + 1.5 \\times \\text{{IQR}}$) identify anomalous field testing surges.</li>
                 </ul>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
-    with m2:
+    with col_pr2:
         st.markdown(
             f"""
-            <div class="verdant-card">
-                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+            <div class="verdant-card" style="height: 100%;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
                     {icon_shield(20, "#527A50")}
-                    <h3 style="margin: 0; font-size: 1.15rem; color: #102C26;">How We Test Accuracy (No Cheating)</h3>
+                    <h4 style="margin: 0; color: #102C26; font-size: 1.1rem;">Missing-Value Epistemology</h4>
                 </div>
-                <p style="font-size: 0.9rem; color: #404B43; line-height: 1.55;">
-                    To make sure models perform well in the real world, we test them only on <strong>future unseen months</strong>:
-                </p>
-                <div style="display: flex; gap: 8px; margin: 12px 0;">
-                    <div style="flex: 7; background: rgba(82, 122, 80, 0.15); border: 1px solid #527A50; border-radius: 6px; padding: 8px; text-align: center; font-size: 0.8rem; font-weight: 600; color: #183D32;">
-                        Training (70%)<br><span style="font-size: 0.72rem; font-weight: normal;">Past data: 2015 – 2022</span>
-                    </div>
-                    <div style="flex: 1.5; background: rgba(196, 166, 106, 0.2); border: 1px solid #C4A66A; border-radius: 6px; padding: 8px; text-align: center; font-size: 0.8rem; font-weight: 600; color: #695221;">
-                        Validation (15%)<br><span style="font-size: 0.72rem; font-weight: normal;">Tune models: 2023</span>
-                    </div>
-                    <div style="flex: 1.5; background: rgba(16, 44, 38, 0.2); border: 1px solid #102C26; border-radius: 6px; padding: 8px; text-align: center; font-size: 0.8rem; font-weight: 600; color: #102C26;">
-                        Final Test (15%)<br><span style="font-size: 0.72rem; font-weight: normal;">Unseen future: 2024–2025</span>
-                    </div>
-                </div>
-                <p style="font-size: 0.84rem; color: #5A665D;">
-                    The model never gets to peek at the future while learning. If it scores well, it truly learned the pattern.
-                </p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-        st.markdown(
-            f"""
-            <div class="verdant-card" style="margin-top: 16px;">
-                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                    {icon_download(20, "#527A50")}
-                    <h3 style="margin: 0; font-size: 1.15rem; color: #102C26;">Zero-Safe Error Scoring</h3>
-                </div>
-                <p style="font-size: 0.88rem; color: #404B43; line-height: 1.55;">
-                    Plant diseases frequently drop to 0 reports during dry off-season months. Standard percentage error formulas divide by 0 and break. We use robust formulas:
-                </p>
-                <ul style="font-size: 0.85rem; color: #404B43; padding-left: 20px; line-height: 1.6;">
-                    <li><strong>Average Prediction Error (RMSE):</strong> Average difference in reports between prediction and real counts. Lower is better.</li>
-                    <li><strong>Symmetric Error (sMAPE):</strong> Bounded percentage comparison that stays stable even when counts are 0.</li>
+                <ul style="font-size: 0.86rem; color: #404B43; line-height: 1.6; padding-left: 20px; margin: 0;">
+                    <li><strong>No Artificial Zeroes:</strong> Gaps during unmonitored intervals are flagged with <code>is_missing = True</code> rather than assumed to be zero.</li>
+                    <li><strong>Preserving Off-Season Reality:</strong> Dry summer periods naturally feature near-zero disease reports due to lack of host canopy foliage.</li>
+                    <li><strong>Bias Prevention:</strong> Explicit missingness tracking prevents downward forecast bias and avoids skewing out-of-sample error metrics.</li>
+                    <li><strong>Continuous Regularity:</strong> The timeline maintains an uninterrupted monthly sequence for econometric stability.</li>
                 </ul>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
-# ----------------- Tab 4: Responsible Use -----------------
-with tab_limits:
-    st.markdown("### What These Predictions Mean (and What They Do Not Mean)")
+# ----------------- Tab 3: Model Methodology -----------------
+with tab_methods:
+    st.subheader("Model Architectures & Mathematical Foundations")
     st.markdown(
-        "To use these predictions responsibly, farmers, agricultural officers, and students should understand "
-        "what the numbers represent in the real world."
+        "Verdant Intelligence implements a multi-model forecasting suite, spanning classical statistical econometrics, "
+        "exponential smoothing, and machine learning regressors:"
     )
 
+    models_method_data = [
+        {
+            "name": "ARIMA(1, 1, 1)",
+            "family": "Classical Econometrics",
+            "equation": r"\Delta y_t = c + \phi_1 \Delta y_{t-1} + \theta_1 \epsilon_{t-1} + \epsilon_t",
+            "description": "Combines first differencing (d=1) to eliminate stochastic trend with autoregressive (p=1) and moving average (q=1) terms to model persistence.",
+        },
+        {
+            "name": "SARIMA(1, 0, 1)(1, 0, 1)[12]",
+            "family": "Seasonal Econometrics",
+            "equation": r"\Phi(B^{12}) \phi(B) y_t = \Theta(B^{12}) \theta(B) \epsilon_t",
+            "description": "Extends ARIMA with 12-month seasonal polynomials to model recurring annual monsoon Kharif and winter Rabi infection surges.",
+        },
+        {
+            "name": "Holt-Winters Triple Exponential Smoothing",
+            "family": "State Space Smoothing",
+            "equation": r"\hat{y}_{t+h} = (\ell_t + h b_t) + s_{t+h-m}",
+            "description": "Recursive updating of level (alpha), trend (beta), and additive seasonal factors (gamma) with 12-month periodicity.",
+        },
+        {
+            "name": "Seasonal Naive (Benchmark Baseline)",
+            "family": "Deterministic Benchmark",
+            "equation": r"\hat{y}_{t+h} = y_{t+h-12}",
+            "description": "Mandatory academic benchmark carrying forward last year's same-month observation; any viable model must beat this baseline.",
+        },
+        {
+            "name": "ARIMAX / SARIMAX with Lagged Weather",
+            "family": "Econometric Exogenous",
+            "equation": r"y_t = \beta_1 \text{Temp}_{t-1} + \beta_2 \text{Rain}_{t-1} + \beta_3 \text{RH}_{t-1} + \eta_t",
+            "description": "Incorporates NASA POWER satellite agrometeorology with strictly lagged predictors (t-1) to avoid lookahead data leakage.",
+        },
+    ]
+
+    for m in models_method_data:
+        st.markdown(
+            f"""
+            <div style="background: #FFFEFA; border: 1px solid rgba(82, 122, 80, 0.2); border-left: 4px solid #527A50; border-radius: 8px; padding: 14px 18px; margin-bottom: 14px;">
+                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
+                    <div style="font-family: 'Fraunces', serif; font-size: 1.15rem; color: #102C26; font-weight: 600;">{m['name']}</div>
+                    <span style="font-size: 0.75rem; color: #527A50; font-weight: 600; text-transform: uppercase;">{m['family']}</span>
+                </div>
+                <div style="font-size: 0.85rem; color: #404B43; margin-bottom: 6px;">{m['description']}</div>
+                <div style="background: rgba(16, 44, 38, 0.04); border-radius: 4px; padding: 6px 12px; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #183D32;">
+                    Mathematical Form: {m['equation']}
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+# ----------------- Tab 4: Evaluation & Responsible Use -----------------
+with tab_eval:
+    st.subheader("Validation Framework & Responsible Use")
+    
+    col_ev1, col_ev2 = st.columns(2)
+    with col_ev1:
+        st.markdown(
+            f"""
+            <div class="verdant-card" style="height: 100%;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                    {icon_shield(20, "#527A50")}
+                    <h4 style="margin: 0; color: #102C26; font-size: 1.1rem;">Chronological Testing Protocol</h4>
+                </div>
+                <p style="font-size: 0.86rem; color: #404B43; line-height: 1.55; margin-bottom: 10px;">
+                    All models are evaluated strictly chronologically to eliminate future lookahead data leakage:
+                </p>
+                <ul style="font-size: 0.84rem; color: #5A665D; line-height: 1.6; padding-left: 20px; margin: 0;">
+                    <li><strong>Training Set (70%):</strong> Historical baseline calibration (Jan 2015 – Dec 2022).</li>
+                    <li><strong>Validation Set (15%):</strong> Hyperparameter tuning and lag order selection (2023).</li>
+                    <li><strong>Test Set (15%):</strong> Strictly unseen final evaluation (2024–2025).</li>
+                </ul>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    with col_ev2:
+        st.markdown(
+            f"""
+            <div class="verdant-card" style="height: 100%;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                    {icon_target(20, "#527A50")}
+                    <h4 style="margin: 0; color: #102C26; font-size: 1.1rem;">Zero-Safe Error Metrics</h4>
+                </div>
+                <p style="font-size: 0.86rem; color: #404B43; line-height: 1.55; margin-bottom: 10px;">
+                    Because plant disease counts frequently drop to zero during dry off-season periods, standard MAPE is mathematically undefined:
+                </p>
+                <ul style="font-size: 0.84rem; color: #5A665D; line-height: 1.6; padding-left: 20px; margin: 0;">
+                    <li><strong>sMAPE:</strong> Symmetric MAPE bounded in [0%, 200%], stable during zero-report months.</li>
+                    <li><strong>WAPE:</strong> Weighted Absolute Percentage Error ($\\sum |e_t| / \\sum y_t$).</li>
+                    <li><strong>RMSE & MAE:</strong> Standardized report count error metrics.</li>
+                </ul>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.subheader("Responsible Agricultural Use Guidelines")
+    
     st.markdown(
         f"""
-        <div class="verdant-card" style="margin-bottom: 16px; border-left: 4px solid #DC2626;">
-            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-                {icon_shield(18, "#DC2626")}
-                <h4 style="margin: 0; color: #102C26; font-size: 1.05rem;">1. Recorded Reports vs. Total Infected Acreage</h4>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="verdant-card" style="border-left: 4px solid #102C26;">
+                <h4 style="margin: 0 0 4px 0; color: #102C26; font-size: 0.98rem;">1. Documented Reports vs. Total Acreage</h4>
+                <p style="font-size: 0.82rem; color: #404B43; line-height: 1.5; margin: 0;">
+                    Numbers represent documented research herbaria and surveillance accessions, not an absolute census of infected farm acreage.
+                </p>
             </div>
-            <p style="font-size: 0.88rem; color: #404B43; line-height: 1.55; margin: 0;">
-                These numbers reflect <strong>verified scientific sightings deposited by researchers and field teams</strong>. 
-                A higher number indicates elevated disease activity in the region, but does not mean every single farm is infected.
-            </p>
-        </div>
-
-        <div class="verdant-card" style="margin-bottom: 16px; border-left: 4px solid #2563EB;">
-            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-                {icon_model_compare(18, "#2563EB")}
-                <h4 style="margin: 0; color: #102C26; font-size: 1.05rem;">2. Weather Conditions vs. Actual Infection</h4>
+            <div class="verdant-card" style="border-left: 4px solid #2563EB;">
+                <h4 style="margin: 0 0 4px 0; color: #102C26; font-size: 0.98rem;">2. Weather Conditions vs. Infection</h4>
+                <p style="font-size: 0.82rem; color: #404B43; line-height: 1.5; margin: 0;">
+                    Favorable micro-climates create permissive incubation conditions, but actual disease requires susceptible host crop phenology and physical spore presence.
+                </p>
             </div>
-            <p style="font-size: 0.88rem; color: #404B43; line-height: 1.55; margin: 0;">
-                Warm temperatures and high humidity create <strong>favorable conditions for fungal growth</strong>. However, disease can only develop if the pathogen spores are present on a susceptible crop variety. Good weather alone does not guarantee a disease outbreak.
-            </p>
-        </div>
-
-        <div class="verdant-card" style="margin-bottom: 16px; border-left: 4px solid #166534;">
-            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-                {icon_shield(18, "#166534")}
-                <h4 style="margin: 0; color: #102C26; font-size: 1.05rem;">3. Why Wheat Stem Rust Shows Zero Reports</h4>
+            <div class="verdant-card" style="border-left: 4px solid #527A50;">
+                <h4 style="margin: 0 0 4px 0; color: #102C26; font-size: 0.98rem;">3. Real-World Disease Control</h4>
+                <p style="font-size: 0.82rem; color: #404B43; line-height: 1.5; margin: 0;">
+                    Zero post-2015 reports for Wheat Stem Rust reflect successful widespread adoption of ICAR rust-resistant cultivars across India.
+                </p>
             </div>
-            <p style="font-size: 0.88rem; color: #404B43; line-height: 1.55; margin: 0;">
-                Our records show zero post-2015 reports for Wheat Stem Rust (*Puccinia graminis*). This is an agricultural success story: Indian agricultural universities (ICAR) developed resistant wheat varieties that effectively suppressed stem rust nationwide. We report real zeroes rather than inventing fake data.
-            </p>
-        </div>
-
-        <div class="verdant-card" style="margin-bottom: 16px; border-left: 4px solid #D97706;">
-            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-                {icon_timeseries(18, "#D97706")}
-                <h4 style="margin: 0; color: #102C26; font-size: 1.05rem;">4. Future Predictions Carry Some Uncertainty</h4>
+            <div class="verdant-card" style="border-left: 4px solid #C4A66A;">
+                <h4 style="margin: 0 0 4px 0; color: #102C26; font-size: 0.98rem;">4. Predictive Uncertainty</h4>
+                <p style="font-size: 0.82rem; color: #404B43; line-height: 1.5; margin: 0;">
+                    Forecasts convey seasonal risk probabilities with nested 80%/95% confidence bands rather than single-number guarantees.
+                </p>
             </div>
-            <p style="font-size: 0.88rem; color: #404B43; line-height: 1.55; margin: 0;">
-                All statistical models have uncertainty. Always inspect the shaded prediction interval around the forecast line. Actual recorded numbers may fall above or below the expected line due to unexpected weather events or changes in field surveillance.
-            </p>
         </div>
         """,
         unsafe_allow_html=True,
     )
 
-# ----------------- Tab 5: Download Data Files -----------------
-with tab_exports:
-    st.markdown("### Download Clean Datasets & Documentation")
-    st.markdown(
-        "Download cleaned monthly disease time-series, data quality audit records, and project documentation for replication."
-    )
-
+# ----------------- Tab 5: Downloads & References -----------------
+with tab_downloads:
+    st.subheader("Download Datasets & Artifacts")
+    
     ec1, ec2 = st.columns(2)
     with ec1:
         st.markdown(
             f"""
-            <div class="verdant-card" style="margin-bottom: 16px;">
-                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                    {icon_download(20, "#527A50")}
-                    <h3 style="margin: 0; font-size: 1.1rem; color: #102C26;">Monthly Disease Dataset (CSV)</h3>
+            <div class="verdant-card" style="margin-bottom: 14px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                    {icon_download(18, "#527A50")}
+                    <h4 style="margin: 0; font-size: 1.05rem; color: #102C26;">Monthly Disease Dataset (CSV)</h4>
                 </div>
-                <p style="font-size: 0.85rem; color: #5A665D; margin-bottom: 12px;">
-                    Continuous monthly records (2015–2026) across 10 major Indian crop diseases with filled off-season gaps.
+                <p style="font-size: 0.84rem; color: #5A665D; margin-bottom: 10px;">
+                    Continuous monthly records (2015–2026) across 10 major Indian crop diseases with joined NASA POWER weather.
                 </p>
             </div>
             """,
             unsafe_allow_html=True,
         )
-
         combined_path = Path("data/processed/india_plant_diseases_monthly.csv")
         if combined_path.exists():
             with open(combined_path, "rb") as f:
                 st.download_button(
-                    label="📥 Download Monthly Dataset (CSV)",
+                    label="Download Monthly Dataset (CSV)",
                     data=f.read(),
                     file_name="india_plant_diseases_monthly.csv",
                     mime="text/csv",
-                    width="stretch",
+                    use_container_width=True,
                 )
 
         st.markdown(
             f"""
-            <div class="verdant-card" style="margin-top: 20px; margin-bottom: 16px;">
-                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                    {icon_download(20, "#527A50")}
-                    <h3 style="margin: 0; font-size: 1.1rem; color: #102C26;">Data Quality Audit (JSON)</h3>
+            <div class="verdant-card" style="margin-top: 18px; margin-bottom: 14px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                    {icon_download(18, "#527A50")}
+                    <h4 style="margin: 0; font-size: 1.05rem; color: #102C26;">Data Quality Audit (JSON)</h4>
                 </div>
-                <p style="font-size: 0.85rem; color: #5A665D; margin-bottom: 12px;">
-                    Integrity checks, date verification, and location bounding verification scores.
+                <p style="font-size: 0.84rem; color: #5A665D; margin-bottom: 10px;">
+                    Integrity checks, date verification percentages, and location bounding scores.
                 </p>
             </div>
             """,
             unsafe_allow_html=True,
         )
-
         q_path = Path("data/reports/data_quality_report.json")
         if q_path.exists():
             with open(q_path, "rb") as f:
                 st.download_button(
-                    label="📥 Download Quality Certificate (JSON)",
+                    label="Download Quality Certificate (JSON)",
                     data=f.read(),
                     file_name="data_quality_report.json",
                     mime="application/json",
-                    width="stretch",
+                    use_container_width=True,
                 )
 
     with ec2:
         st.markdown(
             f"""
-            <div class="verdant-card" style="margin-bottom: 16px;">
-                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                    {icon_download(20, "#527A50")}
-                    <h3 style="margin: 0; font-size: 1.1rem; color: #102C26;">Methodology Whitepaper (Markdown)</h3>
+            <div class="verdant-card" style="margin-bottom: 14px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                    {icon_download(18, "#527A50")}
+                    <h4 style="margin: 0; font-size: 1.05rem; color: #102C26;">Methodology Whitepaper (Markdown)</h4>
                 </div>
-                <p style="font-size: 0.85rem; color: #5A665D; margin-bottom: 12px;">
+                <p style="font-size: 0.84rem; color: #5A665D; margin-bottom: 10px;">
                     Full documentation detailing collection parameters, mathematical formulas, and scientific citations.
                 </p>
             </div>
             """,
             unsafe_allow_html=True,
         )
-
         m_path = Path("data/reports/methodology_report.md")
         if m_path.exists():
             with open(m_path, "rb") as f:
                 st.download_button(
-                    label="📥 Download Methodology Whitepaper (Markdown)",
+                    label="Download Methodology Whitepaper (Markdown)",
                     data=f.read(),
                     file_name="methodology_report.md",
                     mime="text/markdown",
-                    width="stretch",
+                    use_container_width=True,
                 )
 
         st.markdown(
             f"""
-            <div class="verdant-card" style="margin-top: 20px; margin-bottom: 16px;">
-                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                    {icon_download(20, "#527A50")}
-                    <h3 style="margin: 0; font-size: 1.1rem; color: #102C26;">System Architecture Specification (JSON)</h3>
+            <div class="verdant-card" style="margin-top: 18px; margin-bottom: 14px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                    {icon_download(18, "#527A50")}
+                    <h4 style="margin: 0; font-size: 1.05rem; color: #102C26;">Architecture Specification (JSON)</h4>
                 </div>
-                <p style="font-size: 0.85rem; color: #5A665D; margin-bottom: 12px;">
+                <p style="font-size: 0.84rem; color: #5A665D; margin-bottom: 10px;">
                     Complete data pipeline definitions, feature engineering settings, and split indices.
                 </p>
             </div>
             """,
             unsafe_allow_html=True,
         )
-
         mj_path = Path("data/reports/methodology_report.json")
         if mj_path.exists():
             with open(mj_path, "rb") as f:
                 st.download_button(
-                    label="📥 Download Architecture Spec (JSON)",
+                    label="Download Architecture Spec (JSON)",
                     data=f.read(),
                     file_name="methodology_report.json",
                     mime="application/json",
-                    width="stretch",
+                    use_container_width=True,
                 )
 
-st.markdown("<br><br>", unsafe_allow_html=True)
-st.caption("Verdant Intelligence · Plant Disease Outbreak Forecasting · Open Science & Reproducible Research")
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.subheader("Academic References & Literature")
+    references = [
+        "Box, G. E., Jenkins, G. M., Reinsel, G. C., & Ljung, G. M. (2015). *Time Series Analysis: Forecasting and Control* (5th ed.). John Wiley & Sons.",
+        "Hyndman, R. J., & Athanasopoulos, G. (2021). *Forecasting: Principles and Practice* (3rd ed.). OTexts: Melbourne, Australia.",
+        "GBIF Secretariat (2024). *GBIF Backbone Taxonomy*. Checklist dataset https://doi.org/10.15468/39omei accessed via GBIF.org.",
+        "NASA POWER Project (2024). *Prediction Of Worldwide Energy Resources*. NASA Langley Research Center, https://power.larc.nasa.gov.",
+        "EPPO (2024). *EPPO Global Database*. European and Mediterranean Plant Protection Organization, https://gd.eppo.int.",
+    ]
+    for ref in references:
+        st.markdown(f"- <span style='font-size: 0.86rem; color: #404B43;'>{ref}</span>", unsafe_allow_html=True)
+
+# Page Conclusion
+st.markdown(
+    f"""
+    <div class="verdant-card" style="background: #F6F4EC; border: 1px solid rgba(82, 122, 80, 0.2); border-radius: 14px; padding: 20px 24px; margin-top: 24px;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+            {icon_target(18, "#183D32")}
+            <h4 style="margin: 0; color: #183D32; font-size: 1.05rem;">Data & Methodology Conclusion</h4>
+        </div>
+        <p style="margin: 0; font-size: 0.88rem; color: #5A665D; line-height: 1.6;">
+            Verdant Intelligence is built upon open-science data provenance, rigorous chronological validation, and zero-safe percentage error metrics. By uniting 11 years of verified GBIF occurrences with NASA POWER satellite meteorology, the platform provides an academically sound and reproducible forecasting framework for Indian agriculture.
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+

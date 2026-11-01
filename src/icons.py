@@ -312,3 +312,106 @@ def icon_info(size: int = 16, color: str = "#527A50", css_class: str = "") -> st
 </svg>"""
     return _to_img(svg, size, css_class)
 
+
+def icon_dashboard(size: int = 20, color: str = "#166534", css_class: str = "") -> str:
+    """Lucide-style Layout Dashboard icon for Overview."""
+    c = _res_col(color, "#166534")
+    svg = f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="3" y="3" width="7" height="9" rx="1.5" stroke="{c}" stroke-width="1.75"/>
+  <rect x="14" y="3" width="7" height="5" rx="1.5" stroke="{c}" stroke-width="1.75"/>
+  <rect x="14" y="12" width="7" height="9" rx="1.5" stroke="{c}" stroke-width="1.75"/>
+  <rect x="3" y="16" width="7" height="5" rx="1.5" stroke="{c}" stroke-width="1.75"/>
+</svg>"""
+    return _to_img(svg, size, css_class)
+
+
+def icon_microscope(size: int = 20, color: str = "#527A50", css_class: str = "") -> str:
+    """Scientific laboratory microscope icon for Disease Explorer."""
+    c = _res_col(color, "#527A50")
+    svg = f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M6 18H18M9 21H15M10 14L8 12M14 6L16 4M9 3L17 11L15 13L7 5L9 3Z" stroke="{c}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M12 9C12 9 14.5 9.5 15.5 12C16.5 14.5 16 18 16 18" stroke="{c}" stroke-width="1.75" stroke-linecap="round"/>
+</svg>"""
+    return _to_img(svg, size, css_class)
+
+
+def icon_activity(size: int = 20, color: str = "#0D9488", css_class: str = "") -> str:
+    """Waveform activity pulse icon for Stationarity & Diagnostics."""
+    c = _res_col(color, "#0D9488")
+    svg = f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M22 12H18L15 21L9 3L6 12H2" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>"""
+    return _to_img(svg, size, css_class)
+
+
+def icon_target(size: int = 20, color: str = "#C4A66A", css_class: str = "") -> str:
+    """Bullseye target icon for Model Accuracy & Benchmarking."""
+    c = _res_col(color, "#C4A66A")
+    svg = f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="12" cy="12" r="10" stroke="{c}" stroke-width="1.75"/>
+  <circle cx="12" cy="12" r="6" stroke="{c}" stroke-width="1.75"/>
+  <circle cx="12" cy="12" r="2" fill="{c}"/>
+</svg>"""
+    return _to_img(svg, size, css_class)
+
+
+def icon_droplets(size: int = 20, color: str = "#0284C7", css_class: str = "") -> str:
+    """Water droplets icon for Relative Humidity & Leaf Wetness."""
+    c = _res_col(color, "#0284C7")
+    svg = f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M7 16.3C7 18.9 9.1 21 11.7 21C14.3 21 16.4 18.9 16.4 16.3C16.4 13.5 11.7 7.5 11.7 7.5C11.7 7.5 7 13.5 7 16.3Z" stroke="{c}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M17.5 13C17.5 14.7 18.8 16 20.4 16C22.1 16 23.4 14.7 23.4 13C23.4 11.2 20.4 7 20.4 7C20.4 7 17.5 11.2 17.5 13Z" stroke="{c}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>"""
+    return _to_img(svg, size, css_class)
+
+
+def icon_cloud_rain(size: int = 20, color: str = "#2563EB", css_class: str = "") -> str:
+    """Precipitation cloud rain icon."""
+    c = _res_col(color, "#2563EB")
+    svg = f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M19 16.9A5 5 0 0 0 18 7H16.7A8 8 0 0 0 2 13.5A6 6 0 0 0 7.5 19H19" stroke="{c}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M13 13V21M13 21L10 18M13 21L16 18" stroke="{c}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>"""
+    return _to_img(svg, size, css_class)
+
+
+def icon_check_circle(size: int = 18, color: str = "#166534", css_class: str = "") -> str:
+    """Check circle icon for verified quality and valid stationarity."""
+    c = _res_col(color, "#166534")
+    svg = f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="12" cy="12" r="10" stroke="{c}" stroke-width="1.75"/>
+  <path d="M8 12L11 15L16 9" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>"""
+    return _to_img(svg, size, css_class)
+
+
+def icon_calendar(size: int = 18, color: str = "#527A50", css_class: str = "") -> str:
+    """Calendar date / timeline icon."""
+    c = _res_col(color, "#527A50")
+    svg = f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="3" y="4" width="18" height="18" rx="2" stroke="{c}" stroke-width="1.75"/>
+  <path d="M16 2V6M8 2V6M3 10H21" stroke="{c}" stroke-width="1.75" stroke-linecap="round"/>
+</svg>"""
+    return _to_img(svg, size, css_class)
+
+
+def icon_map(size: int = 18, color: str = "#527A50", css_class: str = "") -> str:
+    """Folded geographical territory map icon."""
+    c = _res_col(color, "#527A50")
+    svg = f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M1 6V22L8 18L16 22L23 18V2L16 6L8 2L1 6Z" stroke="{c}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M8 2V18M16 6V22" stroke="{c}" stroke-width="1.75"/>
+</svg>"""
+    return _to_img(svg, size, css_class)
+
+
+def icon_table(size: int = 18, color: str = "#527A50", css_class: str = "") -> str:
+    """Data summary table grid icon."""
+    c = _res_col(color, "#527A50")
+    svg = f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="3" y="3" width="18" height="18" rx="2" stroke="{c}" stroke-width="1.75"/>
+  <path d="M3 9H21M3 15H21M9 3V21M15 3V21" stroke="{c}" stroke-width="1.5"/>
+</svg>"""
+    return _to_img(svg, size, css_class)
+
+

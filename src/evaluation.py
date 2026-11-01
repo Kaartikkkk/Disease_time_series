@@ -114,4 +114,5 @@ def build_model_comparison_table(eval_results: List[Dict[str, Any]]) -> pd.DataF
     if not df.empty and "RMSE" in df.columns:
         # Sort by RMSE ascending (best model first)
         df = df.sort_values("RMSE", ascending=True).reset_index(drop=True)
+        df.insert(0, "Rank", [f"#{i+1}" for i in range(len(df))])
     return df

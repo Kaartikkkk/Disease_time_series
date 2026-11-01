@@ -15,9 +15,8 @@ import streamlit as st
 # Configure main app page
 st.set_page_config(
     page_title="Verdant Intelligence — Agricultural Disease Forecasting",
-    page_icon="🌿",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
 from src.icons import (
@@ -44,6 +43,7 @@ from src.icons import (
     icon_shield,
     icon_sprout,
     icon_sun,
+    icon_target,
     icon_thermometer,
     icon_timeseries,
     icon_trending_up,
@@ -612,9 +612,11 @@ with col_prev_left:
     )
     st.plotly_chart(fig_preview, use_container_width=True)
 
-    render_what_does_this_mean(
-        "This chart shows actual recorded disease reports over the past 10 years. In India, diseases like Rice Blast tend to peak during the Kharif monsoon (August to November) when humidity and rainfall are highest.",
-        "Zero-bounded continuous monthly timeline aggregated from georeferenced GBIF accessions with strict temporal deduplication."
+    render_graph_explanation_card(
+        what_it_shows="Monthly recorded disease occurrences for Rice Blast and Brown Spot of Rice in India from 2015 to 2025.",
+        key_observation="Rice Blast reports consistently peak between August and October during the wet Kharif monsoon, while dry summer months show near-zero activity.",
+        why_it_matters="Identifying these recurrent seasonal windows gives agricultural extension officers and farmers 1 to 2 months of advance warning before peak pathogen pressure.",
+        technical_details="Zero-bounded continuous monthly timeline aggregated from 3,076 GBIF accessions with strict temporal deduplication."
     )
 
 with col_prev_right:
@@ -640,6 +642,22 @@ with col_prev_right:
         """,
         unsafe_allow_html=True,
     )
+
+# Page Conclusion
+st.markdown(
+    f"""
+    <div class="verdant-card" style="background: #F6F4EC; border: 1px solid rgba(82, 122, 80, 0.2); border-radius: 14px; padding: 20px 24px; margin-top: 28px; margin-bottom: 24px;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+            {icon_target(18, "#183D32")}
+            <h4 style="margin: 0; color: #183D32; font-size: 1.05rem;">Overview Summary</h4>
+        </div>
+        <p style="margin: 0; font-size: 0.88rem; color: #5A665D; line-height: 1.6;">
+            Verdant Intelligence establishes an end-to-end econometric forecasting pipeline for Indian agricultural diseases. By combining 11 years of verified GBIF occurrences with NASA POWER meteorological records, the platform benchmarks 11 forecasting models—demonstrating that classical statistical models (ARIMA 1,1,1) achieve the highest forecasting accuracy for proactive crop protection.
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 # ==============================================================================
 # SECTION F: FINAL CALL TO ACTION & FOOTER

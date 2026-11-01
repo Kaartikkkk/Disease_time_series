@@ -68,11 +68,14 @@ def test_prediction_interval_coverage():
 
 
 def test_model_comparison_table_formatting():
-    """Test generating sorted comparison DataFrame."""
+    """Test generating sorted comparison DataFrame with Rank column."""
     m1 = compute_forecast_metrics(np.array([10, 20]), np.array([15, 25]), model_name="Model_A")  # RMSE = 5
     m2 = compute_forecast_metrics(np.array([10, 20]), np.array([11, 21]), model_name="Model_B")  # RMSE = 1
     table = build_model_comparison_table([m1, m2])
     assert len(table) == 2
-    # Best model (Model_B with RMSE 1) should be at top
+    assert "Rank" in table.columns
+    # Best model (Model_B with RMSE 1) should be at top with rank #1
+    assert table.iloc[0]["Rank"] == "#1"
     assert table.iloc[0]["Model"] == "Model_B"
+    assert table.iloc[1]["Rank"] == "#2"
     assert table.iloc[1]["Model"] == "Model_A"

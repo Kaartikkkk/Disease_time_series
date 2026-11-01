@@ -12,14 +12,20 @@ import streamlit as st
 import yaml
 
 from src.icons import (
+    icon_activity,
     icon_alert_triangle,
     icon_arrow_right,
     icon_bar_chart,
     icon_bell,
     icon_book,
+    icon_calendar,
+    icon_check_circle,
     icon_chevron_down,
+    icon_cloud_rain,
+    icon_dashboard,
     icon_database,
     icon_download,
+    icon_droplets,
     icon_forecast,
     icon_home,
     icon_india_map,
@@ -27,6 +33,8 @@ from src.icons import (
     icon_layers,
     icon_leaf,
     icon_logo,
+    icon_map,
+    icon_microscope,
     icon_model_compare,
     icon_pathology,
     icon_pin,
@@ -36,6 +44,8 @@ from src.icons import (
     icon_shield,
     icon_sprout,
     icon_sun,
+    icon_table,
+    icon_target,
     icon_thermometer,
     icon_timeseries,
     icon_trending_up,
@@ -96,11 +106,177 @@ def inject_custom_css():
             background-size: 28px 28px;
         }
 
-        /* Top App Padding & Header Hide */
+        /* Completely Hide Default Streamlit Sidebar & Sidebar Controls */
+        [data-testid="stSidebar"],
+        section[data-testid="stSidebar"],
+        [data-testid="stSidebarNav"],
+        [data-testid="collapsedControl"] {
+            display: none !important;
+            width: 0 !important;
+            min-width: 0 !important;
+            visibility: hidden !important;
+        }
+
         header[data-testid="stHeader"] {
-            background-color: rgba(246, 244, 236, 0.85);
-            backdrop-filter: blur(10px);
-            z-index: 99;
+            display: none !important;
+            height: 0 !important;
+            min-height: 0 !important;
+            padding: 0 !important;
+        }
+
+        .block-container {
+            padding-top: 0.8rem !important;
+            padding-bottom: 3.5rem !important;
+            padding-left: 2rem !important;
+            padding-right: 2rem !important;
+            max-width: 1320px !important;
+            margin: 0 auto !important;
+        }
+
+        /* Modern Horizontal Top Navigation Bar */
+        .verdant-top-navbar {
+            position: sticky;
+            top: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(82, 122, 80, 0.16);
+            box-shadow: 0 2px 10px rgba(16, 44, 38, 0.04);
+            padding: 10px 18px;
+            margin-left: -2rem;
+            margin-right: -2rem;
+            margin-top: -0.8rem;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .verdant-top-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none !important;
+            color: #102C26 !important;
+            flex-shrink: 0;
+        }
+        .verdant-brand-name {
+            font-family: 'Fraunces', Georgia, serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #102C26;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+        .verdant-brand-subtag {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #527A50;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .verdant-nav-links-wrap {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+        .verdant-nav-tab {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #4A5568;
+            text-decoration: none !important;
+            transition: all 0.15s ease;
+            border: 1px solid transparent;
+        }
+        .verdant-nav-tab:hover {
+            color: #102C26;
+            background: #F4F7F4;
+            border-color: rgba(82, 122, 80, 0.15);
+        }
+        .verdant-nav-tab.active {
+            color: #166534;
+            background: #EAF2E8;
+            border-color: rgba(22, 101, 52, 0.32);
+            font-weight: 700;
+            box-shadow: 0 1px 3px rgba(22, 101, 52, 0.06);
+        }
+        .verdant-top-utils {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .mode-toggle-group {
+            display: inline-flex;
+            align-items: center;
+            background: #F1F5F0;
+            border: 1px solid rgba(82, 122, 80, 0.22);
+            border-radius: 18px;
+            padding: 2px;
+        }
+        .mode-toggle-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 14px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: #5A665D;
+            text-decoration: none !important;
+            transition: all 0.15s ease;
+        }
+        .mode-toggle-btn.active {
+            background: #183D32;
+            color: #FFFFFF !important;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+        .mode-toggle-btn:hover:not(.active) {
+            color: #102C26;
+        }
+
+        /* Standard Compact Graph Explanation Card */
+        .graph-explanation-card {
+            background: #FFFFFF;
+            border: 1px solid rgba(82, 122, 80, 0.2);
+            border-left: 4px solid #527A50;
+            border-radius: 8px;
+            padding: 12px 18px;
+            margin-top: 10px;
+            margin-bottom: 22px;
+            box-shadow: 0 2px 6px rgba(16, 44, 38, 0.02);
+        }
+        .expl-line {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+            line-height: 1.45;
+        }
+        .expl-line:last-child {
+            margin-bottom: 0;
+        }
+        .expl-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: #183D32;
+            font-weight: 700;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .expl-text {
+            color: #2D3748;
         }
 
         /* Typography Hierarchy */
@@ -1138,7 +1314,17 @@ def inject_custom_css():
 
 
 def is_advanced_mode() -> bool:
-    """Return True if user toggled to Advanced View (for professors/evaluators), False for Simple View."""
+    """Return True if user toggled to Advanced View (for researchers/evaluators), False for Simple View."""
+    # Check query parameter first
+    qp = st.query_params
+    if "mode" in qp:
+        val = str(qp.get("mode", "")).lower()
+        if val in ["advanced", "adv"]:
+            st.session_state["view_mode"] = "Advanced View"
+            return True
+        elif val in ["simple", "sim"]:
+            st.session_state["view_mode"] = "Simple View"
+            return False
     return st.session_state.get("view_mode", "Simple View") == "Advanced View"
 
 
@@ -1175,45 +1361,33 @@ def render_graph_explanation_card(
     why_it_matters: str,
     technical_details: Optional[str] = None,
 ):
-    """Render the standard compact 3-part graph explanation card required across all dashboard pages.
+    """Render the standard compact graph explanation card directly below every important graph.
     
-    Structure:
-    - WHAT DOES THIS GRAPH SHOW? (2-3 simple sentences)
-    - KEY OBSERVATION: (the most important pattern visible)
-    - AGRICULTURAL INTERPRETATION / WHY DOES IT MATTER? (connection to disease monitoring)
+    Format:
+    - What this shows: One simple sentence.
+    - Key finding: One or two sentences based on actual data.
+    - Why it matters: One sentence connecting it to agriculture.
     """
     tech_html = ""
     if is_advanced_mode() and technical_details:
         tech_html = f"""
-        <div style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed rgba(82, 122, 80, 0.25); font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; color: #183D32;">
+        <div style="margin-top: 8px; padding-top: 6px; border-top: 1px dashed rgba(82, 122, 80, 0.22); font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; color: #183D32;">
             <strong>Econometric / Statistical Note:</strong> {technical_details}
         </div>
         """
     card_html = f"""
-    <div style="background: #FFFEFA; border: 1px solid rgba(82, 122, 80, 0.22); border-left: 4px solid #527A50; border-radius: 10px; padding: 14px 18px; margin-top: 12px; margin-bottom: 22px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
-        <div style="margin-bottom: 8px;">
-            <div style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #527A50; margin-bottom: 2px;">
-                WHAT DOES THIS GRAPH SHOW?
-            </div>
-            <p style="font-size: 0.86rem; color: #202822; margin: 0; line-height: 1.48;">
-                {what_it_shows}
-            </p>
+    <div class="graph-explanation-card">
+        <div class="expl-line">
+            <span class="expl-label">{icon_info(14, "#527A50")} <strong>What this shows:</strong></span>
+            <span class="expl-text">{what_it_shows}</span>
         </div>
-        <div style="margin-bottom: 8px;">
-            <div style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #183D32; margin-bottom: 2px;">
-                KEY OBSERVATION:
-            </div>
-            <p style="font-size: 0.86rem; color: #202822; margin: 0; line-height: 1.48;">
-                {key_observation}
-            </p>
+        <div class="expl-line">
+            <span class="expl-label">{icon_target(14, "#183D32")} <strong>Key finding:</strong></span>
+            <span class="expl-text">{key_observation}</span>
         </div>
-        <div>
-            <div style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #C4A66A; margin-bottom: 2px;">
-                AGRICULTURAL INTERPRETATION / WHY DOES IT MATTER?
-            </div>
-            <p style="font-size: 0.86rem; color: #202822; margin: 0; line-height: 1.48;">
-                {why_it_matters}
-            </p>
+        <div class="expl-line">
+            <span class="expl-label">{icon_leaf(14, "#C4A66A")} <strong>Why it matters:</strong></span>
+            <span class="expl-text">{why_it_matters}</span>
         </div>
         {tech_html}
     </div>
@@ -1221,107 +1395,65 @@ def render_graph_explanation_card(
     st.html(card_html)
 
 
+def render_top_navigation(active_page: str = "overview"):
+    """Render modern horizontal top navigation bar replacing the sidebar."""
+    is_adv = is_advanced_mode()
+    
+    nav_items = [
+        ("overview", "/", "Overview", icon_dashboard),
+        ("explorer", "/Disease_Explorer", "Disease Explorer", icon_microscope),
+        ("timeseries", "/Time_Series_Analysis", "Time Series Analysis", icon_timeseries),
+        ("comparison", "/Model_Comparison", "Model Comparison", icon_model_compare),
+        ("forecasts", "/Future_Forecasts", "Future Forecasts", icon_trending_up),
+        ("methodology", "/Data_and_Methodology", "Data & Methodology", icon_database),
+    ]
+
+    nav_links_html = []
+    for slug, url, label, icon_fn in nav_items:
+        is_active = (active_page == slug)
+        cls = "verdant-nav-tab active" if is_active else "verdant-nav-tab"
+        icon_col = "#166534" if is_active else "#5A665D"
+        icon_markup = icon_fn(16, icon_col)
+        nav_links_html.append(
+            f'<a href="{url}" target="_self" class="{cls}">{icon_markup}<span>{label}</span></a>'
+        )
+
+    all_links = "".join(nav_links_html)
+    simple_active = "active" if not is_adv else ""
+    adv_active = "active" if is_adv else ""
+
+    navbar_html = f"""
+    <div class="verdant-top-navbar">
+        <a href="/" target="_self" class="verdant-top-brand">
+            {icon_leaf(22, "#166534")}
+            <div>
+                <div class="verdant-brand-name">Verdant Intelligence</div>
+                <div class="verdant-brand-subtag">Agricultural Plant Disease Forecasting · India</div>
+            </div>
+        </a>
+        <nav class="verdant-nav-links-wrap">
+            {all_links}
+        </nav>
+        <div class="verdant-top-utils">
+            <div class="mode-toggle-group" title="Toggle between Simple View and Advanced Research View">
+                <a href="?mode=simple" target="_self" class="mode-toggle-btn {simple_active}">Simple View</a>
+                <a href="?mode=advanced" target="_self" class="mode-toggle-btn {adv_active}">Advanced View</a>
+            </div>
+        </div>
+    </div>
+    """
+    st.html(navbar_html)
+
+
 def render_app_sidebar(active_page: str = "overview"):
-    """Render the cohesive left sidebar matching the Verdant Intelligence platform mockup."""
-    sprout_img_path = ASSETS_DIR / "seedling_sprout.jpg"
-    sprout_b64 = get_image_base64(sprout_img_path)
-
-    # Initialize viewing mode if not set
-    if "view_mode" not in st.session_state:
-        st.session_state["view_mode"] = "Simple View"
-
-    with st.sidebar:
-        st.markdown(
-            f"""
-            <div class="sidebar-brand-header">
-                <div class="sidebar-logo-circle">
-                    {icon_leaf(20, "#FFFFFF")}
-                </div>
-                <div>
-                    <div class="sidebar-brand-title">Verdant Intelligence</div>
-                    <div class="sidebar-brand-subtitle">PLANT DISEASE FORECASTING · INDIA</div>
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-        # Simple View (Default) vs Advanced View Toggle
-        current_mode = st.session_state.get("view_mode", "Simple View")
-        selected_mode = st.radio(
-            "Viewing Mode",
-            options=["Simple View", "Advanced View"],
-            index=0 if current_mode == "Simple View" else 1,
-            help="Simple View uses everyday English for farmers and students. Advanced View displays statistical models (ARIMA/SARIMAX), equations, ADF/KPSS tests, and diagnostic plots for researchers.",
-            key="global_view_mode_selector",
-        )
-        st.session_state["view_mode"] = selected_mode
-
-        mode_badge = "🌿 Simple View" if selected_mode == "Simple View" else "🔬 Advanced View"
-        st.markdown(
-            f"""
-            <div class="mode-status-pill">
-                {mode_badge}
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-        st.page_link("app.py", label="1. Overview", icon="🏠")
-        st.page_link("pages/1_Disease_Explorer.py", label="2. Disease Explorer", icon="🍃")
-        st.page_link("pages/2_Time_Series_Analysis.py", label="3. Time Series Analysis", icon="📊")
-        st.page_link("pages/3_Model_Comparison.py", label="4. Model Comparison", icon="⚖️")
-        st.page_link("pages/4_Future_Forecasts.py", label="5. Future Forecasts", icon="🔮")
-        st.page_link("pages/5_Data_and_Methodology.py", label="6. Data & Methodology", icon="📖")
-
-        st.markdown(
-            f"""
-            <div style="margin-top: 24px;"></div>
-            <div class="sidebar-callout-card">
-                <div class="callout-thumb">
-                    <img src="{sprout_b64}" alt="Sprout" />
-                </div>
-                <div class="callout-content">
-                    <div class="callout-text">Building healthier crops for a stronger India.</div>
-                </div>
-                <a href="/Forecasts" target="_self" class="callout-arrow-btn">
-                    {icon_arrow_right(13, "#FFFFFF")}
-                </a>
-            </div>
-            <div class="sidebar-footer">
-                <div class="sidebar-footer-map">
-                    {icon_india_map(36, "#8A968E")}
-                </div>
-                <div class="sidebar-footer-text">
-                    <div>India Focused</div>
-                    <div>Data Driven</div>
-                    <div>Farmer Empowered</div>
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+    """Backward-compatible wrapper: Renders the horizontal top navigation."""
+    render_top_navigation(active_page)
 
 
 def render_top_header():
-    """Render the top search and user profile bar matching the platform mockup."""
-    top_header_markup = (
-        f'<div class="app-top-bar">'
-        f'<div class="search-pill">'
-        f'<span class="search-icon">{icon_search(16, "#7D8A82")}</span>'
-        f'<span class="search-placeholder">Search crops, diseases, states, or insights...</span>'
-        f'<span class="search-kbd">⌘ K</span>'
-        f'</div>'
-        f'<div class="top-util-group">'
-        f'<div class="top-icon-btn" title="Light / Dark mode">{icon_sun(17, "#5A665D")}</div>'
-        f'<div class="top-icon-btn" title="Notifications">{icon_bell(17, "#5A665D", with_dot=True)}</div>'
-        f'<div class="user-profile-pill">'
-        f'<div class="user-avatar">K</div>'
-        f'<span class="user-name">Kartik</span>'
-        f'<span class="user-chevron">{icon_chevron_down(12, "#7D8A82")}</span>'
-        f'</div></div></div>'
-    )
-    st.html(top_header_markup)
+    """No-op: The horizontal top navigation bar serves as the header across all pages."""
+    pass
+
 
 
 

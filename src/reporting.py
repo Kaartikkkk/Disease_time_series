@@ -97,7 +97,7 @@ def generate_methodology_report(
     # Save Markdown report
     md_path = output_dir / "methodology_report.md"
     with open(md_path, "w", encoding="utf-8") as f:
-        f.write("# 🔬 Methodology, Statistical Framework & Limitations Report\n\n")
+        f.write("# Methodology, Statistical Framework & Limitations Report\n\n")
         f.write(f"**Publication Timestamp (UTC):** {report_time}  \n")
         f.write(f"**Geographic Scope:** {report_content['country_scope']}  \n\n")
 
@@ -129,7 +129,7 @@ def generate_methodology_report(
 
         f.write("## 4. Scientific Limitations & Responsible AI Disclaimers\n\n")
         for lim in report_content["scientific_limitations"]:
-            f.write(f"- ⚠️ {lim}\n")
+            f.write(f"- [Limitation] {lim}\n")
 
     logger.info("Saved methodology reports to %s and %s", json_path, md_path)
     return report_content
