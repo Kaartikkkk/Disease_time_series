@@ -1440,7 +1440,6 @@ def render_top_navigation(active_page: str = "overview"):
             {icon_leaf(22, "#166534")}
             <div>
                 <div class="verdant-brand-name">Agricultural Disease Forecasting Using Time Series</div>
-                <div class="verdant-brand-subtag">Plant Disease Surveillance & Climate Modeling · India</div>
             </div>
         </a>
         <nav class="verdant-nav-links-wrap">
