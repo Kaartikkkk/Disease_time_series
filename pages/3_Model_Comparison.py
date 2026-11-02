@@ -103,9 +103,9 @@ with col_p1:
 with col_p2:
     eval_protocol = st.radio(
         "Validation Protocol" if adv_mode else "Testing Strategy",
-        options=["Operational Walk-Forward (1-3 Mo Ahead)", "Fixed Chronological Holdout"],
+        options=["Fixed Chronological Holdout", "Operational Walk-Forward (1-3 Mo Ahead)"],
         horizontal=True,
-        help="Operational Walk-Forward updates models monthly as real disease surveillance reports arrive (recommended for operational deployment). Fixed Holdout evaluates a single multi-month forecast without updating.",
+        help="Fixed Holdout evaluates all candidate models against a multi-month out-of-sample holdout period. Operational Walk-Forward updates models dynamically as each month's surveillance report arrives.",
     )
 with col_p3:
     st.write("")
@@ -118,7 +118,7 @@ with col_p3:
 is_walk_forward = "Walk-Forward" in eval_protocol
 
 if is_walk_forward:
-    col_w1, col_w2, col_w3, col_w4 = st.columns(4)
+    col_w1, col_w2, col_w3, col_w4, col_w5 = st.columns([1.1, 1.2, 1.1, 1.0, 1.0])
     with col_w1:
         step_ahead = st.selectbox(
             "Forecast Horizon",
@@ -136,11 +136,19 @@ if is_walk_forward:
             help="Expanding window incorporates all available history; rolling window maintains a fixed length.",
         )
     with col_w3:
+        wf_steps = st.selectbox(
+            "Evaluation Steps" if adv_mode else "Testing Period",
+            options=[6, 12, 20],
+            index=0,
+            format_func=lambda s: f"{s} Months ({'Fast' if s==6 else '1 Year' if s==12 else 'Full History'})",
+            help="Number of chronological walk-forward origin updates. 6 months evaluates rapidly; 12 months covers a full seasonal cycle.",
+        )
+        horizon = wf_steps
+    with col_w4:
         use_threshold = st.checkbox("Threshold Low Reports (< tau)", value=False, help="Set small fractional predictions below tau to 0.0 to suppress false alarms during dry/dormant periods.")
         tau_val = st.slider("Threshold tau", min_value=0.1, max_value=1.5, value=0.5, step=0.1) if use_threshold else 0.5
-    with col_w4:
+    with col_w5:
         use_log1p = st.checkbox("Log1p Transform", value=False, help="Fit on log-scale z = log(1+y) and invert via expm1.")
-    horizon = 20
 else:
     col_h1, col_h2 = st.columns([1.5, 2.5])
     with col_h1:
@@ -163,41 +171,65 @@ if df_monthly is None or df_monthly.empty:
     st.error(f"Monthly disease records not found for {pathogen_dict.get(selected_slug, selected_slug)}.")
     st.stop()
 
-# Cache or run benchmark
-session_key = (
-    f"comp_wf_{selected_slug}_{step_ahead}_{window_type}_{use_threshold}_{tau_val}_{use_log1p}"
-    if is_walk_forward
-    else f"comp_fixed_{selected_slug}_{horizon}"
-)
+# Cached Model Comparison functions for instantaneous sub-second reloads
+@st.cache_data(show_spinner=False)
+def get_cached_fixed_holdout(slug: str, horizon_val: int) -> dict:
+    df_series = load_monthly_series(slug)
+    res = run_model_comparison(df_series, horizon=horizon_val)
+    return {k: v for k, v in res.items() if k != "fitted_models"}
 
-if run_btn or session_key not in st.session_state:
+@st.cache_data(show_spinner=False)
+def get_cached_walk_forward(
+    slug: str,
+    horizon_val: int,
+    step_ahead_val: int,
+    window_type_val: str,
+    threshold_val: bool,
+    tau_float: float,
+    log1p_val: bool,
+) -> dict:
+    df_series = load_monthly_series(slug)
+    res = run_rolling_walk_forward_evaluation(
+        df_series,
+        horizon=horizon_val,
+        step_ahead=step_ahead_val,
+        window_type=window_type_val,
+        apply_threshold=threshold_val,
+        tau=tau_float,
+        use_log1p=log1p_val,
+    )
+    return {k: v for k, v in res.items() if k != "fitted_models"}
+
+if run_btn:
     if is_walk_forward:
-        spinner_text = (
-            f"Executing operational walk-forward evaluation ({step_ahead}-month ahead rolling origin) across all models..."
-            if adv_mode
-            else f"Testing monthly updating predictions across models on real historical data..."
-        )
-        with st.spinner(spinner_text):
-            comp_results = run_rolling_walk_forward_evaluation(
-                df_monthly,
-                step_ahead=step_ahead,
-                window_type=window_type,
-                apply_threshold=use_threshold,
-                tau=tau_val,
-                use_log1p=use_log1p,
-            )
-            st.session_state[session_key] = comp_results
+        get_cached_walk_forward.clear()
     else:
-        spinner_text = (
-            f"Evaluating model architectures against held-out validation horizon ({horizon} months)..."
-            if adv_mode
-            else f"Testing prediction methods on the last {horizon} months of real data..."
+        get_cached_fixed_holdout.clear()
+
+if is_walk_forward:
+    spinner_text = (
+        f"Executing operational walk-forward evaluation ({step_ahead}-month ahead, {horizon} steps) across all 13 models..."
+        if adv_mode
+        else f"Testing monthly updating predictions across 13 models on real historical data..."
+    )
+    with st.spinner(spinner_text):
+        comp_results = get_cached_walk_forward(
+            selected_slug,
+            horizon,
+            step_ahead,
+            window_type,
+            use_threshold,
+            tau_val,
+            use_log1p,
         )
-        with st.spinner(spinner_text):
-            comp_results = run_model_comparison(df_monthly, horizon=horizon)
-            st.session_state[session_key] = comp_results
 else:
-    comp_results = st.session_state[session_key]
+    spinner_text = (
+        f"Evaluating 13 model architectures against held-out validation horizon ({horizon} months)..."
+        if adv_mode
+        else f"Testing prediction methods on the last {horizon} months of real data..."
+    )
+    with st.spinner(spinner_text):
+        comp_results = get_cached_fixed_holdout(selected_slug, horizon)
 
 eval_metrics = comp_results.get("evaluation_metrics", [])
 table_df = build_model_comparison_table(eval_metrics)

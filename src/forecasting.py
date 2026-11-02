@@ -473,6 +473,17 @@ def run_rolling_walk_forward_evaluation(
     except Exception:
         cached_sarima_order = ((1, 0, 1), (1, 0, 1, 12))
 
+    # Pre-select optimal AutoTS architecture on baseline window to avoid repetitive tournament overhead
+    cached_autots_model = "SeasonalNaive"
+    if HAS_AUTOTS:
+        try:
+            _, _, _, r_ats = forecast_autots(
+                train_df, horizon=step_ahead, max_generations=0, model_list="superfast"
+            )
+            cached_autots_model = getattr(r_ats, "best_model_name", "SeasonalNaive")
+        except Exception:
+            cached_autots_model = "SeasonalNaive"
+
     # Initialize forecast accumulators
     model_names = [
         "Seasonal Naive (Baseline)",
@@ -659,7 +670,7 @@ def run_rolling_walk_forward_evaluation(
         if HAS_AUTOTS and "AutoTS (AutoML Ensemble)" in step_predictions:
             try:
                 p_ats, _, _, _ = forecast_autots(
-                    sub_df, horizon=step_ahead, max_generations=0, model_list="superfast"
+                    sub_df, horizon=step_ahead, max_generations=0, model_list=[cached_autots_model]
                 )
                 step_predictions["AutoTS (AutoML Ensemble)"].append(_invert_and_clean(p_ats))
             except Exception:
