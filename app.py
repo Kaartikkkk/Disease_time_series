@@ -204,7 +204,7 @@ features_markup = (
     f'<div class="feature-arrow-btn">{icon_arrow_right(13, "currentColor")}</div>'
     f'</div>'
     f'<div><div class="feature-card-title" style="font-size: 0.95rem; font-weight: 700;">Compare Models</div>'
-    f'<div class="feature-card-sub">11 prediction methods tested side-by-side</div></div>'
+    f'<div class="feature-card-sub">10 prediction methods tested side-by-side</div></div>'
     f'</a>'
     f'</div>'
 )
@@ -316,7 +316,7 @@ p3_title = "03 · Diagnostics & Lags" if adv_mode else "03 · Data Diagnostics"
 p3_desc = "Runs stationarity, seasonal decomposition, and lag correlation checks."
 
 p4_title = "04 · Model Forecasting" if adv_mode else "04 · Generate Forecasts"
-p4_desc = "Benchmarks 11 forecasting models to predict monthly disease activity."
+p4_desc = "Benchmarks 10 forecasting models to predict monthly disease activity."
 
 st.markdown(
     f"""
@@ -498,15 +498,15 @@ st.markdown(
         </div>
         <div class="model-card">
             <div>
-                <span class="model-badge" style="background: rgba(37, 99, 235, 0.12); color: #2563EB;">Decomposition</span>
-                <div class="model-card-title">Meta Prophet</div>
+                <span class="model-badge" style="background: rgba(37, 99, 235, 0.12); color: #2563EB;">Autoregressive</span>
+                <div class="model-card-title">AR(1) &amp; MA(1)</div>
                 <div class="model-card-desc">
-                    Additive model decomposing trend changepoints, annual seasonality, and climate regressors.
+                    Parsimonious lag and shock-smoothing models capturing immediate monthly outbreak momentum.
                 </div>
             </div>
             <div class="model-stat-row">
                 <span>Top Validation RMSE:</span>
-                <span class="model-stat-val">2.809</span>
+                <span class="model-stat-val">2.311 (MA(1))</span>
             </div>
         </div>
         <div class="model-card">

@@ -10,7 +10,6 @@ Architecture:
     * `src/models/sarima_model.py` (SARIMA seasonal cycle)
     * `src/models/arimax_model.py` (ARIMAX with NASA weather lags)
     * `src/models/sarimax_model.py` (SARIMAX seasonal + NASA weather lags)
-    * `src/models/prophet_model.py` (Meta Prophet piecewise trend + Fourier)
     * `src/models/gradient_boosting.py` (HistGradientBoosting autoregressor)
     * `src/models/random_forest.py` (RandomForest autoregressor)
 - This module orchestrates:
@@ -28,18 +27,13 @@ from statsmodels.tsa.statespace.sarimax import SARIMAX
 
 from src.evaluation import compute_forecast_metrics
 from src.models import (
-    HAS_AUTOTS,
-    HAS_PROPHET,
     forecast_ar,
     forecast_arima,
     forecast_arimax,
-    forecast_autots,
     forecast_gradient_boosting,
     forecast_holt_winters,
-    forecast_hurdle,
     forecast_ma,
     forecast_ml_autoregressor,
-    forecast_prophet,
     forecast_random_forest,
     forecast_sarima,
     forecast_sarimax_model,
@@ -279,28 +273,7 @@ def run_model_comparison(
         except Exception as e:
             logger.warning("SARIMAX failed: %s", e)
 
-    # 9. Meta Prophet (src/models/prophet_model.py)
-    if HAS_PROPHET:
-        try:
-            p_prophet, lb_prophet, ub_prophet, _ = forecast_prophet(
-                train_df, horizon=eval_horizon, future_dates=val_dates,
-                weather_cols=weather_exog_cols if has_weather else None,
-                future_weather_df=eval_val_df if has_weather else None,
-            )
-            m_prophet = compute_forecast_metrics(
-                y_val, p_prophet, lb_prophet, ub_prophet,
-                model_name="Prophet (Trend + Seasonality)",
-                y_train=y_train.values,
-                season_length=12,
-                parameters="Piecewise Trend + Regularized Fourier (m=12) + Weather",
-                model_family="Generalized Additive",
-            )
-            models_results.append(m_prophet)
-            forecasts_dict["Prophet (Trend + Seasonality)"] = p_prophet
-        except Exception as e:
-            logger.warning("Prophet failed: %s", e)
-
-    # 10. Gradient Boosting Regressor (src/models/gradient_boosting.py)
+    # 9. Gradient Boosting Regressor (src/models/gradient_boosting.py)
     try:
         p_gb, lb_gb, ub_gb, _ = forecast_gradient_boosting(
             train_df, horizon=eval_horizon,
@@ -321,7 +294,7 @@ def run_model_comparison(
     except Exception as e:
         logger.warning("HistGradientBoosting autoregressor failed: %s", e)
 
-    # 11. Random Forest Regressor (src/models/random_forest.py)
+    # 10. Random Forest Regressor (src/models/random_forest.py)
     try:
         p_rf, lb_rf, ub_rf, _ = forecast_random_forest(
             train_df, horizon=eval_horizon,
@@ -341,51 +314,6 @@ def run_model_comparison(
         forecasts_dict["Random Forest (Autoregressive)"] = p_rf
     except Exception as e:
         logger.warning("Random Forest autoregressor failed: %s", e)
-
-    # 12. Two-Stage Hurdle Model for Zero-Inflated Disease Counts
-    try:
-        p_hurdle, lb_hurdle, ub_hurdle, res_hurdle = forecast_hurdle(
-            y_train,
-            horizon=eval_horizon,
-            train_exog=train_exog,
-            future_exog=val_exog,
-            train_dates=train_df["date"],
-            future_dates=val_dates,
-        )
-        param_str = getattr(res_hurdle, "param_summary", "Stage 1 Logistic P(Y>0) + Stage 2 Positive Intensity")
-        m_hurdle = compute_forecast_metrics(
-            y_val, p_hurdle, lb_hurdle, ub_hurdle,
-            model_name="Two-Stage Hurdle (Zero-Inflated)",
-            y_train=y_train.values,
-            season_length=12,
-            parameters=param_str,
-            model_family="Intermittent Hurdle",
-        )
-        models_results.append(m_hurdle)
-        forecasts_dict["Two-Stage Hurdle (Zero-Inflated)"] = p_hurdle
-    except Exception as e:
-        logger.warning("Two-Stage Hurdle failed: %s", e)
-
-    # 13. AutoTS (Automated Machine Learning)
-    if HAS_AUTOTS:
-        try:
-            p_autots, lb_autots, ub_autots, m_autots_fit = forecast_autots(
-                train_df, horizon=eval_horizon, future_dates=val_dates,
-                max_generations=0, model_list="superfast",
-            )
-            param_str = getattr(m_autots_fit, "param_summary", "AutoML Tournament Selection")
-            m_autots = compute_forecast_metrics(
-                y_val, p_autots, lb_autots, ub_autots,
-                model_name="AutoTS (AutoML Ensemble)",
-                y_train=y_train.values,
-                season_length=12,
-                parameters=param_str,
-                model_family="Automated ML (AutoML)",
-            )
-            models_results.append(m_autots)
-            forecasts_dict["AutoTS (AutoML Ensemble)"] = p_autots
-        except Exception as e:
-            logger.warning("AutoTS benchmark failed: %s", e)
 
     # Rank models by RMSE
     models_results = sorted(models_results, key=lambda x: x.get("rmse") if x.get("rmse") is not None else float("inf"))
@@ -473,17 +401,6 @@ def run_rolling_walk_forward_evaluation(
     except Exception:
         cached_sarima_order = ((1, 0, 1), (1, 0, 1, 12))
 
-    # Pre-select optimal AutoTS architecture on baseline window to avoid repetitive tournament overhead
-    cached_autots_model = "SeasonalNaive"
-    if HAS_AUTOTS:
-        try:
-            _, _, _, r_ats = forecast_autots(
-                train_df, horizon=step_ahead, max_generations=0, model_list="superfast"
-            )
-            cached_autots_model = getattr(r_ats, "best_model_name", "SeasonalNaive")
-        except Exception:
-            cached_autots_model = "SeasonalNaive"
-
     # Initialize forecast accumulators
     model_names = [
         "Seasonal Naive (Baseline)",
@@ -494,14 +411,9 @@ def run_rolling_walk_forward_evaluation(
         "Holt-Winters",
         "ARIMAX (Weather Regressors)",
         "SARIMAX (Seasonal + Weather)",
-        "Two-Stage Hurdle (Zero-Inflated)",
         "Random Forest (Autoregressive)",
         "Hist Gradient Boosting (Autoregressive)",
     ]
-    if HAS_PROPHET:
-        model_names.append("Prophet (Trend + Seasonality)")
-    if HAS_AUTOTS:
-        model_names.append("AutoTS (AutoML Ensemble)")
 
     step_predictions: Dict[str, List[float]] = {m: [] for m in model_names}
     actuals: List[float] = []
@@ -612,21 +524,7 @@ def run_rolling_walk_forward_evaluation(
             except Exception:
                 step_predictions["SARIMAX (Seasonal + Weather)"].append(0.0)
 
-        # 9. Two-Stage Hurdle
-        try:
-            p_hurdle, _, _, _ = forecast_hurdle(
-                y_sub,
-                horizon=step_ahead,
-                train_exog=sub_train_exog,
-                future_exog=sub_fut_exog,
-                train_dates=sub_df["date"],
-                future_dates=future_sub_df["date"],
-            )
-            step_predictions["Two-Stage Hurdle (Zero-Inflated)"].append(_invert_and_clean(p_hurdle))
-        except Exception:
-            step_predictions["Two-Stage Hurdle (Zero-Inflated)"].append(0.0)
-
-        # 10. Random Forest
+        # 9. Random Forest
         try:
             p_rf, _, _, _ = forecast_random_forest(
                 sub_df,
@@ -639,7 +537,7 @@ def run_rolling_walk_forward_evaluation(
         except Exception:
             step_predictions["Random Forest (Autoregressive)"].append(0.0)
 
-        # 11. Hist Gradient Boosting
+        # 10. Hist Gradient Boosting
         try:
             p_gb, _, _, _ = forecast_gradient_boosting(
                 sub_df,
@@ -651,30 +549,6 @@ def run_rolling_walk_forward_evaluation(
             step_predictions["Hist Gradient Boosting (Autoregressive)"].append(_invert_and_clean(p_gb))
         except Exception:
             step_predictions["Hist Gradient Boosting (Autoregressive)"].append(0.0)
-
-        # 12. Meta Prophet (optional in walk-forward due to fitting cost)
-        if HAS_PROPHET and "Prophet (Trend + Seasonality)" in step_predictions:
-            try:
-                p_prophet, _, _, _ = forecast_prophet(
-                    sub_df,
-                    horizon=step_ahead,
-                    future_dates=future_sub_df["date"],
-                    weather_cols=weather_exog_cols if has_weather else None,
-                    future_weather_df=future_sub_df if has_weather else None,
-                )
-                step_predictions["Prophet (Trend + Seasonality)"].append(_invert_and_clean(p_prophet))
-            except Exception:
-                step_predictions["Prophet (Trend + Seasonality)"].append(0.0)
-
-        # 13. AutoTS (Automated Machine Learning)
-        if HAS_AUTOTS and "AutoTS (AutoML Ensemble)" in step_predictions:
-            try:
-                p_ats, _, _, _ = forecast_autots(
-                    sub_df, horizon=step_ahead, max_generations=0, model_list=[cached_autots_model]
-                )
-                step_predictions["AutoTS (AutoML Ensemble)"].append(_invert_and_clean(p_ats))
-            except Exception:
-                step_predictions["AutoTS (AutoML Ensemble)"].append(0.0)
 
     y_actual_arr = np.array(actuals, dtype=float)
     y_train_init = train_df[target_col].values

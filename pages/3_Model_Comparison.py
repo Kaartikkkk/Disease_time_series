@@ -208,9 +208,9 @@ if run_btn:
 
 if is_walk_forward:
     spinner_text = (
-        f"Executing operational walk-forward evaluation ({step_ahead}-month ahead, {horizon} steps) across all 13 models..."
+        f"Executing operational walk-forward evaluation ({step_ahead}-month ahead, {horizon} steps) across all 10 models..."
         if adv_mode
-        else f"Testing monthly updating predictions across 13 models on real historical data..."
+        else f"Testing monthly updating predictions across 10 models on real historical data..."
     )
     with st.spinner(spinner_text):
         comp_results = get_cached_walk_forward(
@@ -224,7 +224,7 @@ if is_walk_forward:
         )
 else:
     spinner_text = (
-        f"Evaluating 13 model architectures against held-out validation horizon ({horizon} months)..."
+        f"Evaluating 10 model architectures against held-out validation horizon ({horizon} months)..."
         if adv_mode
         else f"Testing prediction methods on the last {horizon} months of real data..."
     )
@@ -396,7 +396,7 @@ tab_actual, tab_rmse, tab_mae, tab_zero_hurdle, tab_residuals, tab_assumptions =
     "Actual vs. Predicted",
     "RMSE Comparison",
     "MAE Comparison",
-    "Zero-Inflation & Hurdle",
+    "Zero-Inflation Analysis",
     "Residual Diagnostics",
     "Model Formulations",
 ])
@@ -527,7 +527,7 @@ with tab_mae:
     )
 
 with tab_zero_hurdle:
-    st.subheader("Zero-Inflated Disease Surveillance & Two-Stage Hurdle Dynamics")
+    st.subheader("Zero-Inflation & Surveillance Intermittency Dynamics")
     
     # Calculate zero-inflation statistics
     target_counts = df_monthly["documented_occurrence_count"].values
@@ -550,64 +550,48 @@ with tab_zero_hurdle:
     with col_z3:
         st.metric("Validation Period Zeros", f"{pct_zeros_val:.1f}%", f"{n_zeros_val} / {len(y_val)} months")
     with col_z4:
-        hurdle_row = next((m for m in eval_metrics if "Hurdle" in m.get("model_name", "")), None)
-        h_rmse = hurdle_row.get("rmse", 0.0) if hurdle_row else None
-        st.metric("Hurdle Model RMSE", f"{h_rmse:.3f}" if h_rmse else "Evaluated", "Beats Seasonal Naive")
+        n_pos = n_total - n_zeros_total
+        st.metric("Active Outbreak Months", f"{(n_pos / n_total)*100.0:.1f}%", f"{n_pos} positive months")
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # Hurdle forecast trajectory vs Actuals
-    hurdle_pred = forecasts.get("Two-Stage Hurdle (Zero-Inflated)")
-    if hurdle_pred is not None:
-        fig_hurdle = go.Figure()
-        fig_hurdle.add_trace(
-            go.Scatter(
-                x=val_dates,
-                y=y_val,
-                name="Actual Disease Counts",
-                mode="lines+markers",
-                line=dict(color="#102C26", width=3),
-                marker=dict(size=7, color="#102C26"),
-            )
+    # Plot zero vs active surveillance observations across validation timeline
+    fig_zero = go.Figure()
+    fig_zero.add_trace(
+        go.Bar(
+            x=val_dates,
+            y=y_val,
+            name="Recorded Disease Occurrences",
+            marker_color=["#166534" if y > 0 else "#D1D5DB" for y in y_val],
+            hovertemplate="<b>%{x|%b %Y}</b><br>Reports: %{y:.0f}<extra></extra>",
         )
-        fig_hurdle.add_trace(
-            go.Scatter(
-                x=val_dates,
-                y=hurdle_pred,
-                name="Two-Stage Hurdle Expected Count",
-                mode="lines+markers",
-                line=dict(color="#C4A66A", width=2.5, dash="dash"),
-                marker=dict(size=6, symbol="diamond", color="#C4A66A"),
-            )
-        )
-        format_plotly_figure(
-            fig_hurdle,
-            title="Two-Stage Hurdle Point Forecasts vs Actual Zero-Inflated Observations",
-            height=380,
-        )
-        fig_hurdle.update_layout(xaxis_title="Month", yaxis_title="Disease Reports")
-        st.plotly_chart(fig_hurdle, use_container_width=True)
+    )
+    format_plotly_figure(
+        fig_zero,
+        title=f"Observed Disease Occurrences Across Validation Timeline ({pct_zeros_val:.0f}% Zero Months)",
+        height=360,
+    )
+    fig_zero.update_layout(xaxis_title="Month", yaxis_title="Recorded Reports")
+    st.plotly_chart(fig_zero, use_container_width=True)
 
-        render_graph_explanation_card(
-            what_it_shows="Two-stage hurdle model forecasts (P(Y>0) x E[Y|Y>0]) tracking actual intermittent zero-inflated disease occurrences.",
-            parameters=f"Stage 1 occurrence probability P(Y>0), Stage 2 positive intensity E[Y|Y>0], Zero-inflation rate ({pct_zeros_total:.1f}% zero months across timeline).",
-            what_it_compares="Expected hurdle predictions against actual seasonal zero-report dormancy periods and positive surge outbreaks, demonstrating how decoupling occurrence from severity prevents fractional false alarms.",
-        )
+    render_graph_explanation_card(
+        what_it_shows="Monthly occurrence counts across the held-out validation window, distinguishing active outbreaks (green) from seasonal dormancy zero-report periods (gray).",
+        parameters=f"Total validation months ({len(y_val)}), Zero-report months ({n_zeros_val}, {pct_zeros_val:.1f}%), Positive outbreak months ({len(y_val) - n_zeros_val}).",
+        what_it_compares="Intermittent outbreak bursts versus dormancy intervals, illustrating why non-negativity clipping and thresholding are essential for operational agricultural surveillance.",
+    )
 
     # Explanatory Technical Cards
     col_hz1, col_hz2 = st.columns(2)
     with col_hz1:
         st.markdown(
-            """
+            f"""
             <div style="background: rgba(82, 122, 80, 0.08); padding: 16px 20px; border-radius: 12px; border: 1px solid rgba(82, 122, 80, 0.2); height: 100%;">
-                <h4 style="margin: 0 0 8px 0; color: #102C26; font-size: 1.05rem;">Two-Stage Hurdle Architecture</h4>
+                <h4 style="margin: 0 0 8px 0; color: #102C26; font-size: 1.05rem;">Surveillance Intermittency &amp; Sparsity</h4>
                 <p style="font-size: 0.86rem; color: #374151; line-height: 1.5; margin: 0 0 10px 0;">
-                    Indian plant disease surveillance records exhibit severe intermittency (up to 85% zero-report months during dry and post-harvest seasons). Standard Gaussian models assume continuous normality, often predicting fractional non-zero reports in dormant months.
+                    Indian plant disease surveillance records exhibit significant intermittency ({pct_zeros_total:.1f}% zero-report months overall) due to post-harvest dry seasons and dormant pathogen phases.
                 </p>
                 <p style="font-size: 0.86rem; color: #374151; line-height: 1.5; margin: 0;">
-                    <strong>Stage 1 (Occurrence Probability):</strong> L2-regularized Logistic Regression estimates <code>P(Y<sub>t</sub> &gt; 0)</code> using cyclical harmonics, autoregressive occurrence lags, and NASA weather lags.<br>
-                    <strong>Stage 2 (Positive Report Intensity):</strong> Regularized log-linear Ridge regression estimates <code>E[Y<sub>t</sub> | Y<sub>t</sub> &gt; 0]</code> on positive historical outbreaks.<br>
-                    <strong>Combined Expectation:</strong> <code>E[Y<sub>t</sub>] = P(Y<sub>t</sub> &gt; 0) × E[Y<sub>t</sub> | Y<sub>t</sub> &gt; 0]</code>.
+                    Standard continuous forecasting models (like Gaussian ARIMA or regression) can predict small fractional values during dormant periods. Enforcing non-negativity guarantees realistic agricultural disease surveillance.
                 </p>
             </div>
             """,
@@ -617,12 +601,12 @@ with tab_zero_hurdle:
         st.markdown(
             """
             <div style="background: rgba(26, 77, 62, 0.06); padding: 16px 20px; border-radius: 12px; border: 1px solid rgba(26, 77, 62, 0.18); height: 100%;">
-                <h4 style="margin: 0 0 8px 0; color: #102C26; font-size: 1.05rem;">Thresholding & Log1p Trade-Offs</h4>
+                <h4 style="margin: 0 0 8px 0; color: #102C26; font-size: 1.05rem;">Dormancy Thresholding &amp; Transformations</h4>
                 <p style="font-size: 0.86rem; color: #374151; line-height: 1.5; margin: 0 0 10px 0;">
-                    <strong>Dormancy Thresholding (τ):</strong> Suppressing fractional noise <code>y_hat &lt; τ → 0</code> (e.g. τ ≈ 0.5 reports) reduces false positive warnings during dry seasons. Tuning τ strictly on training data eliminates false alarms and reduces validation MAE without missing major outbreak surges.
+                    <strong>Dormancy Thresholding (τ):</strong> Suppressing fractional noise <code>y_hat &lt; τ → 0</code> (e.g. τ ≈ 0.5 reports) prevents false warnings during dry dormancy periods without muting major outbreak surges.
                 </p>
                 <p style="font-size: 0.86rem; color: #374151; line-height: 1.5; margin: 0;">
-                    <strong>Log1p Transformation (z = log(1+y)):</strong> While log1p variance-stabilizes skewed count data, back-transforming via <code>expm1</code> induces transformation skew. On rolling walk-forward validation, original-scale ARIMA (RMSE 2.141) outperforms log1p ARIMA (RMSE 2.298), confirming that unskewed original count models remain superior for peak outbreak risk surveillance.
+                    <strong>Original vs Transformed Scale:</strong> Fitting models directly on raw count scale preserves peak surge amplitude and prevents exponential transformation bias.
                 </p>
             </div>
             """,

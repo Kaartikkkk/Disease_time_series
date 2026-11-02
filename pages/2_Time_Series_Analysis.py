@@ -591,7 +591,7 @@ st.markdown("<br>", unsafe_allow_html=True)
 try:
     col_c1, col_c2 = st.columns(2)
     with col_c1:
-        st.page_link("pages/3_Model_Comparison.py", label="Compare All 11 Forecasting Models ->", use_container_width=True)
+        st.page_link("pages/3_Model_Comparison.py", label="Compare All 10 Forecasting Models ->", use_container_width=True)
     with col_c2:
         st.page_link("pages/4_Future_Forecasts.py", label="Generate Future Outbreak Forecasts ->", use_container_width=True)
 except Exception:
