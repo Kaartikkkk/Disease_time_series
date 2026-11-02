@@ -28,10 +28,12 @@ from statsmodels.tsa.statespace.sarimax import SARIMAX
 
 from src.evaluation import compute_forecast_metrics
 from src.models import (
+    HAS_AUTOTS,
     HAS_PROPHET,
     forecast_ar,
     forecast_arima,
     forecast_arimax,
+    forecast_autots,
     forecast_gradient_boosting,
     forecast_holt_winters,
     forecast_hurdle,
@@ -364,6 +366,27 @@ def run_model_comparison(
     except Exception as e:
         logger.warning("Two-Stage Hurdle failed: %s", e)
 
+    # 13. AutoTS (Automated Machine Learning)
+    if HAS_AUTOTS:
+        try:
+            p_autots, lb_autots, ub_autots, m_autots_fit = forecast_autots(
+                train_df, horizon=eval_horizon, future_dates=val_dates,
+                max_generations=0, model_list="superfast",
+            )
+            param_str = getattr(m_autots_fit, "param_summary", "AutoML Tournament Selection")
+            m_autots = compute_forecast_metrics(
+                y_val, p_autots, lb_autots, ub_autots,
+                model_name="AutoTS (AutoML Ensemble)",
+                y_train=y_train.values,
+                season_length=12,
+                parameters=param_str,
+                model_family="Automated ML (AutoML)",
+            )
+            models_results.append(m_autots)
+            forecasts_dict["AutoTS (AutoML Ensemble)"] = p_autots
+        except Exception as e:
+            logger.warning("AutoTS benchmark failed: %s", e)
+
     # Rank models by RMSE
     models_results = sorted(models_results, key=lambda x: x.get("rmse") if x.get("rmse") is not None else float("inf"))
     best_model_name = models_results[0]["model_name"] if models_results else "None"
@@ -466,6 +489,8 @@ def run_rolling_walk_forward_evaluation(
     ]
     if HAS_PROPHET:
         model_names.append("Prophet (Trend + Seasonality)")
+    if HAS_AUTOTS:
+        model_names.append("AutoTS (AutoML Ensemble)")
 
     step_predictions: Dict[str, List[float]] = {m: [] for m in model_names}
     actuals: List[float] = []
@@ -629,6 +654,16 @@ def run_rolling_walk_forward_evaluation(
                 step_predictions["Prophet (Trend + Seasonality)"].append(_invert_and_clean(p_prophet))
             except Exception:
                 step_predictions["Prophet (Trend + Seasonality)"].append(0.0)
+
+        # 13. AutoTS (Automated Machine Learning)
+        if HAS_AUTOTS and "AutoTS (AutoML Ensemble)" in step_predictions:
+            try:
+                p_ats, _, _, _ = forecast_autots(
+                    sub_df, horizon=step_ahead, max_generations=0, model_list="superfast"
+                )
+                step_predictions["AutoTS (AutoML Ensemble)"].append(_invert_and_clean(p_ats))
+            except Exception:
+                step_predictions["AutoTS (AutoML Ensemble)"].append(0.0)
 
     y_actual_arr = np.array(actuals, dtype=float)
     y_train_init = train_df[target_col].values

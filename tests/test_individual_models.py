@@ -13,6 +13,7 @@ from src.models.sarima_model import forecast_sarima
 from src.models.gradient_boosting import forecast_gradient_boosting
 from src.models.hurdle_model import forecast_hurdle
 from src.models.random_forest import forecast_random_forest
+from src.models.autots_model import HAS_AUTOTS, forecast_autots
 
 
 @pytest.fixture
@@ -134,4 +135,22 @@ def test_log1p_transform_invertibility():
     z = np.log1p(y)
     y_rec = np.maximum(0.0, np.expm1(z))
     np.testing.assert_allclose(y, y_rec, rtol=1e-10, atol=1e-10)
+
+
+def test_autots_standalone(sample_monthly_df):
+    """Verify AutoTS runs standalone, respects non-negativity and generates prediction intervals."""
+    if not HAS_AUTOTS:
+        pytest.skip("AutoTS not available")
+    preds, lb, ub, model = forecast_autots(
+        sample_monthly_df,
+        horizon=6,
+        max_generations=0,
+        model_list="superfast",
+    )
+    assert len(preds) == 6
+    assert len(lb) == 6
+    assert len(ub) == 6
+    assert np.all(preds >= 0.0)
+    assert np.all(lb <= ub)
+
 

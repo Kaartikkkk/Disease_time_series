@@ -24,6 +24,7 @@ from src.forecasting import (
     generate_future_weather_scenario,
     HAS_PROPHET,
 )
+from src.models import HAS_AUTOTS, forecast_autots
 from src.icons import (
     icon_arrow_right,
     icon_download,
@@ -159,6 +160,8 @@ with st.container():
     ]
     if HAS_PROPHET:
         available_models.append("Meta Prophet")
+    if HAS_AUTOTS:
+        available_models.append("AutoTS (AutoML Ensemble)")
 
     RECOMMENDED_MODELS = {
         "pyricularia_oryzae": "ARIMA(1,1,1)",
@@ -187,6 +190,7 @@ with st.container():
             "Seasonal Naive (Baseline)": "Seasonal Benchmark (Previous Year)",
             "Hist Gradient Boosting (Autoregressive)": "Machine Learning (Gradient Boosting)",
             "Meta Prophet": "Prophet (Trend & Seasonality)",
+            "AutoTS (AutoML Ensemble)": "AutoTS (Automated ML Tournament)",
         }
         base_name = friendly_names.get(m, m)
         return f"{base_name}{rec_tag}"
@@ -280,6 +284,11 @@ with st.spinner(f"Calculating monthly disease predictions using {format_model_ch
                 df_monthly, horizon=horizon_months, future_dates=future_dates,
                 weather_cols=weather_cols if has_weather else None,
                 future_weather_df=df_future_weather if has_weather else None,
+            )
+        elif chosen_model == "AutoTS (AutoML Ensemble)":
+            p_fut, lb_95, ub_95, _ = forecast_autots(
+                df_monthly, horizon=horizon_months, future_dates=future_dates,
+                max_generations=0, model_list="superfast",
             )
         else:
             p_fut, lb_95, ub_95, _ = forecast_ml_autoregressor(
