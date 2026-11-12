@@ -20,7 +20,7 @@ from src.models.ml_autoregressor import forecast_ml_autoregressor
 def forecast_gradient_boosting(
     train_df: pd.DataFrame,
     horizon: int,
-    lags: List[int] = [1, 2, 3, 12],
+    lags: Optional[List[int]] = None,
     weather_lag_cols: Optional[List[str]] = None,
     future_weather_df: Optional[pd.DataFrame] = None,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, Any]:

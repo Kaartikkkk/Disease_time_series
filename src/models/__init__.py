@@ -16,24 +16,18 @@ This package provides standalone, modular implementations for benchmark models:
    - ARIMAX: `from src.models.arimax_model import forecast_arimax`
    - SARIMAX: `from src.models.sarimax_model import forecast_sarimax_model`
 
-4. Zero-Inflated / Intermittent Models:
-   - Two-Stage Hurdle: `from src.models.hurdle_model import forecast_hurdle`
-
-5. Modern Machine Learning & AutoML:
-   - Meta Prophet: `from src.models.prophet_model import forecast_prophet, HAS_PROPHET`
-   - AutoTS: `from src.models.autots_model import forecast_autots, HAS_AUTOTS`
+4. Machine Learning & Preserved Milestone 3 Modules:
    - Hist Gradient Boosting: `from src.models.gradient_boosting import forecast_gradient_boosting`
    - Random Forest: `from src.models.random_forest import forecast_random_forest`
    - ML Autoregressor Base: `from src.models.ml_autoregressor import forecast_ml_autoregressor`
+   - Meta Prophet (preserved for Milestone 3): `from src.models.prophet_model import forecast_prophet, HAS_PROPHET`
 """
 
 from src.models.ar_model import forecast_ar
 from src.models.arima_model import forecast_arima
 from src.models.arimax_model import forecast_arimax
-from src.models.autots_model import HAS_AUTOTS, forecast_autots
 from src.models.gradient_boosting import forecast_gradient_boosting
 from src.models.holt_winters import forecast_holt_winters
-from src.models.hurdle_model import forecast_hurdle
 from src.models.ma_model import forecast_ma
 from src.models.ml_autoregressor import forecast_ml_autoregressor
 from src.models.prophet_model import HAS_PROPHET, forecast_prophet
@@ -51,12 +45,9 @@ __all__ = [
     "forecast_sarima",
     "forecast_arimax",
     "forecast_sarimax_model",
-    "forecast_hurdle",
     "forecast_prophet",
-    "forecast_autots",
     "forecast_gradient_boosting",
     "forecast_random_forest",
     "forecast_ml_autoregressor",
     "HAS_PROPHET",
-    "HAS_AUTOTS",
 ]

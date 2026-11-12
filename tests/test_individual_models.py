@@ -11,9 +11,7 @@ from src.models.ma_model import forecast_ma
 from src.models.arima_model import forecast_arima
 from src.models.sarima_model import forecast_sarima
 from src.models.gradient_boosting import forecast_gradient_boosting
-from src.models.hurdle_model import forecast_hurdle
 from src.models.random_forest import forecast_random_forest
-from src.models.autots_model import HAS_AUTOTS, forecast_autots
 
 
 @pytest.fixture
@@ -105,52 +103,11 @@ def test_random_forest_standalone(sample_monthly_df):
     assert np.all(preds >= 0.0)
 
 
-def test_hurdle_model_standalone(sample_monthly_series, sample_monthly_df):
-    """Verify Two-Stage Hurdle model runs standalone and respects probability and non-negativity bounds."""
-    preds, lb, ub, res = forecast_hurdle(
-        sample_monthly_series,
-        horizon=6,
-        train_dates=sample_monthly_df["date"],
-    )
-    assert len(preds) == 6
-    assert len(lb) == 6
-    assert len(ub) == 6
-    assert np.all(preds >= 0.0)
-    assert np.all(lb <= ub)
-    assert hasattr(res, "prob_forecasts")
-    assert np.all((res.prob_forecasts >= 0.0) & (res.prob_forecasts <= 1.0))
-
-
-def test_hurdle_all_zeros_edge_case():
-    """Verify Hurdle model safely handles series with zero disease reports without crashing."""
-    zeros_series = pd.Series(np.zeros(24))
-    preds, lb, ub, res = forecast_hurdle(zeros_series, horizon=6)
-    assert len(preds) == 6
-    assert np.all(preds == 0.0)
-
-
 def test_log1p_transform_invertibility():
     """Verify log1p forward and inverse transformation maintains exact value reconstruction."""
     y = np.array([0.0, 1.0, 5.0, 14.0, 0.0, 2.5, 100.0])
     z = np.log1p(y)
     y_rec = np.maximum(0.0, np.expm1(z))
     np.testing.assert_allclose(y, y_rec, rtol=1e-10, atol=1e-10)
-
-
-def test_autots_standalone(sample_monthly_df):
-    """Verify AutoTS runs standalone, respects non-negativity and generates prediction intervals."""
-    if not HAS_AUTOTS:
-        pytest.skip("AutoTS not available")
-    preds, lb, ub, model = forecast_autots(
-        sample_monthly_df,
-        horizon=6,
-        max_generations=0,
-        model_list="superfast",
-    )
-    assert len(preds) == 6
-    assert len(lb) == 6
-    assert len(ub) == 6
-    assert np.all(preds >= 0.0)
-    assert np.all(lb <= ub)
 
 

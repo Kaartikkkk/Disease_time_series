@@ -4,11 +4,7 @@ Plant Disease Outbreak Forecasting & Climate Intelligence Platform.
 """
 
 import base64
-from datetime import datetime, timezone
-from pathlib import Path
-import numpy as np
 import pandas as pd
-import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 
@@ -19,32 +15,16 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
+from src.forecasting import run_model_comparison
 from src.icons import (
     icon_alert_triangle,
     icon_arrow_right,
-    icon_bar_chart,
-    icon_bell,
-    icon_book,
-    icon_chevron_down,
-    icon_database,
-    icon_download,
-    icon_forecast,
-    icon_home,
-    icon_india_map,
-    icon_layers,
     icon_leaf,
     icon_logo,
     icon_model_compare,
     icon_pathology,
-    icon_pin,
-    icon_pulse,
-    icon_search,
-    icon_settings,
     icon_shield,
     icon_sprout,
-    icon_sun,
-    icon_target,
-    icon_thermometer,
     icon_timeseries,
     icon_trending_up,
     icon_weather,
@@ -52,18 +32,14 @@ from src.icons import (
 from src.ui_helpers import (
     ASSETS_DIR,
     format_plotly_figure,
-    get_config_settings,
     get_image_base64,
     inject_custom_css,
     is_advanced_mode,
-    is_simple_mode,
-    load_all_pathogen_options,
     load_data_quality_report_data,
     load_monthly_series,
     render_app_sidebar,
     render_graph_explanation_card,
     render_top_header,
-    render_what_does_this_mean,
 )
 
 inject_custom_css()
@@ -92,36 +68,90 @@ img_sunset_b64 = get_image_base64(ASSETS_DIR / "cereal_harvest_sunset.jpg")
 img_wheat_b64 = get_image_base64(ASSETS_DIR / "wheat_canopy_ears.jpg")
 img_golden_b64 = get_image_base64(ASSETS_DIR / "golden_crop_field.jpg")
 
-# ==============================================================================
-# 1. PANORAMIC HERO WITH FLOATING GLASS CARD
-# ==============================================================================
-sparkline_raw_svg = """<svg width="270" height="60" viewBox="0 0 270 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="heroSparkGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#E11D48" stop-opacity="0.32"/>
-      <stop offset="100%" stop-color="#E11D48" stop-opacity="0.0"/>
-    </linearGradient>
-  </defs>
-  <path d="M10 46 Q 50 42, 90 36 T 170 26 T 255 10 L 255 58 L 10 58 Z" fill="url(#heroSparkGrad)"/>
-  <path d="M10 46 Q 50 42, 90 36 T 170 26 T 255 10" stroke="#E11D48" stroke-width="2.5" stroke-linecap="round"/>
-  <circle cx="10" cy="46" r="3.5" fill="#E11D48" stroke="#FFFFFF" stroke-width="1.5"/>
-  <circle cx="90" cy="36" r="3.5" fill="#E11D48" stroke="#FFFFFF" stroke-width="1.5"/>
-  <circle cx="170" cy="26" r="3.5" fill="#E11D48" stroke="#FFFFFF" stroke-width="1.5"/>
-  <circle cx="255" cy="10" r="4" fill="#E11D48" stroke="#FFFFFF" stroke-width="2"/>
-</svg>"""
-sparkline_b64 = base64.b64encode(sparkline_raw_svg.strip().encode("utf-8")).decode("utf-8")
-sparkline_img_tag = f'<img src="data:image/svg+xml;base64,{sparkline_b64}" width="270" height="60" style="display:block;margin:0 auto;" alt="Disease Trajectory" />'
-sparkline_svg = (
-    f'{sparkline_img_tag}'
-    '<div style="display: flex; justify-content: space-between; padding: 0 10px; font-size: 0.72rem; color: #7D8A82; font-weight: 600; margin-top: 2px; margin-bottom: 12px;">'
-    '<span>Nov</span><span>Dec</span><span>Jan</span>'
-    '</div>'
-)
+# Load real monthly series and cached benchmark evaluation for Rice Blast
+df_rice_blast = load_monthly_series("pyricularia_oryzae")
+df_brown_spot = load_monthly_series("bipolaris_oryzae")
 
-hero_stat_label = "TOP VALIDATED MODEL" if adv_mode else "TOP METHOD"
-hero_stat_val = "ARIMA" if adv_mode else "ARIMA"
+
+@st.cache_data(show_spinner=False)
+def get_homepage_benchmark(slug: str = "pyricularia_oryzae", horizon: int = 6) -> dict:
+    """Run and cache 6-month chronological holdout evaluation for homepage metrics."""
+    df_series = load_monthly_series(slug)
+    if df_series is None or df_series.empty:
+        return {}
+    res = run_model_comparison(df_series, horizon=horizon)
+    return {
+        "best_model": res.get("best_model"),
+        "evaluation_metrics": res.get("evaluation_metrics", []),
+    }
+
+
+def _build_real_sparkline_svg(df_series: pd.DataFrame, n_points: int = 6) -> str:
+    """Build an inline SVG sparkline from actual recent monthly occurrence counts."""
+    if df_series is None or df_series.empty:
+        return '<div style="font-size:0.78rem;color:#7D8A82;padding:18px 0;text-align:center;">No recent observations available.</div>'
+    tail_df = df_series.tail(n_points).copy()
+    vals = tail_df["documented_occurrence_count"].astype(float).tolist()
+    labels = pd.to_datetime(tail_df["date"]).dt.strftime("%b").tolist()
+    max_v = max(max(vals), 1.0)
+    w, h, pad_x, pad_y = 270, 60, 12, 8
+    xs = [pad_x + i * (w - 2 * pad_x) / max(1, len(vals) - 1) for i in range(len(vals))]
+    ys = [h - pad_y - (v / max_v) * (h - 2 * pad_y) for v in vals]
+    pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in zip(xs, ys))
+    area_pts = f"{xs[0]:.1f},{h - 2} {pts} {xs[-1]:.1f},{h - 2}"
+    circles = "".join(
+        f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3.2" fill="#E11D48" stroke="#FFFFFF" stroke-width="1.5"/>'
+        for x, y in zip(xs, ys)
+    )
+    svg = (
+        f'<svg width="270" height="60" viewBox="0 0 270 60" fill="none" xmlns="http://www.w3.org/2000/svg">'
+        f'<defs><linearGradient id="heroSparkGrad" x1="0" y1="0" x2="0" y2="1">'
+        f'<stop offset="0%" stop-color="#E11D48" stop-opacity="0.28"/>'
+        f'<stop offset="100%" stop-color="#E11D48" stop-opacity="0.0"/></linearGradient></defs>'
+        f'<polygon points="{area_pts}" fill="url(#heroSparkGrad)"/>'
+        f'<polyline points="{pts}" fill="none" stroke="#E11D48" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>'
+        f'{circles}</svg>'
+    )
+    b64 = base64.b64encode(svg.encode("utf-8")).decode("utf-8")
+    lbl_html = "".join(f"<span>{lbl}</span>" for lbl in labels)
+    return (
+        f'<img src="data:image/svg+xml;base64,{b64}" width="270" height="60" style="display:block;margin:0 auto;" alt="Recent Rice Blast Trajectory" />'
+        f'<div style="display:flex;justify-content:space-between;padding:0 10px;font-size:0.70rem;color:#7D8A82;font-weight:600;margin-top:2px;margin-bottom:12px;">{lbl_html}</div>'
+    )
+
+
+bench_data = get_homepage_benchmark("pyricularia_oryzae", horizon=6)
+bench_metrics = bench_data.get("evaluation_metrics", [])
+metrics_by_name = {m["model_name"]: m for m in bench_metrics if m.get("rmse") is not None}
+
+def _best_family_stat(names: list[str]) -> str:
+    found = [(n, metrics_by_name[n]["rmse"]) for n in names if n in metrics_by_name]
+    if not found:
+        return "Pending evaluation"
+    best_n, best_r = min(found, key=lambda x: x[1])
+    short = best_n.split(" (")[0]
+    return f"{best_r:.3f} ({short})"
+
+sparkline_svg = _build_real_sparkline_svg(df_rice_blast, n_points=6)
+
+if bench_metrics:
+    top_row = bench_metrics[0]
+    hero_stat_val = top_row["model_name"]
+    hero_metric_val = f"{top_row['rmse']:.3f}" if adv_mode else f"{top_row['rmse']:.2f} reports"
+else:
+    hero_stat_val = "Not Evaluated"
+    hero_metric_val = "Run Comparison"
+
+hero_stat_label = "TOP VALIDATED MODEL (6M)" if adv_mode else "TOP METHOD (6M TEST)"
 hero_metric_label = "OUT-OF-SAMPLE RMSE" if adv_mode else "AVERAGE ERROR"
-hero_metric_val = "2.437" if adv_mode else "2.4 reports"
+
+if df_rice_blast is not None and not df_rice_blast.empty:
+    _d_min = pd.to_datetime(df_rice_blast["date"]).min().strftime("%b %Y")
+    _d_max = pd.to_datetime(df_rice_blast["date"]).max().strftime("%b %Y")
+    _n_months = len(df_rice_blast)
+    _n_years = round(_n_months / 12.0, 1)
+else:
+    _d_min, _d_max, _n_months, _n_years = "Jan 2015", "Dec 2025", 132, 11.0
 
 hero_markup = (
     f'<div class="dashboard-hero-banner" style="background-image: url(\'{panoramic_hero_b64}\');">'
@@ -155,7 +185,7 @@ hero_markup = (
     f'<div style="font-size: 0.95rem; font-weight: 700; color: #102C26;">Rice — Rice Blast</div>'
     f'<span style="background: #FEE2E2; color: #DC2626; font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 12px;">Active Season</span>'
     f'</div>'
-    f'<div style="font-size: 0.72rem; color: #7D8A82; font-weight: 500; margin-bottom: 12px;">Next 3 Months</div>'
+    f'<div style="font-size: 0.72rem; color: #7D8A82; font-weight: 500; margin-bottom: 12px;">Last 6 Observed Months (Rice Blast)</div>'
     f'{sparkline_svg}'
     f'<div style="border-top: 1px solid #EAE6DC; padding-top: 12px; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 8px;">'
     f'<div>'
@@ -274,8 +304,8 @@ st.markdown(
         <div class="research-metric-card">
             <div class="metric-icon-wrap">{icon_timeseries(20, "#527A50")}</div>
             <div class="metric-label-text">Historical Coverage</div>
-            <div class="metric-value-text">11.2 Yrs</div>
-            <div class="metric-note-text">Jan 2015 – Apr 2026</div>
+            <div class="metric-value-text">{_n_years} Yrs</div>
+            <div class="metric-note-text">{_d_min} – {_d_max} ({_n_months} mo)</div>
         </div>
         <div class="research-metric-card">
             <div class="metric-icon-wrap">{icon_shield(20, "#527A50")}</div>
@@ -466,8 +496,8 @@ st.markdown(
                 </div>
             </div>
             <div class="model-stat-row">
-                <span>Top Validation RMSE:</span>
-                <span class="model-stat-val">2.437 (ARIMA)</span>
+                <span>Rice Blast 6M RMSE:</span>
+                <span class="model-stat-val">{_best_family_stat(["ARIMA(1,1,1)", "SARIMA(1,0,1)(1,0,1)[12]"])}</span>
             </div>
         </div>
         <div class="model-card">
@@ -479,8 +509,8 @@ st.markdown(
                 </div>
             </div>
             <div class="model-stat-row">
-                <span>Top Validation RMSE:</span>
-                <span class="model-stat-val">2.506 (ARIMAX)</span>
+                <span>Rice Blast 6M RMSE:</span>
+                <span class="model-stat-val">{_best_family_stat(["ARIMAX (Weather Regressors)", "SARIMAX (Seasonal + Weather)"])}</span>
             </div>
         </div>
         <div class="model-card">
@@ -492,8 +522,8 @@ st.markdown(
                 </div>
             </div>
             <div class="model-stat-row">
-                <span>Top Validation RMSE:</span>
-                <span class="model-stat-val">3.074</span>
+                <span>Rice Blast 6M RMSE:</span>
+                <span class="model-stat-val">{_best_family_stat(["Holt-Winters Exponential Smoothing"])}</span>
             </div>
         </div>
         <div class="model-card">
@@ -505,8 +535,8 @@ st.markdown(
                 </div>
             </div>
             <div class="model-stat-row">
-                <span>Top Validation RMSE:</span>
-                <span class="model-stat-val">2.311 (MA(1))</span>
+                <span>Rice Blast 6M RMSE:</span>
+                <span class="model-stat-val">{_best_family_stat(["AR(1)", "MA(1)"])}</span>
             </div>
         </div>
         <div class="model-card">
@@ -518,8 +548,8 @@ st.markdown(
                 </div>
             </div>
             <div class="model-stat-row">
-                <span>Top Validation RMSE:</span>
-                <span class="model-stat-val">2.763 (Random Forest)</span>
+                <span>Rice Blast 6M RMSE:</span>
+                <span class="model-stat-val">{_best_family_stat(["Random Forest (Autoregressive)", "Hist Gradient Boosting (Autoregressive)"])}</span>
             </div>
         </div>
         <div class="model-card">
@@ -531,8 +561,8 @@ st.markdown(
                 </div>
             </div>
             <div class="model-stat-row">
-                <span>Baseline RMSE:</span>
-                <span class="model-stat-val">2.693</span>
+                <span>Rice Blast 6M RMSE:</span>
+                <span class="model-stat-val">{_best_family_stat(["Seasonal Naive (Baseline)"])}</span>
             </div>
         </div>
     </div>
@@ -559,9 +589,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Plot miniature multi-pathogen trend chart from real processed data
-df_rice_blast = load_monthly_series("pyricularia_oryzae")
-df_brown_spot = load_monthly_series("bipolaris_oryzae")
+# Miniature multi-pathogen trend chart from real processed data (loaded above)
 
 fig_preview = go.Figure()
 if df_rice_blast is not None and not df_rice_blast.empty:

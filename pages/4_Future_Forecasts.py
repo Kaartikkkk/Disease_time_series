@@ -16,11 +16,18 @@ from src.forecast_insights import (
     identify_peak_forecast_month,
 )
 from src.forecasting import (
+    forecast_ar,
+    forecast_arima,
+    forecast_arimax,
+    forecast_gradient_boosting,
     forecast_holt_winters,
-    forecast_ml_autoregressor,
-    forecast_sarimax,
+    forecast_ma,
+    forecast_random_forest,
+    forecast_sarima,
+    forecast_sarimax_model,
     forecast_seasonal_naive,
     generate_future_weather_scenario,
+    run_model_comparison,
 )
 from src.icons import (
     icon_arrow_right,
@@ -122,21 +129,28 @@ with st.container():
         )
 
     with cfg_c2:
-        region_options = {
-            "all": "All Agro-Climatic Zones" if adv_mode else "All Regions (National)",
-            "national_composite": "National Composite" if adv_mode else "National Overview",
-            "odisha_bengal": "Eastern Coastal Rice Belt (Odisha / WB)",
-            "punjab_haryana": "Northwest Wheat Belt (Punjab / Haryana)",
-            "tamil_nadu": "Southern Agricultural Region (Tamil Nadu)",
-            "maharashtra": "Western / Central Region (Maharashtra)",
-        }
-        selected_region = st.selectbox(
-            "Region" if not adv_mode else "Agro-Climatic Zone",
-            options=list(region_options.keys()),
-            format_func=lambda k: region_options[k],
-            index=0,
-            key="fc_region",
+        df_preview_series = load_monthly_series(selected_slug)
+        series_region_id = (
+            str(df_preview_series["region_id"].iloc[0])
+            if df_preview_series is not None and not df_preview_series.empty and "region_id" in df_preview_series.columns
+            else "national_composite"
         )
+        region_labels = {
+            "national_composite": "National Composite (India)",
+            "odisha_bengal": "Eastern Rice Belt (Odisha / WB)",
+            "punjab_haryana": "Northwest Wheat Belt (Punjab / HR)",
+            "tamil_nadu": "Southern Zone (Tamil Nadu)",
+            "maharashtra": "Western / Central (Maharashtra)",
+        }
+        region_display = region_labels.get(series_region_id, series_region_id)
+        st.text_input(
+            "Dataset Scope" if not adv_mode else "Calibrated Climate Series",
+            value=region_display,
+            disabled=True,
+            key=f"fc_region_display_{selected_slug}",
+            help="Monthly forecasts use the national pathogen series aligned with its primary agro-climatic weather zone.",
+        )
+        selected_region = series_region_id
 
     with cfg_c3:
         horizon_months = st.selectbox(
@@ -148,27 +162,27 @@ with st.container():
         )
 
     available_models = [
-        "SARIMA(1,0,1)(1,0,1)[12]",
-        "SARIMAX (Seasonal + Weather Regressors)",
-        "ARIMA(1,1,1)",
-        "Holt-Winters Exponential Smoothing",
         "Seasonal Naive (Baseline)",
+        "AR(1)",
+        "MA(1)",
+        "ARIMA(1,1,1)",
+        "SARIMA(1,0,1)(1,0,1)[12]",
+        "Holt-Winters Exponential Smoothing",
+        "ARIMAX (Weather Regressors)",
+        "SARIMAX (Seasonal + Weather)",
+        "Random Forest (Autoregressive)",
         "Hist Gradient Boosting (Autoregressive)",
     ]
 
-    RECOMMENDED_MODELS = {
-        "pyricularia_oryzae": "ARIMA(1,1,1)",
-        "bipolaris_oryzae": "Seasonal Naive (Baseline)",
-        "fusarium_oxysporum": "Holt-Winters Exponential Smoothing",
-        "ralstonia_solanacearum": "Hist Gradient Boosting (Autoregressive)",
-        "rhizoctonia_solani": "Holt-Winters Exponential Smoothing",
-        "macrophomina_phaseolina": "ARIMA(1,1,1)",
-        "alternaria_solani": "ARIMA(1,1,1)",
-        "xanthomonas_oryzae": "SARIMAX (Seasonal + Weather Regressors)",
-        "puccinia_striiformis": "Seasonal Naive (Baseline)",
-        "phytophthora_infestans": "Hist Gradient Boosting (Autoregressive)",
-    }
-    rec_model = RECOMMENDED_MODELS.get(selected_slug, "SARIMA(1,0,1)(1,0,1)[12]")
+    @st.cache_data(show_spinner=False)
+    def get_dynamic_recommended_model(slug: str, eval_h: int = 6) -> str:
+        df_s = load_monthly_series(slug)
+        if df_s is None or df_s.empty:
+            return "SARIMA(1,0,1)(1,0,1)[12]"
+        res = run_model_comparison(df_s, horizon=eval_h)
+        return res.get("best_model") or "SARIMA(1,0,1)(1,0,1)[12]"
+
+    rec_model = get_dynamic_recommended_model(selected_slug, eval_h=min(horizon_months, 12))
     default_model_idx = available_models.index(rec_model) if rec_model in available_models else 0
 
     def format_model_choice(m: str) -> str:
@@ -176,11 +190,15 @@ with st.container():
         if adv_mode:
             return f"{m}{rec_tag}"
         friendly_names = {
-            "SARIMA(1,0,1)(1,0,1)[12]": "SARIMA (Seasonal Pattern)",
-            "SARIMAX (Seasonal + Weather Regressors)": "SARIMAX (Seasonal + Weather Factors)",
-            "ARIMA(1,1,1)": "ARIMA (Trend Following)",
-            "Holt-Winters Exponential Smoothing": "Holt-Winters Smoothing",
             "Seasonal Naive (Baseline)": "Seasonal Benchmark (Previous Year)",
+            "AR(1)": "AR(1) Autoregressive",
+            "MA(1)": "MA(1) Moving Average",
+            "ARIMA(1,1,1)": "ARIMA (Trend Following)",
+            "SARIMA(1,0,1)(1,0,1)[12]": "SARIMA (Seasonal Pattern)",
+            "Holt-Winters Exponential Smoothing": "Holt-Winters Smoothing",
+            "ARIMAX (Weather Regressors)": "ARIMAX (Weather Factors)",
+            "SARIMAX (Seasonal + Weather)": "SARIMAX (Seasonal + Weather Factors)",
+            "Random Forest (Autoregressive)": "Machine Learning (Random Forest)",
             "Hist Gradient Boosting (Autoregressive)": "Machine Learning (Gradient Boosting)",
         }
         base_name = friendly_names.get(m, m)
@@ -260,20 +278,33 @@ with st.spinner(f"Calculating monthly disease predictions using {format_model_ch
 
         if chosen_model == "Seasonal Naive (Baseline)":
             p_fut, lb_95, ub_95 = forecast_seasonal_naive(y_full, horizon=horizon_months, season_length=12)
-        elif chosen_model == "SARIMA(1,0,1)(1,0,1)[12]":
-            p_fut, lb_95, ub_95, _ = forecast_sarimax(y_full, horizon=horizon_months, order=(1, 0, 1), seasonal_order=(1, 0, 1, 12))
-        elif chosen_model == "SARIMAX (Seasonal + Weather Regressors)":
-            p_fut, lb_95, ub_95, _ = forecast_sarimax(
-                y_full, horizon=horizon_months, order=(1, 0, 1), seasonal_order=(1, 0, 1, 12), train_exog=train_exog, future_exog=fut_exog
-            )
+        elif chosen_model == "AR(1)":
+            p_fut, lb_95, ub_95, _ = forecast_ar(y_full, horizon=horizon_months, p=1)
+        elif chosen_model == "MA(1)":
+            p_fut, lb_95, ub_95, _ = forecast_ma(y_full, horizon=horizon_months, q=1)
         elif chosen_model == "ARIMA(1,1,1)":
-            p_fut, lb_95, ub_95, _ = forecast_sarimax(y_full, horizon=horizon_months, order=(1, 1, 1))
+            p_fut, lb_95, ub_95, _ = forecast_arima(y_full, horizon=horizon_months, order=(1, 1, 1), auto_optimize=True)
+        elif chosen_model == "SARIMA(1,0,1)(1,0,1)[12]":
+            p_fut, lb_95, ub_95, _ = forecast_sarima(y_full, horizon=horizon_months, order=(1, 0, 1), seasonal_order=(1, 0, 1, 12), auto_optimize=True)
         elif chosen_model == "Holt-Winters Exponential Smoothing":
-            p_fut, lb_95, ub_95, _ = forecast_holt_winters(y_full, horizon=horizon_months, seasonal_periods=12)
+            p_fut, lb_95, ub_95, _ = forecast_holt_winters(y_full, horizon=horizon_months, seasonal_periods=12, auto_optimize=True)
+        elif chosen_model == "ARIMAX (Weather Regressors)":
+            p_fut, lb_95, ub_95, _ = forecast_arimax(
+                y_full, horizon=horizon_months, train_exog=train_exog, future_exog=fut_exog, order=(1, 0, 1), auto_optimize=True
+            )
+        elif chosen_model == "SARIMAX (Seasonal + Weather)":
+            p_fut, lb_95, ub_95, _ = forecast_sarimax_model(
+                y_full, horizon=horizon_months, order=(1, 0, 1), seasonal_order=(1, 0, 1, 12), train_exog=train_exog, future_exog=fut_exog, auto_optimize=True
+            )
+        elif chosen_model == "Random Forest (Autoregressive)":
+            p_fut, lb_95, ub_95, _ = forecast_random_forest(
+                df_monthly, horizon=horizon_months, lags=[1, 2, 3, 12],
+                weather_lag_cols=weather_cols if has_weather else None,
+                future_weather_df=df_future_weather if has_weather else None,
+            )
         else:
-            p_fut, lb_95, ub_95, _ = forecast_ml_autoregressor(
-                df_monthly, horizon=horizon_months, model_type="gradient_boosting",
-                lags=[1, 2, 3, 12],
+            p_fut, lb_95, ub_95, _ = forecast_gradient_boosting(
+                df_monthly, horizon=horizon_months, lags=[1, 2, 3, 12],
                 weather_lag_cols=weather_cols if has_weather else None,
                 future_weather_df=df_future_weather if has_weather else None,
             )
@@ -423,7 +454,7 @@ monthly_outlooks = generate_monthly_disease_outlook(
     df_historical=df_monthly,
     pathogen_name=pathogen_dict[selected_slug],
     target_col=target_col,
-    region_name=region_options.get(selected_region, "India"),
+    region_name=region_display,
 )
 
 # Render cards in 3-column responsive grid

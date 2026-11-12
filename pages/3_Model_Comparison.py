@@ -8,11 +8,6 @@ import streamlit as st
 from statsmodels.tsa.stattools import acf
 
 from src.evaluation import build_model_comparison_table
-import importlib
-import src.forecasting
-import src.ui_helpers
-importlib.reload(src.forecasting)
-importlib.reload(src.ui_helpers)
 from src.forecasting import chronological_split, run_model_comparison, run_rolling_walk_forward_evaluation
 from src.icons import (
     icon_arrow_right,
@@ -232,6 +227,11 @@ else:
         comp_results = get_cached_fixed_holdout(selected_slug, horizon)
 
 eval_metrics = comp_results.get("evaluation_metrics", [])
+model_failures = comp_results.get("model_failures", {})
+if model_failures:
+    with st.expander(f"Diagnostic Notice: {len(model_failures)} model(s) encountered fold-level errors", expanded=False):
+        for m_name, errs in model_failures.items():
+            st.warning(f"{m_name}: {len(errs)} failed step(s) excluded from metrics ({errs[0]})")
 table_df = build_model_comparison_table(eval_metrics)
 best_model = comp_results.get("best_model", "N/A")
 val_dates = pd.to_datetime(comp_results.get("validation_dates"))

@@ -202,14 +202,16 @@ forecasting:
     - "seasonal_naive"
     - "ar"
     - "ma"
-    - "arma"
     - "arima"
     - "sarima"
     - "holt_winters"
     - "arimax"
     - "sarimax"
-  modern_models:
-    - "prophet"
-    - "autots"
+  ml_models:
     - "random_forest_autoregressor"
     - "gradient_boosting_autoregressor"
+  milestone_3_planned:
+    - "xgboost"
+    - "prophet"
+    - "lstm"
+    - "gru"

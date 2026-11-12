@@ -14,16 +14,14 @@ Architecture:
     * `src/models/random_forest.py` (RandomForest autoregressor)
 - This module orchestrates:
     1. Chronological holdout splitting (70% train / 15% validation / 15% test)
-    2. Comprehensive 11-model benchmarking with out-of-sample RMSE/MAE rankings
+    2. Comprehensive 10-model benchmarking with out-of-sample RMSE/MAE rankings
     3. Future scenario weather simulation (Monsoon, Drought, Climatology)
 """
 
-from datetime import datetime, timedelta
 import logging
 from typing import Any, Dict, List, Optional, Tuple
 import numpy as np
 import pandas as pd
-from statsmodels.tsa.statespace.sarimax import SARIMAX
 
 from src.evaluation import compute_forecast_metrics
 from src.models import (
@@ -33,7 +31,6 @@ from src.models import (
     forecast_gradient_boosting,
     forecast_holt_winters,
     forecast_ma,
-    forecast_ml_autoregressor,
     forecast_random_forest,
     forecast_sarima,
     forecast_sarimax_model,
@@ -408,7 +405,7 @@ def run_rolling_walk_forward_evaluation(
         "MA(1)",
         "ARIMA(1,1,1)",
         "SARIMA(1,0,1)(1,0,1)[12]",
-        "Holt-Winters",
+        "Holt-Winters Exponential Smoothing",
         "ARIMAX (Weather Regressors)",
         "SARIMAX (Seasonal + Weather)",
         "Random Forest (Autoregressive)",
@@ -416,8 +413,14 @@ def run_rolling_walk_forward_evaluation(
     ]
 
     step_predictions: Dict[str, List[float]] = {m: [] for m in model_names}
+    model_failures: Dict[str, List[str]] = {}
     actuals: List[float] = []
     eval_dates: List[pd.Timestamp] = []
+
+    def _record_failure(model_label: str, step_idx: int, exc: Exception) -> None:
+        logger.warning("Walk-forward step %d failed for %s: %s", step_idx, model_label, exc)
+        model_failures.setdefault(model_label, []).append(f"step {step_idx}: {exc}")
+        step_predictions[model_label].append(np.nan)
 
     for step in range(eval_steps):
         target_idx = n_train + step + step_ahead - 1
@@ -437,8 +440,11 @@ def run_rolling_walk_forward_evaluation(
         eval_dates.append(dt_val)
 
         y_sub_raw = sub_df[target_col].copy()
+        sub_df_fit = sub_df.copy()
         if use_log1p:
-            y_sub = pd.Series(np.log1p(np.maximum(0.0, y_sub_raw.values)), index=y_sub_raw.index)
+            y_log_vals = np.log1p(np.maximum(0.0, y_sub_raw.values))
+            y_sub = pd.Series(y_log_vals, index=y_sub_raw.index)
+            sub_df_fit[target_col] = y_log_vals
         else:
             y_sub = y_sub_raw
 
@@ -458,29 +464,29 @@ def run_rolling_walk_forward_evaluation(
         try:
             p_sn, _, _ = forecast_seasonal_naive(y_sub, horizon=step_ahead, season_length=12)
             step_predictions["Seasonal Naive (Baseline)"].append(_invert_and_clean(p_sn))
-        except Exception:
-            step_predictions["Seasonal Naive (Baseline)"].append(0.0)
+        except Exception as e:
+            _record_failure("Seasonal Naive (Baseline)", step, e)
 
         # 2. AR(1)
         try:
             p_ar, _, _, _ = forecast_ar(y_sub, horizon=step_ahead, p=1)
             step_predictions["AR(1)"].append(_invert_and_clean(p_ar))
-        except Exception:
-            step_predictions["AR(1)"].append(0.0)
+        except Exception as e:
+            _record_failure("AR(1)", step, e)
 
         # 3. MA(1)
         try:
             p_ma, _, _, _ = forecast_ma(y_sub, horizon=step_ahead, q=1)
             step_predictions["MA(1)"].append(_invert_and_clean(p_ma))
-        except Exception:
-            step_predictions["MA(1)"].append(0.0)
+        except Exception as e:
+            _record_failure("MA(1)", step, e)
 
         # 4. ARIMA
         try:
             p_arima, _, _, _ = forecast_arima(y_sub, horizon=step_ahead, order=cached_arima_order, auto_optimize=False)
             step_predictions["ARIMA(1,1,1)"].append(_invert_and_clean(p_arima))
-        except Exception:
-            step_predictions["ARIMA(1,1,1)"].append(0.0)
+        except Exception as e:
+            _record_failure("ARIMA(1,1,1)", step, e)
 
         # 5. SARIMA
         try:
@@ -488,15 +494,15 @@ def run_rolling_walk_forward_evaluation(
                 y_sub, horizon=step_ahead, order=cached_sarima_order[0], seasonal_order=cached_sarima_order[1], auto_optimize=False
             )
             step_predictions["SARIMA(1,0,1)(1,0,1)[12]"].append(_invert_and_clean(p_sarima))
-        except Exception:
-            step_predictions["SARIMA(1,0,1)(1,0,1)[12]"].append(0.0)
+        except Exception as e:
+            _record_failure("SARIMA(1,0,1)(1,0,1)[12]", step, e)
 
         # 6. Holt-Winters
         try:
             p_hw, _, _, _ = forecast_holt_winters(y_sub, horizon=step_ahead, seasonal_periods=12, auto_optimize=False)
-            step_predictions["Holt-Winters"].append(_invert_and_clean(p_hw))
-        except Exception:
-            step_predictions["Holt-Winters"].append(0.0)
+            step_predictions["Holt-Winters Exponential Smoothing"].append(_invert_and_clean(p_hw))
+        except Exception as e:
+            _record_failure("Holt-Winters Exponential Smoothing", step, e)
 
         # 7. ARIMAX
         if has_weather and sub_train_exog is not None and sub_fut_exog is not None:
@@ -505,8 +511,8 @@ def run_rolling_walk_forward_evaluation(
                     y_sub, horizon=step_ahead, train_exog=sub_train_exog, future_exog=sub_fut_exog, order=cached_arima_order, auto_optimize=False
                 )
                 step_predictions["ARIMAX (Weather Regressors)"].append(_invert_and_clean(p_arimax))
-            except Exception:
-                step_predictions["ARIMAX (Weather Regressors)"].append(0.0)
+            except Exception as e:
+                _record_failure("ARIMAX (Weather Regressors)", step, e)
 
         # 8. SARIMAX
         if has_weather and sub_train_exog is not None and sub_fut_exog is not None:
@@ -521,34 +527,34 @@ def run_rolling_walk_forward_evaluation(
                     auto_optimize=False,
                 )
                 step_predictions["SARIMAX (Seasonal + Weather)"].append(_invert_and_clean(p_sarimax))
-            except Exception:
-                step_predictions["SARIMAX (Seasonal + Weather)"].append(0.0)
+            except Exception as e:
+                _record_failure("SARIMAX (Seasonal + Weather)", step, e)
 
         # 9. Random Forest
         try:
             p_rf, _, _, _ = forecast_random_forest(
-                sub_df,
+                sub_df_fit,
                 horizon=step_ahead,
                 lags=[1, 2, 3, 12],
                 weather_lag_cols=weather_exog_cols if has_weather else None,
                 future_weather_df=future_sub_df if has_weather else None,
             )
             step_predictions["Random Forest (Autoregressive)"].append(_invert_and_clean(p_rf))
-        except Exception:
-            step_predictions["Random Forest (Autoregressive)"].append(0.0)
+        except Exception as e:
+            _record_failure("Random Forest (Autoregressive)", step, e)
 
         # 10. Hist Gradient Boosting
         try:
             p_gb, _, _, _ = forecast_gradient_boosting(
-                sub_df,
+                sub_df_fit,
                 horizon=step_ahead,
                 lags=[1, 2, 3, 12],
                 weather_lag_cols=weather_exog_cols if has_weather else None,
                 future_weather_df=future_sub_df if has_weather else None,
             )
             step_predictions["Hist Gradient Boosting (Autoregressive)"].append(_invert_and_clean(p_gb))
-        except Exception:
-            step_predictions["Hist Gradient Boosting (Autoregressive)"].append(0.0)
+        except Exception as e:
+            _record_failure("Hist Gradient Boosting (Autoregressive)", step, e)
 
     y_actual_arr = np.array(actuals, dtype=float)
     y_train_init = train_df[target_col].values
@@ -581,6 +587,7 @@ def run_rolling_walk_forward_evaluation(
         "validation_actual": y_actual_arr,
         "validation_dates": pd.Series(eval_dates),
         "forecasts": forecasts_dict,
+        "model_failures": model_failures,
         "step_ahead": step_ahead,
         "window_type": window_type,
         "n_eval_steps": eval_steps,

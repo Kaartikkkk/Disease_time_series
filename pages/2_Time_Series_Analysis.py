@@ -128,6 +128,9 @@ if df_monthly is None or df_monthly.empty:
 target_col = "documented_occurrence_count"
 series_summary = compute_series_summary(df_monthly, target_col=target_col)
 suitability = assess_forecasting_suitability(df_monthly, target_col=target_col, pathogen_name=pathogen_dict[selected_slug])
+date_min_str = pd.to_datetime(df_monthly["date"]).min().strftime("%b %Y")
+date_max_str = pd.to_datetime(df_monthly["date"]).max().strftime("%b %Y")
+year_span_str = f"{pd.to_datetime(df_monthly['date']).min().year}–{pd.to_datetime(df_monthly['date']).max().year}"
 
 # 4 Clean KPI Cards
 st.markdown(
@@ -137,7 +140,7 @@ st.markdown(
             <div class="metric-icon-wrap">{icon_timeseries(20, "#527A50")}</div>
             <div class="metric-label-text">Timeline Duration</div>
             <div class="metric-value-text">{series_summary['total_months']} Months</div>
-            <div class="metric-note-text">Jan 2015 – Apr 2026 (Continuous)</div>
+            <div class="metric-note-text">{date_min_str} – {date_max_str} (Continuous)</div>
         </div>
         <div class="research-metric-card">
             <div class="metric-icon-wrap">{icon_shield(20, "#527A50")}</div>
@@ -188,7 +191,7 @@ with tab_prep:
             <div class="research-metric-card">
                 <div class="metric-label-text">Time Index Regularity</div>
                 <div class="metric-value-text" style="font-size: 1.25rem; color: #527A50;">Valid (Monthly MS)</div>
-                <div class="metric-note-text">132 unbroken intervals (2015–2026)</div>
+                <div class="metric-note-text">{series_summary['total_months']} unbroken intervals ({year_span_str})</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -239,7 +242,7 @@ with tab_missing:
         st.plotly_chart(fig_miss, use_container_width=True)
 
         render_graph_explanation_card(
-            what_it_shows="Observational integrity timeline from 2015 to 2026 showing active surveillance months (green) versus unobserved gaps (red).",
+            what_it_shows=f"Observational integrity timeline from {year_span_str} showing active surveillance months (green) versus unobserved gaps (red).",
             parameters="Temporal index (t in monthly increments), Surveillance binary state (is_missing boolean flag).",
             what_it_compares="Active surveillance periods against unobserved gaps to verify whether zero report months reflect genuine disease dormancy versus missing survey effort.",
         )

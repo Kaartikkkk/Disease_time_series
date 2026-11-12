@@ -18,7 +18,7 @@ def forecast_ml_autoregressor(
     train_df: pd.DataFrame,
     horizon: int,
     model_type: str = "gradient_boosting",
-    lags: List[int] = [1, 2, 3, 12],
+    lags: Optional[List[int]] = None,
     weather_lag_cols: Optional[List[str]] = None,
     future_weather_df: Optional[pd.DataFrame] = None,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, Any]:
@@ -35,6 +35,8 @@ def forecast_ml_autoregressor(
     Returns:
         Tuple of (point_predictions, lower_95_ci, upper_95_ci, fitted_model).
     """
+    if lags is None:
+        lags = [1, 2, 3, 12]
     target_col = "documented_occurrence_count"
 
     # Feature construction on training data

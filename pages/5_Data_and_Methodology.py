@@ -21,11 +21,12 @@ from src.icons import (
 )
 from src.reporting import generate_methodology_report
 from src.ui_helpers import (
+    get_config_settings,
     inject_custom_css,
     is_advanced_mode,
+    load_data_quality_report_data,
     render_app_sidebar,
     render_top_header,
-    render_what_does_this_mean,
 )
 
 st.set_page_config(
@@ -154,18 +155,22 @@ with tab_sources:
 
     st.markdown("<br>", unsafe_allow_html=True)
     st.subheader("Monitored Plant Diseases & Dataset Coverage")
-    taxa_table = [
-        {"Common Disease Name": "Rice Blast", "Host Crops": "Rice / Paddy, Finger Millet", "Scientific Name": "Pyricularia oryzae", "Recorded Reports (2015-2026)": "312", "Status": "Active Series"},
-        {"Common Disease Name": "Brown Spot of Rice", "Host Crops": "Rice / Paddy", "Scientific Name": "Bipolaris oryzae", "Recorded Reports (2015-2026)": "184", "Status": "Active Series"},
-        {"Common Disease Name": "Bacterial Blight of Rice", "Host Crops": "Rice / Paddy", "Scientific Name": "Xanthomonas oryzae", "Recorded Reports (2015-2026)": "115", "Status": "Active Series"},
-        {"Common Disease Name": "Potato Late Blight", "Host Crops": "Potato, Tomato", "Scientific Name": "Phytophthora infestans", "Recorded Reports (2015-2026)": "128", "Status": "Active Series"},
-        {"Common Disease Name": "Potato & Tomato Early Blight", "Host Crops": "Potato, Tomato", "Scientific Name": "Alternaria solani", "Recorded Reports (2015-2026)": "142", "Status": "Active Series"},
-        {"Common Disease Name": "Bacterial Wilt", "Host Crops": "Potato, Tomato, Eggplant, Ginger", "Scientific Name": "Ralstonia solanacearum", "Recorded Reports (2015-2026)": "640", "Status": "Active Series"},
-        {"Common Disease Name": "Wilt / Root Rot", "Host Crops": "Chickpea, Cotton, Tomato, Banana", "Scientific Name": "Fusarium oxysporum", "Recorded Reports (2015-2026)": "1,180", "Status": "Active Series"},
-        {"Common Disease Name": "Dry Root Rot", "Host Crops": "Chickpea, Soybean, Cotton, Groundnut", "Scientific Name": "Macrophomina phaseolina", "Recorded Reports (2015-2026)": "85", "Status": "Active Series"},
-        {"Common Disease Name": "Sugarcane Red Rot", "Host Crops": "Sugarcane", "Scientific Name": "Colletotrichum falcatum", "Recorded Reports (2015-2026)": "98", "Status": "Active Series"},
-        {"Common Disease Name": "Wheat Stem Rust", "Host Crops": "Wheat, Barley", "Scientific Name": "Puccinia graminis", "Recorded Reports (2015-2026)": "0 (Controlled)", "Status": "Successfully Controlled Nationwide"},
-    ]
+    settings = get_config_settings()
+    pathogens_cfg = settings.get("pathogens", {})
+    quality_report = load_data_quality_report_data() or {}
+    audits_by_slug = {a.get("slug"): a for a in quality_report.get("pathogen_audits", [])}
+
+    taxa_table = []
+    for slug, info in pathogens_cfg.items():
+        audit = audits_by_slug.get(slug, {})
+        rec_count = audit.get("records_with_date", audit.get("total_records", "N/A"))
+        taxa_table.append({
+            "Common Disease Name": info.get("common_name", slug),
+            "Host Crops": info.get("host_crop", "N/A"),
+            "Scientific Name": info.get("scientific_name", ""),
+            "Dated Records (2015–2025)": f"{rec_count:,}" if isinstance(rec_count, int) else str(rec_count),
+            "Status": "Active Series" if audit.get("is_suitable_for_monthly_forecasting", True) else "Sparse / Contextual Series",
+        })
     st.dataframe(pd.DataFrame(taxa_table), use_container_width=True, hide_index=True)
 
 # ----------------- Tab 2: Preprocessing & Missing Values -----------------
@@ -321,7 +326,7 @@ with tab_downloads:
                     <h4 style="margin: 0; font-size: 1.05rem; color: #102C26;">Monthly Disease Dataset (CSV)</h4>
                 </div>
                 <p style="font-size: 0.84rem; color: #5A665D; margin-bottom: 10px;">
-                    Continuous monthly records (2015–2026) across 10 major Indian crop diseases with joined NASA POWER weather.
+                    Continuous monthly records (2015–2025, 132 months) across 10 major Indian crop diseases with joined NASA POWER weather.
                 </p>
             </div>
             """,
