@@ -1,0 +1,151 @@
+{
+  "policy_metadata": {
+    "version": "1.0.0",
+    "created_at": "2026-11-12T13:51:30+05:30",
+    "status": "frozen_for_test",
+    "validation_protocol": "Multi-Origin Chronological Walk-Forward (4 Origins, 6 Steps Ahead, 240 Evaluation Points)",
+    "validation_period": "September 2022 to April 2024 (20 Validation Months)",
+    "untouched_test_period": "May 2024 to December 2025 (20 Months Strictly Preserved)",
+    "default_global_champion": "hurdle_xgboost",
+    "macro_average_champion": "global_random_forest",
+    "hurdle_prediction_strategy": {
+      "default_operational": "expected_count (probability * magnitude)",
+      "conservative_dormancy": "thresholded_tau_0.4 (I(probability >= 0.4) * magnitude)",
+      "rationale": "Expected-count yields lowest linear MAE (2.370) and highest Outbreak Recall (86.2%) and F1 (0.774). Thresholded tau=0.4 is optimal for suppressing false alarms to 15.4%."
+    },
+    "missingness_weighting": {
+      "structural_zeros": 1.0,
+      "gap_imputed_zeros": 0.2,
+      "rationale": "Downweighting gap-imputed records prevents classifier probability collapse without breaking continuous lag features."
+    },
+    "selection_criteria": [
+      "Strict chronological out-of-sample validation evidence only (zero test data inspection)",
+      "Multi-origin temporal consistency across 4 origins (mean RMSE, std dev of RMSE across origins)",
+      "Epidemiological objective balance (count RMSE/MAE vs. outbreak detection F1)",
+      "Parsimony principle: prefer simpler or more stable model when performance is within 5% error margin"
+    ]
+  },
+  "pathogen_assignments": {
+    "alternaria_solani": {
+      "common_name": "Early Blight of Potato/Tomato",
+      "host_crop": "Potato / Tomato",
+      "assigned_model_id": "lstm",
+      "model_display_name": "LSTM (Sequence Neural Net)",
+      "model_family": "Deep Recurrent Neural Net",
+      "validation_mean_rmse": 1.317,
+      "validation_origin_std": 0.150,
+      "validation_mean_mae": 1.011,
+      "outbreak_f1": 0.640,
+      "rationale": "Lowest mean RMSE and MAE across all 4 origins; exceptional temporal consistency (std 0.150); recurrent hidden memory captures multi-month spore incubation cycles."
+    },
+    "bipolaris_oryzae": {
+      "common_name": "Brown Spot of Rice",
+      "host_crop": "Rice (Oryza sativa)",
+      "assigned_model_id": "global_random_forest",
+      "model_display_name": "Global Random Forest (Multi-Pathogen)",
+      "model_family": "Global Tree Ensemble",
+      "validation_mean_rmse": 3.498,
+      "validation_origin_std": 2.574,
+      "validation_mean_mae": 2.637,
+      "outbreak_f1": 0.840,
+      "rationale": "Lowest mean RMSE across origins; lowest cross-origin variance among competitive models; effectively pools weather-disease correlations across all 10 Indian pathogens."
+    },
+    "fusarium_oxysporum": {
+      "common_name": "Fusarium Wilt",
+      "host_crop": "Pulses / Cash Crops",
+      "assigned_model_id": "gru",
+      "model_display_name": "GRU (Gated Recurrent Unit)",
+      "model_family": "Deep Recurrent Neural Net",
+      "validation_mean_rmse": 6.378,
+      "validation_origin_std": 0.771,
+      "validation_mean_mae": 5.097,
+      "outbreak_f1": 0.980,
+      "rationale": "Selected under stability and parsimony policy: achieves nearly 2x lower variance across origins (std 0.771 vs Local XGBoost std 1.480) with near-equivalent RMSE and superior Outbreak F1 (0.980 vs 0.960)."
+    },
+    "macrophomina_phaseolina": {
+      "common_name": "Dry Root Rot / Charcoal Rot",
+      "host_crop": "Pulses / Oilseeds",
+      "assigned_model_id": "gru",
+      "model_display_name": "GRU (Gated Recurrent Unit)",
+      "model_family": "Deep Recurrent Neural Net",
+      "validation_mean_rmse": 1.684,
+      "validation_origin_std": 0.504,
+      "validation_mean_mae": 1.294,
+      "outbreak_f1": 0.800,
+      "rationale": "Rank 1 in count accuracy (RMSE 1.684, MAE 1.294) and Rank 1 in outbreak detection (100% recall, F1 0.800); recurrent reset gating models soil water deficit transitions accurately."
+    },
+    "phytophthora_infestans": {
+      "common_name": "Late Blight of Potato",
+      "host_crop": "Potato (Solanum tuberosum)",
+      "assigned_model_id": "random_forest",
+      "model_display_name": "Random Forest (Autoregressive)",
+      "model_family": "Local Tree Ensemble",
+      "validation_mean_rmse": 2.347,
+      "validation_origin_std": 2.102,
+      "validation_mean_mae": 1.102,
+      "outbreak_f1": 0.667,
+      "rationale": "Lowest mean RMSE (2.347) and MAE (1.102); selected over complex neural architectures due to parsimony and lower inference overhead."
+    },
+    "puccinia_striiformis": {
+      "common_name": "Yellow / Stripe Rust of Wheat",
+      "host_crop": "Wheat (Triticum aestivum)",
+      "assigned_model_id": "seasonal_naive",
+      "model_display_name": "Seasonal Naive (Baseline)",
+      "model_family": "Persistence Benchmark",
+      "validation_mean_rmse": 0.000,
+      "validation_origin_std": 0.000,
+      "validation_mean_mae": 0.000,
+      "outbreak_f1": 1.000,
+      "rationale": "Extreme biological sparsity: 23 out of 24 validation months were zero; the single positive occurrence (May 2023 = 1.0) was an exact match with May 2022 (y_{t-12} = 1.0). Zero-parameter persistence eliminates any danger of overfitting to dormancy."
+    },
+    "pyricularia_oryzae": {
+      "common_name": "Rice Blast",
+      "host_crop": "Rice (Oryza sativa)",
+      "assigned_model_id": "global_random_forest",
+      "model_display_name": "Global Random Forest (Multi-Pathogen)",
+      "model_family": "Global Tree Ensemble",
+      "validation_mean_rmse": 1.414,
+      "validation_origin_std": 1.278,
+      "validation_mean_mae": 1.143,
+      "outbreak_f1": 0.762,
+      "rationale": "Rank 1 in stability (std 1.278) with elite count accuracy (RMSE 1.414); avoids trajectory divergence during sudden monsoon-driven spore spikes."
+    },
+    "ralstonia_solanacearum": {
+      "common_name": "Bacterial Wilt",
+      "host_crop": "Solanaceous Crops",
+      "assigned_model_id": "hurdle_xgboost",
+      "model_display_name": "Hurdle XGBoost (Classifier + Regressor)",
+      "model_family": "Global Two-Stage ML",
+      "validation_mean_rmse": 12.378,
+      "validation_origin_std": 10.950,
+      "validation_mean_mae": 6.891,
+      "outbreak_f1": 0.741,
+      "rationale": "Critical outbreak detection capability: captures 90.9% of active outbreak months (Recall 0.909, F1 0.741) on this highly severe bacterial pathogen where uncaptured outbreaks cause catastrophic crop loss."
+    },
+    "rhizoctonia_solani": {
+      "common_name": "Sheath Blight of Rice",
+      "host_crop": "Rice (Oryza sativa)",
+      "assigned_model_id": "hurdle_xgboost",
+      "model_display_name": "Hurdle XGBoost (Classifier + Regressor)",
+      "model_family": "Global Two-Stage ML",
+      "validation_mean_rmse": 3.222,
+      "validation_origin_std": 1.229,
+      "validation_mean_mae": 2.358,
+      "outbreak_f1": 0.905,
+      "rationale": "Rank 1 in count accuracy (RMSE 3.222, MAE 2.358) and Rank 1 in outbreak detection (Recall 0.950, F1 0.905); separates seasonal sheath dormancy from virulent monsoon outbreaks."
+    },
+    "xanthomonas_oryzae": {
+      "common_name": "Bacterial Blight of Rice",
+      "host_crop": "Rice (Oryza sativa)",
+      "assigned_model_id": "ma",
+      "model_display_name": "MA(1)",
+      "model_family": "Classical Econometric",
+      "validation_mean_rmse": 0.428,
+      "validation_origin_std": 0.268,
+      "validation_mean_mae": 0.280,
+      "outbreak_f1": 0.286,
+      "rationale": "Parsimonious moving-average model outperforms complex ML (Global models overfit on this sparse, low-count series with max count 1.0, achieving RMSE 0.574 vs MA(1) 0.428)."
+    }
+  }
+}
+

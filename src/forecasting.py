@@ -19,25 +19,59 @@ Architecture:
 """
 
 import logging
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 import numpy as np
 import pandas as pd
+import yaml
 
 from src.evaluation import compute_forecast_metrics
+from src.model_registry import get_available_models, run_registered_model
 from src.models import (
     forecast_ar,
     forecast_arima,
     forecast_arimax,
+    forecast_global_random_forest,
+    forecast_global_xgboost,
     forecast_gradient_boosting,
+    forecast_gru,
     forecast_holt_winters,
+    forecast_hurdle_xgboost,
+    forecast_lstm,
     forecast_ma,
+    forecast_prophet,
     forecast_random_forest,
     forecast_sarima,
     forecast_sarimax_model,
     forecast_seasonal_naive,
+    forecast_xgboost,
 )
+from src.models.base import ForecastContext, build_failure_output
 
 logger = logging.getLogger(__name__)
+
+_SETTINGS_PATH = Path(__file__).resolve().parent.parent / "config" / "settings.yaml"
+
+
+def _load_forecasting_hyperparameters() -> Dict[str, Any]:
+    """Load centralized forecasting hyperparameters from config/settings.yaml."""
+    defaults = {
+        "seasonal_period": 12,
+        "autoregressive_lags": [1, 2, 3, 12],
+        "weather_exog_cols": [
+            "temp_mean_c_lag1",
+            "precipitation_monthly_mm_lag1",
+            "relative_humidity_pct_lag1",
+        ],
+    }
+    if _SETTINGS_PATH.exists():
+        try:
+            cfg = yaml.safe_load(_SETTINGS_PATH.read_text(encoding="utf-8")) or {}
+            hp = cfg.get("forecasting", {}).get("hyperparameters", {})
+            return {**defaults, **hp}
+        except Exception:
+            pass
+    return defaults
 
 
 # ==============================================================================
@@ -111,206 +145,46 @@ def run_model_comparison(
         val_dates = pd.to_datetime(val_df["date"])
         eval_val_df = val_df.copy()
 
-    # Weather regressors
-    weather_exog_cols = ["temp_mean_c_lag1", "precipitation_monthly_mm_lag1", "relative_humidity_pct_lag1"]
+    hp = _load_forecasting_hyperparameters()
+    season_len = int(hp["seasonal_period"])
+    lags = list(hp["autoregressive_lags"])
+    weather_exog_cols = list(hp["weather_exog_cols"])
     has_weather = all(c in train_df.columns for c in weather_exog_cols)
-
-    train_exog = train_df[weather_exog_cols].bfill().fillna(0) if has_weather else None
-    val_exog = eval_val_df[weather_exog_cols].bfill().fillna(0) if has_weather else None
 
     models_results: List[Dict[str, Any]] = []
     forecasts_dict: Dict[str, np.ndarray] = {}
 
-    # 1. Seasonal Naive Baseline (src/models/seasonal_naive.py)
-    try:
-        p_snaive, lb_snaive, ub_snaive = forecast_seasonal_naive(y_train, horizon=eval_horizon, season_length=12)
-        m_snaive = compute_forecast_metrics(
-            y_val, p_snaive, lb_snaive, ub_snaive,
-            model_name="Seasonal Naive (Baseline)",
-            y_train=y_train.values,
-            season_length=12,
-            parameters="Same-Month Prior Year (s=12)",
-            model_family="Persistence Baseline",
-        )
-        models_results.append(m_snaive)
-        forecasts_dict["Seasonal Naive (Baseline)"] = p_snaive
-    except Exception as e:
-        logger.warning("Seasonal Naive failed: %s", e)
+    ctx = ForecastContext(
+        train_df=train_df,
+        horizon=eval_horizon,
+        target_col=target_col,
+        exog_cols=weather_exog_cols if has_weather else None,
+        future_df=eval_val_df if has_weather else None,
+        config={"season_length": season_len, "lags": lags, "auto_optimize": True},
+    )
 
-    # 2. AR(1) / ARIMA(1,0,0) (src/models/ar_model.py)
-    try:
-        p_ar, lb_ar, ub_ar, res_ar = forecast_ar(y_train, horizon=eval_horizon, p=1)
-        param_str = getattr(res_ar, "param_summary", "p=1, d=0, q=0 (c=est, phi1=est)")
-        m_ar = compute_forecast_metrics(
-            y_val, p_ar, lb_ar, ub_ar,
-            model_name="AR(1)",
-            y_train=y_train.values,
-            season_length=12,
-            parameters=param_str,
-            model_family="Box-Jenkins Univariate",
-        )
-        models_results.append(m_ar)
-        forecasts_dict["AR(1)"] = p_ar
-    except Exception as e:
-        logger.warning("AR(1) failed: %s", e)
-
-    # 3. MA(1) / ARIMA(0,0,1) (src/models/ma_model.py)
-    try:
-        p_ma, lb_ma, ub_ma, res_ma = forecast_ma(y_train, horizon=eval_horizon, q=1)
-        param_str = getattr(res_ma, "param_summary", "p=0, d=0, q=1 (mu=est, theta1=est)")
-        m_ma = compute_forecast_metrics(
-            y_val, p_ma, lb_ma, ub_ma,
-            model_name="MA(1)",
-            y_train=y_train.values,
-            season_length=12,
-            parameters=param_str,
-            model_family="Box-Jenkins Univariate",
-        )
-        models_results.append(m_ma)
-        forecasts_dict["MA(1)"] = p_ma
-    except Exception as e:
-        logger.warning("MA(1) failed: %s", e)
-
-    # 4. ARIMA(1, 1, 1) (src/models/arima_model.py)
-    try:
-        p_arima, lb_arima, ub_arima, res_arima = forecast_arima(y_train, horizon=eval_horizon, order=(1, 1, 1), auto_optimize=True)
-        param_str = getattr(res_arima, "param_summary", "p=1, d=1, q=1")
-        m_arima = compute_forecast_metrics(
-            y_val, p_arima, lb_arima, ub_arima,
-            model_name="ARIMA(1,1,1)",
-            y_train=y_train.values,
-            season_length=12,
-            parameters=param_str,
-            model_family="Box-Jenkins Integrated",
-        )
-        models_results.append(m_arima)
-        forecasts_dict["ARIMA(1,1,1)"] = p_arima
-    except Exception as e:
-        logger.warning("ARIMA(1,1,1) failed: %s", e)
-
-    # 5. SARIMA(1, 0, 1)(1, 0, 1, 12) (src/models/sarima_model.py)
-    try:
-        p_sarima, lb_sarima, ub_sarima, res_sarima = forecast_sarima(
-            y_train, horizon=eval_horizon, order=(1, 0, 1), seasonal_order=(1, 0, 1, 12), auto_optimize=True
-        )
-        param_str = getattr(res_sarima, "param_summary", "(1,0,1)(1,0,1)[12]")
-        m_sarima = compute_forecast_metrics(
-            y_val, p_sarima, lb_sarima, ub_sarima,
-            model_name="SARIMA(1,0,1)(1,0,1)[12]",
-            y_train=y_train.values,
-            season_length=12,
-            parameters=param_str,
-            model_family="Seasonal Box-Jenkins",
-        )
-        models_results.append(m_sarima)
-        forecasts_dict["SARIMA(1,0,1)(1,0,1)[12]"] = p_sarima
-    except Exception as e:
-        logger.warning("SARIMA failed: %s", e)
-
-    # 6. Holt-Winters Exponential Smoothing (src/models/holt_winters.py)
-    try:
-        p_hw, lb_hw, ub_hw, res_hw = forecast_holt_winters(y_train, horizon=eval_horizon, seasonal_periods=12, auto_optimize=True)
-        param_str = getattr(res_hw, "param_summary", "Additive Level + Trend + Season (m=12)")
-        m_hw = compute_forecast_metrics(
-            y_val, p_hw, lb_hw, ub_hw,
-            model_name="Holt-Winters Exponential Smoothing",
-            y_train=y_train.values,
-            season_length=12,
-            parameters=param_str,
-            model_family="Exponential Smoothing",
-        )
-        models_results.append(m_hw)
-        forecasts_dict["Holt-Winters Exponential Smoothing"] = p_hw
-    except Exception as e:
-        logger.warning("Holt-Winters failed: %s", e)
-
-    # 7. ARIMAX with Exogenous Weather Lags (src/models/arimax_model.py)
-    if has_weather and train_exog is not None and val_exog is not None:
+    for spec in get_available_models():
+        if spec.requires_exog and not has_weather:
+            continue
         try:
-            p_arimax, lb_arimax, ub_arimax, res_arimax = forecast_arimax(
-                y_train, horizon=eval_horizon, train_exog=train_exog, future_exog=val_exog, order=(1, 0, 1), auto_optimize=True
-            )
-            param_str = getattr(res_arimax, "param_summary", "ARIMA + 3 NASA Weather Lags (t-1)")
-            m_arimax = compute_forecast_metrics(
-                y_val, p_arimax, lb_arimax, ub_arimax,
-                model_name="ARIMAX (Weather Regressors)",
+            out = run_registered_model(spec.model_id, ctx, clip_non_negative=True)
+            meta = out["metadata"]
+            metrics = compute_forecast_metrics(
+                y_val,
+                out["predictions"],
+                out["lower_bound"],
+                out["upper_bound"],
+                model_name=out["model_name"],
                 y_train=y_train.values,
-                season_length=12,
-                parameters=param_str,
-                model_family="Exogenous Econometric",
+                season_length=season_len,
+                parameters=meta.get("parameters", ""),
+                model_family=meta.get("model_family", spec.model_family),
+                model_category=spec.category,
             )
-            models_results.append(m_arimax)
-            forecasts_dict["ARIMAX (Weather Regressors)"] = p_arimax
+            models_results.append(metrics)
+            forecasts_dict[out["model_name"]] = out["predictions"]
         except Exception as e:
-            logger.warning("ARIMAX failed: %s", e)
-
-    # 8. SARIMAX Seasonal + Exogenous Weather Lags (src/models/sarimax_model.py)
-    if has_weather and train_exog is not None and val_exog is not None:
-        try:
-            p_sarimax, lb_sarimax, ub_sarimax, res_sarimax = forecast_sarimax_model(
-                y_train,
-                horizon=eval_horizon,
-                order=(1, 0, 1),
-                seasonal_order=(1, 0, 1, 12),
-                train_exog=train_exog,
-                future_exog=val_exog,
-                auto_optimize=True,
-            )
-            param_str = getattr(res_sarimax, "param_summary", "SARIMA(1,0,1)(1,0,1)[12] + NASA Weather")
-            m_sarimax = compute_forecast_metrics(
-                y_val, p_sarimax, lb_sarimax, ub_sarimax,
-                model_name="SARIMAX (Seasonal + Weather)",
-                y_train=y_train.values,
-                season_length=12,
-                parameters=param_str,
-                model_family="Exogenous Econometric",
-            )
-            models_results.append(m_sarimax)
-            forecasts_dict["SARIMAX (Seasonal + Weather)"] = p_sarimax
-        except Exception as e:
-            logger.warning("SARIMAX failed: %s", e)
-
-    # 9. Gradient Boosting Regressor (src/models/gradient_boosting.py)
-    try:
-        p_gb, lb_gb, ub_gb, _ = forecast_gradient_boosting(
-            train_df, horizon=eval_horizon,
-            lags=[1, 2, 3, 12],
-            weather_lag_cols=weather_exog_cols if has_weather else None,
-            future_weather_df=eval_val_df if has_weather else None,
-        )
-        m_gb = compute_forecast_metrics(
-            y_val, p_gb, lb_gb, ub_gb,
-            model_name="Hist Gradient Boosting (Autoregressive)",
-            y_train=y_train.values,
-            season_length=12,
-            parameters="Lags [1, 2, 3, 12] + Cyclical Harmonics + Weather",
-            model_family="Tree Ensemble ML",
-        )
-        models_results.append(m_gb)
-        forecasts_dict["Hist Gradient Boosting (Autoregressive)"] = p_gb
-    except Exception as e:
-        logger.warning("HistGradientBoosting autoregressor failed: %s", e)
-
-    # 10. Random Forest Regressor (src/models/random_forest.py)
-    try:
-        p_rf, lb_rf, ub_rf, _ = forecast_random_forest(
-            train_df, horizon=eval_horizon,
-            lags=[1, 2, 3, 12],
-            weather_lag_cols=weather_exog_cols if has_weather else None,
-            future_weather_df=eval_val_df if has_weather else None,
-        )
-        m_rf = compute_forecast_metrics(
-            y_val, p_rf, lb_rf, ub_rf,
-            model_name="Random Forest (Autoregressive)",
-            y_train=y_train.values,
-            season_length=12,
-            parameters="Regularized Trees (Depth 3) + Lags + Weather",
-            model_family="Tree Ensemble ML",
-        )
-        models_results.append(m_rf)
-        forecasts_dict["Random Forest (Autoregressive)"] = p_rf
-    except Exception as e:
-        logger.warning("Random Forest autoregressor failed: %s", e)
+            logger.warning("%s failed in fixed holdout: %s", spec.display_name, e)
 
     # Rank models by RMSE
     models_results = sorted(models_results, key=lambda x: x.get("rmse") if x.get("rmse") is not None else float("inf"))
@@ -342,26 +216,30 @@ def run_rolling_walk_forward_evaluation(
     apply_threshold: bool = False,
     tau: float = 0.5,
     use_log1p: bool = False,
+    eval_start_idx: Optional[int] = None,
+    filter_model_ids: Optional[List[str]] = None,
 ) -> Dict[str, Any]:
     """Execute rolling-origin walk-forward evaluation across all models without temporal lookahead.
 
     In each step k:
-        1. Historical slice: [0 : n_train + k] (expanding) or [max(0, n_train + k - fixed_window) : n_train + k] (rolling).
+        1. Historical slice: [0 : curr_train_end] (expanding) or [curr_train_start : curr_train_end] (rolling).
         2. Fits each model strictly on the historical slice.
         3. Forecasts step_ahead months ahead.
-        4. Out-of-sample prediction is compared with ground truth at target_idx = n_train + k + step_ahead - 1.
+        4. Out-of-sample prediction is compared with ground truth at target_idx.
         5. Origin rolls forward by 1 month, incorporating the newly available actual observation.
 
     Args:
         df: Pathogen time series DataFrame.
-        horizon: Optional number of walk-forward steps (defaults to validation set length).
-        step_ahead: Forecasting horizon (1 for next month, 2 or 3 for multi-step operational planning).
+        horizon: Optional number of walk-forward steps (defaults to validation window length).
+        step_ahead: Forecasting horizon (1 for next month).
         window_type: "expanding" (accumulates history) or "rolling" (fixed history length).
         fixed_window_size: Window size when window_type == "rolling" (default 92).
         target_col: Name of disease occurrence count column.
         apply_threshold: If True, small non-negative predictions below tau are set to 0.0.
         tau: Rounding/dormancy threshold (default 0.5 reports).
         use_log1p: If True, transforms target z = log(1+y) before fitting and back-transforms.
+        eval_start_idx: Starting index in df for evaluation (defaults to start of validation set = 92).
+        filter_model_ids: Optional subset of model_ids to evaluate.
 
     Returns:
         Dictionary containing comparative walk-forward metrics, actual values, and step forecasts.
@@ -369,18 +247,23 @@ def run_rolling_walk_forward_evaluation(
     train_df, val_df, test_df = chronological_split(df, train_ratio=0.70, val_ratio=0.15)
     n_train = len(train_df)
     total_val_len = len(val_df)
+    max_total_len = n_train + total_val_len
 
-    max_eval_steps = max(1, total_val_len - step_ahead + 1)
+    start_idx = eval_start_idx if eval_start_idx is not None else n_train
+    max_eval_steps = max(1, max_total_len - start_idx - step_ahead + 1)
     if horizon is not None and 0 < horizon <= max_eval_steps:
         eval_steps = horizon
     else:
         eval_steps = max_eval_steps
 
-    weather_exog_cols = ["temp_mean_c_lag1", "precipitation_monthly_mm_lag1", "relative_humidity_pct_lag1"]
+    hp = _load_forecasting_hyperparameters()
+    season_len = int(hp["seasonal_period"])
+    lags = list(hp["autoregressive_lags"])
+    weather_exog_cols = list(hp["weather_exog_cols"])
     has_weather = all(c in df.columns for c in weather_exog_cols)
 
-    # Initial order optimization on baseline training window (prevents repetitive order-search overhead)
-    initial_y_train = train_df[target_col].copy()
+    # Initial order optimization on baseline training window strictly prior to evaluation origin
+    initial_y_train = df.iloc[:start_idx][target_col].copy()
     if use_log1p:
         initial_y_fit = np.log1p(np.maximum(0.0, initial_y_train.values))
     else:
@@ -394,37 +277,39 @@ def run_rolling_walk_forward_evaluation(
 
     try:
         _, _, _, r_sarima = forecast_sarima(pd.Series(initial_y_fit), horizon=step_ahead, auto_optimize=True)
-        cached_sarima_order = getattr(r_sarima, "best_order", ((1, 0, 1), (1, 0, 1, 12)))
+        cached_sarima_order = getattr(r_sarima, "best_order", ((1, 0, 1), (1, 0, 1, season_len)))
     except Exception:
-        cached_sarima_order = ((1, 0, 1), (1, 0, 1, 12))
+        cached_sarima_order = ((1, 0, 1), (1, 0, 1, season_len))
 
-    # Initialize forecast accumulators
-    model_names = [
-        "Seasonal Naive (Baseline)",
-        "AR(1)",
-        "MA(1)",
-        "ARIMA(1,1,1)",
-        "SARIMA(1,0,1)(1,0,1)[12]",
-        "Holt-Winters Exponential Smoothing",
-        "ARIMAX (Weather Regressors)",
-        "SARIMAX (Seasonal + Weather)",
-        "Random Forest (Autoregressive)",
-        "Hist Gradient Boosting (Autoregressive)",
+    active_specs = [
+        spec for spec in get_available_models()
+        if not (spec.requires_exog and not has_weather)
+        and (filter_model_ids is None or spec.model_id in filter_model_ids)
     ]
 
-    step_predictions: Dict[str, List[float]] = {m: [] for m in model_names}
+    step_predictions: Dict[str, List[float]] = {spec.display_name: [] for spec in active_specs}
     model_failures: Dict[str, List[str]] = {}
     actuals: List[float] = []
     eval_dates: List[pd.Timestamp] = []
 
     def _record_failure(model_label: str, step_idx: int, exc: Exception) -> None:
         logger.warning("Walk-forward step %d failed for %s: %s", step_idx, model_label, exc)
+        fail_out = build_failure_output(model_label, step_ahead, exc)
         model_failures.setdefault(model_label, []).append(f"step {step_idx}: {exc}")
-        step_predictions[model_label].append(np.nan)
+        step_predictions[model_label].append(float(fail_out["predictions"][-1]))
+
+    def _invert_and_clean(pred_array: np.ndarray) -> float:
+        val = float(pred_array[-1])
+        if use_log1p:
+            val = float(np.expm1(val))
+        val = max(0.0, val)
+        if apply_threshold and val < tau:
+            val = 0.0
+        return val
 
     for step in range(eval_steps):
-        target_idx = n_train + step + step_ahead - 1
-        curr_train_end = n_train + step
+        target_idx = start_idx + step + step_ahead - 1
+        curr_train_end = start_idx + step
 
         if window_type == "rolling":
             curr_train_start = max(0, curr_train_end - fixed_window_size)
@@ -439,130 +324,44 @@ def run_rolling_walk_forward_evaluation(
         actuals.append(y_true)
         eval_dates.append(dt_val)
 
-        y_sub_raw = sub_df[target_col].copy()
         sub_df_fit = sub_df.copy()
         if use_log1p:
-            y_log_vals = np.log1p(np.maximum(0.0, y_sub_raw.values))
-            y_sub = pd.Series(y_log_vals, index=y_sub_raw.index)
-            sub_df_fit[target_col] = y_log_vals
-        else:
-            y_sub = y_sub_raw
+            sub_df_fit[target_col] = np.log1p(np.maximum(0.0, sub_df_fit[target_col].values))
 
-        sub_train_exog = sub_df[weather_exog_cols].bfill().fillna(0) if has_weather else None
-        sub_fut_exog = future_sub_df[weather_exog_cols].bfill().fillna(0) if has_weather else None
+        for spec in active_specs:
+            step_cfg: Dict[str, Any] = {
+                "season_length": season_len,
+                "lags": lags,
+                "auto_optimize": False,
+            }
+            if spec.model_id in ("arima", "arimax"):
+                step_cfg["order"] = cached_arima_order
+            elif spec.model_id in ("sarima", "sarimax"):
+                step_cfg["order"] = cached_sarima_order[0]
+                step_cfg["seasonal_order"] = cached_sarima_order[1]
 
-        def _invert_and_clean(pred_array: np.ndarray) -> float:
-            val = float(pred_array[-1])
-            if use_log1p:
-                val = float(np.expm1(val))
-            val = max(0.0, val)
-            if apply_threshold and val < tau:
-                val = 0.0
-            return val
-
-        # 1. Seasonal Naive
-        try:
-            p_sn, _, _ = forecast_seasonal_naive(y_sub, horizon=step_ahead, season_length=12)
-            step_predictions["Seasonal Naive (Baseline)"].append(_invert_and_clean(p_sn))
-        except Exception as e:
-            _record_failure("Seasonal Naive (Baseline)", step, e)
-
-        # 2. AR(1)
-        try:
-            p_ar, _, _, _ = forecast_ar(y_sub, horizon=step_ahead, p=1)
-            step_predictions["AR(1)"].append(_invert_and_clean(p_ar))
-        except Exception as e:
-            _record_failure("AR(1)", step, e)
-
-        # 3. MA(1)
-        try:
-            p_ma, _, _, _ = forecast_ma(y_sub, horizon=step_ahead, q=1)
-            step_predictions["MA(1)"].append(_invert_and_clean(p_ma))
-        except Exception as e:
-            _record_failure("MA(1)", step, e)
-
-        # 4. ARIMA
-        try:
-            p_arima, _, _, _ = forecast_arima(y_sub, horizon=step_ahead, order=cached_arima_order, auto_optimize=False)
-            step_predictions["ARIMA(1,1,1)"].append(_invert_and_clean(p_arima))
-        except Exception as e:
-            _record_failure("ARIMA(1,1,1)", step, e)
-
-        # 5. SARIMA
-        try:
-            p_sarima, _, _, _ = forecast_sarima(
-                y_sub, horizon=step_ahead, order=cached_sarima_order[0], seasonal_order=cached_sarima_order[1], auto_optimize=False
-            )
-            step_predictions["SARIMA(1,0,1)(1,0,1)[12]"].append(_invert_and_clean(p_sarima))
-        except Exception as e:
-            _record_failure("SARIMA(1,0,1)(1,0,1)[12]", step, e)
-
-        # 6. Holt-Winters
-        try:
-            p_hw, _, _, _ = forecast_holt_winters(y_sub, horizon=step_ahead, seasonal_periods=12, auto_optimize=False)
-            step_predictions["Holt-Winters Exponential Smoothing"].append(_invert_and_clean(p_hw))
-        except Exception as e:
-            _record_failure("Holt-Winters Exponential Smoothing", step, e)
-
-        # 7. ARIMAX
-        if has_weather and sub_train_exog is not None and sub_fut_exog is not None:
-            try:
-                p_arimax, _, _, _ = forecast_arimax(
-                    y_sub, horizon=step_ahead, train_exog=sub_train_exog, future_exog=sub_fut_exog, order=cached_arima_order, auto_optimize=False
-                )
-                step_predictions["ARIMAX (Weather Regressors)"].append(_invert_and_clean(p_arimax))
-            except Exception as e:
-                _record_failure("ARIMAX (Weather Regressors)", step, e)
-
-        # 8. SARIMAX
-        if has_weather and sub_train_exog is not None and sub_fut_exog is not None:
-            try:
-                p_sarimax, _, _, _ = forecast_sarimax_model(
-                    y_sub,
-                    horizon=step_ahead,
-                    order=cached_sarima_order[0],
-                    seasonal_order=cached_sarima_order[1],
-                    train_exog=sub_train_exog,
-                    future_exog=sub_fut_exog,
-                    auto_optimize=False,
-                )
-                step_predictions["SARIMAX (Seasonal + Weather)"].append(_invert_and_clean(p_sarimax))
-            except Exception as e:
-                _record_failure("SARIMAX (Seasonal + Weather)", step, e)
-
-        # 9. Random Forest
-        try:
-            p_rf, _, _, _ = forecast_random_forest(
-                sub_df_fit,
+            step_ctx = ForecastContext(
+                train_df=sub_df_fit,
                 horizon=step_ahead,
-                lags=[1, 2, 3, 12],
-                weather_lag_cols=weather_exog_cols if has_weather else None,
-                future_weather_df=future_sub_df if has_weather else None,
+                target_col=target_col,
+                exog_cols=weather_exog_cols if has_weather else None,
+                future_df=future_sub_df if has_weather else None,
+                config=step_cfg,
             )
-            step_predictions["Random Forest (Autoregressive)"].append(_invert_and_clean(p_rf))
-        except Exception as e:
-            _record_failure("Random Forest (Autoregressive)", step, e)
-
-        # 10. Hist Gradient Boosting
-        try:
-            p_gb, _, _, _ = forecast_gradient_boosting(
-                sub_df_fit,
-                horizon=step_ahead,
-                lags=[1, 2, 3, 12],
-                weather_lag_cols=weather_exog_cols if has_weather else None,
-                future_weather_df=future_sub_df if has_weather else None,
-            )
-            step_predictions["Hist Gradient Boosting (Autoregressive)"].append(_invert_and_clean(p_gb))
-        except Exception as e:
-            _record_failure("Hist Gradient Boosting (Autoregressive)", step, e)
+            try:
+                out = run_registered_model(spec.model_id, step_ctx, clip_non_negative=False)
+                step_predictions[spec.display_name].append(_invert_and_clean(out["predictions"]))
+            except Exception as e:
+                _record_failure(spec.display_name, step, e)
 
     y_actual_arr = np.array(actuals, dtype=float)
-    y_train_init = train_df[target_col].values
+    y_train_init = df.iloc[:start_idx][target_col].values
 
     eval_results: List[Dict[str, Any]] = []
     forecasts_dict: Dict[str, np.ndarray] = {}
 
-    for name in model_names:
+    for spec in active_specs:
+        name = spec.display_name
         preds = np.array(step_predictions[name], dtype=float)
         if len(preds) == len(y_actual_arr):
             m = compute_forecast_metrics(
@@ -570,9 +369,10 @@ def run_rolling_walk_forward_evaluation(
                 predicted=preds,
                 model_name=name,
                 y_train=y_train_init,
-                season_length=12,
+                season_length=season_len,
                 parameters=f"Walk-Forward {step_ahead}-Step Ahead ({window_type.capitalize()} Window)",
                 model_family="Rolling Origin Benchmark",
+                model_category=spec.category,
             )
             eval_results.append(m)
             forecasts_dict[name] = preds

@@ -19,13 +19,20 @@ from src.forecasting import (
     forecast_ar,
     forecast_arima,
     forecast_arimax,
+    forecast_global_random_forest,
+    forecast_global_xgboost,
     forecast_gradient_boosting,
+    forecast_gru,
     forecast_holt_winters,
+    forecast_hurdle_xgboost,
+    forecast_lstm,
     forecast_ma,
+    forecast_prophet,
     forecast_random_forest,
     forecast_sarima,
     forecast_sarimax_model,
     forecast_seasonal_naive,
+    forecast_xgboost,
     generate_future_weather_scenario,
     run_model_comparison,
 )
@@ -172,6 +179,13 @@ with st.container():
         "SARIMAX (Seasonal + Weather)",
         "Random Forest (Autoregressive)",
         "Hist Gradient Boosting (Autoregressive)",
+        "XGBoost (Autoregressive)",
+        "Prophet (Trend + Seasonality)",
+        "LSTM (Sequence Neural Net)",
+        "GRU (Gated Recurrent Unit)",
+        "Global XGBoost (Multi-Pathogen)",
+        "Global Random Forest (Multi-Pathogen)",
+        "Hurdle XGBoost (Classifier + Regressor)",
     ]
 
     @st.cache_data(show_spinner=False)
@@ -200,6 +214,13 @@ with st.container():
             "SARIMAX (Seasonal + Weather)": "SARIMAX (Seasonal + Weather Factors)",
             "Random Forest (Autoregressive)": "Machine Learning (Random Forest)",
             "Hist Gradient Boosting (Autoregressive)": "Machine Learning (Gradient Boosting)",
+            "XGBoost (Autoregressive)": "Machine Learning (XGBoost)",
+            "Prophet (Trend + Seasonality)": "Prophet (Trend + Seasonality)",
+            "LSTM (Sequence Neural Net)": "Deep Learning (LSTM)",
+            "GRU (Gated Recurrent Unit)": "Deep Learning (GRU)",
+            "Global XGBoost (Multi-Pathogen)": "Global Machine Learning (Pooled XGBoost)",
+            "Global Random Forest (Multi-Pathogen)": "Global Machine Learning (Pooled Random Forest)",
+            "Hurdle XGBoost (Classifier + Regressor)": "Zero-Inflated Machine Learning (Hurdle XGBoost)",
         }
         base_name = friendly_names.get(m, m)
         return f"{base_name}{rec_tag}"
@@ -300,6 +321,41 @@ with st.spinner(f"Calculating monthly disease predictions using {format_model_ch
             p_fut, lb_95, ub_95, _ = forecast_random_forest(
                 df_monthly, horizon=horizon_months, lags=[1, 2, 3, 12],
                 weather_lag_cols=weather_cols if has_weather else None,
+                future_weather_df=df_future_weather if has_weather else None,
+            )
+        elif chosen_model == "XGBoost (Autoregressive)":
+            p_fut, lb_95, ub_95, _, _ = forecast_xgboost(
+                df_monthly, horizon=horizon_months,
+                weather_lag_cols=weather_cols if has_weather else None,
+                future_weather_df=df_future_weather if has_weather else None,
+            )
+        elif chosen_model == "Prophet (Trend + Seasonality)":
+            p_fut, lb_95, ub_95, _ = forecast_prophet(
+                df_monthly, horizon=horizon_months, future_dates=future_dates
+            )
+        elif chosen_model == "LSTM (Sequence Neural Net)":
+            p_fut, _, _, _, _ = forecast_lstm(df_monthly, horizon=horizon_months)
+            # Point-only deep learning forecast (no fabricated CI)
+            lb_95 = p_fut.copy()
+            ub_95 = p_fut.copy()
+        elif chosen_model == "GRU (Gated Recurrent Unit)":
+            p_fut, _, _, _, _ = forecast_gru(df_monthly, horizon=horizon_months)
+            # Point-only deep learning forecast (no fabricated CI)
+            lb_95 = p_fut.copy()
+            ub_95 = p_fut.copy()
+        elif chosen_model == "Global XGBoost (Multi-Pathogen)":
+            p_fut, lb_95, ub_95, _, _ = forecast_global_xgboost(
+                df_monthly, horizon=horizon_months,
+                future_weather_df=df_future_weather if has_weather else None,
+            )
+        elif chosen_model == "Global Random Forest (Multi-Pathogen)":
+            p_fut, lb_95, ub_95, _, _ = forecast_global_random_forest(
+                df_monthly, horizon=horizon_months,
+                future_weather_df=df_future_weather if has_weather else None,
+            )
+        elif chosen_model == "Hurdle XGBoost (Classifier + Regressor)":
+            p_fut, lb_95, ub_95, _, _ = forecast_hurdle_xgboost(
+                df_monthly, horizon=horizon_months,
                 future_weather_df=df_future_weather if has_weather else None,
             )
         else:

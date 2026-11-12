@@ -215,3 +215,10 @@ forecasting:
     - "prophet"
     - "lstm"
     - "gru"
+  hyperparameters:
+    seasonal_period: 12
+    autoregressive_lags: [1, 2, 3, 12]
+    weather_exog_cols:
+      - "temp_mean_c_lag1"
+      - "precipitation_monthly_mm_lag1"
+      - "relative_humidity_pct_lag1"

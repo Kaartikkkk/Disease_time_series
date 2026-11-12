@@ -1,5 +1,7 @@
 """Page 3: Model Comparison — Benchmark Classical Econometrics & Modern Forecasters."""
 
+import json
+from pathlib import Path
 import numpy as np
 import pandas as pd
 import plotly.express as px
@@ -9,6 +11,7 @@ from statsmodels.tsa.stattools import acf
 
 from src.evaluation import build_model_comparison_table
 from src.forecasting import chronological_split, run_model_comparison, run_rolling_walk_forward_evaluation
+from src.model_registry import get_available_models
 from src.icons import (
     icon_arrow_right,
     icon_bar_chart,
@@ -98,9 +101,13 @@ with col_p1:
 with col_p2:
     eval_protocol = st.radio(
         "Validation Protocol" if adv_mode else "Testing Strategy",
-        options=["Fixed Chronological Holdout", "Operational Walk-Forward (1-3 Mo Ahead)"],
+        options=[
+            "Fixed Chronological Holdout",
+            "Operational Walk-Forward (1-3 Mo Ahead)",
+            "Multi-Origin Validation (Robustness Analysis)",
+        ],
         horizontal=True,
-        help="Fixed Holdout evaluates all candidate models against a multi-month out-of-sample holdout period. Operational Walk-Forward updates models dynamically as each month's surveillance report arrives.",
+        help="Fixed Holdout evaluates models against a single multi-month holdout. Operational Walk-Forward tests single-origin rolling updates. Multi-Origin Validation tests models across 4 chronological origins covering Sep 2022 to Apr 2024.",
     )
 with col_p3:
     st.write("")
@@ -110,7 +117,22 @@ with col_p3:
         use_container_width=True,
     )
 
-is_walk_forward = "Walk-Forward" in eval_protocol
+is_multi_origin = "Multi-Origin" in eval_protocol
+is_walk_forward = "Walk-Forward" in eval_protocol and not is_multi_origin
+
+if is_multi_origin:
+    st.markdown(
+        """
+        <div style="background: rgba(82, 122, 80, 0.08); padding: 12px 18px; border-radius: 10px; border: 1px solid rgba(82, 122, 80, 0.2); margin-bottom: 14px; font-size: 0.88rem; color: #102C26;">
+            <strong>Multi-Origin Robustness Benchmark:</strong> Standardized 4-origin walk-forward evaluation across the 20-month validation period (Sep 2022 – Apr 2024). 
+            Tests 14 model architectures across all 10 Indian plant pathogens (240 total forecast evaluation steps) with moving block-bootstrap statistical significance testing.
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    from src.multi_origin_ui import render_multi_origin_dashboard
+    render_multi_origin_dashboard(selected_slug, adv_mode, pathogen_dict)
+    st.stop()
 
 if is_walk_forward:
     col_w1, col_w2, col_w3, col_w4, col_w5 = st.columns([1.1, 1.2, 1.1, 1.0, 1.0])
@@ -201,11 +223,12 @@ if run_btn:
     else:
         get_cached_fixed_holdout.clear()
 
+_n_avail_models = len(get_available_models())
 if is_walk_forward:
     spinner_text = (
-        f"Executing operational walk-forward evaluation ({step_ahead}-month ahead, {horizon} steps) across all 10 models..."
+        f"Executing operational walk-forward evaluation ({step_ahead}-month ahead, {horizon} steps) across all {_n_avail_models} models..."
         if adv_mode
-        else f"Testing monthly updating predictions across 10 models on real historical data..."
+        else f"Testing monthly updating predictions across {_n_avail_models} models on real historical data..."
     )
     with st.spinner(spinner_text):
         comp_results = get_cached_walk_forward(
@@ -219,7 +242,7 @@ if is_walk_forward:
         )
 else:
     spinner_text = (
-        f"Evaluating 10 model architectures against held-out validation horizon ({horizon} months)..."
+        f"Evaluating {_n_avail_models} model architectures against held-out validation horizon ({horizon} months)..."
         if adv_mode
         else f"Testing prediction methods on the last {horizon} months of real data..."
     )
@@ -675,6 +698,7 @@ with tab_assumptions:
         m_mase = m.get("mase")
         dynamic_summary.append({
             "Model": m.get("model_name"),
+            "Category": m.get("model_category", "Time Series"),
             "Architecture Family": m.get("model_family", "Time Series"),
             "Selected Parameters": m.get("parameters", "Auto-Optimized"),
             "Holdout RMSE": f"{m.get('rmse', 0.0):.3f}",
