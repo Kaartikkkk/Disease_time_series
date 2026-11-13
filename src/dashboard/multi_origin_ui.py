@@ -1360,8 +1360,10 @@ def render_multi_origin_dashboard(
         unsafe_allow_html=True,
     )
 
-    # Sub-section: Fine-Tuning & Hyperparameter Optimization Results (Prompt 19)
-    opt_data_path = Path("reports/experiments/ADVANCED_MODEL_OPTIMIZATION_RESULTS.json")
+    # Sub-section: Fine-Tuning & Hyperparameter Optimization Results
+    opt_data_path = Path("data/processed/advanced_model_optimization_results.json")
+    if not opt_data_path.exists():
+        opt_data_path = Path("reports/experiments/ADVANCED_MODEL_OPTIMIZATION_RESULTS.json")
     if not opt_data_path.exists():
         opt_data_path = Path("ADVANCED_MODEL_OPTIMIZATION_RESULTS.json")
     if opt_data_path.exists():

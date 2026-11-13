@@ -272,22 +272,8 @@ def load_monthly_series(slug: str) -> Optional[pd.DataFrame]:
 
 @st.cache_data
 def load_clean_records(slug: str) -> Optional[pd.DataFrame]:
-    """Load cleaned occurrence records for a pathogen."""
-    try:
-        from src.data.dataset_service import load_clean_event_records
-        df = load_clean_event_records(slug)
-        if df is not None:
-            return df
-    except Exception:
-        pass
-
-    path = PROCESSED_DIR / f"clean_{slug}_records.csv"
-    if path.exists():
-        df = pd.read_csv(path, low_memory=False)
-        if "event_date_parsed" in df.columns:
-            df["event_date_parsed"] = pd.to_datetime(df["event_date_parsed"])
-        return df
-    return None
+    """Load occurrence records for a pathogen from the master dataset."""
+    return load_authoritative_series(slug)
 
 
 @st.cache_data

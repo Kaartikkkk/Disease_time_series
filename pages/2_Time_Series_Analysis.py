@@ -224,9 +224,9 @@ with tab_decomp:
     st.markdown(f"**Classical Seasonal-Trend-Loess (STL) Decomposition (Period = 12 Months)**")
     decomp_res = perform_seasonal_decomposition(df_monthly, period=12, model="additive", target_col=target_col)
     
-    if decomp_res.get("success"):
+    if decomp_res is not None and not decomp_res.empty:
         fig_d = go.Figure()
-        dates = df_monthly["date"]
+        dates = decomp_res["date"]
         fig_d.add_trace(go.Scatter(x=dates, y=decomp_res["observed"], name="Observed (Y_t)", line=dict(color="#102C26", width=1.5)))
         fig_d.add_trace(go.Scatter(x=dates, y=decomp_res["trend"], name="Trend (T_t)", line=dict(color="#C4A66A", width=2.0)))
         fig_d.add_trace(go.Scatter(x=dates, y=decomp_res["seasonal"], name="Seasonal (S_t, 12m)", line=dict(color="#047857", width=1.5)))
@@ -333,10 +333,13 @@ with tab_weather:
     st.markdown(f"**NASA POWER Meteorological Telemetry & Lag Cross-Correlations**")
     corr_res = compute_weather_disease_correlations(df_monthly, target_col=target_col)
     
-    if corr_res.get("success") and not corr_res["correlation_matrix"].empty:
-        corr_df = corr_res["correlation_matrix"]
+    if corr_res and corr_res.get("correlations"):
+        df_corr = pd.DataFrame(corr_res["correlations"])
+        corr_matrix = df_corr.pivot(index="label", columns="lag_months", values="pearson_r")
+        corr_matrix.columns = [f"Lag {c}m" for c in corr_matrix.columns]
+        
         fig_c = px.imshow(
-            corr_df,
+            corr_matrix,
             text_auto=".2f",
             aspect="auto",
             color_continuous_scale=[[0, "#2563EB"], [0.5, "#FFFEFA"], [1, "#DC2626"]],

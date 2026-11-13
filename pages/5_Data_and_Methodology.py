@@ -304,7 +304,9 @@ with tab_downloads:
                 mime="application/json",
                 use_container_width=True,
             )
-        p_opt = Path("reports/experiments/ADVANCED_MODEL_OPTIMIZATION_RESULTS.json")
+        p_opt = Path("data/processed/advanced_model_optimization_results.json")
+        if not p_opt.exists():
+            p_opt = Path("reports/experiments/ADVANCED_MODEL_OPTIMIZATION_RESULTS.json")
         if not p_opt.exists():
             p_opt = Path("ADVANCED_MODEL_OPTIMIZATION_RESULTS.json")
         if p_opt.exists():

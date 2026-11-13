@@ -129,14 +129,8 @@ def load_authoritative_master_dataset() -> pd.DataFrame:
 
 
 def load_clean_event_records(slug: str) -> Optional[pd.DataFrame]:
-    """Load cleaned observational event records for geospatial mapping and record inspection."""
-    path = get_clean_records_path(slug)
-    if path.exists():
-        df = pd.read_csv(path, low_memory=False)
-        if "event_date_parsed" in df.columns:
-            df["event_date_parsed"] = pd.to_datetime(df["event_date_parsed"])
-        return df
-    return None
+    """Load occurrence records for a pathogen from the master dataset."""
+    return load_authoritative_series(slug)
 
 
 def verify_dataset_integrity() -> Dict[str, Any]:
