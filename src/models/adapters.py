@@ -7,26 +7,26 @@ its underlying mathematical algorithm, ensuring Milestone 2 behavior is preserve
 from typing import Any, Dict, Optional, Tuple
 import pandas as pd
 
-from src.models.ar_model import forecast_ar
-from src.models.arima_model import forecast_arima
-from src.models.arimax_model import forecast_arimax
-from src.models.base import ForecastContext
-from src.models.global_models import (
+from src.models.common.base import ForecastContext
+from src.models.classical.ar_model import forecast_ar
+from src.models.classical.arima_model import forecast_arima
+from src.models.classical.arimax_model import forecast_arimax
+from src.models.classical.holt_winters import forecast_holt_winters
+from src.models.classical.ma_model import forecast_ma
+from src.models.classical.sarima_model import forecast_sarima
+from src.models.classical.sarimax_model import forecast_sarimax_model
+from src.models.classical.seasonal_naive import forecast_seasonal_naive
+from src.models.machine_learning.gradient_boosting import forecast_gradient_boosting
+from src.models.machine_learning.random_forest import forecast_random_forest
+from src.models.machine_learning.xgboost_model import HAS_XGBOOST, forecast_xgboost
+from src.models.machine_learning.global_models import (
     forecast_global_random_forest,
     forecast_global_xgboost,
     forecast_hurdle_xgboost,
 )
-from src.models.gradient_boosting import forecast_gradient_boosting
-from src.models.gru_model import forecast_gru
-from src.models.holt_winters import forecast_holt_winters
-from src.models.lstm_model import HAS_TORCH, forecast_lstm
-from src.models.ma_model import forecast_ma
-from src.models.prophet_model import HAS_PROPHET, forecast_prophet
-from src.models.random_forest import forecast_random_forest
-from src.models.sarima_model import forecast_sarima
-from src.models.sarimax_model import forecast_sarimax_model
-from src.models.seasonal_naive import forecast_seasonal_naive
-from src.models.xgboost_model import HAS_XGBOOST, forecast_xgboost
+from src.models.deep_learning.lstm_model import HAS_TORCH, forecast_lstm
+from src.models.deep_learning.gru_model import forecast_gru
+from src.models.probabilistic.prophet_model import HAS_PROPHET, forecast_prophet
 
 
 def _extract_exog(ctx: ForecastContext) -> Tuple[Optional[pd.DataFrame], Optional[pd.DataFrame]]:
@@ -51,6 +51,14 @@ def _build_output(
     model_family: str,
     fitted_model: Any = None,
 ) -> Dict[str, Any]:
+    if lb is not None and ub is not None:
+        try:
+            lb_arr = np.asarray(lb, dtype=float)
+            ub_arr = np.asarray(ub, dtype=float)
+            lb = np.minimum(lb_arr, ub_arr)
+            ub = np.maximum(lb_arr, ub_arr)
+        except Exception:
+            pass
     return {
         "predictions": preds,
         "lower_bound": lb,
@@ -205,6 +213,7 @@ def adapt_sarimax(ctx: ForecastContext) -> Dict[str, Any]:
 
 def adapt_random_forest(ctx: ForecastContext) -> Dict[str, Any]:
     lags = list(ctx.config.get("lags", [1, 2, 3, 12]))
+    rf_params = ctx.config.get("rf_params")
     exog_cols = ctx.exog_cols if ctx.exog_cols and all(c in ctx.train_df.columns for c in ctx.exog_cols) else None
     preds, lb, ub, model = forecast_random_forest(
         ctx.train_df,
@@ -212,6 +221,7 @@ def adapt_random_forest(ctx: ForecastContext) -> Dict[str, Any]:
         lags=lags,
         weather_lag_cols=exog_cols,
         future_weather_df=ctx.future_df if exog_cols else None,
+        rf_params=rf_params,
     )
     return _build_output(
         preds, lb, ub,

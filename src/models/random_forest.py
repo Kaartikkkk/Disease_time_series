@@ -23,6 +23,7 @@ def forecast_random_forest(
     lags: Optional[List[int]] = None,
     weather_lag_cols: Optional[List[str]] = None,
     future_weather_df: Optional[pd.DataFrame] = None,
+    rf_params: Optional[Any] = None,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, Any]:
     """Fit Random Forest autoregressive model and generate recursive predictions.
 
@@ -32,6 +33,7 @@ def forecast_random_forest(
         lags: Target lag periods (default: [1, 2, 3, 12]).
         weather_lag_cols: Exogenous lagged climate column names.
         future_weather_df: Projected climate regressors for forecast horizon.
+        rf_params: Optional dictionary of RandomForestRegressor hyperparameters.
 
     Returns:
         Tuple of (point_predictions, lower_95_ci, upper_95_ci, fitted_model).
@@ -43,4 +45,5 @@ def forecast_random_forest(
         lags=lags,
         weather_lag_cols=weather_lag_cols,
         future_weather_df=future_weather_df,
+        model_params=rf_params,
     )

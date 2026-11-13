@@ -1,56 +1,55 @@
-"""Agricultural Disease Forecasting Using Time Series — Individual Model Suite.
+"""Agricultural Disease Forecasting — Modular Model Suite.
 
-This package provides standalone, modular implementations for benchmark models:
+Organized into dedicated model families:
+1. Classical Models: `src.models.classical` (AR, MA, ARIMA, SARIMA, ARIMAX, SARIMAX, Holt-Winters, Seasonal Naive)
+2. Machine Learning: `src.models.machine_learning` (Random Forest, XGBoost, Global Models, Hurdle XGBoost, Gradient Boosting)
+3. Deep Learning: `src.models.deep_learning` (PyTorch LSTM, GRU)
+4. Probabilistic: `src.models.probabilistic` (Meta Prophet)
+5. Common Infrastructure: `src.models.common` (ForecastContext, validation schemas, adapters)
 
-1. Baseline & Smoothing:
-   - Seasonal Naive (baseline): `from src.models.seasonal_naive import forecast_seasonal_naive`
-   - Holt-Winters: `from src.models.holt_winters import forecast_holt_winters`
-
-2. Box-Jenkins Classical Univariate:
-   - AR(1): `from src.models.ar_model import forecast_ar`
-   - MA(1): `from src.models.ma_model import forecast_ma`
-   - ARIMA(1,1,1): `from src.models.arima_model import forecast_arima`
-   - SARIMA(1,0,1)(1,0,1)[12]: `from src.models.sarima_model import forecast_sarima`
-
-3. Exogenous Weather-Coupled Econometric:
-   - ARIMAX: `from src.models.arimax_model import forecast_arimax`
-   - SARIMAX: `from src.models.sarimax_model import forecast_sarimax_model`
-
-4. Machine Learning & Preserved Milestone 3 Modules:
-   - Hist Gradient Boosting: `from src.models.global_models import (
-    forecast_global_random_forest,
-    forecast_global_xgboost,
-    forecast_hurdle_xgboost,
-)
-from src.models.gradient_boosting import forecast_gradient_boosting`
-   - Random Forest: `from src.models.random_forest import forecast_random_forest`
-   - XGBoost: `from src.models.xgboost_model import forecast_xgboost, HAS_XGBOOST`
-   - ML Autoregressor Base: `from src.models.ml_autoregressor import forecast_ml_autoregressor`
-   - Meta Prophet (preserved for Milestone 3): `from src.models.prophet_model import forecast_prophet, HAS_PROPHET`
+Re-exports provided for backward-compatibility.
 """
 
-from src.models.ar_model import forecast_ar
-from src.models.arima_model import forecast_arima
-from src.models.arimax_model import forecast_arimax
-from src.models.global_models import (
+from src.models.classical import (
+    forecast_ar,
+    forecast_arima,
+    forecast_arimax,
+    forecast_holt_winters,
+    forecast_ma,
+    forecast_sarima,
+    forecast_sarimax_model,
+    forecast_seasonal_naive,
+)
+from src.models.machine_learning import (
+    HAS_XGBOOST,
     forecast_global_random_forest,
     forecast_global_xgboost,
+    forecast_gradient_boosting,
     forecast_hurdle_xgboost,
+    forecast_ml_autoregressor,
+    forecast_random_forest,
+    forecast_xgboost,
 )
-from src.models.gradient_boosting import forecast_gradient_boosting
-from src.models.gru_model import forecast_gru
-from src.models.holt_winters import forecast_holt_winters
-from src.models.lstm_model import HAS_TORCH, forecast_lstm
-from src.models.ma_model import forecast_ma
-from src.models.ml_autoregressor import forecast_ml_autoregressor
-from src.models.prophet_model import HAS_PROPHET, forecast_prophet
-from src.models.random_forest import forecast_random_forest
-from src.models.sarima_model import forecast_sarima
-from src.models.sarimax_model import forecast_sarimax_model
-from src.models.seasonal_naive import forecast_seasonal_naive
-from src.models.xgboost_model import HAS_XGBOOST, forecast_xgboost
+from src.models.deep_learning import (
+    HAS_TORCH,
+    create_lstm_sequences,
+    forecast_gru,
+    forecast_lstm,
+)
+from src.models.probabilistic import (
+    HAS_PROPHET,
+    forecast_prophet,
+    prepare_prophet_dataframe,
+)
+from src.models.common import (
+    ForecastContext,
+    ModelAdapterFn,
+    build_failure_output,
+    validate_forecast_output,
+)
 
 __all__ = [
+    # Classical
     "forecast_seasonal_naive",
     "forecast_holt_winters",
     "forecast_ar",
@@ -59,17 +58,27 @@ __all__ = [
     "forecast_sarima",
     "forecast_arimax",
     "forecast_sarimax_model",
+    # Probabilistic
     "forecast_prophet",
+    "prepare_prophet_dataframe",
+    "HAS_PROPHET",
+    # Machine Learning
     "forecast_gradient_boosting",
     "forecast_random_forest",
     "forecast_xgboost",
     "forecast_global_xgboost",
     "forecast_global_random_forest",
     "forecast_hurdle_xgboost",
+    "forecast_ml_autoregressor",
+    "HAS_XGBOOST",
+    # Deep Learning
     "forecast_lstm",
     "forecast_gru",
-    "forecast_ml_autoregressor",
-    "HAS_PROPHET",
-    "HAS_XGBOOST",
+    "create_lstm_sequences",
     "HAS_TORCH",
+    # Common
+    "ForecastContext",
+    "ModelAdapterFn",
+    "build_failure_output",
+    "validate_forecast_output",
 ]

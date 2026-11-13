@@ -1,0 +1,335 @@
+{
+  "all_pathogens::global_random_forest": {
+    "model_name": "global_random_forest",
+    "pathogen_slug": "all_pathogens",
+    "filename": "all_pathogens_global_random_forest_20261112_200102.joblib",
+    "file_path": "models/all_pathogens_global_random_forest_20261112_200102.joblib",
+    "created_at_utc": "2026-11-12T20:01:02.725724+00:00",
+    "train_start": "2015-01-01",
+    "train_end": "2024-04-01",
+    "validation_metrics": {
+      "rmse": 6.012,
+      "mae": 2.411,
+      "mse": 36.141,
+      "mase": 2.416,
+      "smape_pct": 142.1,
+      "wape_pct": 86.6,
+      "r2_score": 0.079,
+      "outbreak_threshold": 0.0,
+      "outbreak_precision": 0.512,
+      "outbreak_recall": 1.0,
+      "outbreak_f1": 0.678
+    },
+    "hyperparameters": {
+      "n_estimators": 120,
+      "max_depth": 4,
+      "min_samples_leaf": 4,
+      "max_features": 0.8,
+      "random_state": 42,
+      "n_jobs": 1
+    }
+  },
+  "all_pathogens::global_xgboost": {
+    "model_name": "global_xgboost",
+    "pathogen_slug": "all_pathogens",
+    "filename": "all_pathogens_global_xgboost_20261112_200102.joblib",
+    "file_path": "models/all_pathogens_global_xgboost_20261112_200102.joblib",
+    "created_at_utc": "2026-11-12T20:01:02.752379+00:00",
+    "train_start": "2015-01-01",
+    "train_end": "2024-04-01",
+    "validation_metrics": {
+      "rmse": 6.017,
+      "mae": 2.405,
+      "mse": 36.205,
+      "mase": 2.41,
+      "smape_pct": 144.3,
+      "wape_pct": 86.4,
+      "r2_score": 0.077,
+      "outbreak_threshold": 0.0,
+      "outbreak_precision": 0.512,
+      "outbreak_recall": 1.0,
+      "outbreak_f1": 0.678
+    },
+    "hyperparameters": {
+      "n_estimators": 130,
+      "max_depth": 4,
+      "learning_rate": 0.025,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8,
+      "reg_alpha": 0.4,
+      "reg_lambda": 1.5,
+      "random_state": 42,
+      "n_jobs": 1
+    }
+  },
+  "all_pathogens::hurdle_xgboost": {
+    "model_name": "hurdle_xgboost",
+    "pathogen_slug": "all_pathogens",
+    "filename": "all_pathogens_hurdle_xgboost_20261112_200102.joblib",
+    "file_path": "models/all_pathogens_hurdle_xgboost_20261112_200102.joblib",
+    "created_at_utc": "2026-11-12T20:01:02.769163+00:00",
+    "train_start": "2015-01-01",
+    "train_end": "2024-04-01",
+    "validation_metrics": {
+      "rmse": 5.982,
+      "mae": 2.37,
+      "mse": 35.779,
+      "mase": 2.375,
+      "smape_pct": 139.9,
+      "wape_pct": 85.1,
+      "r2_score": 0.088,
+      "outbreak_threshold": 0.0,
+      "outbreak_precision": 0.512,
+      "outbreak_recall": 1.0,
+      "outbreak_f1": 0.678,
+      "hurdle_zero_f1": 0.699,
+      "hurdle_zero_precision": 0.809,
+      "hurdle_zero_recall": 0.615,
+      "hurdle_stage1_brier_score": 0.189,
+      "hurdle_stage2_positive_rmse": 8.255,
+      "hurdle_stage2_positive_mae": 3.882
+    },
+    "hyperparameters": {
+      "stage1": {
+        "n_estimators": 80,
+        "max_depth": 3,
+        "learning_rate": 0.05,
+        "subsample": 0.8,
+        "colsample_bytree": 0.8,
+        "eval_metric": "logloss",
+        "random_state": 42,
+        "n_jobs": 1
+      },
+      "stage2": {
+        "n_estimators": 80,
+        "max_depth": 3,
+        "learning_rate": 0.05,
+        "subsample": 0.8,
+        "colsample_bytree": 0.8,
+        "reg_alpha": 0.5,
+        "reg_lambda": 2.5,
+        "random_state": 42,
+        "n_jobs": 1
+      },
+      "threshold": 0.5
+    }
+  },
+  "pyricularia_oryzae::random_forest": {
+    "model_name": "random_forest",
+    "pathogen_slug": "pyricularia_oryzae",
+    "filename": "pyricularia_oryzae_random_forest_20261112_200102.joblib",
+    "file_path": "models/pyricularia_oryzae_random_forest_20261112_200102.joblib",
+    "created_at_utc": "2026-11-12T20:01:02.817220+00:00",
+    "train_start": "2015-01-01",
+    "train_end": "2024-04-01",
+    "validation_metrics": {
+      "rmse": 6.567
+    },
+    "hyperparameters": {
+      "n_estimators": 100,
+      "max_depth": 6
+    }
+  },
+  "pyricularia_oryzae::xgboost": {
+    "model_name": "xgboost",
+    "pathogen_slug": "pyricularia_oryzae",
+    "filename": "pyricularia_oryzae_xgboost_20261112_200102.joblib",
+    "file_path": "models/pyricularia_oryzae_xgboost_20261112_200102.joblib",
+    "created_at_utc": "2026-11-12T20:01:02.823740+00:00",
+    "train_start": "2015-01-01",
+    "train_end": "2024-04-01",
+    "validation_metrics": {
+      "rmse": 6.462
+    },
+    "hyperparameters": {
+      "n_estimators": 80,
+      "max_depth": 4,
+      "learning_rate": 0.05
+    }
+  },
+  "puccinia_striiformis::random_forest": {
+    "model_name": "random_forest",
+    "pathogen_slug": "puccinia_striiformis",
+    "filename": "puccinia_striiformis_random_forest_20261112_200102.joblib",
+    "file_path": "models/puccinia_striiformis_random_forest_20261112_200102.joblib",
+    "created_at_utc": "2026-11-12T20:01:02.860416+00:00",
+    "train_start": "2015-01-01",
+    "train_end": "2024-04-01",
+    "validation_metrics": {
+      "rmse": 6.567
+    },
+    "hyperparameters": {
+      "n_estimators": 100,
+      "max_depth": 6
+    }
+  },
+  "puccinia_striiformis::xgboost": {
+    "model_name": "xgboost",
+    "pathogen_slug": "puccinia_striiformis",
+    "filename": "puccinia_striiformis_xgboost_20261112_200102.joblib",
+    "file_path": "models/puccinia_striiformis_xgboost_20261112_200102.joblib",
+    "created_at_utc": "2026-11-12T20:01:02.865707+00:00",
+    "train_start": "2015-01-01",
+    "train_end": "2024-04-01",
+    "validation_metrics": {
+      "rmse": 6.462
+    },
+    "hyperparameters": {
+      "n_estimators": 80,
+      "max_depth": 4,
+      "learning_rate": 0.05
+    }
+  },
+  "ralstonia_solanacearum::random_forest": {
+    "model_name": "random_forest",
+    "pathogen_slug": "ralstonia_solanacearum",
+    "filename": "ralstonia_solanacearum_random_forest_20261112_200102.joblib",
+    "file_path": "models/ralstonia_solanacearum_random_forest_20261112_200102.joblib",
+    "created_at_utc": "2026-11-12T20:01:02.905592+00:00",
+    "train_start": "2015-01-01",
+    "train_end": "2024-04-01",
+    "validation_metrics": {
+      "rmse": 6.567
+    },
+    "hyperparameters": {
+      "n_estimators": 100,
+      "max_depth": 6
+    }
+  },
+  "ralstonia_solanacearum::xgboost": {
+    "model_name": "xgboost",
+    "pathogen_slug": "ralstonia_solanacearum",
+    "filename": "ralstonia_solanacearum_xgboost_20261112_200102.joblib",
+    "file_path": "models/ralstonia_solanacearum_xgboost_20261112_200102.joblib",
+    "created_at_utc": "2026-11-12T20:01:02.911615+00:00",
+    "train_start": "2015-01-01",
+    "train_end": "2024-04-01",
+    "validation_metrics": {
+      "rmse": 6.462
+    },
+    "hyperparameters": {
+      "n_estimators": 80,
+      "max_depth": 4,
+      "learning_rate": 0.05
+    }
+  },
+  "all_pathogens::gru": {
+    "model_name": "gru",
+    "pathogen_slug": "all_pathogens",
+    "filename": "all_pathogens_gru_20261112_200102.joblib",
+    "file_path": "models/all_pathogens_gru_20261112_200102.joblib",
+    "created_at_utc": "2026-11-12T20:01:02.918656+00:00",
+    "train_start": "2015-01-01",
+    "train_end": "2024-04-01",
+    "validation_metrics": {
+      "rmse": 6.106,
+      "mae": 2.304,
+      "mse": 37.289,
+      "mase": 2.309,
+      "smape_pct": 145.9,
+      "wape_pct": 82.8,
+      "r2_score": 0.05,
+      "outbreak_threshold": 0.0,
+      "outbreak_precision": 0.504,
+      "outbreak_recall": 0.951,
+      "outbreak_f1": 0.659
+    },
+    "hyperparameters": {
+      "hidden_units": 8,
+      "lookback": 12,
+      "learning_rate": 0.003
+    }
+  },
+  "all_pathogens::lstm": {
+    "model_name": "lstm",
+    "pathogen_slug": "all_pathogens",
+    "filename": "all_pathogens_lstm_20261112_200102.joblib",
+    "file_path": "models/all_pathogens_lstm_20261112_200102.joblib",
+    "created_at_utc": "2026-11-12T20:01:02.919449+00:00",
+    "train_start": "2015-01-01",
+    "train_end": "2024-04-01",
+    "validation_metrics": {
+      "rmse": 6.223,
+      "mae": 2.376,
+      "mse": 38.72,
+      "mase": 2.382,
+      "smape_pct": 145.9,
+      "wape_pct": 85.4,
+      "r2_score": 0.013,
+      "outbreak_threshold": 0.0,
+      "outbreak_precision": 0.502,
+      "outbreak_recall": 0.943,
+      "outbreak_f1": 0.655
+    },
+    "hyperparameters": {
+      "hidden_units": 16,
+      "lookback": 12,
+      "learning_rate": 0.01
+    }
+  },
+  "pyricularia_oryzae::ar": {
+    "model_name": "ar",
+    "pathogen_slug": "pyricularia_oryzae",
+    "filename": "pyricularia_oryzae_ar_20261112_200114.joblib",
+    "file_path": "models/pyricularia_oryzae_ar_20261112_200114.joblib",
+    "created_at_utc": "2026-11-12T20:01:14.703956+00:00",
+    "train_start": "",
+    "train_end": "",
+    "validation_metrics": {
+      "rmse": 6.643
+    },
+    "hyperparameters": {
+      "p": 1
+    }
+  },
+  "pyricularia_oryzae::ma": {
+    "model_name": "ma",
+    "pathogen_slug": "pyricularia_oryzae",
+    "filename": "pyricularia_oryzae_ma_20261112_200114.joblib",
+    "file_path": "models/pyricularia_oryzae_ma_20261112_200114.joblib",
+    "created_at_utc": "2026-11-12T20:01:14.731460+00:00",
+    "train_start": "",
+    "train_end": "",
+    "validation_metrics": {
+      "rmse": 6.243
+    },
+    "hyperparameters": {
+      "q": 1
+    }
+  },
+  "pyricularia_oryzae::arima": {
+    "model_name": "arima",
+    "pathogen_slug": "pyricularia_oryzae",
+    "filename": "pyricularia_oryzae_arima_20261112_200114.joblib",
+    "file_path": "models/pyricularia_oryzae_arima_20261112_200114.joblib",
+    "created_at_utc": "2026-11-12T20:01:14.755048+00:00",
+    "train_start": "",
+    "train_end": "",
+    "validation_metrics": {
+      "rmse": 8.374
+    },
+    "hyperparameters": {
+      "order": [
+        1,
+        1,
+        1
+      ]
+    }
+  },
+  "pyricularia_oryzae::holt_winters": {
+    "model_name": "holt_winters",
+    "pathogen_slug": "pyricularia_oryzae",
+    "filename": "pyricularia_oryzae_holt_winters_20261112_200114.joblib",
+    "file_path": "models/pyricularia_oryzae_holt_winters_20261112_200114.joblib",
+    "created_at_utc": "2026-11-12T20:01:14.785808+00:00",
+    "train_start": "",
+    "train_end": "",
+    "validation_metrics": {
+      "rmse": 7.028
+    },
+    "hyperparameters": {
+      "trend": "add",
+      "seasonal": "add"
+    }
+  }
+}

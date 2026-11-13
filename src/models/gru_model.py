@@ -51,7 +51,17 @@ else:
     _GRUNet = None  # type: ignore[assignment]
 
 
-DEFAULT_GRU_CONFIG: Dict[str, Any] = dict(DEFAULT_LSTM_CONFIG)
+DEFAULT_GRU_CONFIG: Dict[str, Any] = {
+    "lookback": 12,
+    "units": 8,
+    "dropout": 0.10,
+    "learning_rate": 0.003,
+    "batch_size": 8,
+    "max_epochs": 80,
+    "patience": 10,
+    "val_fraction": 0.15,
+    "seed": 42,
+}
 
 
 def forecast_gru(

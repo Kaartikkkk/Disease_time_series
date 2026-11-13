@@ -34,13 +34,13 @@ except ImportError:
 
 # Tuned via expanding-window cross-validation on internal training data (date <= 2022-08-01)
 DEFAULT_GLOBAL_XGB_PARAMS: Dict[str, Any] = {
-    "n_estimators": 110,
-    "max_depth": 3,
-    "learning_rate": 0.03,
-    "subsample": 0.85,
-    "colsample_bytree": 0.85,
-    "reg_alpha": 0.3,
-    "reg_lambda": 1.0,
+    "n_estimators": 130,
+    "max_depth": 4,
+    "learning_rate": 0.025,
+    "subsample": 0.80,
+    "colsample_bytree": 0.80,
+    "reg_alpha": 0.4,
+    "reg_lambda": 1.5,
     "random_state": 42,
     "n_jobs": 1,
 }
@@ -58,8 +58,8 @@ DEFAULT_HURDLE_CLF_PARAMS: Dict[str, Any] = {
     "n_estimators": 80,
     "max_depth": 3,
     "learning_rate": 0.05,
-    "subsample": 0.85,
-    "colsample_bytree": 0.85,
+    "subsample": 0.80,
+    "colsample_bytree": 0.80,
     "eval_metric": "logloss",
     "random_state": 42,
     "n_jobs": 1,
@@ -69,10 +69,10 @@ DEFAULT_HURDLE_REG_PARAMS: Dict[str, Any] = {
     "n_estimators": 80,
     "max_depth": 3,
     "learning_rate": 0.05,
-    "subsample": 0.85,
-    "colsample_bytree": 0.85,
-    "reg_alpha": 0.2,
-    "reg_lambda": 1.2,
+    "subsample": 0.80,
+    "colsample_bytree": 0.80,
+    "reg_alpha": 0.5,
+    "reg_lambda": 2.5,
     "random_state": 42,
     "n_jobs": 1,
 }
@@ -168,9 +168,14 @@ def _load_historical_panel(train_df: pd.DataFrame, target_col: str) -> Tuple[pd.
         else "target_series"
     )
 
-    if MASTER_PANEL_PATH.exists():
+    panel_candidate = (
+        Path("data/processed/improved_india_plant_diseases_monthly.csv")
+        if Path("data/processed/improved_india_plant_diseases_monthly.csv").exists()
+        else MASTER_PANEL_PATH
+    )
+    if panel_candidate.exists():
         try:
-            mdf = pd.read_csv(MASTER_PANEL_PATH)
+            mdf = pd.read_csv(panel_candidate)
             mdf["date"] = pd.to_datetime(mdf["date"])
             # Strict slice: observations dated <= max_train_date only
             panel_slice = mdf[mdf["date"] <= max_train_date].copy()
@@ -179,7 +184,7 @@ def _load_historical_panel(train_df: pd.DataFrame, target_col: str) -> Tuple[pd.
         except Exception:
             pass
 
-    # Fallback to single series if master panel is unreadable or during synthetic unit testing
+    # Fallback to single series if master panel is unreadable or during isolated testing
     fallback = df_sorted.copy()
     if "pathogen_slug" not in fallback.columns:
         fallback["pathogen_slug"] = target_slug
@@ -201,6 +206,22 @@ def forecast_global_xgboost(
     panel_slice, target_slug = _load_historical_panel(train_df, target_col)
     feat_panel, feature_cols = build_global_panel_features(panel_slice, target_col=target_col)
 
+    params = {**DEFAULT_GLOBAL_XGB_PARAMS, **(xgb_params or {})}
+    exclude_weather = bool(params.pop("exclude_weather", False))
+    exclude_rolling = bool(params.pop("exclude_rolling", False))
+    exclude_lag12 = bool(params.pop("exclude_lag12", False))
+    exclude_pathogen_id = bool(params.pop("exclude_pathogen_id", False))
+
+    if exclude_weather:
+        weather_cols = {"temp_mean_c_lag1", "precipitation_monthly_mm_lag1", "relative_humidity_pct_lag1"}
+        feature_cols = [c for c in feature_cols if c not in weather_cols]
+    if exclude_rolling:
+        feature_cols = [c for c in feature_cols if not c.startswith("roll_")]
+    if exclude_lag12:
+        feature_cols = [c for c in feature_cols if c != "lag_12"]
+    if exclude_pathogen_id:
+        feature_cols = [c for c in feature_cols if not c.startswith("is_")]
+
     clean_train = feat_panel.dropna(subset=feature_cols + [target_col]).copy()
     if len(clean_train) < 12:
         raise ValueError(f"Insufficient training observations ({len(clean_train)}) for Global XGBoost.")
@@ -208,7 +229,6 @@ def forecast_global_xgboost(
     X_train = clean_train[feature_cols].values
     y_train = clean_train[target_col].astype(float).values
 
-    params = {**DEFAULT_GLOBAL_XGB_PARAMS, **(xgb_params or {})}
     model = XGBRegressor(**params)
     sample_weight = (
         np.where(clean_train["is_missing"] == 1, 0.2, 1.0)
@@ -225,7 +245,7 @@ def forecast_global_xgboost(
     target_history_df = panel_slice[panel_slice["pathogen_slug"] == target_slug].sort_values("date").reset_index(drop=True)
     history = target_history_df[target_col].astype(float).tolist()
     last_date = target_history_df["date"].iloc[-1]
-    all_slugs = [c.replace("is_", "") for c in feature_cols if c.startswith("is_")]
+    all_slugs = [(c[3:] if c.startswith("is_") else c) for c in feature_cols if c.startswith("is_")]
 
     preds: List[float] = []
     for step in range(1, horizon + 1):
@@ -234,34 +254,32 @@ def forecast_global_xgboost(
             if (future_weather_df is not None and "date" in future_weather_df.columns and len(future_weather_df) >= step)
             else last_date + pd.DateOffset(months=step)
         )
-        row_vals: List[float] = []
+        row_dict: Dict[str, float] = {}
         for l in (1, 2, 3, 6, 12):
-            row_vals.append(float(history[-l]) if len(history) >= l else float(history[-1]))
+            row_dict[f"lag_{l}"] = float(history[-l]) if len(history) >= l else float(history[-1])
         for w in (3, 6):
             w_slice = np.asarray(history[-w:], dtype=float)
-            row_vals.append(float(np.mean(w_slice)))
-            row_vals.append(float(np.std(w_slice, ddof=1)) if len(w_slice) > 1 else 0.0)
-            row_vals.append(float(np.mean(w_slice > 0)))
+            row_dict[f"roll_mean_{w}"] = float(np.mean(w_slice))
+            row_dict[f"roll_std_{w}"] = float(np.std(w_slice, ddof=1)) if len(w_slice) > 1 else 0.0
+            row_dict[f"roll_freq_{w}"] = float(np.mean(w_slice > 0))
 
         m = float(step_date.month)
-        row_vals.extend([
-            m,
-            float(step_date.quarter),
-            float(np.sin(2.0 * np.pi * m / 12.0)),
-            float(np.cos(2.0 * np.pi * m / 12.0)),
-        ])
+        row_dict["month"] = m
+        row_dict["quarter"] = float(step_date.quarter)
+        row_dict["month_sin"] = float(np.sin(2.0 * np.pi * m / 12.0))
+        row_dict["month_cos"] = float(np.cos(2.0 * np.pi * m / 12.0))
 
         # Weather features
         for w_col in ("temp_mean_c_lag1", "precipitation_monthly_mm_lag1", "relative_humidity_pct_lag1"):
-            if w_col in feature_cols:
-                if future_weather_df is not None and w_col in future_weather_df.columns and len(future_weather_df) >= step:
-                    row_vals.append(float(future_weather_df[w_col].iloc[step - 1]))
-                else:
-                    row_vals.append(float(clean_train[w_col].mean()) if w_col in clean_train.columns else 0.0)
+            if future_weather_df is not None and w_col in future_weather_df.columns and len(future_weather_df) >= step:
+                row_dict[w_col] = float(future_weather_df[w_col].iloc[step - 1])
+            else:
+                row_dict[w_col] = float(clean_train[w_col].mean()) if w_col in clean_train.columns else 0.0
 
         for s in all_slugs:
-            row_vals.append(1.0 if s == target_slug else 0.0)
+            row_dict[f"is_{s}"] = 1.0 if s == target_slug else 0.0
 
+        row_vals = [row_dict[c] for c in feature_cols]
         pred_step = max(0.0, float(model.predict(np.asarray([row_vals], dtype=float))[0]))
         preds.append(pred_step)
         history.append(pred_step)
@@ -302,6 +320,22 @@ def forecast_global_random_forest(
     panel_slice, target_slug = _load_historical_panel(train_df, target_col)
     feat_panel, feature_cols = build_global_panel_features(panel_slice, target_col=target_col)
 
+    params = {**DEFAULT_GLOBAL_RF_PARAMS, **(rf_params or {})}
+    exclude_weather = bool(params.pop("exclude_weather", False))
+    exclude_rolling = bool(params.pop("exclude_rolling", False))
+    exclude_lag12 = bool(params.pop("exclude_lag12", False))
+    exclude_pathogen_id = bool(params.pop("exclude_pathogen_id", False))
+
+    if exclude_weather:
+        weather_cols = {"temp_mean_c_lag1", "precipitation_monthly_mm_lag1", "relative_humidity_pct_lag1"}
+        feature_cols = [c for c in feature_cols if c not in weather_cols]
+    if exclude_rolling:
+        feature_cols = [c for c in feature_cols if not c.startswith("roll_")]
+    if exclude_lag12:
+        feature_cols = [c for c in feature_cols if c != "lag_12"]
+    if exclude_pathogen_id:
+        feature_cols = [c for c in feature_cols if not c.startswith("is_")]
+
     clean_train = feat_panel.dropna(subset=feature_cols + [target_col]).copy()
     if len(clean_train) < 12:
         raise ValueError(f"Insufficient training observations ({len(clean_train)}) for Global Random Forest.")
@@ -309,14 +343,13 @@ def forecast_global_random_forest(
     X_train = clean_train[feature_cols].values
     y_train = clean_train[target_col].astype(float).values
 
-    params = {**DEFAULT_GLOBAL_RF_PARAMS, **(rf_params or {})}
     model = RandomForestRegressor(**params)
     model.fit(X_train, y_train)
 
     target_history_df = panel_slice[panel_slice["pathogen_slug"] == target_slug].sort_values("date").reset_index(drop=True)
     history = target_history_df[target_col].astype(float).tolist()
     last_date = target_history_df["date"].iloc[-1]
-    all_slugs = [c.replace("is_", "") for c in feature_cols if c.startswith("is_")]
+    all_slugs = [(c[3:] if c.startswith("is_") else c) for c in feature_cols if c.startswith("is_")]
 
     preds: List[float] = []
     for step in range(1, horizon + 1):
@@ -325,33 +358,31 @@ def forecast_global_random_forest(
             if (future_weather_df is not None and "date" in future_weather_df.columns and len(future_weather_df) >= step)
             else last_date + pd.DateOffset(months=step)
         )
-        row_vals: List[float] = []
+        row_dict: Dict[str, float] = {}
         for l in (1, 2, 3, 6, 12):
-            row_vals.append(float(history[-l]) if len(history) >= l else float(history[-1]))
+            row_dict[f"lag_{l}"] = float(history[-l]) if len(history) >= l else float(history[-1])
         for w in (3, 6):
             w_slice = np.asarray(history[-w:], dtype=float)
-            row_vals.append(float(np.mean(w_slice)))
-            row_vals.append(float(np.std(w_slice, ddof=1)) if len(w_slice) > 1 else 0.0)
-            row_vals.append(float(np.mean(w_slice > 0)))
+            row_dict[f"roll_mean_{w}"] = float(np.mean(w_slice))
+            row_dict[f"roll_std_{w}"] = float(np.std(w_slice, ddof=1)) if len(w_slice) > 1 else 0.0
+            row_dict[f"roll_freq_{w}"] = float(np.mean(w_slice > 0))
 
         m = float(step_date.month)
-        row_vals.extend([
-            m,
-            float(step_date.quarter),
-            float(np.sin(2.0 * np.pi * m / 12.0)),
-            float(np.cos(2.0 * np.pi * m / 12.0)),
-        ])
+        row_dict["month"] = m
+        row_dict["quarter"] = float(step_date.quarter)
+        row_dict["month_sin"] = float(np.sin(2.0 * np.pi * m / 12.0))
+        row_dict["month_cos"] = float(np.cos(2.0 * np.pi * m / 12.0))
 
         for w_col in ("temp_mean_c_lag1", "precipitation_monthly_mm_lag1", "relative_humidity_pct_lag1"):
-            if w_col in feature_cols:
-                if future_weather_df is not None and w_col in future_weather_df.columns and len(future_weather_df) >= step:
-                    row_vals.append(float(future_weather_df[w_col].iloc[step - 1]))
-                else:
-                    row_vals.append(float(clean_train[w_col].mean()) if w_col in clean_train.columns else 0.0)
+            if future_weather_df is not None and w_col in future_weather_df.columns and len(future_weather_df) >= step:
+                row_dict[w_col] = float(future_weather_df[w_col].iloc[step - 1])
+            else:
+                row_dict[w_col] = float(clean_train[w_col].mean()) if w_col in clean_train.columns else 0.0
 
         for s in all_slugs:
-            row_vals.append(1.0 if s == target_slug else 0.0)
+            row_dict[f"is_{s}"] = 1.0 if s == target_slug else 0.0
 
+        row_vals = [row_dict[c] for c in feature_cols]
         pred_step = max(0.0, float(model.predict(np.asarray([row_vals], dtype=float))[0]))
         preds.append(pred_step)
         history.append(pred_step)
@@ -440,7 +471,7 @@ def forecast_hurdle_xgboost(
     target_history_df = panel_slice[panel_slice["pathogen_slug"] == target_slug].sort_values("date").reset_index(drop=True)
     history = target_history_df[target_col].astype(float).tolist()
     last_date = target_history_df["date"].iloc[-1]
-    all_slugs = [c.replace("is_", "") for c in feature_cols if c.startswith("is_")]
+    all_slugs = [(c[3:] if c.startswith("is_") else c) for c in feature_cols if c.startswith("is_")]
 
     preds: List[float] = []
     probs: List[float] = []

@@ -1,4 +1,7 @@
-"""Page 4: Future Predictions — Monthly Disease Outlook & Visual Predictions."""
+"""Page 4: Future Forecasts — Out-of-Sample Surveillance Projections & Monthly Risk Outlook.
+
+Minimal, academic, and interactive interface for forward agricultural disease surveillance.
+"""
 
 from datetime import datetime, timezone
 import numpy as np
@@ -16,23 +19,6 @@ from src.forecast_insights import (
     identify_peak_forecast_month,
 )
 from src.forecasting import (
-    forecast_ar,
-    forecast_arima,
-    forecast_arimax,
-    forecast_global_random_forest,
-    forecast_global_xgboost,
-    forecast_gradient_boosting,
-    forecast_gru,
-    forecast_holt_winters,
-    forecast_hurdle_xgboost,
-    forecast_lstm,
-    forecast_ma,
-    forecast_prophet,
-    forecast_random_forest,
-    forecast_sarima,
-    forecast_sarimax_model,
-    forecast_seasonal_naive,
-    forecast_xgboost,
     generate_future_weather_scenario,
     run_model_comparison,
 )
@@ -43,73 +29,73 @@ from src.icons import (
     icon_info,
     icon_leaf,
     icon_model_compare,
-    icon_pin,
     icon_pulse,
     icon_shield,
-    icon_target,
-    icon_thermometer,
     icon_timeseries,
-    icon_weather,
 )
+from src.models.ar_model import forecast_ar
+from src.models.arima_model import forecast_arima
+from src.models.arimax_model import forecast_arimax
+from src.models.global_models import (
+    forecast_global_random_forest,
+    forecast_global_xgboost,
+    forecast_hurdle_xgboost,
+)
+from src.models.gradient_boosting import forecast_gradient_boosting
+from src.models.gru_model import forecast_gru
+from src.models.holt_winters import forecast_holt_winters
+from src.models.lstm_model import forecast_lstm
+from src.models.ma_model import forecast_ma
+from src.models.prophet_model import forecast_prophet
+from src.models.random_forest import forecast_random_forest
+from src.models.sarima_model import forecast_sarima
+from src.models.sarimax_model import forecast_sarimax_model
+from src.models.seasonal_naive import forecast_seasonal_naive
+from src.models.xgboost_model import forecast_xgboost
+from src.project_stats import get_project_telemetry
 from src.ui_helpers import (
-    ASSETS_DIR,
     format_plotly_figure,
-    get_disease_common_name,
-    get_image_base64,
-    get_pathogen_display_name,
     inject_custom_css,
-    is_advanced_mode,
-    is_simple_mode,
-    load_friendly_pathogen_options,
+    load_all_pathogen_options,
     load_monthly_series,
     render_app_sidebar,
-    render_graph_explanation_card,
     render_top_header,
-    render_what_does_this_mean,
 )
 
 st.set_page_config(
-    page_title="Future Predictions — Agricultural Disease Forecasting Using Time Series",
+    page_title="Future Forecasts — Agricultural Disease Forecasting Using Time Series",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
 
 inject_custom_css()
-render_app_sidebar(active_page="forecasts")
+render_app_sidebar(active_page="predictions")
 render_top_header()
 
-adv_mode = is_advanced_mode()
-pathogen_dict = load_friendly_pathogen_options()
-run_timestamp = datetime.now(timezone.utc).strftime("%d %b %Y · %H:%M UTC")
+stats = get_project_telemetry()
+pathogen_dict = load_all_pathogen_options()
 
 # ==============================================================================
-# A. PAGE HEADER
+# 1. EDITORIAL HEADER & DYNAMIC DATE TELEMETRY
 # ==============================================================================
-page_heading = "Forecast Intelligence" if adv_mode else "Future Disease Predictions"
-page_subheading = (
-    "Explore out-of-sample forward projections across candidate architectures, model confidence intervals, and seasonal climatology."
-    if adv_mode
-    else "See expected disease reports for the coming months and plan ahead with clear, easy-to-understand predictions."
-)
-
 st.markdown(
     f"""
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(82, 122, 80, 0.16);">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid rgba(82, 122, 80, 0.16);">
         <div style="flex: 1 1 300px; min-width: 250px;">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
-                {icon_forecast(28, "#527A50")}
-                <h1 style="font-size: clamp(1.6rem, 3.2vw, 2.2rem); margin: 0; color: #102C26; word-break: normal; hyphens: none; line-height: 1.2;">{page_heading}</h1>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+                {icon_forecast(26, "#527A50")}
+                <h1 style="font-size: clamp(1.5rem, 3vw, 2.0rem); margin: 0; color: #102C26; word-break: normal; hyphens: none; line-height: 1.2;">Future Disease Forecasts &amp; Surveillance Outlook</h1>
             </div>
-            <p style="color: #5A665D; font-size: 0.95rem; margin: 0; line-height: 1.45;">
-                {page_subheading}
+            <p style="color: #5A665D; font-size: 0.92rem; margin: 0; line-height: 1.45;">
+                Forward projections originating from the latest verified historical observations with 80% and 95% expected ranges.
             </p>
         </div>
-        <div style="text-align: right; background: #FFFEFA; border: 1px solid rgba(82, 122, 80, 0.2); border-radius: 12px; padding: 8px 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); flex-shrink: 0; align-self: flex-start;">
-            <div style="display: flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; color: #527A50; letter-spacing: 0.05em;">
-                {icon_pulse(8, "#527A50")} {"Active Modeling Runtime" if adv_mode else "Prediction System Ready"}
+        <div style="text-align: right; background: #FFFEFA; border: 1px solid rgba(82, 122, 80, 0.2); border-radius: 10px; padding: 6px 14px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); flex-shrink: 0; align-self: flex-start;">
+            <div style="font-size: 0.70rem; font-weight: 700; text-transform: uppercase; color: #527A50; letter-spacing: 0.05em;">
+                Surveillance Origin
             </div>
-            <div style="font-size: 0.75rem; color: #5A665D; margin-top: 2px;">
-                Updated: <strong>{run_timestamp}</strong>
+            <div style="font-size: 0.75rem; color: #183D32; font-weight: 600; margin-top: 1px;">
+                Latest Observed: <strong>{stats['forecast_origin_date']}</strong>
             </div>
         </div>
     </div>
@@ -118,168 +104,76 @@ st.markdown(
 )
 
 # ==============================================================================
-# B. FORECAST CONFIGURATION PANEL
+# 2. CONTROLS TOOLBAR
 # ==============================================================================
-section_label = "Model Parameters & Prediction Settings" if adv_mode else "Select Disease, Region & Prediction Period"
-st.markdown(f"<div style='font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #5A665D; margin-bottom: 8px;'>{section_label}</div>", unsafe_allow_html=True)
+col_c1, col_c2, col_c3 = st.columns([1.3, 1.3, 1.0])
 
-with st.container():
-    cfg_c1, cfg_c2, cfg_c3, cfg_c4, cfg_c5 = st.columns([1.3, 1.0, 0.8, 1.3, 1.0])
+with col_c1:
+    selected_slug = st.selectbox(
+        "Target Crop Disease",
+        options=list(pathogen_dict.keys()),
+        format_func=lambda k: pathogen_dict[k],
+        index=0,
+    )
 
-    with cfg_c1:
-        selected_slug = st.selectbox(
-            "Plant Disease" if not adv_mode else "Target Pathogen Series",
-            options=list(pathogen_dict.keys()),
-            format_func=lambda k: pathogen_dict[k],
-            index=0,
-            key="fc_pathogen",
-        )
-
-    with cfg_c2:
-        df_preview_series = load_monthly_series(selected_slug)
-        series_region_id = (
-            str(df_preview_series["region_id"].iloc[0])
-            if df_preview_series is not None and not df_preview_series.empty and "region_id" in df_preview_series.columns
-            else "national_composite"
-        )
-        region_labels = {
-            "national_composite": "National Composite (India)",
-            "odisha_bengal": "Eastern Rice Belt (Odisha / WB)",
-            "punjab_haryana": "Northwest Wheat Belt (Punjab / HR)",
-            "tamil_nadu": "Southern Zone (Tamil Nadu)",
-            "maharashtra": "Western / Central (Maharashtra)",
-        }
-        region_display = region_labels.get(series_region_id, series_region_id)
-        st.text_input(
-            "Dataset Scope" if not adv_mode else "Calibrated Climate Series",
-            value=region_display,
-            disabled=True,
-            key=f"fc_region_display_{selected_slug}",
-            help="Monthly forecasts use the national pathogen series aligned with its primary agro-climatic weather zone.",
-        )
-        selected_region = series_region_id
-
-    with cfg_c3:
-        horizon_months = st.selectbox(
-            "Prediction Period" if not adv_mode else "Forecast Horizon",
-            options=[3, 6, 9, 12, 18, 24],
-            index=1,  # default 6 months
-            format_func=lambda h: f"{h} Months",
-            key="fc_horizon",
-        )
-
-    available_models = [
-        "Seasonal Naive (Baseline)",
-        "AR(1)",
-        "MA(1)",
-        "ARIMA(1,1,1)",
-        "SARIMA(1,0,1)(1,0,1)[12]",
-        "Holt-Winters Exponential Smoothing",
-        "ARIMAX (Weather Regressors)",
-        "SARIMAX (Seasonal + Weather)",
-        "Random Forest (Autoregressive)",
-        "Hist Gradient Boosting (Autoregressive)",
-        "XGBoost (Autoregressive)",
-        "Prophet (Trend + Seasonality)",
-        "LSTM (Sequence Neural Net)",
-        "GRU (Gated Recurrent Unit)",
-        "Global XGBoost (Multi-Pathogen)",
-        "Global Random Forest (Multi-Pathogen)",
-        "Hurdle XGBoost (Classifier + Regressor)",
-    ]
-
-    @st.cache_data(show_spinner=False)
-    def get_dynamic_recommended_model(slug: str, eval_h: int = 6) -> str:
-        df_s = load_monthly_series(slug)
-        if df_s is None or df_s.empty:
-            return "SARIMA(1,0,1)(1,0,1)[12]"
-        res = run_model_comparison(df_s, horizon=eval_h)
-        return res.get("best_model") or "SARIMA(1,0,1)(1,0,1)[12]"
-
-    rec_model = get_dynamic_recommended_model(selected_slug, eval_h=min(horizon_months, 12))
-    default_model_idx = available_models.index(rec_model) if rec_model in available_models else 0
-
-    def format_model_choice(m: str) -> str:
-        rec_tag = " [Top Validated]" if m == rec_model else ""
-        if adv_mode:
-            return f"{m}{rec_tag}"
-        friendly_names = {
-            "Seasonal Naive (Baseline)": "Seasonal Benchmark (Previous Year)",
-            "AR(1)": "AR(1) Autoregressive",
-            "MA(1)": "MA(1) Moving Average",
-            "ARIMA(1,1,1)": "ARIMA (Trend Following)",
-            "SARIMA(1,0,1)(1,0,1)[12]": "SARIMA (Seasonal Pattern)",
-            "Holt-Winters Exponential Smoothing": "Holt-Winters Smoothing",
-            "ARIMAX (Weather Regressors)": "ARIMAX (Weather Factors)",
-            "SARIMAX (Seasonal + Weather)": "SARIMAX (Seasonal + Weather Factors)",
-            "Random Forest (Autoregressive)": "Machine Learning (Random Forest)",
-            "Hist Gradient Boosting (Autoregressive)": "Machine Learning (Gradient Boosting)",
-            "XGBoost (Autoregressive)": "Machine Learning (XGBoost)",
-            "Prophet (Trend + Seasonality)": "Prophet (Trend + Seasonality)",
-            "LSTM (Sequence Neural Net)": "Deep Learning (LSTM)",
-            "GRU (Gated Recurrent Unit)": "Deep Learning (GRU)",
-            "Global XGBoost (Multi-Pathogen)": "Global Machine Learning (Pooled XGBoost)",
-            "Global Random Forest (Multi-Pathogen)": "Global Machine Learning (Pooled Random Forest)",
-            "Hurdle XGBoost (Classifier + Regressor)": "Zero-Inflated Machine Learning (Hurdle XGBoost)",
-        }
-        base_name = friendly_names.get(m, m)
-        return f"{base_name}{rec_tag}"
-
-    with cfg_c4:
-        chosen_model = st.selectbox(
-            "Prediction Method" if not adv_mode else "Forecasting Architecture",
-            options=available_models,
-            format_func=format_model_choice,
-            index=default_model_idx,
-            key=f"fc_model_{selected_slug}",
-            help=f"Top validated method for {pathogen_dict.get(selected_slug, 'this disease')} based on historical holdout testing is {format_model_choice(rec_model)}.",
-        )
-
-    with cfg_c5:
-        ci_labels = {
-            "Both (80% & 95%)": "Likely & Full Range (80% & 95%)" if not adv_mode else "Both (80% & 95%)",
-            "80% Interval Only": "Likely Range Only (80%)" if not adv_mode else "80% Interval Only",
-            "95% Interval Only": "Full Range Only (95%)" if not adv_mode else "95% Interval Only",
-            "Point Forecast Only": "Predicted Value Only" if not adv_mode else "Point Forecast Only",
-        }
-        ci_option = st.selectbox(
-            "Uncertainty Range" if not adv_mode else "Prediction Intervals",
-            options=list(ci_labels.keys()),
-            format_func=lambda k: ci_labels[k],
-            index=0,
-            key="fc_ci",
-        )
-
-# Load real dataset
 df_monthly = load_monthly_series(selected_slug)
 if df_monthly is None or df_monthly.empty:
-    st.error(f"No monthly records found for {pathogen_dict.get(selected_slug, selected_slug)}. Please choose another plant disease.")
+    st.error(f"No monthly records found for {selected_slug}.")
     st.stop()
 
 target_col = "documented_occurrence_count"
 last_obs_date = pd.to_datetime(df_monthly["date"].max())
 first_obs_date = pd.to_datetime(df_monthly["date"].min())
+
+with col_c2:
+    model_choices = [
+        "Hurdle XGBoost (Classifier + Regressor)",
+        "GRU (Gated Recurrent Unit)",
+        "Global Random Forest (Multi-Pathogen)",
+        "Global XGBoost (Multi-Pathogen)",
+        "Prophet (Trend + Seasonality)",
+        "LSTM (Sequence Neural Net)",
+        "MA(1)",
+        "AR(1)",
+        "Seasonal Naive (Baseline)",
+        "Holt-Winters Exponential Smoothing",
+        "ARIMA(1,1,1)",
+        "SARIMA(1,0,1)(1,0,1)[12]",
+        "ARIMAX (Weather Regressors)",
+        "SARIMAX (Seasonal + Weather)",
+        "Random Forest (Autoregressive)",
+        "XGBoost (Autoregressive)",
+    ]
+    chosen_model = st.selectbox(
+        "Forecasting Model Architecture",
+        options=model_choices,
+        index=0,
+        help="Select a calibrated model to project future disease occurrence.",
+    )
+
+with col_c3:
+    horizon_months = st.slider(
+        "Forecast Period (Months)",
+        min_value=3,
+        max_value=12,
+        value=6,
+        step=1,
+        help="Number of future months to project forward from the last observed date.",
+    )
+
 future_dates = pd.date_range(start=last_obs_date + pd.DateOffset(months=1), periods=horizon_months, freq="MS")
 
-# Metadata Chips
+# Prominent Dynamic Date Grounding Callout
 st.markdown(
     f"""
-    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; margin-bottom: 22px;">
-        <span style="background: rgba(82, 122, 80, 0.08); border: 1px solid rgba(82, 122, 80, 0.2); padding: 4px 10px; border-radius: 6px; font-size: 0.78rem; color: #183D32;">
-            <strong>Disease:</strong> {pathogen_dict[selected_slug]}
-        </span>
-        <span style="background: rgba(82, 122, 80, 0.08); border: 1px solid rgba(82, 122, 80, 0.2); padding: 4px 10px; border-radius: 6px; font-size: 0.78rem; color: #183D32;">
-            <strong>Frequency:</strong> Monthly
-        </span>
-        <span style="background: rgba(82, 122, 80, 0.08); border: 1px solid rgba(82, 122, 80, 0.2); padding: 4px 10px; border-radius: 6px; font-size: 0.78rem; color: #183D32;">
-            <strong>Historical Records:</strong> {first_obs_date.strftime('%b %Y')} – {last_obs_date.strftime('%b %Y')} ({len(df_monthly)} Months)
-        </span>
-        <span style="background: rgba(82, 122, 80, 0.08); border: 1px solid rgba(82, 122, 80, 0.2); padding: 4px 10px; border-radius: 6px; font-size: 0.78rem; color: #183D32;">
-            <strong>Method:</strong> {format_model_choice(chosen_model)}
-        </span>
-        <span style="background: rgba(196, 166, 106, 0.15); border: 1px solid rgba(196, 166, 106, 0.35); padding: 4px 10px; border-radius: 6px; font-size: 0.78rem; color: #695221;">
-            <strong>Prediction Period:</strong> {future_dates[0].strftime('%b %Y')} – {future_dates[-1].strftime('%b %Y')}
-        </span>
+    <div style="background: rgba(196, 166, 106, 0.12); border: 1px solid rgba(196, 166, 106, 0.35); border-radius: 8px; padding: 10px 16px; margin-bottom: 18px; font-size: 0.85rem; color: #4A3B12; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <div>
+            <strong>Verified Database Cutoff:</strong> {last_obs_date.strftime('%B %Y')} (End of Historical Surveillance Records) &nbsp;·&nbsp;
+            <strong>Forward Forecast Period:</strong> <strong>{future_dates[0].strftime('%B %Y')} – {future_dates[-1].strftime('%B %Y')}</strong> ({horizon_months} Months Ahead)
+        </div>
+        <div style="font-size: 0.75rem; color: #695221; font-weight: 600;">
+            Origin: {last_obs_date.strftime('%b %Y')} Cutoff
+        </div>
     </div>
     """,
     unsafe_allow_html=True,
@@ -290,8 +184,8 @@ weather_cols = ["temp_mean_c_lag1", "precipitation_monthly_mm_lag1", "relative_h
 has_weather = all(c in df_monthly.columns for c in weather_cols)
 df_future_weather = generate_future_weather_scenario(df_monthly, horizon_months=horizon_months) if has_weather else None
 
-# Run Forecast Execution with Robust Error Handling
-with st.spinner(f"Calculating monthly disease predictions using {format_model_choice(chosen_model)}..."):
+# Run Forecast Execution
+with st.spinner(f"Projecting forward occurrences using {chosen_model}..."):
     try:
         y_full = df_monthly[target_col].astype(float)
         train_exog = df_monthly[weather_cols].bfill().fillna(0) if has_weather else None
@@ -335,12 +229,10 @@ with st.spinner(f"Calculating monthly disease predictions using {format_model_ch
             )
         elif chosen_model == "LSTM (Sequence Neural Net)":
             p_fut, _, _, _, _ = forecast_lstm(df_monthly, horizon=horizon_months)
-            # Point-only deep learning forecast (no fabricated CI)
             lb_95 = p_fut.copy()
             ub_95 = p_fut.copy()
         elif chosen_model == "GRU (Gated Recurrent Unit)":
             p_fut, _, _, _, _ = forecast_gru(df_monthly, horizon=horizon_months)
-            # Point-only deep learning forecast (no fabricated CI)
             lb_95 = p_fut.copy()
             ub_95 = p_fut.copy()
         elif chosen_model == "Global XGBoost (Multi-Pathogen)":
@@ -365,18 +257,14 @@ with st.spinner(f"Calculating monthly disease predictions using {format_model_ch
                 future_weather_df=df_future_weather if has_weather else None,
             )
     except Exception as exc:
-        st.error(f"Calculation note for {chosen_model}: {exc}. Defaulting to seasonal baseline.")
+        st.warning(f"Note: {chosen_model} calculation defaulted to seasonal persistence: {exc}")
         p_fut, lb_95, ub_95 = forecast_seasonal_naive(y_full, horizon=horizon_months, season_length=12)
 
-# Seasonal Naive baseline comparison
-p_baseline, _, _ = forecast_seasonal_naive(y_full, horizon=horizon_months, season_length=12)
-
-# Non-negative clipping
+# Non-negative clipping and intervals
 p_fut = np.maximum(0.0, p_fut)
 lb_95 = np.maximum(0.0, lb_95)
 ub_95 = np.maximum(p_fut, ub_95)
 
-# Coherent 80% CI (Z=1.28 vs Z=1.96 for 95%)
 ci_ratio = 1.28155 / 1.95996
 half_width_95 = np.maximum(0.05, (ub_95 - lb_95) / 2.0)
 half_width_80 = half_width_95 * ci_ratio
@@ -390,61 +278,44 @@ df_forecast_out = pd.DataFrame({
     "upper_80": np.round(ub_80, 2),
     "lower_95": np.round(lb_95, 2),
     "upper_95": np.round(ub_95, 2),
-    "baseline_seasonal_naive": np.round(p_baseline, 2),
 })
 
-# Peak forecast detection across horizon
 peak_info = identify_peak_forecast_month(df_forecast_out, pathogen_name=pathogen_dict[selected_slug])
-peak_text = peak_info.get("simple_narrative") if not adv_mode else peak_info.get("narrative")
 
 # ==============================================================================
-# C. FORECAST SUMMARY CARDS (4 KPIS)
+# 3. FOUR COMPACT KPI METRIC CARDS
 # ==============================================================================
 latest_obs_val = float(df_monthly[target_col].dropna().iloc[-1])
 mean_forecast = float(np.mean(df_forecast_out["forecast"]))
 total_forecast = float(np.sum(df_forecast_out["forecast"]))
 mean_ci_width = float(np.mean(df_forecast_out["upper_80"] - df_forecast_out["lower_80"]))
 
-card1_title = "Latest Recorded Reports" if not adv_mode else "Latest Observed Count"
-card1_sub = f"Recorded in {last_obs_date.strftime('%b %Y')} · Annual avg: {df_monthly[target_col].mean():.1f}/mo"
-
-card2_title = "Peak Forecast Month" if not adv_mode else "Horizon Peak Activity"
-card2_val = f"{peak_info.get('peak_value', 0.0):.1f} reports"
-card2_sub = f"Expected in {peak_info.get('peak_month', 'N/A')}"
-
-card3_title = "Average Monthly Forecast" if not adv_mode else "Mean Monthly Forecast"
-card3_val = f"~{mean_forecast:.1f} / mo"
-card3_sub = f"Total: {total_forecast:.1f} reports ({horizon_months} mos)"
-
-card4_title = "Prediction Uncertainty" if not adv_mode else "Uncertainty Spread (80% CI)"
-card4_sub = "80% prediction interval" if not adv_mode else "Mean prediction interval half-width"
-
 st.markdown(
     f"""
-    <div class="metric-grid" style="margin-bottom: 24px;">
+    <div class="metric-grid" style="margin-bottom: 20px;">
         <div class="research-metric-card">
-            <div class="metric-icon-wrap">{icon_timeseries(20, "#527A50")}</div>
-            <div class="metric-label-text">{card1_title}</div>
-            <div class="metric-value-text">{latest_obs_val:.1f} reports</div>
-            <div class="metric-note-text">{card1_sub}</div>
+            <div class="metric-icon-wrap">{icon_timeseries(18, "#527A50")}</div>
+            <div class="metric-label-text">Last Recorded Count</div>
+            <div class="metric-value-text">{latest_obs_val:.1f} Reports</div>
+            <div class="metric-note-text">Observed in {last_obs_date.strftime('%b %Y')}</div>
         </div>
         <div class="research-metric-card">
-            <div class="metric-icon-wrap">{icon_forecast(20, "#183D32")}</div>
-            <div class="metric-label-text">{card2_title}</div>
-            <div class="metric-value-text">{card2_val}</div>
-            <div class="metric-note-text">{card2_sub}</div>
+            <div class="metric-icon-wrap">{icon_forecast(18, "#183D32")}</div>
+            <div class="metric-label-text">Peak Forecast Month</div>
+            <div class="metric-value-text">{peak_info.get('peak_value', 0.0):.1f} Reports</div>
+            <div class="metric-note-text">Expected in {peak_info.get('peak_month', 'N/A')}</div>
         </div>
         <div class="research-metric-card">
-            <div class="metric-icon-wrap">{icon_model_compare(20, "#C4A66A")}</div>
-            <div class="metric-label-text">{card3_title}</div>
-            <div class="metric-value-text">{card3_val}</div>
-            <div class="metric-note-text">{card3_sub}</div>
+            <div class="metric-icon-wrap">{icon_model_compare(18, "#C4A66A")}</div>
+            <div class="metric-label-text">Mean Monthly Projection</div>
+            <div class="metric-value-text">~{mean_forecast:.1f} / mo</div>
+            <div class="metric-note-text">Total: {total_forecast:.1f} Across {horizon_months} Mo</div>
         </div>
         <div class="research-metric-card">
-            <div class="metric-icon-wrap">{icon_shield(20, "#527A50")}</div>
-            <div class="metric-label-text">{card4_title}</div>
-            <div class="metric-value-text">±{mean_ci_width / 2.0:.1f} reports</div>
-            <div class="metric-note-text">{card4_sub}</div>
+            <div class="metric-icon-wrap">{icon_shield(18, "#527A50")}</div>
+            <div class="metric-label-text">Uncertainty Spread</div>
+            <div class="metric-value-text">±{mean_ci_width / 2.0:.1f} Reports</div>
+            <div class="metric-note-text">80% Expected Range Half-Width</div>
         </div>
     </div>
     """,
@@ -452,51 +323,117 @@ st.markdown(
 )
 
 # ==============================================================================
-# D. MONTHLY DISEASE OUTLOOK (EVERYDAY PLAIN ENGLISH EXPLANATIONS)
+# 4. PRIMARY FORECAST VISUALIZATION (PROMINENT CENTERPIECE)
 # ==============================================================================
-st.markdown("---")
 st.markdown(
-    """
-    <div style="margin-bottom: 16px;">
-        <h2 style="font-size: 1.85rem; margin: 0 0 4px 0; color: #102C26;">Monthly Disease Outlook</h2>
-        <p style="color: #5A665D; font-size: 0.92rem; margin: 0;">
-            A clear month-by-month view of predicted disease activity, emerging trends, and which months may require closer monitoring.
+    f"""
+    <div style="margin-bottom: 10px;">
+        <h3 style="font-family: 'Fraunces', serif; font-size: 1.35rem; color: #102C26; margin: 0 0 2px 0;">
+            Forward Surveillance Projectory: {pathogen_dict[selected_slug]}
+        </h3>
+        <p style="color: #5A665D; font-size: 0.85rem; margin: 0;">
+            Observed historical reports (pre-cutoff) and future projections ({future_dates[0].strftime('%b %Y')} – {future_dates[-1].strftime('%b %Y')}) with expected ranges.
         </p>
     </div>
     """,
     unsafe_allow_html=True,
 )
 
-# 1. Peak Forecast Month Callout Card
+fig_f = go.Figure()
 
+# Recent Historical Observations (last 24 months)
+hist_subset = df_monthly.tail(24).copy()
+fig_f.add_trace(
+    go.Scatter(
+        x=hist_subset["date"],
+        y=hist_subset[target_col],
+        name="Observed Incidence",
+        mode="lines+markers",
+        line=dict(color="#102C26", width=2.4),
+        marker=dict(size=5, color="#102C26"),
+        hovertemplate="<b>Observed:</b> %{y:.1f}<br><b>Date:</b> %{x|%b %Y}<extra></extra>",
+    )
+)
+
+# 95% Confidence Band
+fig_f.add_trace(
+    go.Scatter(
+        x=pd.concat([pd.Series([last_obs_date]), pd.Series(df_forecast_out["date"])]),
+        y=pd.concat([pd.Series([latest_obs_val]), df_forecast_out["upper_95"]]),
+        mode="lines",
+        line=dict(width=0),
+        showlegend=False,
+        hoverinfo="skip",
+    )
+)
+fig_f.add_trace(
+    go.Scatter(
+        x=pd.concat([pd.Series([last_obs_date]), pd.Series(df_forecast_out["date"])]),
+        y=pd.concat([pd.Series([latest_obs_val]), df_forecast_out["lower_95"]]),
+        mode="lines",
+        line=dict(width=0),
+        fill="tonexty",
+        fillcolor="rgba(196, 166, 106, 0.12)",
+        name="95% Expected Range",
+    )
+)
+
+# Point Forecast Line
+plot_dates = pd.concat([pd.Series([last_obs_date]), pd.Series(df_forecast_out["date"])])
+plot_vals = pd.concat([pd.Series([latest_obs_val]), df_forecast_out["forecast"]])
+
+fig_f.add_trace(
+    go.Scatter(
+        x=plot_dates,
+        y=plot_vals,
+        name=f"Forecast ({chosen_model.split(' (')[0]})",
+        mode="lines+markers",
+        line=dict(color="#047857", width=2.6, dash="dash"),
+        marker=dict(size=6, color="#047857"),
+        hovertemplate="<b>Forecast:</b> %{y:.1f}<br><b>Date:</b> %{x|%b %Y}<extra></extra>",
+    )
+)
+
+# Vertical line separating observation and forecast
+fig_f.add_vline(
+    x=last_obs_date,
+    line_width=1.8,
+    line_dash="dot",
+    line_color="#C4A66A",
+    annotation_text=f"Cutoff ({last_obs_date.strftime('%b %Y')})",
+    annotation_position="top left",
+)
+
+format_plotly_figure(
+    fig_f,
+    title=f"Disease Occurrence Forecast ({future_dates[0].strftime('%b %Y')} – {future_dates[-1].strftime('%b %Y')})",
+    height=360,
+)
+st.plotly_chart(fig_f, use_container_width=True)
+
+# ==============================================================================
+# 5. PEAK ACTIVITY CALLOUT & MONTHLY OUTLOOK CARDS
+# ==============================================================================
 st.markdown(
     f"""
-    <div style="background: linear-gradient(135deg, rgba(196, 166, 106, 0.12) 0%, rgba(255, 254, 250, 0.95) 100%); border: 1.5px solid #C4A66A; border-radius: 14px; padding: 18px 24px; margin-bottom: 22px; box-shadow: 0 4px 16px rgba(196, 166, 106, 0.08);">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px;">
+    <div style="background: linear-gradient(135deg, rgba(196, 166, 106, 0.12) 0%, rgba(255, 254, 250, 0.95) 100%); border: 1.5px solid #C4A66A; border-radius: 12px; padding: 14px 20px; margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
             <div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="background: #C4A66A; color: #FFF; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.05em;">
-                        {"HIGHEST PREDICTED ACTIVITY" if not adv_mode else "PEAK FORECAST ACTIVITY"}
-                    </span>
-                    <span style="font-size: 0.82rem; color: #695221; font-weight: 600;">
-                        {pathogen_dict[selected_slug]}
-                    </span>
+                <div style="font-size: 0.70rem; font-weight: 700; text-transform: uppercase; color: #695221; letter-spacing: 0.05em;">
+                    PEAK PROJECTED SURVEILLANCE WINDOW
                 </div>
-                <div style="font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 600; color: #102C26; margin: 6px 0 4px 0;">
-                    {peak_info.get('peak_month', 'N/A')} · ~{peak_info.get('peak_value', 0.0):.1f} Recorded Reports
+                <div style="font-family: 'Fraunces', serif; font-size: 1.35rem; font-weight: 600; color: #102C26; margin: 4px 0 2px 0;">
+                    {peak_info.get('peak_month', 'N/A')} · ~{peak_info.get('peak_value', 0.0):.1f} Projected Reports
                 </div>
-                <p style="font-size: 0.88rem; color: #404B43; line-height: 1.5; margin: 0; max-width: 820px;">
-                    {peak_text}
-                </p>
+                <div style="font-size: 0.82rem; color: #5A665D;">
+                    Highest predicted occurrence intensity during the forward {horizon_months}-month forecast period.
+                </div>
             </div>
-            <div style="text-align: right; background: #FFFEFA; border: 1px solid rgba(196, 166, 106, 0.3); border-radius: 10px; padding: 10px 16px;">
-                <div style="font-size: 0.7rem; font-weight: 600; text-transform: uppercase; color: #695221;">
-                    {"Likely Range (80%)" if not adv_mode else "80% Confidence Range"}
-                </div>
-                <div style="font-family: 'JetBrains Mono', monospace; font-size: 1.15rem; font-weight: 600; color: #102C26;">
+            <div style="text-align: right; background: #FFFEFA; border: 1px solid rgba(196, 166, 106, 0.3); border-radius: 8px; padding: 6px 14px;">
+                <div style="font-size: 0.68rem; font-weight: 700; text-transform: uppercase; color: #695221;">80% Expected Range</div>
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; font-weight: 700; color: #102C26;">
                     {peak_info.get('lower_80', 0.0):.1f} – {peak_info.get('upper_80', 0.0):.1f}
                 </div>
-                <div style="font-size: 0.72rem; color: #5A665D; margin-top: 2px;">Recorded Reports</div>
             </div>
         </div>
     </div>
@@ -504,104 +441,81 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# 2. Responsive Monthly Outlook Cards Grid
+# Monthly Outlook Cards Grid
 monthly_outlooks = generate_monthly_disease_outlook(
     df_forecast=df_forecast_out,
     df_historical=df_monthly,
     pathogen_name=pathogen_dict[selected_slug],
     target_col=target_col,
-    region_name=region_display,
+    region_name="India",
 )
 
-# Render cards in 3-column responsive grid
+st.markdown("<div style='font-size: 1.15rem; font-family: Fraunces, serif; color: #102C26; margin-bottom: 10px;'>Month-by-Month Risk Outlook</div>", unsafe_allow_html=True)
+
 grid_cols = st.columns(min(3, len(monthly_outlooks)))
 for i, outlook in enumerate(monthly_outlooks):
     col = grid_cols[i % len(grid_cols)]
     with col:
         pct_str = f" ({outlook['change_pct']:+.1f}%)" if outlook['change_pct'] is not None else ""
-        card_narrative = outlook.get("simple_explanation") if not adv_mode else outlook.get("narrative")
-        
-        ci_text = (
-            f"Likely Range: {outlook['lower_80']:.1f} to {outlook['upper_80']:.1f} reports"
-            if not adv_mode
-            else f"80% CI: [{outlook['lower_80']:.2f}, {outlook['upper_80']:.2f}] · 95% CI: [{outlook['lower_95']:.2f}, {outlook['upper_95']:.2f}]"
-        )
-        
         st.markdown(
             f"""
-            <div class="verdant-card" style="margin-bottom: 16px; display: flex; flex-direction: column; justify-content: space-between;">
-                <div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                        <span style="font-family: 'Fraunces', serif; font-size: 1.15rem; font-weight: 600; color: #102C26;">
-                            {outlook['month_label']}
-                        </span>
-                        <span style="background: {outlook['activity_color']}15; border: 1px solid {outlook['activity_color']}40; color: {outlook['activity_color']}; font-size: 0.7rem; font-weight: 600; padding: 2px 7px; border-radius: 4px;">
-                            {outlook['activity_level']}
-                        </span>
-                    </div>
-                    <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px;">
-                        <span style="font-family: 'Fraunces', serif; font-size: 1.8rem; font-weight: 600; color: #102C26;">
-                            {outlook['predicted_count']:.1f}
-                        </span>
-                        <span style="font-size: 0.8rem; font-weight: 600; color: {'#183D32' if outlook['change_abs'] <= 0 else '#C4A66A'};">
-                            {outlook['trend_arrow']} {outlook['change_abs']:+.1f}{pct_str}
-                        </span>
-                    </div>
-                    <div style="font-size: 0.75rem; color: #5A665D; margin-bottom: 10px;">
-                        {ci_text}
-                    </div>
-                    <p style="font-size: 0.84rem; color: #404B43; line-height: 1.5; margin: 0;">
-                        {card_narrative}
-                    </p>
+            <div class="verdant-card" style="margin-bottom: 14px; padding: 14px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <span style="font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 600; color: #102C26;">
+                        {outlook['month_label']}
+                    </span>
+                    <span style="background: {outlook['activity_color']}15; border: 1px solid {outlook['activity_color']}40; color: {outlook['activity_color']}; font-size: 0.68rem; font-weight: 600; padding: 2px 6px; border-radius: 4px;">
+                        {outlook['activity_level']}
+                    </span>
+                </div>
+                <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px;">
+                    <span style="font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 600; color: #102C26;">
+                        {outlook['predicted_count']:.1f}
+                    </span>
+                    <span style="font-size: 0.78rem; font-weight: 600; color: {'#183D32' if outlook['change_abs'] <= 0 else '#C4A66A'};">
+                        {outlook['trend_arrow']} {outlook['change_abs']:+.1f}{pct_str}
+                    </span>
+                </div>
+                <div style="font-size: 0.72rem; color: #5A665D;">
+                    80% Range: <strong>{outlook['lower_80']:.1f} – {outlook['upper_80']:.1f}</strong> reports
                 </div>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
-# 3. Month-by-Month Forecast Summary Table & Export
-st.markdown("<div style='margin-top: 14px; margin-bottom: 6px; font-size: 1.1rem; font-family: Fraunces, serif; color: #102C26;'>Month-by-Month Forecast Summary</div>", unsafe_allow_html=True)
-
+# ==============================================================================
+# 6. SUMMARY TABLE & CSV EXPORT
+# ==============================================================================
 table_rows = []
 for out in monthly_outlooks:
     pct_text = f"{out['change_pct']:+.1f}%" if out['change_pct'] is not None else "N/A"
-    if not adv_mode:
-        table_rows.append({
-            "Month": out["month_label"],
-            "Predicted Reports": out["predicted_count"],
-            "Change from Previous": f"{out['change_abs']:+.1f} ({pct_text})",
-            "Trend": f"{out['trend_arrow']} {out['trend_label']}",
-            "Likely Range (80%)": f"{out['lower_80']} – {out['upper_80']}",
-            "Full Range (95%)": f"{out['lower_95']} – {out['upper_95']}",
-            "Expected Activity": out["activity_level"],
-        })
-    else:
-        table_rows.append({
-            "Month": out["month_label"],
-            "Predicted Count": out["predicted_count"],
-            "Change from Prior": f"{out['change_abs']:+.2f} ({pct_text})",
-            "Trend": f"{out['trend_arrow']} {out['trend_label']}",
-            "80% Uncertainty Band": f"[{out['lower_80']}, {out['upper_80']}]",
-            "95% Uncertainty Band": f"[{out['lower_95']}, {out['upper_95']}]",
-            "Activity Classification": out["activity_level"],
-        })
+    table_rows.append({
+        "Month": out["month_label"],
+        "Predicted Reports": out["predicted_count"],
+        "Change from Prior": f"{out['change_abs']:+.1f} ({pct_text})",
+        "Trend Direction": f"{out['trend_arrow']} {out['trend_label']}",
+        "80% Uncertainty Range": f"{out['lower_80']} – {out['upper_80']}",
+        "95% Uncertainty Range": f"{out['lower_95']} – {out['upper_95']}",
+        "Surveillance Risk": out["activity_level"],
+    })
 df_summary_table = pd.DataFrame(table_rows)
 
 st.dataframe(df_summary_table, use_container_width=True, hide_index=True)
 
 csv_summary = df_summary_table.to_csv(index=False).encode("utf-8")
 st.download_button(
-    label="Download Forecast Table (CSV)",
+    label=f"Download Projected Forecast Table (CSV - {len(df_summary_table)} Months)",
     data=csv_summary,
-    file_name=f"monthly_predictions_{selected_slug}_{horizon_months}m.csv",
+    file_name=f"disease_forecast_{selected_slug}_{horizon_months}m.csv",
     mime="text/csv",
 )
 
-# 4. Multi-Disease Attention Summary
-with st.expander("Compare Predicted Activity Across All 10 Plant Diseases", expanded=False):
-    st.markdown(
-        "See how future predicted activity compares across all monitored plant diseases in India."
-    )
+# ==============================================================================
+# 7. MULTI-DISEASE WATCH MATRIX & WEATHER SCENARIOS (EXPANDERS)
+# ==============================================================================
+with st.expander("🌐 National Multi-Disease Attention Matrix (10 Plant Pathogens)", expanded=False):
+    st.markdown("Cross-pathogen surveillance summary ranking predicted activity against historical seasonal baselines:")
     df_watch = build_multi_disease_watch_matrix(pathogen_dict, load_monthly_series, horizon_months=6)
     if not df_watch.empty:
         col_names = {
@@ -622,179 +536,14 @@ with st.expander("Compare Predicted Activity Across All 10 Plant Diseases", expa
             use_container_width=True,
             hide_index=True,
         )
-    st.caption("Note: Disease activity is compared relative to each disease's normal seasonal pattern for a fair national comparison.")
 
-# ==============================================================================
-# E. MAIN FORECAST VISUALIZATION (CENTERPIECE TIME-SERIES CHART)
-# ==============================================================================
-st.markdown("---")
-st.markdown(
-    f"""
-    <div style="margin-bottom: 12px;">
-        <h2 style="font-size: 1.85rem; margin: 0 0 4px 0; color: #102C26;">
-            {"Disease Predictions Over Time: " + pathogen_dict[selected_slug] if not adv_mode else "Time-Series Trajectory: " + pathogen_dict[selected_slug]}
-        </h2>
-        <p style="color: #5A665D; font-size: 0.92rem; margin: 0;">
-            {"Past recorded reports, future predictions, and likely ranges of possible results." if not adv_mode else "Observed surveillance frequency, point projections, and nested 80%/95% prediction intervals."}
-        </p>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-fig_f = go.Figure()
-
-# Recent Historical Observations (last 36 months)
-hist_subset = df_monthly.tail(36).copy()
-
-fig_f.add_trace(
-    go.Scatter(
-        x=hist_subset["date"],
-        y=hist_subset[target_col],
-        name="Past Recorded Reports" if not adv_mode else "Historical Documented Occurrences",
-        mode="lines+markers",
-        line=dict(color="#102C26", width=2.5),
-        marker=dict(size=6, color="#102C26"),
-        hovertemplate="<b>Recorded:</b> %{y:.1f} reports<br><b>Month:</b> %{x|%b %Y}<extra></extra>",
-    )
-)
-
-# Uncertainty Intervals
-if ci_option in ["Both (80% & 95%)", "95% Interval Only"]:
-    fig_f.add_trace(
-        go.Scatter(
-            x=df_forecast_out["date"],
-            y=df_forecast_out["upper_95"],
-            mode="lines",
-            line=dict(color="rgba(82, 122, 80, 0)", width=0),
-            showlegend=False,
-            hoverinfo="skip",
-        )
-    )
-    fig_f.add_trace(
-        go.Scatter(
-            x=df_forecast_out["date"],
-            y=df_forecast_out["lower_95"],
-            name="Full Range (95%)" if not adv_mode else "95% Prediction Interval",
-            mode="lines",
-            line=dict(color="rgba(82, 122, 80, 0)", width=0),
-            fill="tonexty",
-            fillcolor="rgba(82, 122, 80, 0.12)",
-            hovertemplate="<b>95% Lower:</b> %{y:.2f} reports<extra></extra>",
-        )
-    )
-
-if ci_option in ["Both (80% & 95%)", "80% Interval Only"]:
-    fig_f.add_trace(
-        go.Scatter(
-            x=df_forecast_out["date"],
-            y=df_forecast_out["upper_80"],
-            mode="lines",
-            line=dict(color="rgba(82, 122, 80, 0)", width=0),
-            showlegend=False,
-            hoverinfo="skip",
-        )
-    )
-    fig_f.add_trace(
-        go.Scatter(
-            x=df_forecast_out["date"],
-            y=df_forecast_out["lower_80"],
-            name="Likely Range (80%)" if not adv_mode else "80% Prediction Interval",
-            mode="lines",
-            line=dict(color="rgba(82, 122, 80, 0)", width=0),
-            fill="tonexty",
-            fillcolor="rgba(82, 122, 80, 0.25)",
-            hovertemplate="<b>80% Lower:</b> %{y:.2f} reports<extra></extra>",
-        )
-    )
-
-# Baseline Comparison (Seasonal Naive)
-fig_f.add_trace(
-    go.Scatter(
-        x=df_forecast_out["date"],
-        y=df_forecast_out["baseline_seasonal_naive"],
-        name="Seasonal Benchmark (Past Year)" if not adv_mode else "Seasonal Naive Baseline",
-        mode="lines",
-        line=dict(color="#C4A66A", width=1.75, dash="dot"),
-        hovertemplate="<b>Seasonal Benchmark:</b> %{y:.2f} reports<extra></extra>",
-    )
-)
-
-# Forecast Point Line
-fig_f.add_trace(
-    go.Scatter(
-        x=df_forecast_out["date"],
-        y=df_forecast_out["forecast"],
-        name=f"Predicted Reports ({format_model_choice(chosen_model)})",
-        mode="lines+markers",
-        line=dict(color="#527A50", width=3, dash="dash"),
-        marker=dict(size=7, symbol="diamond", color="#183D32"),
-        hovertemplate="<b>Prediction:</b> %{y:.2f} reports<br><b>Month:</b> %{x|%b %Y}<extra></extra>",
-    )
-)
-
-# Vertical Boundary Line at Forecast Origin
-fig_f.add_vline(
-    x=last_obs_date,
-    line_width=1.5,
-    line_dash="dash",
-    line_color="#5A665D",
-    annotation_text="Today / Prediction Begins" if not adv_mode else "Forecast Origin",
-    annotation_position="top left",
-    annotation_font=dict(size=11, color="#5A665D", family="Plus Jakarta Sans"),
-)
-
-format_plotly_figure(
-    fig_f,
-    title=f"Predicted Disease Reports ({future_dates[0].strftime('%b %Y')} – {future_dates[-1].strftime('%b %Y')})",
-    height=480,
-)
-fig_f.update_layout(
-    yaxis_title="Recorded Disease Reports",
-    xaxis_title="Timeline (Month)",
-    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1.0),
-)
-st.plotly_chart(fig_f, use_container_width=True)
-
-render_graph_explanation_card(
-    what_it_shows=f"Forward {horizon_months}-month disease trajectory forecast (dashed line) bounded by 80% and 95% uncertainty intervals, historical observations, and Seasonal Naive benchmark.",
-    parameters=f"Forecast horizon (h={horizon_months} months), Selected model ({chosen_model}), Confidence bounds (80% z=1.28, 95% z=1.96), Peak projection ({peak_info.get('peak_month', 'N/A')} ~ {peak_info.get('peak_value', 0.0):.1f} reports).",
-    what_it_compares="Future projected outbreak intensity against historical seasonal baseline to distinguish normal seasonal surges from elevated epidemic risk with calibrated uncertainty bands.",
-)
-
-# Dedicated Section 9 Forecast Summary Card
-hist_baseline_mean = float(np.mean(df_forecast_out["baseline_seasonal_naive"])) if "baseline_seasonal_naive" in df_forecast_out else 0.0
-trend_diff = float(mean_forecast - hist_baseline_mean)
-trend_sign = "+" if trend_diff > 0 else ""
-trend_label = "Increasing Activity" if trend_diff > 0.5 else ("Decreasing Activity" if trend_diff < -0.5 else "Stable Seasonal Pattern")
-
-st.markdown(
-    f"""
-    <div style="background: #FFFEFA; border: 1.5px solid #527A50; border-radius: 12px; padding: 20px 24px; margin-top: 10px; margin-bottom: 24px; box-shadow: 0 4px 14px rgba(16, 44, 38, 0.06);">
-        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
-            {icon_forecast(22, "#527A50")}
-            <h3 style="margin: 0; font-size: 1.25rem; color: #102C26;">FORECAST SUMMARY</h3>
-        </div>
-        <ul style="font-size: 0.88rem; color: #202822; line-height: 1.6; margin: 0; padding-left: 20px;">
-            <li><strong>Projected Average:</strong> ~{float(np.mean(p_fut)):.1f} reports/month across the {horizon_months}-month horizon.</li>
-            <li><strong>Peak Activity Month:</strong> <strong>{peak_info.get('peak_month', 'N/A')}</strong> (~{peak_info.get('peak_value', 0.0):.1f} reports, 80% range: {peak_info.get('lower_80', 0.0):.1f} to {peak_info.get('upper_80', 0.0):.1f}).</li>
-            <li><strong>Activity Trend:</strong> <strong>{trend_label}</strong> ({trend_sign}{trend_diff:.1f} reports vs historical seasonal baseline).</li>
-            <li><strong>Prediction Uncertainty:</strong> ±{mean_ci_width / 2.0:.1f} reports (80% interval).</li>
-            <li><strong>Action:</strong> Prioritize scouting 3 to 4 weeks prior to {peak_info.get('peak_month', 'peak month')}.</li>
-        </ul>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
+# Navigation
 st.markdown("<br>", unsafe_allow_html=True)
 try:
-    col_nav1, col_nav2 = st.columns(2)
-    with col_nav1:
-        st.page_link("pages/3_Model_Comparison.py", label="← Back to Model Comparison", use_container_width=True)
-    with col_nav2:
-        st.page_link("pages/5_Data_and_Methodology.py", label="View Data & Methodology →", use_container_width=True)
+    c_f1, c_f2 = st.columns(2)
+    with c_f1:
+        st.page_link("pages/3_Model_Comparison.py", label="Inspect Model Accuracy Leaderboard ->", use_container_width=True)
+    with c_f2:
+        st.page_link("pages/5_Data_and_Methodology.py", label="Review Scientific Methodology ->", use_container_width=True)
 except Exception:
     pass
-
-

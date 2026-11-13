@@ -1,0 +1,222 @@
+{
+  "metadata": {
+    "title": "Frozen Production Model Configurations",
+    "version": "1.0.0",
+    "freeze_date": "2026-11-13",
+    "dataset_version": "improved_india_plant_diseases_monthly.csv (1320 rows, 43 features)",
+    "training_period": "2015-01-01 to 2024-04-01 (112 chronological months strictly prior to holdout)",
+    "holdout_test_period": "2024-05-01 to 2025-12-01 (20 chronological months, 200 total observations)",
+    "n_pathogens": 10
+  },
+  "champions": {
+    "overall_champion": {
+      "model_id": "ensemble_inverse_variance",
+      "model_name": "Ensemble 3 (Inverse-Variance Triad)",
+      "family": "Multi-Family Ensemble",
+      "holdout_rmse": 4.897,
+      "holdout_mae": 2.641,
+      "holdout_mse": 23.98,
+      "holdout_mase": 1.678,
+      "holdout_wape": 83.7,
+      "selection_rationale": "Lowest overall pooled RMSE and exceptional generalization stability on untouched 2024-2025 holdout."
+    },
+    "classical_champion": {
+      "model_id": "ma",
+      "model_name": "MA(1)",
+      "family": "Box-Jenkins Univariate",
+      "holdout_rmse": 5.517,
+      "holdout_mae": 2.533,
+      "holdout_mse": 30.442,
+      "selection_rationale": "Best classical statistical model, strong seasonal memory without variance collapse."
+    },
+    "machine_learning_champion": {
+      "model_id": "global_random_forest",
+      "model_name": "Global Random Forest (Multi-Pathogen)",
+      "family": "Pooled Tree Ensemble",
+      "holdout_rmse": 4.988,
+      "holdout_mae": 2.656,
+      "holdout_mse": 24.881,
+      "selection_rationale": "Leading machine-learning model leveraging multi-lag features and weather covariates."
+    },
+    "deep_learning_champion": {
+      "model_id": "gru",
+      "model_name": "GRU (Gated Recurrent Unit)",
+      "family": "Recurrent Neural Network (PyTorch)",
+      "holdout_rmse": 5.106,
+      "holdout_mae": 2.558,
+      "holdout_mse": 26.072,
+      "selection_rationale": "Gated recurrent architecture capturing multi-month infection latency and weather sequences."
+    },
+    "ensemble_champion": {
+      "model_id": "ensemble_inverse_variance",
+      "model_name": "Ensemble 3 (Inverse-Variance Triad)",
+      "family": "Multi-Family Ensemble",
+      "holdout_rmse": 4.897,
+      "holdout_mae": 2.641,
+      "holdout_mse": 23.98,
+      "selection_rationale": "Combines non-linear tree classification with additive trend-seasonal forecasting."
+    }
+  },
+  "model_hyperparameters": {
+    "seasonal_naive": {
+      "season_length": 12
+    },
+    "ar": {
+      "p": 1
+    },
+    "ma": {
+      "q": 1
+    },
+    "arima": {
+      "order": [
+        1,
+        0,
+        1
+      ],
+      "auto_optimize": false
+    },
+    "sarima": {
+      "order": [
+        1,
+        0,
+        0
+      ],
+      "seasonal_order": [
+        1,
+        0,
+        0,
+        12
+      ],
+      "auto_optimize": false
+    },
+    "holt_winters": {
+      "trend": "add",
+      "seasonal": "add",
+      "damped_trend": true,
+      "phi": 0.92,
+      "season_length": 12,
+      "auto_optimize": false
+    },
+    "random_forest": {
+      "rf_params": {
+        "n_estimators": 180,
+        "max_depth": 5,
+        "min_samples_leaf": 4,
+        "max_features": 0.7,
+        "random_state": 42
+      },
+      "lags": [
+        1,
+        2,
+        3,
+        12
+      ]
+    },
+    "xgboost": {
+      "xgb_params": {
+        "n_estimators": 100,
+        "max_depth": 4,
+        "learning_rate": 0.025,
+        "reg_alpha": 0.6,
+        "reg_lambda": 2.5,
+        "random_state": 42
+      },
+      "xgb_lags": [
+        1,
+        2,
+        3,
+        6,
+        12
+      ]
+    },
+    "global_random_forest": {
+      "rf_params": {
+        "n_estimators": 120,
+        "max_depth": 4,
+        "min_samples_leaf": 4,
+        "max_features": 0.8,
+        "random_state": 42
+      }
+    },
+    "global_xgboost": {
+      "xgb_params": {
+        "n_estimators": 130,
+        "max_depth": 4,
+        "learning_rate": 0.025,
+        "reg_alpha": 0.4,
+        "reg_lambda": 1.5,
+        "random_state": 42
+      }
+    },
+    "hurdle_xgboost": {
+      "clf_params": {
+        "learning_rate": 0.05,
+        "max_depth": 3,
+        "random_state": 42
+      },
+      "reg_params": {
+        "learning_rate": 0.05,
+        "max_depth": 3,
+        "reg_lambda": 2.5,
+        "random_state": 42
+      }
+    },
+    "prophet": {
+      "prophet_params": {
+        "changepoint_prior_scale": 0.05,
+        "seasonality_mode": "additive"
+      }
+    },
+    "lstm": {
+      "lstm_config": {
+        "units": 16,
+        "lookback": 12,
+        "dropout": 0.0,
+        "learning_rate": 0.01,
+        "batch_size": 8,
+        "epochs": 80
+      }
+    },
+    "gru": {
+      "gru_config": {
+        "units": 8,
+        "lookback": 12,
+        "dropout": 0.1,
+        "learning_rate": 0.003,
+        "batch_size": 8,
+        "epochs": 80
+      }
+    },
+    "sarimax": {
+      "order": [
+        1,
+        0,
+        1
+      ],
+      "seasonal_order": [
+        1,
+        0,
+        1,
+        12
+      ],
+      "auto_optimize": false
+    }
+  },
+  "ensemble_definitions": {
+    "ensemble_hurdle_prophet": {
+      "display_name": "Ensemble 2 (60% Hurdle + 40% Prophet)",
+      "family": "Multi-Family Ensemble",
+      "category": "Ensemble"
+    },
+    "ensemble_hurdle_rf": {
+      "display_name": "Ensemble 1 (50% Hurdle + 50% Global RF)",
+      "family": "Tree Ensemble Consensus",
+      "category": "Ensemble"
+    },
+    "ensemble_inverse_variance": {
+      "display_name": "Ensemble 3 (Inverse-Variance Triad)",
+      "family": "Multi-Family Ensemble",
+      "category": "Ensemble"
+    }
+  }
+}

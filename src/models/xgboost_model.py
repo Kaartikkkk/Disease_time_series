@@ -23,14 +23,14 @@ except ImportError:
 DEFAULT_XGB_LAGS = [1, 2, 3, 6, 12]
 DEFAULT_XGB_PARAMS: Dict[str, Any] = {
     "objective": "reg:squarederror",
-    "n_estimators": 120,
-    "max_depth": 3,
-    "learning_rate": 0.05,
+    "n_estimators": 150,
+    "max_depth": 4,
+    "learning_rate": 0.025,
     "subsample": 0.8,
     "colsample_bytree": 0.8,
     "min_child_weight": 3,
-    "reg_alpha": 0.5,
-    "reg_lambda": 2.0,
+    "reg_alpha": 0.6,
+    "reg_lambda": 2.5,
     "random_state": 42,
     "n_jobs": 1,
 }

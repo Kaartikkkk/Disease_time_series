@@ -1,0 +1,44 @@
+{
+  "Raw (Untransformed)": {
+    "rmse": 6.052,
+    "mae": 2.423,
+    "mse": 36.629,
+    "mase": 0.705,
+    "smape": 148.83,
+    "wape": 87.05,
+    "f1": 0.675,
+    "precision": 0.667,
+    "recall": 0.683,
+    "mae_pos": 4.053,
+    "mae_zero": 0.71,
+    "near_zero_pct": 47.5
+  },
+  "Log1p (Log-Transformed log(1+y))": {
+    "rmse": 6.313,
+    "mae": 2.442,
+    "mse": 39.852,
+    "mase": 0.711,
+    "smape": 162.31,
+    "wape": 87.72,
+    "f1": 0.585,
+    "precision": 0.732,
+    "recall": 0.488,
+    "mae_pos": 4.537,
+    "mae_zero": 0.239,
+    "near_zero_pct": 65.8
+  },
+  "Sqrt (Square Root Transformed sqrt(y))": {
+    "rmse": 6.291,
+    "mae": 2.415,
+    "mse": 39.579,
+    "mase": 0.703,
+    "smape": 168.75,
+    "wape": 86.78,
+    "f1": 0.536,
+    "precision": 0.817,
+    "recall": 0.398,
+    "mae_pos": 4.568,
+    "mae_zero": 0.152,
+    "near_zero_pct": 75.0
+  }
+}

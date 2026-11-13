@@ -1,9 +1,10 @@
 """Agricultural Disease Forecasting Using Time Series.
 
 Plant Disease Outbreak Forecasting & Climate Intelligence Platform.
+Overview Page — High-impact, minimal, professional executive summary.
 """
 
-import base64
+from datetime import datetime, timezone
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
@@ -15,9 +16,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-from src.forecasting import run_model_comparison
 from src.icons import (
-    icon_alert_triangle,
     icon_arrow_right,
     icon_leaf,
     icon_logo,
@@ -29,33 +28,23 @@ from src.icons import (
     icon_trending_up,
     icon_weather,
 )
+from src.project_stats import get_project_telemetry
 from src.ui_helpers import (
     ASSETS_DIR,
     format_plotly_figure,
     get_image_base64,
     inject_custom_css,
-    is_advanced_mode,
-    load_data_quality_report_data,
     load_monthly_series,
     render_app_sidebar,
-    render_graph_explanation_card,
     render_top_header,
 )
 
 inject_custom_css()
-
-# Render unified left sidebar and top bar
 render_app_sidebar(active_page="overview")
 render_top_header()
 
-adv_mode = is_advanced_mode()
-
-# Load real quality report metrics
-quality_data = load_data_quality_report_data()
-meta = quality_data.get("report_metadata", {}) if quality_data else {}
-total_records = meta.get("total_raw_records", 3076)
-total_dates = meta.get("total_records_with_date", 2071)
-total_coords = meta.get("total_records_with_coords", 835)
+# Load authoritative dynamic project telemetry
+stats = get_project_telemetry()
 
 # Load real image assets
 panoramic_hero_path = ASSETS_DIR / "verdant_panoramic_hero.jpg"
@@ -68,528 +57,253 @@ img_sunset_b64 = get_image_base64(ASSETS_DIR / "cereal_harvest_sunset.jpg")
 img_wheat_b64 = get_image_base64(ASSETS_DIR / "wheat_canopy_ears.jpg")
 img_golden_b64 = get_image_base64(ASSETS_DIR / "golden_crop_field.jpg")
 
-# Load real monthly series and cached benchmark evaluation for Rice Blast
+# Load real monthly series for primary preview
 df_rice_blast = load_monthly_series("pyricularia_oryzae")
 df_brown_spot = load_monthly_series("bipolaris_oryzae")
-
-
-@st.cache_data(show_spinner=False)
-def get_homepage_benchmark(slug: str = "pyricularia_oryzae", horizon: int = 6) -> dict:
-    """Run and cache 6-month chronological holdout evaluation for homepage metrics."""
-    df_series = load_monthly_series(slug)
-    if df_series is None or df_series.empty:
-        return {}
-    res = run_model_comparison(df_series, horizon=horizon)
-    return {
-        "best_model": res.get("best_model"),
-        "evaluation_metrics": res.get("evaluation_metrics", []),
-    }
 
 
 def _build_real_sparkline_svg(df_series: pd.DataFrame, n_points: int = 6) -> str:
     """Build an inline SVG sparkline from actual recent monthly occurrence counts."""
     if df_series is None or df_series.empty:
-        return '<div style="font-size:0.78rem;color:#7D8A82;padding:18px 0;text-align:center;">No recent observations available.</div>'
+        return '<div style="font-size:0.78rem;color:#7D8A82;padding:12px 0;text-align:center;">No recent observations available.</div>'
     tail_df = df_series.tail(n_points).copy()
     vals = tail_df["documented_occurrence_count"].astype(float).tolist()
-    labels = pd.to_datetime(tail_df["date"]).dt.strftime("%b").tolist()
+    labels = pd.to_datetime(tail_df["date"]).dt.strftime("%b '%y").tolist()
     max_v = max(max(vals), 1.0)
-    w, h, pad_x, pad_y = 270, 60, 12, 8
+    w, h, pad_x, pad_y = 260, 52, 10, 6
     xs = [pad_x + i * (w - 2 * pad_x) / max(1, len(vals) - 1) for i in range(len(vals))]
     ys = [h - pad_y - (v / max_v) * (h - 2 * pad_y) for v in vals]
     pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in zip(xs, ys))
     area_pts = f"{xs[0]:.1f},{h - 2} {pts} {xs[-1]:.1f},{h - 2}"
     circles = "".join(
-        f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3.2" fill="#E11D48" stroke="#FFFFFF" stroke-width="1.5"/>'
+        f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3" fill="#E11D48" stroke="#FFFFFF" stroke-width="1.5"/>'
         for x, y in zip(xs, ys)
     )
     svg = (
-        f'<svg width="270" height="60" viewBox="0 0 270 60" fill="none" xmlns="http://www.w3.org/2000/svg">'
+        f'<svg width="260" height="52" viewBox="0 0 260 52" fill="none" xmlns="http://www.w3.org/2000/svg">'
         f'<defs><linearGradient id="heroSparkGrad" x1="0" y1="0" x2="0" y2="1">'
-        f'<stop offset="0%" stop-color="#E11D48" stop-opacity="0.28"/>'
+        f'<stop offset="0%" stop-color="#E11D48" stop-opacity="0.25"/>'
         f'<stop offset="100%" stop-color="#E11D48" stop-opacity="0.0"/></linearGradient></defs>'
         f'<polygon points="{area_pts}" fill="url(#heroSparkGrad)"/>'
         f'<polyline points="{pts}" fill="none" stroke="#E11D48" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>'
         f'{circles}</svg>'
     )
+    import base64
     b64 = base64.b64encode(svg.encode("utf-8")).decode("utf-8")
     lbl_html = "".join(f"<span>{lbl}</span>" for lbl in labels)
     return (
-        f'<img src="data:image/svg+xml;base64,{b64}" width="270" height="60" style="display:block;margin:0 auto;" alt="Recent Rice Blast Trajectory" />'
-        f'<div style="display:flex;justify-content:space-between;padding:0 10px;font-size:0.70rem;color:#7D8A82;font-weight:600;margin-top:2px;margin-bottom:12px;">{lbl_html}</div>'
+        f'<img src="data:image/svg+xml;base64,{b64}" width="260" height="52" style="display:block;margin:0 auto;" alt="Recent Rice Blast Trajectory" />'
+        f'<div style="display:flex;justify-content:space-between;padding:0 8px;font-size:0.68rem;color:#7D8A82;font-weight:600;margin-top:2px;margin-bottom:8px;">{lbl_html}</div>'
     )
 
 
-bench_data = get_homepage_benchmark("pyricularia_oryzae", horizon=6)
-bench_metrics = bench_data.get("evaluation_metrics", [])
-metrics_by_name = {m["model_name"]: m for m in bench_metrics if m.get("rmse") is not None}
-
-def _best_family_stat(names: list[str]) -> str:
-    found = [(n, metrics_by_name[n]["rmse"]) for n in names if n in metrics_by_name]
-    if not found:
-        return "Pending evaluation"
-    best_n, best_r = min(found, key=lambda x: x[1])
-    short = best_n.split(" (")[0]
-    return f"{best_r:.3f} ({short})"
-
 sparkline_svg = _build_real_sparkline_svg(df_rice_blast, n_points=6)
 
-if bench_metrics:
-    top_row = bench_metrics[0]
-    hero_stat_val = top_row["model_name"]
-    hero_metric_val = f"{top_row['rmse']:.3f}" if adv_mode else f"{top_row['rmse']:.2f} reports"
-else:
-    hero_stat_val = "Not Evaluated"
-    hero_metric_val = "Run Comparison"
-
-hero_stat_label = "TOP VALIDATED MODEL (6M)" if adv_mode else "TOP METHOD (6M TEST)"
-hero_metric_label = "OUT-OF-SAMPLE RMSE" if adv_mode else "AVERAGE ERROR"
-
-if df_rice_blast is not None and not df_rice_blast.empty:
-    _d_min = pd.to_datetime(df_rice_blast["date"]).min().strftime("%b %Y")
-    _d_max = pd.to_datetime(df_rice_blast["date"]).max().strftime("%b %Y")
-    _n_months = len(df_rice_blast)
-    _n_years = round(_n_months / 12.0, 1)
-else:
-    _d_min, _d_max, _n_months, _n_years = "Jan 2015", "Dec 2025", 132, 11.0
-
-hero_markup = (
-    f'<div class="dashboard-hero-banner" style="background-image: url(\'{panoramic_hero_b64}\');">'
-    f'<div class="dashboard-hero-overlay">'
-    f'<div class="hero-left-content">'
-    f'<div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(16, 44, 38, 0.7); border: 1px solid rgba(196, 166, 106, 0.5); border-radius: 30px; padding: 5px 14px; margin-bottom: 16px; backdrop-filter: blur(8px);">'
-    f'<span style="font-size: 0.68rem; font-weight: 700; color: #F5E8C7; letter-spacing: 0.08em; text-transform: uppercase;">'
-    f'{icon_leaf(12, "#C4A66A")} AGRICULTURAL FORECASTING · INDIA'
-    f'</span></div>'
-    f'<div class="hero-main-title">'
-    f'Anticipate disease.<br><span>Protect the harvest.</span></div>'
-    f'<p style="color: rgba(246, 244, 236, 0.95); font-size: 0.95rem; line-height: 1.6; margin: 0 0 24px 0; max-width: 490px; text-shadow: 0 1px 4px rgba(0,0,0,0.4);">'
-    f'Forecasting plant disease outbreaks across India using GBIF field surveillance and NASA POWER satellite weather.'
-    f'</p>'
-    f'<div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">'
-    f'<a href="/Disease_Explorer" target="_self" class="btn-primary-cta" style="padding: 10px 22px; font-size: 0.88rem; border-radius: 10px; background: #102C26; border: 1px solid rgba(255,255,255,0.2);">'
-    f'View Disease Records {icon_arrow_right(14, "#FFFFFF")}'
-    f'</a>'
-    f'<a href="/Data_and_Methodology" target="_self" class="btn-secondary-cta" style="padding: 9px 18px; font-size: 0.88rem; border-radius: 10px; color: #FFFFFF !important; border: 1px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.15); backdrop-filter: blur(8px);">'
-    f'▷ Data & Methodology'
-    f'</a>'
-    f'</div></div>'
-    f'<div class="hero-glass-card">'
-    f'<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">'
-    f'<div style="width: 24px; height: 24px; border-radius: 50%; background: #E8F5E9; display: flex; align-items: center; justify-content: center;">'
-    f'{icon_trending_up(14, "#166534")}'
-    f'</div>'
-    f'<div style="font-size: 0.82rem; font-weight: 700; color: #102C26;">Predicted Disease Activity</div>'
-    f'</div>'
-    f'<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px;">'
-    f'<div style="font-size: 0.95rem; font-weight: 700; color: #102C26;">Rice — Rice Blast</div>'
-    f'<span style="background: #FEE2E2; color: #DC2626; font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 12px;">Active Season</span>'
-    f'</div>'
-    f'<div style="font-size: 0.72rem; color: #7D8A82; font-weight: 500; margin-bottom: 12px;">Last 6 Observed Months (Rice Blast)</div>'
-    f'{sparkline_svg}'
-    f'<div style="border-top: 1px solid #EAE6DC; padding-top: 12px; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 8px;">'
-    f'<div>'
-    f'<div style="font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #7D8A82;">{hero_stat_label}</div>'
-    f'<div style="font-size: 0.88rem; font-weight: 700; color: #102C26; margin-top: 2px;">{hero_stat_val}</div>'
-    f'</div>'
-    f'<div style="text-align: right;">'
-    f'<div style="font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #7D8A82;">{hero_metric_label}</div>'
-    f'<div style="font-family: \'JetBrains Mono\', monospace; font-size: 1.05rem; font-weight: 700; color: #166534; margin-top: 1px;">{hero_metric_val}</div>'
-    f'</div></div></div></div></div>'
-)
+# ==============================================================================
+# 1. HERO SECTION (ATTRACTIVE, ELEGANT, SCIENTIFIC)
+# ==============================================================================
+hero_markup = f"""
+<div class="dashboard-hero-banner" style="background-image: url('{panoramic_hero_b64}');">
+    <div class="dashboard-hero-overlay">
+        <div class="hero-left-content">
+            <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(16, 44, 38, 0.7); border: 1px solid rgba(196, 166, 106, 0.5); border-radius: 30px; padding: 5px 14px; margin-bottom: 16px; backdrop-filter: blur(8px);">
+                <span style="font-size: 0.68rem; font-weight: 700; color: #F5E8C7; letter-spacing: 0.08em; text-transform: uppercase;">
+                    {icon_leaf(12, "#C4A66A")} AGRICULTURAL FORECASTING · INDIA
+                </span>
+            </div>
+            <div class="hero-main-title">
+                Anticipate disease.<br><span>Protect the harvest.</span>
+            </div>
+            <p style="color: rgba(246, 244, 236, 0.95); font-size: 0.96rem; line-height: 1.6; margin: 0 0 24px 0; max-width: 500px; text-shadow: 0 1px 4px rgba(0,0,0,0.4);">
+                A unified time-series intelligence platform benchmarking classical econometrics and modern AI across 10 major Indian plant pathogens and 11 years of NASA satellite agrometeorology.
+            </p>
+            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                <a href="/Disease_Explorer" target="_self" class="btn-primary-cta" style="padding: 10px 22px; font-size: 0.88rem; border-radius: 10px; background: #102C26; border: 1px solid rgba(255,255,255,0.2);">
+                    Explore Disease Records {icon_arrow_right(14, "#FFFFFF")}
+                </a>
+                <a href="/Future_Forecasts" target="_self" class="btn-secondary-cta" style="padding: 9px 18px; font-size: 0.88rem; border-radius: 10px; color: #FFFFFF !important; border: 1px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.18); backdrop-filter: blur(8px);">
+                    Future Forecasts {icon_arrow_right(14, "#FFFFFF")}
+                </a>
+            </div>
+        </div>
+        <div class="hero-glass-card">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                <div style="width: 24px; height: 24px; border-radius: 50%; background: #E8F5E9; display: flex; align-items: center; justify-content: center;">
+                    {icon_trending_up(14, "#166534")}
+                </div>
+                <div style="font-size: 0.82rem; font-weight: 700; color: #102C26;">Surveillance Signal</div>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px;">
+                <div style="font-size: 0.95rem; font-weight: 700; color: #102C26;">Rice Blast (P. oryzae)</div>
+                <span style="background: #E8F5E9; color: #166534; font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 12px;">Active Signal</span>
+            </div>
+            <div style="font-size: 0.72rem; color: #7D8A82; font-weight: 500; margin-bottom: 10px;">End-of-Series Observed Trajectory (Last 6 Months)</div>
+            {sparkline_svg}
+            <div style="border-top: 1px solid #EAE6DC; padding-top: 10px; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 8px;">
+                <div>
+                    <div style="font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #7D8A82;">Validation Champion</div>
+                    <div style="font-size: 0.88rem; font-weight: 700; color: #102C26; margin-top: 2px;">Hurdle XGBoost</div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #7D8A82;">Validation RMSE</div>
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 1.05rem; font-weight: 700; color: #166534; margin-top: 1px;">5.996</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+"""
 st.html(hero_markup)
 
 # ==============================================================================
-# 2. FOUR FEATURE / METRIC CARDS
+# 2. DATASET TELEMETRY (AUTHORITATIVE DYNAMIC STRIP)
 # ==============================================================================
-features_markup = (
-    f'<div class="feature-cards-grid">'
-    f'<a href="/Disease_Explorer" target="_self" class="feature-card">'
-    f'<div class="feature-card-top">'
-    f'<div class="feature-icon-circle" style="background: #E8F5E9;">{icon_sprout(20, "#166534")}</div>'
-    f'<div class="feature-arrow-btn">{icon_arrow_right(13, "currentColor")}</div>'
-    f'</div>'
-    f'<div><div style="display: flex; align-items: baseline; gap: 6px;"><span class="feature-card-stat">10+</span><span class="feature-card-title">Crops Monitored</span></div>'
-    f'<div class="feature-card-sub">Rice, Wheat, Potato, Chickpea and more</div></div>'
-    f'</a>'
-    f'<a href="/Disease_Explorer" target="_self" class="feature-card">'
-    f'<div class="feature-card-top">'
-    f'<div class="feature-icon-circle" style="background: #FEF2F2;">{icon_pathology(20, "#DC2626")}</div>'
-    f'<div class="feature-arrow-btn">{icon_arrow_right(13, "currentColor")}</div>'
-    f'</div>'
-    f'<div><div style="display: flex; align-items: baseline; gap: 6px;"><span class="feature-card-stat">10</span><span class="feature-card-title">Plant Diseases</span></div>'
-    f'<div class="feature-card-sub">Rice Blast, Stem Rust, Blight & more</div></div>'
-    f'</a>'
-    f'<a href="/Time_Series_Analysis" target="_self" class="feature-card">'
-    f'<div class="feature-card-top">'
-    f'<div class="feature-icon-circle" style="background: #EFF6FF;">{icon_timeseries(20, "#2563EB")}</div>'
-    f'<div class="feature-arrow-btn">{icon_arrow_right(13, "currentColor")}</div>'
-    f'</div>'
-    f'<div><div class="feature-card-title" style="font-size: 0.95rem; font-weight: 700;">Time Series Analysis</div>'
-    f'<div class="feature-card-sub">Seasonality, stationarity & weather lags</div></div>'
-    f'</a>'
-    f'<a href="/Model_Comparison" target="_self" class="feature-card">'
-    f'<div class="feature-card-top">'
-    f'<div class="feature-icon-circle" style="background: #FAF5FF;">{icon_model_compare(20, "#9333EA")}</div>'
-    f'<div class="feature-arrow-btn">{icon_arrow_right(13, "currentColor")}</div>'
-    f'</div>'
-    f'<div><div class="feature-card-title" style="font-size: 0.95rem; font-weight: 700;">Compare Models</div>'
-    f'<div class="feature-card-sub">10 prediction methods tested side-by-side</div></div>'
-    f'</a>'
-    f'</div>'
-)
-st.html(features_markup)
-
-# ==============================================================================
-# 3. KEY INSIGHTS SECTION
-# ==============================================================================
-insights_markup = (
-    f'<div class="insights-header-row">'
-    f'<div class="insights-title-wrap">'
-    f'<div class="insights-accent-bar"></div>'
-    f'<div><div class="insights-heading">Key Insights</div>'
-    f'<div class="insights-subtitle">Plain-English summaries of disease trends and weather patterns across India</div></div>'
-    f'</div>'
-    f'</div>'
-    f'<div class="insight-cards-grid">'
-    f'<a href="/Future_Forecasts" target="_self" class="insight-card">'
-    f'<div class="insight-icon-circle" style="background: #FEF2F2;">{icon_alert_triangle(20, "#DC2626")}</div>'
-    f'<div class="insight-card-content">'
-    f'<div class="insight-card-header">'
-    f'<span class="insight-card-title">Seasonal Notice</span>'
-    f'<span class="insight-badge" style="background: #FEE2E2; color: #DC2626;">Higher Activity</span>'
-    f'</div>'
-    f'<div class="insight-card-desc">Rice Blast reports typically peak during wet Kharif harvest months in eastern belts.</div>'
-    f'</div>'
-    f'<div class="insight-arrow-btn">{icon_arrow_right(12, "currentColor")}</div>'
-    f'</a>'
-    f'<a href="/Future_Forecasts" target="_self" class="insight-card">'
-    f'<div class="insight-icon-circle" style="background: #E8F5E9;">{icon_trending_up(20, "#166534")}</div>'
-    f'<div class="insight-card-content">'
-    f'<div class="insight-card-header">'
-    f'<span class="insight-card-title">Seasonal Patterns</span>'
-    f'<span class="insight-badge" style="background: #DCFCE7; color: #166534;">Cyclic</span>'
-    f'</div>'
-    f'<div class="insight-card-desc">Foliar diseases follow yearly patterns that repeat each monsoon and winter season.</div>'
-    f'</div>'
-    f'<div class="insight-arrow-btn">{icon_arrow_right(12, "currentColor")}</div>'
-    f'</a>'
-    f'<a href="/Time_Series_Analysis" target="_self" class="insight-card">'
-    f'<div class="insight-icon-circle" style="background: #EFF6FF;">{icon_weather(20, "#2563EB")}</div>'
-    f'<div class="insight-card-content">'
-    f'<div class="insight-card-header">'
-    f'<span class="insight-card-title">Weather Factors</span>'
-    f'<span class="insight-badge" style="background: #DBEAFE; color: #1E40AF;">Humidity</span>'
-    f'</div>'
-    f'<div class="insight-card-desc">High humidity (above 80%) creates favorable conditions for fungal disease spread.</div>'
-    f'</div>'
-    f'<div class="insight-arrow-btn">{icon_arrow_right(12, "currentColor")}</div>'
-    f'</a>'
-    f'</div>'
-)
-st.html(insights_markup)
-
-
-
-
-
-# ==============================================================================
-# SECTION A: RESEARCH METRICS
-# ==============================================================================
-st.markdown('<div id="research-metrics"></div>', unsafe_allow_html=True)
-
-st.markdown(
-    f"""
-    <div class="metric-grid">
-        <div class="research-metric-card">
-            <div class="metric-icon-wrap">{icon_timeseries(20, "#527A50")}</div>
-            <div class="metric-label-text">Historical Coverage</div>
-            <div class="metric-value-text">{_n_years} Yrs</div>
-            <div class="metric-note-text">{_d_min} – {_d_max} ({_n_months} mo)</div>
-        </div>
-        <div class="research-metric-card">
-            <div class="metric-icon-wrap">{icon_shield(20, "#527A50")}</div>
-            <div class="metric-label-text">Usable Dated Records</div>
-            <div class="metric-value-text">{total_dates:,}</div>
-            <div class="metric-note-text">67.3% temporal integrity</div>
-        </div>
-        <div class="research-metric-card">
-            <div class="metric-icon-wrap">{icon_leaf(20, "#527A50")}</div>
-            <div class="metric-label-text">Analyzable Pathogens</div>
-            <div class="metric-value-text">10 Taxa</div>
-            <div class="metric-note-text">Rice, wheat, pulses, solanaceous</div>
-        </div>
-        <div class="research-metric-card">
-            <div class="metric-icon-wrap">{icon_weather(20, "#527A50")}</div>
-            <div class="metric-label-text">Climate Telemetry</div>
-            <div class="metric-value-text">6 Factors</div>
-            <div class="metric-note-text">Temp, rainfall, RH, dew point</div>
-        </div>
+years_span = round(stats["total_months"] / 12.0, 1)
+telemetry_markup = f"""
+<div class="metric-grid" style="margin-top: 16px; margin-bottom: 24px;">
+    <div class="research-metric-card">
+        <div class="metric-icon-wrap">{icon_timeseries(20, "#527A50")}</div>
+        <div class="metric-label-text">Temporal Scope</div>
+        <div class="metric-value-text">{years_span} Years</div>
+        <div class="metric-note-text">{stats['monthly_start_date']} – {stats['monthly_end_date']} ({stats['total_months']} Months)</div>
     </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-# ==============================================================================
-# SECTION B: HOW IT WORKS
-# ==============================================================================
-st.markdown('<div id="how-it-works"></div>', unsafe_allow_html=True)
-st.markdown("---")
-
-p1_title = "01 · Ingest Surveillance" if adv_mode else "01 · Collect Records"
-p1_desc = "Ingests verified disease reports from GBIF and research herbaria across India."
-
-p2_title = "02 · Climate Telemetry" if adv_mode else "02 · Add Weather"
-p2_desc = "Integrates 11 years of monthly climate telemetry from NASA POWER satellites."
-
-p3_title = "03 · Diagnostics & Lags" if adv_mode else "03 · Data Diagnostics"
-p3_desc = "Runs stationarity, seasonal decomposition, and lag correlation checks."
-
-p4_title = "04 · Model Forecasting" if adv_mode else "04 · Generate Forecasts"
-p4_desc = "Benchmarks 10 forecasting models to predict monthly disease activity."
-
-st.markdown(
-    f"""
-    <div style="text-align: center; max-width: 680px; margin: 36px auto 12px auto;">
-        <div class="hero-eyebrow" style="margin-bottom: 8px;">Architecture</div>
-        <h2 style="font-size: 2.1rem; margin-bottom: 12px;">How Predictions Are Made</h2>
-        <p style="color: #5A665D; font-size: 0.95rem; line-height: 1.6;">
-            Four-stage pipeline connecting field records and satellite weather to predictive models.
-        </p>
+    <div class="research-metric-card">
+        <div class="metric-icon-wrap">{icon_shield(20, "#527A50")}</div>
+        <div class="metric-label-text">Verified Surveillance</div>
+        <div class="metric-value-text">{stats['dated_gbif_records']:,} Records</div>
+        <div class="metric-note-text">{stats['curated_records']:,} Quality-Filtered Accessions</div>
     </div>
-    <div class="process-grid">
-        <div class="process-card">
-            <div class="process-num">01</div>
-            <div class="process-title">{p1_title}</div>
-            <div class="process-desc">{p1_desc}</div>
-        </div>
-        <div class="process-card">
-            <div class="process-num">02</div>
-            <div class="process-title">{p2_title}</div>
-            <div class="process-desc">{p2_desc}</div>
-        </div>
-        <div class="process-card">
-            <div class="process-num">03</div>
-            <div class="process-title">{p3_title}</div>
-            <div class="process-desc">{p3_desc}</div>
-        </div>
-        <div class="process-card">
-            <div class="process-num">04</div>
-            <div class="process-title">{p4_title}</div>
-            <div class="process-desc">{p4_desc}</div>
-        </div>
+    <div class="research-metric-card">
+        <div class="metric-icon-wrap">{icon_leaf(20, "#527A50")}</div>
+        <div class="metric-label-text">Monitored Pathogens</div>
+        <div class="metric-value-text">{stats['total_pathogens']} Taxa</div>
+        <div class="metric-note-text">Rice, Wheat, Potato, Chickpea, Pigeonpea</div>
     </div>
-    """,
-    unsafe_allow_html=True,
-)
+    <div class="research-metric-card">
+        <div class="metric-icon-wrap">{icon_weather(20, "#527A50")}</div>
+        <div class="metric-label-text">Zero-Inflation Baseline</div>
+        <div class="metric-value-text">{stats['zero_percentage']}% Zeros</div>
+        <div class="metric-note-text">{stats['structural_zeros']} Confirmed No-Occurrence · {stats['gap_imputed_zeros']} Missing-Data Estimated</div>
+    </div>
+</div>
+"""
+st.html(telemetry_markup)
 
 # ==============================================================================
-# AGRO-ECOLOGICAL TERRAINS & CANOPY REGIMES (USER IMAGES GALLERY)
+# 3. FAST DIRECT NAVIGATION SHORTCUTS
+# ==============================================================================
+st.markdown("<div style='font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #5A665D; margin-bottom: 10px;'>System Navigation</div>", unsafe_allow_html=True)
+
+nav_cols = st.columns(4)
+with nav_cols[0]:
+    st.markdown(
+        f"""
+        <a href="/Disease_Explorer" target="_self" style="text-decoration: none; color: inherit;">
+            <div class="verdant-card" style="padding: 16px; height: 100%; transition: transform 0.15s ease, box-shadow 0.15s ease;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <div style="background: #E8F5E9; border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;">
+                        {icon_pathology(18, "#166534")}
+                    </div>
+                    {icon_arrow_right(14, "#527A50")}
+                </div>
+                <div style="font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 600; color: #102C26; margin-bottom: 4px;">
+                    Disease Records
+                </div>
+                <div style="font-size: 0.8rem; color: #5A665D; line-height: 1.4;">
+                    Historical occurrences, GPS collection coordinates, and host crops.
+                </div>
+            </div>
+        </a>
+        """,
+        unsafe_allow_html=True,
+    )
+
+with nav_cols[1]:
+    st.markdown(
+        f"""
+        <a href="/Time_Series_Analysis" target="_self" style="text-decoration: none; color: inherit;">
+            <div class="verdant-card" style="padding: 16px; height: 100%; transition: transform 0.15s ease, box-shadow 0.15s ease;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <div style="background: #EFF6FF; border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;">
+                        {icon_timeseries(18, "#2563EB")}
+                    </div>
+                    {icon_arrow_right(14, "#527A50")}
+                </div>
+                <div style="font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 600; color: #102C26; margin-bottom: 4px;">
+                    Time Series Analysis
+                </div>
+                <div style="font-size: 0.8rem; color: #5A665D; line-height: 1.4;">
+                    Seasonality decomposition, ADF/KPSS stationarity, and weather lags.
+                </div>
+            </div>
+        </a>
+        """,
+        unsafe_allow_html=True,
+    )
+
+with nav_cols[2]:
+    st.markdown(
+        f"""
+        <a href="/Model_Comparison" target="_self" style="text-decoration: none; color: inherit;">
+            <div class="verdant-card" style="padding: 16px; height: 100%; transition: transform 0.15s ease, box-shadow 0.15s ease;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <div style="background: #FAF5FF; border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;">
+                        {icon_model_compare(18, "#9333EA")}
+                    </div>
+                    {icon_arrow_right(14, "#527A50")}
+                </div>
+                <div style="font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 600; color: #102C26; margin-bottom: 4px;">
+                    Model Comparison
+                </div>
+                <div style="font-size: 0.8rem; color: #5A665D; line-height: 1.4;">
+                    Classical vs. modern benchmark, multi-origin walk-forward validation.
+                </div>
+            </div>
+        </a>
+        """,
+        unsafe_allow_html=True,
+    )
+
+with nav_cols[3]:
+    st.markdown(
+        f"""
+        <a href="/Future_Forecasts" target="_self" style="text-decoration: none; color: inherit;">
+            <div class="verdant-card" style="padding: 16px; height: 100%; transition: transform 0.15s ease, box-shadow 0.15s ease;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <div style="background: #FEF3C7; border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;">
+                        {icon_trending_up(18, "#D97706")}
+                    </div>
+                    {icon_arrow_right(14, "#527A50")}
+                </div>
+                <div style="font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 600; color: #102C26; margin-bottom: 4px;">
+                    Future Forecasts
+                </div>
+                <div style="font-size: 0.8rem; color: #5A665D; line-height: 1.4;">
+                    Forward projections originating from {stats['forecast_origin_date']}, intervals, and risk outlook.
+                </div>
+            </div>
+        </a>
+        """,
+        unsafe_allow_html=True,
+    )
+
+# ==============================================================================
+# 4. PRIMARY DATASET VISUAL (RICE BLAST VS BROWN SPOT 2015–2025)
 # ==============================================================================
 st.markdown("---")
 st.markdown(
-    """
-    <div style="text-align: center; max-width: 720px; margin: 36px auto 20px auto;">
-        <div class="hero-eyebrow" style="margin-bottom: 8px;">Surveillance Environments</div>
-        <h2 style="font-size: 2.1rem; margin-bottom: 12px;">Agro-Ecological Terrains & Micro-Climates</h2>
-        <p style="color: #5A665D; font-size: 0.95rem; line-height: 1.6;">
-            Environmental factors driving pathogen incubation across major cropping seasons.
+    f"""
+    <div style="margin-bottom: 12px;">
+        <h3 style="font-family: 'Fraunces', serif; font-size: 1.4rem; color: #102C26; margin: 0 0 4px 0;">
+            Longitudinal Disease Surveillance Trajectory ({stats['monthly_start_date']} – {stats['monthly_end_date']})
+        </h3>
+        <p style="color: #5A665D; font-size: 0.88rem; margin: 0;">
+            11-year monthly incidence dynamics contrasting episodic monsoonal surges (Rice Blast) against endemic background reports (Brown Spot of Rice).
         </p>
     </div>
     """,
     unsafe_allow_html=True,
 )
-
-st.markdown(
-    f"""
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-bottom: 40px;">
-        <div class="verdant-card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
-            <div style="height: 190px; overflow: hidden; position: relative;">
-                <img src="{img_monsoon_b64}" style="width: 100%; height: 100%; object-fit: cover;" alt="Monsoon Precipitation Front" />
-                <div style="position: absolute; bottom: 8px; left: 10px; background: rgba(16, 44, 38, 0.85); backdrop-filter: blur(8px); color: #FFF; font-size: 0.68rem; font-weight: 600; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.05em;">
-                    MONSOON REGIME
-                </div>
-            </div>
-            <div style="padding: 16px;">
-                <h4 style="margin: 0 0 6px 0; font-size: 1.05rem; color: #102C26;">Leaf Wetness & Rain Splashing</h4>
-                <p style="font-size: 0.82rem; color: #5A665D; line-height: 1.5; margin: 0;">
-                    Extended leaf wetness (>10h) during monsoon rains accelerates spore germination for blast and blight.
-                </p>
-            </div>
-        </div>
-        <div class="verdant-card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
-            <div style="height: 190px; overflow: hidden; position: relative;">
-                <img src="{img_sunset_b64}" style="width: 100%; height: 100%; object-fit: cover;" alt="Rabi Cereal Sunset" />
-                <div style="position: absolute; bottom: 8px; left: 10px; background: rgba(16, 44, 38, 0.85); backdrop-filter: blur(8px); color: #FFF; font-size: 0.68rem; font-weight: 600; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.05em;">
-                    RABI WINTER CROPS
-                </div>
-            </div>
-            <div style="padding: 16px;">
-                <h4 style="margin: 0 0 6px 0; font-size: 1.05rem; color: #102C26;">Grain Growth & Dew Cycles</h4>
-                <p style="font-size: 0.82rem; color: #5A665D; line-height: 1.5; margin: 0;">
-                    Cool temperatures and heavy morning dew drive seasonal rust susceptibility in winter cereals.
-                </p>
-            </div>
-        </div>
-        <div class="verdant-card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
-            <div style="height: 190px; overflow: hidden; position: relative;">
-                <img src="{img_wheat_b64}" style="width: 100%; height: 100%; object-fit: cover;" alt="Vegetative Canopy Tillering" />
-                <div style="position: absolute; bottom: 8px; left: 10px; background: rgba(16, 44, 38, 0.85); backdrop-filter: blur(8px); color: #FFF; font-size: 0.68rem; font-weight: 600; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.05em;">
-                    CANOPY MICRO-CLIMATE
-                </div>
-            </div>
-            <div style="padding: 16px;">
-                <h4 style="margin: 0 0 6px 0; font-size: 1.05rem; color: #102C26;">Foliar Humidity Traps</h4>
-                <p style="font-size: 0.82rem; color: #5A665D; line-height: 1.5; margin: 0;">
-                    Dense canopy foliage traps humidity (>80%), creating favorable micro-climates for foliar lesions.
-                </p>
-            </div>
-        </div>
-        <div class="verdant-card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
-            <div style="height: 190px; overflow: hidden; position: relative;">
-                <img src="{img_golden_b64}" style="width: 100%; height: 100%; object-fit: cover;" alt="Golden Crop Field" />
-                <div style="position: absolute; bottom: 8px; left: 10px; background: rgba(16, 44, 38, 0.85); backdrop-filter: blur(8px); color: #FFF; font-size: 0.68rem; font-weight: 600; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.05em;">
-                    PREVENTATIVE ACTION
-                </div>
-            </div>
-            <div style="padding: 16px;">
-                <h4 style="margin: 0 0 6px 0; font-size: 1.05rem; color: #102C26;">Protecting Crop Yields</h4>
-                <p style="font-size: 0.82rem; color: #5A665D; line-height: 1.5; margin: 0;">
-                    Multi-month advance risk indicators enable timely preventative crop protection and resource planning.
-                </p>
-            </div>
-        </div>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-# ==============================================================================
-# SECTION C: FORECASTING CAPABILITIES
-# ==============================================================================
-st.markdown('<div id="capabilities"></div>', unsafe_allow_html=True)
-st.markdown("---")
-
-st.markdown(
-    """
-    <div style="text-align: center; max-width: 700px; margin: 36px auto 16px auto;">
-        <div class="hero-eyebrow" style="margin-bottom: 8px;">Prediction Methods Suite</div>
-        <h2 style="font-size: 2.1rem; margin-bottom: 12px;">Statistical &amp; Machine Learning Models</h2>
-        <p style="color: #5A665D; font-size: 0.95rem; line-height: 1.6;">
-            We evaluate both classical time-series methods and modern machine learning forecasters,
-            strictly testing each method on past unseen months.
-        </p>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-st.markdown(
-    f"""
-    <div class="model-cards-grid">
-        <div class="model-card">
-            <div>
-                <span class="model-badge">Econometric</span>
-                <div class="model-card-title">ARIMA &amp; SARIMA</div>
-                <div class="model-card-desc">
-                    Captures autoregressive lag dynamics, trend integration, and 12-month annual seasonality.
-                </div>
-            </div>
-            <div class="model-stat-row">
-                <span>Rice Blast 6M RMSE:</span>
-                <span class="model-stat-val">{_best_family_stat(["ARIMA(1,1,1)", "SARIMA(1,0,1)(1,0,1)[12]"])}</span>
-            </div>
-        </div>
-        <div class="model-card">
-            <div>
-                <span class="model-badge" style="background: rgba(196, 166, 106, 0.15); color: #8C6F2D;">Exogenous Climate</span>
-                <div class="model-card-title">SARIMAX &amp; ARIMAX</div>
-                <div class="model-card-desc">
-                    Extends seasonal ARIMA with lagged NASA satellite temperature, rainfall, and humidity.
-                </div>
-            </div>
-            <div class="model-stat-row">
-                <span>Rice Blast 6M RMSE:</span>
-                <span class="model-stat-val">{_best_family_stat(["ARIMAX (Weather Regressors)", "SARIMAX (Seasonal + Weather)"])}</span>
-            </div>
-        </div>
-        <div class="model-card">
-            <div>
-                <span class="model-badge">Exponential Smoothing</span>
-                <div class="model-card-title">Holt-Winters</div>
-                <div class="model-card-desc">
-                    Triple exponential smoothing with adaptive level, trend, and seasonal factors.
-                </div>
-            </div>
-            <div class="model-stat-row">
-                <span>Rice Blast 6M RMSE:</span>
-                <span class="model-stat-val">{_best_family_stat(["Holt-Winters Exponential Smoothing"])}</span>
-            </div>
-        </div>
-        <div class="model-card">
-            <div>
-                <span class="model-badge" style="background: rgba(37, 99, 235, 0.12); color: #2563EB;">Autoregressive</span>
-                <div class="model-card-title">AR(1) &amp; MA(1)</div>
-                <div class="model-card-desc">
-                    Parsimonious lag and shock-smoothing models capturing immediate monthly outbreak momentum.
-                </div>
-            </div>
-            <div class="model-stat-row">
-                <span>Rice Blast 6M RMSE:</span>
-                <span class="model-stat-val">{_best_family_stat(["AR(1)", "MA(1)"])}</span>
-            </div>
-        </div>
-        <div class="model-card">
-            <div>
-                <span class="model-badge" style="background: rgba(16, 44, 38, 0.1); color: #102C26;">Machine Learning</span>
-                <div class="model-card-title">Gradient Boosting &amp; Trees</div>
-                <div class="model-card-desc">
-                    Decision-tree ensembles modeling non-linear interactions across lagged weather factors.
-                </div>
-            </div>
-            <div class="model-stat-row">
-                <span>Rice Blast 6M RMSE:</span>
-                <span class="model-stat-val">{_best_family_stat(["Random Forest (Autoregressive)", "Hist Gradient Boosting (Autoregressive)"])}</span>
-            </div>
-        </div>
-        <div class="model-card">
-            <div>
-                <span class="model-badge">Baseline Benchmark</span>
-                <div class="model-card-title">Seasonal Naive</div>
-                <div class="model-card-desc">
-                    Academic baseline carrying forward observations from the same month of the previous year.
-                </div>
-            </div>
-            <div class="model-stat-row">
-                <span>Rice Blast 6M RMSE:</span>
-                <span class="model-stat-val">{_best_family_stat(["Seasonal Naive (Baseline)"])}</span>
-            </div>
-        </div>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-# ==============================================================================
-# SECTION D: DATA INTEGRITY & RESEARCH PREVIEW
-# ==============================================================================
-st.markdown('<div id="research-preview"></div>', unsafe_allow_html=True)
-st.markdown("---")
-
-st.markdown(
-    """
-    <div style="text-align: center; max-width: 720px; margin: 36px auto 16px auto;">
-        <div class="hero-eyebrow" style="margin-bottom: 6px;">Surveillance Timeline</div>
-        <h2 style="font-size: 2.1rem; margin-bottom: 8px;">Recorded Disease Reports in India</h2>
-        <p style="color: #5A665D; font-size: 0.95rem; line-height: 1.5;">
-            Monthly historical reports for Rice Blast and Brown Spot of Rice showing Kharif monsoon surges.
-        </p>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-# Miniature multi-pathogen trend chart from real processed data (loaded above)
 
 fig_preview = go.Figure()
 if df_rice_blast is not None and not df_rice_blast.empty:
@@ -597,8 +311,8 @@ if df_rice_blast is not None and not df_rice_blast.empty:
         go.Scatter(
             x=df_rice_blast["date"],
             y=df_rice_blast["documented_occurrence_count"],
-            name="Rice Blast",
-            line=dict(color="#047857", width=2.5),
+            name="Rice Blast (Pyricularia oryzae)",
+            line=dict(color="#047857", width=2.4),
             mode="lines+markers",
             marker=dict(size=4),
         )
@@ -608,8 +322,8 @@ if df_brown_spot is not None and not df_brown_spot.empty:
         go.Scatter(
             x=df_brown_spot["date"],
             y=df_brown_spot["documented_occurrence_count"],
-            name="Brown Spot of Rice",
-            line=dict(color="#C4A66A", width=2),
+            name="Brown Spot of Rice (Bipolaris oryzae)",
+            line=dict(color="#C4A66A", width=2.0),
             mode="lines+markers",
             marker=dict(size=4),
         )
@@ -617,46 +331,84 @@ if df_brown_spot is not None and not df_brown_spot.empty:
 
 format_plotly_figure(
     fig_preview,
-    title="Monthly Recorded Disease Reports (2015–2025)",
-    height=340,
+    title=f"Monthly Verified Disease Occurrences in India ({stats['monthly_start_date']} – {stats['monthly_end_date']})",
+    height=320,
 )
 st.plotly_chart(fig_preview, use_container_width=True)
 
-render_graph_explanation_card(
-    what_it_shows="Longitudinal monthly recorded disease occurrences for Rice Blast and Brown Spot of Rice from 2015 through 2025 across Indian agro-climatic zones.",
-    parameters="Timeline (Monthly date stamps 2015–2025), Occurrence volume (confirmed report count Y_t), Pathogen class (Rice Blast vs. Brown Spot).",
-    what_it_compares="Historical outbreak severity and seasonal surge amplitude between episodic epidemic surges (Rice Blast, Kharif peaks) and continuous endemic background reports (Brown Spot).",
-)
+# ==============================================================================
+# 5. AGRO-ECOLOGICAL ENVIRONMENTS (IN EXPANDABLE DRAWER FOR CLEAN MINIMALISM)
+# ==============================================================================
+with st.expander("🌾 Explore Indian Agro-Ecological Environments & Micro-Climates", expanded=False):
+    st.markdown(
+        f"""
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin: 12px 0;">
+            <div class="verdant-card" style="padding: 0; overflow: hidden;">
+                <div style="height: 140px; overflow: hidden; position: relative;">
+                    <img src="{img_monsoon_b64}" style="width: 100%; height: 100%; object-fit: cover;" alt="Monsoon Precipitation" />
+                    <div style="position: absolute; bottom: 6px; left: 8px; background: rgba(16, 44, 38, 0.85); color: #FFF; font-size: 0.65rem; font-weight: 700; padding: 2px 6px; border-radius: 4px;">
+                        KHARIF MONSOON
+                    </div>
+                </div>
+                <div style="padding: 12px;">
+                    <div style="font-weight: 700; font-size: 0.92rem; color: #102C26; margin-bottom: 4px;">Leaf Wetness & Rain Splashing</div>
+                    <div style="font-size: 0.78rem; color: #5A665D; line-height: 1.4;">Extended leaf wetness (>10h) during monsoon rains accelerates fungal spore germination.</div>
+                </div>
+            </div>
+            <div class="verdant-card" style="padding: 0; overflow: hidden;">
+                <div style="height: 140px; overflow: hidden; position: relative;">
+                    <img src="{img_sunset_b64}" style="width: 100%; height: 100%; object-fit: cover;" alt="Rabi Winter Season" />
+                    <div style="position: absolute; bottom: 6px; left: 8px; background: rgba(16, 44, 38, 0.85); color: #FFF; font-size: 0.65rem; font-weight: 700; padding: 2px 6px; border-radius: 4px;">
+                        RABI WINTER
+                    </div>
+                </div>
+                <div style="padding: 12px;">
+                    <div style="font-weight: 700; font-size: 0.92rem; color: #102C26; margin-bottom: 4px;">Cool Dew Cycles</div>
+                    <div style="font-size: 0.78rem; color: #5A665D; line-height: 1.4;">Cool temperatures and morning dew drive seasonal stripe rust susceptibility in cereals.</div>
+                </div>
+            </div>
+            <div class="verdant-card" style="padding: 0; overflow: hidden;">
+                <div style="height: 140px; overflow: hidden; position: relative;">
+                    <img src="{img_wheat_b64}" style="width: 100%; height: 100%; object-fit: cover;" alt="Canopy Tillering" />
+                    <div style="position: absolute; bottom: 6px; left: 8px; background: rgba(16, 44, 38, 0.85); color: #FFF; font-size: 0.65rem; font-weight: 700; padding: 2px 6px; border-radius: 4px;">
+                        CANOPY MICRO-CLIMATE
+                    </div>
+                </div>
+                <div style="padding: 12px;">
+                    <div style="font-weight: 700; font-size: 0.92rem; color: #102C26; margin-bottom: 4px;">Humidity Traps</div>
+                    <div style="font-size: 0.78rem; color: #5A665D; line-height: 1.4;">Dense foliage traps relative humidity (>80%), sustaining localized lesion propagation.</div>
+                </div>
+            </div>
+            <div class="verdant-card" style="padding: 0; overflow: hidden;">
+                <div style="height: 140px; overflow: hidden; position: relative;">
+                    <img src="{img_golden_b64}" style="width: 100%; height: 100%; object-fit: cover;" alt="Golden Harvest" />
+                    <div style="position: absolute; bottom: 6px; left: 8px; background: rgba(16, 44, 38, 0.85); color: #FFF; font-size: 0.65rem; font-weight: 700; padding: 2px 6px; border-radius: 4px;">
+                        PROTECTIVE SURVEILLANCE
+                    </div>
+                </div>
+                <div style="padding: 12px;">
+                    <div style="font-weight: 700; font-size: 0.92rem; color: #102C26; margin-bottom: 4px;">Advance Warning</div>
+                    <div style="font-size: 0.78rem; color: #5A665D; line-height: 1.4;">Early disease forecasts support targeted agronomist advisories.</div>
+                </div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 # ==============================================================================
-# SECTION F: FINAL CALL TO ACTION & FOOTER
+# 6. MINIMAL, ACADEMIC FOOTER
 # ==============================================================================
 st.markdown(
     f"""
-    <div class="final-cta-section">
-        <h2 class="final-cta-title">Turn agricultural data into earlier insights.</h2>
-        <p class="final-cta-lead">
-            Explore recorded disease reports, seasonal patterns, and future predictions across Indian farming regions.
-        </p>
-        <a href="/Future_Forecasts" target="_self" class="btn-gold-cta">
-            View Future Predictions {icon_arrow_right(16, "#102C26")}
-        </a>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-# Footer
-st.markdown(
-    f"""
-    <div class="verdant-footer">
+    <div class="verdant-footer" style="margin-top: 40px; padding: 18px 0; border-top: 1px solid rgba(82,122,80,0.16); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 0.8rem; color: #5A665D;">
         <div style="display: flex; align-items: center; gap: 8px;">
-            {icon_logo(20, "#527A50")}
+            {icon_logo(18, "#527A50")}
             <span style="font-family: 'Fraunces', serif; font-weight: 600; color: #102C26;">Agricultural Disease Forecasting Using Time Series</span>
-            <span>· Academic & Research Portfolio Platform</span>
+            <span>· Academic &amp; Research Portfolio Platform</span>
         </div>
         <div>
-            Public Data: <a href="https://www.gbif.org" style="color: #527A50; text-decoration: underline;">GBIF</a> (CC-BY 4.0) •
+            Open Data: <a href="https://www.gbif.org" style="color: #527A50; text-decoration: underline;">GBIF</a> (CC-BY 4.0) •
             <a href="https://power.larc.nasa.gov" style="color: #527A50; text-decoration: underline;">NASA POWER</a> •
             <a href="https://gd.eppo.int" style="color: #527A50; text-decoration: underline;">EPPO</a>
         </div>

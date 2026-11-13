@@ -21,6 +21,7 @@ def forecast_ml_autoregressor(
     lags: Optional[List[int]] = None,
     weather_lag_cols: Optional[List[str]] = None,
     future_weather_df: Optional[pd.DataFrame] = None,
+    model_params: Optional[Dict[str, Any]] = None,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, Any]:
     """Autoregressive ML model (Gradient Boosting / Random Forest) with strictly lagged regressors.
 
@@ -36,7 +37,7 @@ def forecast_ml_autoregressor(
         Tuple of (point_predictions, lower_95_ci, upper_95_ci, fitted_model).
     """
     if lags is None:
-        lags = [1, 2, 3, 12]
+        lags = [1, 2, 3, 6, 12]
     target_col = "documented_occurrence_count"
 
     # Feature construction on training data
@@ -68,20 +69,27 @@ def forecast_ml_autoregressor(
 
     if model_type == "random_forest":
         # Regularized tree depth and leaf size to prevent memorizing sparse counts
-        model = RandomForestRegressor(
-            n_estimators=100,
-            max_depth=3,
-            min_samples_leaf=2,
-            random_state=42,
-        )
+        rf_kwargs: Dict[str, Any] = {
+            "n_estimators": 180,
+            "max_depth": 5,
+            "min_samples_leaf": 4,
+            "max_features": 0.70,
+            "random_state": 42,
+        }
+        if model_params:
+            rf_kwargs.update(model_params)
+        model = RandomForestRegressor(**rf_kwargs)
     else:
         # Regularized gradient boosting with depth limits and L2 penalty
-        model = HistGradientBoostingRegressor(
-            max_depth=3,
-            min_samples_leaf=5,
-            l2_regularization=2.0,
-            random_state=42,
-        )
+        hgb_kwargs: Dict[str, Any] = {
+            "max_depth": 3,
+            "min_samples_leaf": 5,
+            "l2_regularization": 2.0,
+            "random_state": 42,
+        }
+        if model_params:
+            hgb_kwargs.update(model_params)
+        model = HistGradientBoostingRegressor(**hgb_kwargs)
 
     model.fit(X_train, y_train)
 

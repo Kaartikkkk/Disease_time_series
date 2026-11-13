@@ -1,0 +1,224 @@
+# Central Configuration for Plant Disease Outbreak Forecasting for India
+project:
+  name: "Plant Disease Outbreak Forecasting Using Time-Series Analysis (India)"
+  version: "2.0.0"
+  country: "India"
+  country_code: "IN"
+  random_seed: 42
+
+paths:
+  raw_data_dir: "data/raw"
+  processed_data_dir: "data/processed"
+  reports_dir: "data/reports"
+  models_dir: "models"
+  logs_dir: "logs"
+
+# Candidate plant pathogens and diseases for Indian agriculture
+pathogens:
+  pyricularia_oryzae:
+    scientific_name: "Pyricularia oryzae"
+    synonym: "Magnaporthe oryzae"
+    common_name: "Rice Blast"
+    host_crop: "Rice (Oryza sativa)"
+    crop_category: "Cereal"
+    gbif_taxon_key: 2569259
+    typical_seasons: ["Kharif (Jun-Nov)", "Rabi (Nov-Apr)"]
+    favorable_weather:
+      temp_min_c: 20.0
+      temp_max_c: 30.0
+      rh_min_pct: 85.0
+      rainfall_sensitive: true
+
+  bipolaris_oryzae:
+    scientific_name: "Bipolaris oryzae"
+    synonym: "Cochliobolus miyabeanus"
+    common_name: "Brown Spot of Rice"
+    host_crop: "Rice (Oryza sativa)"
+    crop_category: "Cereal"
+    gbif_taxon_key: 5249454
+    typical_seasons: ["Kharif (Jul-Dec)"]
+    favorable_weather:
+      temp_min_c: 25.0
+      temp_max_c: 32.0
+      rh_min_pct: 80.0
+      rainfall_sensitive: true
+
+  fusarium_oxysporum:
+    scientific_name: "Fusarium oxysporum"
+    common_name: "Fusarium Wilt"
+    host_crop: "Chickpea, Cotton, Tomato, Banana"
+    crop_category: "Pulses / Cash Crops"
+    gbif_taxon_key: 5249911
+    typical_seasons: ["Rabi (Oct-Mar)", "Kharif (Jun-Oct)"]
+    favorable_weather:
+      temp_min_c: 22.0
+      temp_max_c: 30.0
+      rh_min_pct: 60.0
+      rainfall_sensitive: false
+
+  ralstonia_solanacearum:
+    scientific_name: "Ralstonia solanacearum"
+    common_name: "Bacterial Wilt"
+    host_crop: "Potato, Tomato, Brinjal, Ginger"
+    crop_category: "Horticulture / Solanaceous"
+    gbif_taxon_key: 3205777
+    typical_seasons: ["Kharif (Jul-Oct)", "Post-Monsoon (Oct-Dec)"]
+    favorable_weather:
+      temp_min_c: 24.0
+      temp_max_c: 35.0
+      rh_min_pct: 80.0
+      rainfall_sensitive: true
+
+  rhizoctonia_solani:
+    scientific_name: "Rhizoctonia solani"
+    common_name: "Sheath Blight of Rice"
+    host_crop: "Rice (Oryza sativa)"
+    crop_category: "Cereal"
+    gbif_taxon_key: 2555143
+    typical_seasons: ["Kharif (Aug-Nov)"]
+    favorable_weather:
+      temp_min_c: 28.0
+      temp_max_c: 32.0
+      rh_min_pct: 90.0
+      rainfall_sensitive: true
+
+  macrophomina_phaseolina:
+    scientific_name: "Macrophomina phaseolina"
+    common_name: "Dry Root Rot / Charcoal Rot"
+    host_crop: "Chickpea, Soybean, Cotton, Groundnut"
+    crop_category: "Pulses / Oilseeds"
+    gbif_taxon_key: 2593652
+    typical_seasons: ["Post-Monsoon (Sep-Jan)"]
+    favorable_weather:
+      temp_min_c: 28.0
+      temp_max_c: 38.0
+      rh_min_pct: 50.0
+      rainfall_sensitive: false
+
+  alternaria_solani:
+    scientific_name: "Alternaria solani"
+    common_name: "Early Blight of Potato/Tomato"
+    host_crop: "Potato, Tomato"
+    crop_category: "Horticulture"
+    gbif_taxon_key: 2616196
+    typical_seasons: ["Rabi (Nov-Feb)"]
+    favorable_weather:
+      temp_min_c: 24.0
+      temp_max_c: 30.0
+      rh_min_pct: 80.0
+      rainfall_sensitive: true
+
+  xanthomonas_oryzae:
+    scientific_name: "Xanthomonas oryzae"
+    common_name: "Bacterial Blight of Rice"
+    host_crop: "Rice (Oryza sativa)"
+    crop_category: "Cereal"
+    gbif_taxon_key: 3204938
+    typical_seasons: ["Kharif (Jul-Oct)"]
+    favorable_weather:
+      temp_min_c: 25.0
+      temp_max_c: 34.0
+      rh_min_pct: 85.0
+      rainfall_sensitive: true
+
+  puccinia_striiformis:
+    scientific_name: "Puccinia striiformis"
+    common_name: "Yellow / Stripe Rust of Wheat"
+    host_crop: "Wheat (Triticum aestivum)"
+    crop_category: "Cereal"
+    gbif_taxon_key: 3377675
+    typical_seasons: ["Rabi (Dec-Mar)"]
+    favorable_weather:
+      temp_min_c: 10.0
+      temp_max_c: 20.0
+      rh_min_pct: 70.0
+      rainfall_sensitive: false
+
+  phytophthora_infestans:
+    scientific_name: "Phytophthora infestans"
+    common_name: "Late Blight of Potato"
+    host_crop: "Potato (Solanum tuberosum)"
+    crop_category: "Horticulture"
+    gbif_taxon_key: 3203716
+    typical_seasons: ["Rabi (Dec-Feb)"]
+    favorable_weather:
+      temp_min_c: 12.0
+      temp_max_c: 22.0
+      rh_min_pct: 85.0
+      rainfall_sensitive: true
+
+# Regional weather representative coordinates (Indian Agricultural Hubs)
+weather_regions:
+  national_composite:
+    name: "India National Composite"
+    latitude: 22.5937
+    longitude: 78.9629
+    description: "Centroid of Indian agricultural landmass"
+  punjab_haryana:
+    name: "Northwest Indo-Gangetic Plains (Wheat/Rice Hub)"
+    latitude: 30.7333
+    longitude: 76.7794
+    description: "Major cereal breadbasket (Punjab & Haryana)"
+  odisha_bengal:
+    name: "Eastern Coastal Rice Belt (Rice Research Zone)"
+    latitude: 20.4625
+    longitude: 85.8830
+    description: "High rainfall Kharif rice belt (Cuttack NRRI & Bengal)"
+  tamil_nadu:
+    name: "Southern Agricultural Zone (Rice/Pulses/Cotton)"
+    latitude: 11.1271
+    longitude: 78.6569
+    description: "Tamil Nadu & South Deccan plateau"
+  maharashtra:
+    name: "Western/Central Semi-Arid Zone (Pulses/Cotton/Soybean)"
+    latitude: 19.7515
+    longitude: 75.7139
+    description: "Maharashtra & Central India pulse belt"
+
+# Data collection parameters
+data_collection:
+  start_year: 2015
+  end_year: 2026
+  target_country: "IN"
+  gbif_base_url: "https://api.gbif.org/v1/occurrence/search"
+  nasa_power_base_url: "https://power.larc.nasa.gov/api/temporal/monthly/point"
+  timeout_seconds: 25
+  max_retries: 3
+  backoff_factor: 1.5
+
+# Time Series & Forecasting Configuration
+time_series:
+  frequency: "MS"  # Month Start
+  target_variable: "documented_occurrence_count"
+  seasonal_period: 12
+  min_observations_for_sarima: 24
+  train_split: 0.70
+  val_split: 0.15
+  test_split: 0.15
+  default_forecast_horizon: 6
+
+forecasting:
+  classical_models:
+    - "seasonal_naive"
+    - "ar"
+    - "ma"
+    - "arima"
+    - "sarima"
+    - "holt_winters"
+    - "arimax"
+    - "sarimax"
+  ml_models:
+    - "random_forest_autoregressor"
+    - "gradient_boosting_autoregressor"
+  milestone_3_planned:
+    - "xgboost"
+    - "prophet"
+    - "lstm"
+    - "gru"
+  hyperparameters:
+    seasonal_period: 12
+    autoregressive_lags: [1, 2, 3, 12]
+    weather_exog_cols:
+      - "temp_mean_c_lag1"
+      - "precipitation_monthly_mm_lag1"
+      - "relative_humidity_pct_lag1"
