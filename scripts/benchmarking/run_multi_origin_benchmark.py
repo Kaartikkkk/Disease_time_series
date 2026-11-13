@@ -27,8 +27,8 @@ from src.forecasting import run_rolling_walk_forward_evaluation
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger("multi_origin_benchmark")
 
-IMPROVED_DATA_PATH = Path("data/processed/improved_india_plant_diseases_monthly.csv")
-DATA_PATH = IMPROVED_DATA_PATH if IMPROVED_DATA_PATH.exists() else Path("data/processed/india_plant_diseases_monthly.csv")
+IMPROVED_DATA_PATH = Path("data/disease_timeseries_master.csv")
+DATA_PATH = IMPROVED_DATA_PATH
 OUTPUT_PATH = Path("data/processed/multi_origin_validation_results.json")
 
 ORIGINS: List[Tuple[str, int, int, str]] = [

@@ -32,6 +32,13 @@ from src.models.adapters import (
     adapt_sarimax,
     adapt_seasonal_naive,
     adapt_xgboost,
+    adapt_arch_1,
+    adapt_arch_2,
+    adapt_arch_5,
+    adapt_garch_1_1,
+    adapt_garch_1_2,
+    adapt_garch_2_1,
+    adapt_garch_2_2,
 )
 from src.models.base import ForecastContext, ModelAdapterFn, validate_forecast_output
 from src.models.lstm_model import HAS_TORCH
@@ -263,12 +270,120 @@ MODEL_SPECS: Dict[str, ModelSpec] = {
     ),
 }
 
+# ------------------------------------------------------------------------------
+# ARCH and GARCH Volatility Model Specifications
+# ------------------------------------------------------------------------------
+VOLATILITY_MODEL_SPECS: Dict[str, ModelSpec] = {
+    "arch_1": ModelSpec(
+        model_id="arch_1",
+        display_name="ARCH(1)",
+        category="Conditional Volatility",
+        model_family="ARCH/GARCH Volatility",
+        available=True,
+        supports_exog=False,
+        has_ci=True,
+        default_config={"p": 1, "q": 0, "dist": "StudentsT", "approach": "approach_a"},
+        adapter=adapt_arch_1,
+        notes="First-order autoregressive conditional heteroskedasticity uncertainty model",
+    ),
+    "arch_2": ModelSpec(
+        model_id="arch_2",
+        display_name="ARCH(2)",
+        category="Conditional Volatility",
+        model_family="ARCH/GARCH Volatility",
+        available=True,
+        supports_exog=False,
+        has_ci=True,
+        default_config={"p": 2, "q": 0, "dist": "StudentsT", "approach": "approach_a"},
+        adapter=adapt_arch_2,
+        notes="Second-order autoregressive conditional heteroskedasticity uncertainty model",
+    ),
+    "arch_5": ModelSpec(
+        model_id="arch_5",
+        display_name="ARCH(5)",
+        category="Conditional Volatility",
+        model_family="ARCH/GARCH Volatility",
+        available=True,
+        supports_exog=False,
+        has_ci=True,
+        default_config={"p": 5, "q": 0, "dist": "StudentsT", "approach": "approach_a"},
+        adapter=adapt_arch_5,
+        notes="Fifth-order autoregressive conditional heteroskedasticity uncertainty model",
+    ),
+    "garch_1_1": ModelSpec(
+        model_id="garch_1_1",
+        display_name="GARCH(1,1)",
+        category="Conditional Volatility",
+        model_family="ARCH/GARCH Volatility",
+        available=True,
+        supports_exog=False,
+        has_ci=True,
+        default_config={"p": 1, "q": 1, "dist": "StudentsT", "approach": "approach_a"},
+        adapter=adapt_garch_1_1,
+        notes="Generalized autoregressive conditional heteroskedasticity (1,1) uncertainty model",
+    ),
+    "garch_1_2": ModelSpec(
+        model_id="garch_1_2",
+        display_name="GARCH(1,2)",
+        category="Conditional Volatility",
+        model_family="ARCH/GARCH Volatility",
+        available=True,
+        supports_exog=False,
+        has_ci=True,
+        default_config={"p": 1, "q": 2, "dist": "StudentsT", "approach": "approach_a"},
+        adapter=adapt_garch_1_2,
+        notes="Generalized autoregressive conditional heteroskedasticity (1,2) uncertainty model",
+    ),
+    "garch_2_1": ModelSpec(
+        model_id="garch_2_1",
+        display_name="GARCH(2,1)",
+        category="Conditional Volatility",
+        model_family="ARCH/GARCH Volatility",
+        available=True,
+        supports_exog=False,
+        has_ci=True,
+        default_config={"p": 2, "q": 1, "dist": "StudentsT", "approach": "approach_a"},
+        adapter=adapt_garch_2_1,
+        notes="Generalized autoregressive conditional heteroskedasticity (2,1) uncertainty model",
+    ),
+    "garch_2_2": ModelSpec(
+        model_id="garch_2_2",
+        display_name="GARCH(2,2)",
+        category="Conditional Volatility",
+        model_family="ARCH/GARCH Volatility",
+        available=True,
+        supports_exog=False,
+        has_ci=True,
+        default_config={"p": 2, "q": 2, "dist": "StudentsT", "approach": "approach_a"},
+        adapter=adapt_garch_2_2,
+        notes="Generalized autoregressive conditional heteroskedasticity (2,2) uncertainty model",
+    ),
+}
+
+ALL_MODEL_SPECS: Dict[str, ModelSpec] = {**MODEL_SPECS, **VOLATILITY_MODEL_SPECS}
+
 
 def get_model_spec(model_id: str) -> ModelSpec:
-    """Return the ModelSpec for a registered model_id or raise KeyError."""
-    if model_id not in MODEL_SPECS:
-        raise KeyError(f"Unknown model_id '{model_id}'. Registered: {list(MODEL_SPECS.keys())}")
-    return MODEL_SPECS[model_id]
+    """Return the ModelSpec for a registered model_id (point or volatility) or raise KeyError."""
+    if model_id in MODEL_SPECS:
+        return MODEL_SPECS[model_id]
+    if model_id in VOLATILITY_MODEL_SPECS:
+        return VOLATILITY_MODEL_SPECS[model_id]
+    raise KeyError(
+        f"Unknown model_id '{model_id}'. Registered: {list(MODEL_SPECS.keys()) + list(VOLATILITY_MODEL_SPECS.keys())}"
+    )
+
+
+def get_volatility_model_spec(model_id: str) -> ModelSpec:
+    """Return the Volatility ModelSpec for a registered model_id or raise KeyError."""
+    if model_id not in VOLATILITY_MODEL_SPECS:
+        raise KeyError(f"Unknown volatility model_id '{model_id}'. Registered: {list(VOLATILITY_MODEL_SPECS.keys())}")
+    return VOLATILITY_MODEL_SPECS[model_id]
+
+
+def list_volatility_models() -> List[ModelSpec]:
+    """List all registered ARCH/GARCH volatility models."""
+    return list(VOLATILITY_MODEL_SPECS.values())
 
 
 def list_registered_models(
@@ -291,7 +406,7 @@ def get_available_models() -> List[ModelSpec]:
 
 def get_model_category(display_name: str) -> str:
     """Resolve model category from its display name."""
-    for spec in MODEL_SPECS.values():
+    for spec in ALL_MODEL_SPECS.values():
         if spec.display_name == display_name:
             return spec.category
     return "Time Series"
@@ -362,6 +477,7 @@ class ModelRegistry:
         hyperparameters: Optional[Dict[str, Any]] = None,
         train_start: str = "",
         train_end: str = "",
+        **kwargs: Any,
     ) -> str:
         """Persist model artifact and register metadata."""
         timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
@@ -381,6 +497,7 @@ class ModelRegistry:
             "train_end": train_end,
             "validation_metrics": validation_metrics,
             "hyperparameters": hyperparameters or {},
+            **kwargs,
         }
 
         key = f"{pathogen_slug}::{model_name}"

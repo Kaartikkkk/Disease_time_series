@@ -2,9 +2,9 @@
   "all_pathogens::global_random_forest": {
     "model_name": "global_random_forest",
     "pathogen_slug": "all_pathogens",
-    "filename": "all_pathogens_global_random_forest_20261112_200102.joblib",
-    "file_path": "models/all_pathogens_global_random_forest_20261112_200102.joblib",
-    "created_at_utc": "2026-11-12T20:01:02.725724+00:00",
+    "filename": "all_pathogens_global_random_forest_20261113_062641.joblib",
+    "file_path": "models/all_pathogens_global_random_forest_20261113_062641.joblib",
+    "created_at_utc": "2026-11-13T06:26:41.913552+00:00",
     "train_start": "2015-01-01",
     "train_end": "2024-04-01",
     "validation_metrics": {
@@ -27,14 +27,16 @@
       "max_features": 0.8,
       "random_state": 42,
       "n_jobs": 1
-    }
+    },
+    "dataset_filename": "disease_timeseries_master.csv",
+    "dataset_sha256": "c7bf42422df94183dea06a6c17ada8e784972f24ebefbbc252cb800d660f5d67"
   },
   "all_pathogens::global_xgboost": {
     "model_name": "global_xgboost",
     "pathogen_slug": "all_pathogens",
-    "filename": "all_pathogens_global_xgboost_20261112_200102.joblib",
-    "file_path": "models/all_pathogens_global_xgboost_20261112_200102.joblib",
-    "created_at_utc": "2026-11-12T20:01:02.752379+00:00",
+    "filename": "all_pathogens_global_xgboost_20261113_062641.joblib",
+    "file_path": "models/all_pathogens_global_xgboost_20261113_062641.joblib",
+    "created_at_utc": "2026-11-13T06:26:41.952766+00:00",
     "train_start": "2015-01-01",
     "train_end": "2024-04-01",
     "validation_metrics": {
@@ -60,14 +62,16 @@
       "reg_lambda": 1.5,
       "random_state": 42,
       "n_jobs": 1
-    }
+    },
+    "dataset_filename": "disease_timeseries_master.csv",
+    "dataset_sha256": "c7bf42422df94183dea06a6c17ada8e784972f24ebefbbc252cb800d660f5d67"
   },
   "all_pathogens::hurdle_xgboost": {
     "model_name": "hurdle_xgboost",
     "pathogen_slug": "all_pathogens",
-    "filename": "all_pathogens_hurdle_xgboost_20261112_200102.joblib",
-    "file_path": "models/all_pathogens_hurdle_xgboost_20261112_200102.joblib",
-    "created_at_utc": "2026-11-12T20:01:02.769163+00:00",
+    "filename": "all_pathogens_hurdle_xgboost_20261113_062641.joblib",
+    "file_path": "models/all_pathogens_hurdle_xgboost_20261113_062641.joblib",
+    "created_at_utc": "2026-11-13T06:26:41.981056+00:00",
     "train_start": "2015-01-01",
     "train_end": "2024-04-01",
     "validation_metrics": {
@@ -112,14 +116,16 @@
         "n_jobs": 1
       },
       "threshold": 0.5
-    }
+    },
+    "dataset_filename": "disease_timeseries_master.csv",
+    "dataset_sha256": "c7bf42422df94183dea06a6c17ada8e784972f24ebefbbc252cb800d660f5d67"
   },
   "pyricularia_oryzae::random_forest": {
     "model_name": "random_forest",
     "pathogen_slug": "pyricularia_oryzae",
-    "filename": "pyricularia_oryzae_random_forest_20261112_200102.joblib",
-    "file_path": "models/pyricularia_oryzae_random_forest_20261112_200102.joblib",
-    "created_at_utc": "2026-11-12T20:01:02.817220+00:00",
+    "filename": "pyricularia_oryzae_random_forest_20261113_062642.joblib",
+    "file_path": "models/pyricularia_oryzae_random_forest_20261113_062642.joblib",
+    "created_at_utc": "2026-11-13T06:26:42.062971+00:00",
     "train_start": "2015-01-01",
     "train_end": "2024-04-01",
     "validation_metrics": {
@@ -128,14 +134,16 @@
     "hyperparameters": {
       "n_estimators": 100,
       "max_depth": 6
-    }
+    },
+    "dataset_filename": "disease_timeseries_master.csv",
+    "dataset_sha256": "c7bf42422df94183dea06a6c17ada8e784972f24ebefbbc252cb800d660f5d67"
   },
   "pyricularia_oryzae::xgboost": {
     "model_name": "xgboost",
     "pathogen_slug": "pyricularia_oryzae",
-    "filename": "pyricularia_oryzae_xgboost_20261112_200102.joblib",
-    "file_path": "models/pyricularia_oryzae_xgboost_20261112_200102.joblib",
-    "created_at_utc": "2026-11-12T20:01:02.823740+00:00",
+    "filename": "pyricularia_oryzae_xgboost_20261113_062642.joblib",
+    "file_path": "models/pyricularia_oryzae_xgboost_20261113_062642.joblib",
+    "created_at_utc": "2026-11-13T06:26:42.074105+00:00",
     "train_start": "2015-01-01",
     "train_end": "2024-04-01",
     "validation_metrics": {
@@ -145,14 +153,16 @@
       "n_estimators": 80,
       "max_depth": 4,
       "learning_rate": 0.05
-    }
+    },
+    "dataset_filename": "disease_timeseries_master.csv",
+    "dataset_sha256": "c7bf42422df94183dea06a6c17ada8e784972f24ebefbbc252cb800d660f5d67"
   },
   "puccinia_striiformis::random_forest": {
     "model_name": "random_forest",
     "pathogen_slug": "puccinia_striiformis",
-    "filename": "puccinia_striiformis_random_forest_20261112_200102.joblib",
-    "file_path": "models/puccinia_striiformis_random_forest_20261112_200102.joblib",
-    "created_at_utc": "2026-11-12T20:01:02.860416+00:00",
+    "filename": "puccinia_striiformis_random_forest_20261113_062642.joblib",
+    "file_path": "models/puccinia_striiformis_random_forest_20261113_062642.joblib",
+    "created_at_utc": "2026-11-13T06:26:42.137357+00:00",
     "train_start": "2015-01-01",
     "train_end": "2024-04-01",
     "validation_metrics": {
@@ -161,14 +171,16 @@
     "hyperparameters": {
       "n_estimators": 100,
       "max_depth": 6
-    }
+    },
+    "dataset_filename": "disease_timeseries_master.csv",
+    "dataset_sha256": "c7bf42422df94183dea06a6c17ada8e784972f24ebefbbc252cb800d660f5d67"
   },
   "puccinia_striiformis::xgboost": {
     "model_name": "xgboost",
     "pathogen_slug": "puccinia_striiformis",
-    "filename": "puccinia_striiformis_xgboost_20261112_200102.joblib",
-    "file_path": "models/puccinia_striiformis_xgboost_20261112_200102.joblib",
-    "created_at_utc": "2026-11-12T20:01:02.865707+00:00",
+    "filename": "puccinia_striiformis_xgboost_20261113_062642.joblib",
+    "file_path": "models/puccinia_striiformis_xgboost_20261113_062642.joblib",
+    "created_at_utc": "2026-11-13T06:26:42.146782+00:00",
     "train_start": "2015-01-01",
     "train_end": "2024-04-01",
     "validation_metrics": {
@@ -178,14 +190,16 @@
       "n_estimators": 80,
       "max_depth": 4,
       "learning_rate": 0.05
-    }
+    },
+    "dataset_filename": "disease_timeseries_master.csv",
+    "dataset_sha256": "c7bf42422df94183dea06a6c17ada8e784972f24ebefbbc252cb800d660f5d67"
   },
   "ralstonia_solanacearum::random_forest": {
     "model_name": "random_forest",
     "pathogen_slug": "ralstonia_solanacearum",
-    "filename": "ralstonia_solanacearum_random_forest_20261112_200102.joblib",
-    "file_path": "models/ralstonia_solanacearum_random_forest_20261112_200102.joblib",
-    "created_at_utc": "2026-11-12T20:01:02.905592+00:00",
+    "filename": "ralstonia_solanacearum_random_forest_20261113_062642.joblib",
+    "file_path": "models/ralstonia_solanacearum_random_forest_20261113_062642.joblib",
+    "created_at_utc": "2026-11-13T06:26:42.214451+00:00",
     "train_start": "2015-01-01",
     "train_end": "2024-04-01",
     "validation_metrics": {
@@ -194,14 +208,16 @@
     "hyperparameters": {
       "n_estimators": 100,
       "max_depth": 6
-    }
+    },
+    "dataset_filename": "disease_timeseries_master.csv",
+    "dataset_sha256": "c7bf42422df94183dea06a6c17ada8e784972f24ebefbbc252cb800d660f5d67"
   },
   "ralstonia_solanacearum::xgboost": {
     "model_name": "xgboost",
     "pathogen_slug": "ralstonia_solanacearum",
-    "filename": "ralstonia_solanacearum_xgboost_20261112_200102.joblib",
-    "file_path": "models/ralstonia_solanacearum_xgboost_20261112_200102.joblib",
-    "created_at_utc": "2026-11-12T20:01:02.911615+00:00",
+    "filename": "ralstonia_solanacearum_xgboost_20261113_062642.joblib",
+    "file_path": "models/ralstonia_solanacearum_xgboost_20261113_062642.joblib",
+    "created_at_utc": "2026-11-13T06:26:42.224488+00:00",
     "train_start": "2015-01-01",
     "train_end": "2024-04-01",
     "validation_metrics": {
@@ -211,14 +227,16 @@
       "n_estimators": 80,
       "max_depth": 4,
       "learning_rate": 0.05
-    }
+    },
+    "dataset_filename": "disease_timeseries_master.csv",
+    "dataset_sha256": "c7bf42422df94183dea06a6c17ada8e784972f24ebefbbc252cb800d660f5d67"
   },
   "all_pathogens::gru": {
     "model_name": "gru",
     "pathogen_slug": "all_pathogens",
-    "filename": "all_pathogens_gru_20261112_200102.joblib",
-    "file_path": "models/all_pathogens_gru_20261112_200102.joblib",
-    "created_at_utc": "2026-11-12T20:01:02.918656+00:00",
+    "filename": "all_pathogens_gru_20261113_062642.joblib",
+    "file_path": "models/all_pathogens_gru_20261113_062642.joblib",
+    "created_at_utc": "2026-11-13T06:26:42.228398+00:00",
     "train_start": "2015-01-01",
     "train_end": "2024-04-01",
     "validation_metrics": {
@@ -238,14 +256,16 @@
       "hidden_units": 8,
       "lookback": 12,
       "learning_rate": 0.003
-    }
+    },
+    "dataset_filename": "disease_timeseries_master.csv",
+    "dataset_sha256": "c7bf42422df94183dea06a6c17ada8e784972f24ebefbbc252cb800d660f5d67"
   },
   "all_pathogens::lstm": {
     "model_name": "lstm",
     "pathogen_slug": "all_pathogens",
-    "filename": "all_pathogens_lstm_20261112_200102.joblib",
-    "file_path": "models/all_pathogens_lstm_20261112_200102.joblib",
-    "created_at_utc": "2026-11-12T20:01:02.919449+00:00",
+    "filename": "all_pathogens_lstm_20261113_062642.joblib",
+    "file_path": "models/all_pathogens_lstm_20261113_062642.joblib",
+    "created_at_utc": "2026-11-13T06:26:42.229899+00:00",
     "train_start": "2015-01-01",
     "train_end": "2024-04-01",
     "validation_metrics": {
@@ -265,7 +285,9 @@
       "hidden_units": 16,
       "lookback": 12,
       "learning_rate": 0.01
-    }
+    },
+    "dataset_filename": "disease_timeseries_master.csv",
+    "dataset_sha256": "c7bf42422df94183dea06a6c17ada8e784972f24ebefbbc252cb800d660f5d67"
   },
   "pyricularia_oryzae::ar": {
     "model_name": "ar",

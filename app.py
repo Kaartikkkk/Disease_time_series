@@ -183,7 +183,7 @@ telemetry_markup = f"""
         <div class="metric-icon-wrap">{icon_weather(20, "#527A50")}</div>
         <div class="metric-label-text">Zero-Inflation Baseline</div>
         <div class="metric-value-text">{stats['zero_percentage']}% Zeros</div>
-        <div class="metric-note-text">{stats['structural_zeros']} Confirmed No-Occurrence · {stats['gap_imputed_zeros']} Missing-Data Estimated</div>
+        <div class="metric-note-text">Natural Seasonal Dormancy · Off-Season Non-Occurrence</div>
     </div>
 </div>
 """

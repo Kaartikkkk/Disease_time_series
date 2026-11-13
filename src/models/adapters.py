@@ -27,6 +27,7 @@ from src.models.machine_learning.global_models import (
 from src.models.deep_learning.lstm_model import HAS_TORCH, forecast_lstm
 from src.models.deep_learning.gru_model import forecast_gru
 from src.models.probabilistic.prophet_model import HAS_PROPHET, forecast_prophet
+from src.models.volatility.arch_garch_model import ARCHGARCHModel
 
 
 def _extract_exog(ctx: ForecastContext) -> Tuple[Optional[pd.DataFrame], Optional[pd.DataFrame]]:
@@ -463,6 +464,76 @@ def adapt_gru(ctx: ForecastContext) -> Dict[str, Any]:
     )
     out["metadata"]["diagnostics"] = diagnostics
     return out
+
+
+# ------------------------------------------------------------------------------
+# ARCH and GARCH Volatility Adapters
+# ------------------------------------------------------------------------------
+
+def _adapt_volatility_model(ctx: ForecastContext, p: int, q: int, spec_name: str) -> Dict[str, Any]:
+    """Helper connecting ARCH/GARCH uncertainty model to standard ForecastContext."""
+    dist = str(ctx.config.get("dist", "StudentsT"))
+    approach = str(ctx.config.get("approach", "approach_a"))
+    arima_order = ctx.config.get("arima_order", (1, 0, 1))
+
+    y_vals = ctx.train_df[ctx.target_col].values
+    model = ARCHGARCHModel(p=p, q=q, dist=dist, approach=approach, arima_order=arima_order)
+    res = model.fit(y_vals)
+    fcast = model.forecast(horizon=ctx.horizon)
+
+    param_summary = ", ".join([f"{k}={v:.3f}" for k, v in list(res.params.items())[:4]])
+    out = _build_output(
+        preds=fcast.mean_forecast,
+        lb=fcast.lower_bound,
+        ub=fcast.upper_bound,
+        model_name=spec_name,
+        parameters=f"{spec_name} ({dist}, {approach.replace('_', ' ').title()}; {param_summary})",
+        model_family="Conditional Volatility (ARCH/GARCH)",
+        fitted_model=res,
+    )
+    out["metadata"].update({
+        "p": p,
+        "q": q,
+        "dist": dist,
+        "approach": approach,
+        "variance_forecast": fcast.variance_forecast.tolist(),
+        "volatility_forecast": fcast.volatility_forecast.tolist(),
+        "aic": res.aic,
+        "bic": res.bic,
+        "log_likelihood": res.log_likelihood,
+        "arch_lm_pvalue": res.arch_lm_pvalue,
+        "converged": res.converged,
+    })
+    return out
+
+
+def adapt_arch_1(ctx: ForecastContext) -> Dict[str, Any]:
+    return _adapt_volatility_model(ctx, p=1, q=0, spec_name="ARCH(1)")
+
+
+def adapt_arch_2(ctx: ForecastContext) -> Dict[str, Any]:
+    return _adapt_volatility_model(ctx, p=2, q=0, spec_name="ARCH(2)")
+
+
+def adapt_arch_5(ctx: ForecastContext) -> Dict[str, Any]:
+    return _adapt_volatility_model(ctx, p=5, q=0, spec_name="ARCH(5)")
+
+
+def adapt_garch_1_1(ctx: ForecastContext) -> Dict[str, Any]:
+    return _adapt_volatility_model(ctx, p=1, q=1, spec_name="GARCH(1,1)")
+
+
+def adapt_garch_1_2(ctx: ForecastContext) -> Dict[str, Any]:
+    return _adapt_volatility_model(ctx, p=1, q=2, spec_name="GARCH(1,2)")
+
+
+def adapt_garch_2_1(ctx: ForecastContext) -> Dict[str, Any]:
+    return _adapt_volatility_model(ctx, p=2, q=1, spec_name="GARCH(2,1)")
+
+
+def adapt_garch_2_2(ctx: ForecastContext) -> Dict[str, Any]:
+    return _adapt_volatility_model(ctx, p=2, q=2, spec_name="GARCH(2,2)")
+
 
 
 

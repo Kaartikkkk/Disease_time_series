@@ -49,11 +49,12 @@ def forecast_arimax(
     fut_exog_data = None
     if train_exog is not None and not train_exog.empty:
         scaler = StandardScaler()
-        clean_train_exog = train_exog.bfill().ffill().fillna(0)
+        clean_train_exog = train_exog.ffill().bfill().fillna(0)
         exog_data = scaler.fit_transform(clean_train_exog)
 
         if future_exog is not None and not future_exog.empty:
-            clean_fut_exog = future_exog.bfill().ffill().fillna(0)
+            train_medians = clean_train_exog.median()
+            clean_fut_exog = future_exog.ffill().fillna(train_medians).fillna(0)
             fut_exog_data = scaler.transform(clean_fut_exog)
 
     selected_order = order

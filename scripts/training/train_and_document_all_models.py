@@ -38,7 +38,7 @@ from src.model_registry import MODEL_SPECS, run_registered_model
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger("model_trainer")
 
-IMPROVED_DATA_PATH = Path("data/processed/improved_india_plant_diseases_monthly.csv")
+IMPROVED_DATA_PATH = Path("data/disease_timeseries_master.csv")
 OUTPUT_REGISTRY_PATH = Path("data/processed/model_training_and_validation_registry.json")
 
 # Evaluation Windows (Strictly chronological, zero future leakage)

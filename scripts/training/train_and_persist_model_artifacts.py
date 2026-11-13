@@ -37,7 +37,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 logger = logging.getLogger("artifact_trainer")
 
 PROCESSED_DIR = Path("data/processed")
-DATA_PATH = PROCESSED_DIR / "improved_india_plant_diseases_monthly.csv"
+DATA_PATH = Path("data/disease_timeseries_master.csv")
 MODELS_DIR = Path("models")
 REGISTRY_JSON = PROCESSED_DIR / "model_training_and_validation_registry.json"
 
@@ -102,6 +102,8 @@ def main():
         hyperparameters=DEFAULT_GLOBAL_RF_PARAMS,
         train_start="2015-01-01",
         train_end="2024-04-01",
+        dataset_filename="disease_timeseries_master.csv",
+        dataset_sha256="c7bf42422df94183dea06a6c17ada8e784972f24ebefbbc252cb800d660f5d67",
     )
     logger.info("Saved Global Random Forest artifact (%.2fs)", rf_dur)
 
@@ -118,6 +120,8 @@ def main():
         hyperparameters=DEFAULT_GLOBAL_XGB_PARAMS,
         train_start="2015-01-01",
         train_end="2024-04-01",
+        dataset_filename="disease_timeseries_master.csv",
+        dataset_sha256="c7bf42422df94183dea06a6c17ada8e784972f24ebefbbc252cb800d660f5d67",
     )
     logger.info("Saved Global XGBoost artifact (%.2fs)", xgb_dur)
 
@@ -156,6 +160,8 @@ def main():
         },
         train_start="2015-01-01",
         train_end="2024-04-01",
+        dataset_filename="disease_timeseries_master.csv",
+        dataset_sha256="c7bf42422df94183dea06a6c17ada8e784972f24ebefbbc252cb800d660f5d67",
     )
     logger.info("Saved Hurdle XGBoost artifact (%.2fs)", hurdle_dur)
 
@@ -177,6 +183,8 @@ def main():
             hyperparameters={"n_estimators": 100, "max_depth": 6},
             train_start="2015-01-01",
             train_end="2024-04-01",
+            dataset_filename="disease_timeseries_master.csv",
+            dataset_sha256="c7bf42422df94183dea06a6c17ada8e784972f24ebefbbc252cb800d660f5d67",
         )
 
         # Local XGBoost
@@ -190,6 +198,8 @@ def main():
             hyperparameters={"n_estimators": 80, "max_depth": 4, "learning_rate": 0.05},
             train_start="2015-01-01",
             train_end="2024-04-01",
+            dataset_filename="disease_timeseries_master.csv",
+            dataset_sha256="c7bf42422df94183dea06a6c17ada8e784972f24ebefbbc252cb800d660f5d67",
         )
 
     # 4. Save Deep Learning Checkpoints (LSTM & GRU)
@@ -206,6 +216,8 @@ def main():
         hyperparameters={"hidden_units": 8, "lookback": 12, "learning_rate": 0.003},
         train_start="2015-01-01",
         train_end="2024-04-01",
+        dataset_filename="disease_timeseries_master.csv",
+        dataset_sha256="c7bf42422df94183dea06a6c17ada8e784972f24ebefbbc252cb800d660f5d67",
     )
 
     lstm_net = _LSTMNet(hidden_size=16, dropout=0.0)
@@ -217,11 +229,22 @@ def main():
         hyperparameters={"hidden_units": 16, "lookback": 12, "learning_rate": 0.01},
         train_start="2015-01-01",
         train_end="2024-04-01",
+        dataset_filename="disease_timeseries_master.csv",
+        dataset_sha256="c7bf42422df94183dea06a6c17ada8e784972f24ebefbbc252cb800d660f5d67",
     )
 
     logger.info("All model artifacts successfully trained and registered in %s", MODELS_DIR)
     models_saved = registry.list_models()
     logger.info("Total registered model checkpoints: %d", len(models_saved))
+
+    # Mirror artifacts to artifacts/trained_models
+    import shutil
+    artifacts_models_dir = Path("artifacts/trained_models")
+    if artifacts_models_dir.exists():
+        for src_file in MODELS_DIR.glob("*"):
+            if src_file.is_file():
+                shutil.copy2(src_file, artifacts_models_dir / src_file.name)
+        logger.info("Mirrored all model checkpoints and metadata to %s", artifacts_models_dir)
 
 
 if __name__ == "__main__":

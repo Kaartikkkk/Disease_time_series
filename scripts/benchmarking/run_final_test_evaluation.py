@@ -49,8 +49,8 @@ from src.model_policy import get_assigned_model, load_model_selection_policy
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger("final_test_evaluation")
 
-IMPROVED_DATA_PATH = Path("data/processed/improved_india_plant_diseases_monthly.csv")
-DATA_PATH = IMPROVED_DATA_PATH if IMPROVED_DATA_PATH.exists() else Path("data/processed/india_plant_diseases_monthly.csv")
+IMPROVED_DATA_PATH = Path("data/disease_timeseries_master.csv")
+DATA_PATH = IMPROVED_DATA_PATH
 RESULTS_OUTPUT_PATH = Path("data/processed/final_test_evaluation_results.json")
 CSV_OUTPUT_PATH = Path("data/processed/final_test_step_predictions.csv")
 

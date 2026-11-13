@@ -22,7 +22,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 logger = logging.getLogger("registry_builder")
 
 PROCESSED_DIR = Path("data/processed")
-IMPROVED_DATA_PATH = PROCESSED_DIR / "improved_india_plant_diseases_monthly.csv"
+IMPROVED_DATA_PATH = Path("data/disease_timeseries_master.csv")
 FINAL_TEST_CSV = PROCESSED_DIR / "final_test_step_predictions.csv"
 MULTI_ORIGIN_JSON = PROCESSED_DIR / "multi_origin_validation_results.json"
 FINAL_COMP_JSON = PROCESSED_DIR / "FINAL_MODEL_COMPARISON_RESULTS.json"
@@ -456,6 +456,9 @@ def generate_master_registry():
         "metadata": {
             "title": "Master Model Training, Parameter & Validation Registry",
             "dataset_version": "Improved Original Dataset v2.0 (2015-2025)",
+            "dataset_filename": "disease_timeseries_master.csv",
+            "dataset_sha256": "c7bf42422df94183dea06a6c17ada8e784972f24ebefbbc252cb800d660f5d67",
+            "active_master_dataset": "data/disease_timeseries_master.csv",
             "source_foundation": "GBIF Occurrence Records + EPPO Reporting + NASA POWER Agro-Climatology",
             "historical_date_range": "2015-01-01 to 2025-12-01 (11 Years / 132 Months)",
             "pathogens_evaluated": len(pathogens),
@@ -614,6 +617,12 @@ def generate_master_registry():
     logger.info("Writing master registry to %s...", OUTPUT_REGISTRY_JSON)
     with open(OUTPUT_REGISTRY_JSON, "w", encoding="utf-8") as f:
         json.dump(registry, f, indent=2)
+
+    metrics_artifact_path = Path("artifacts/metrics/model_training_and_validation_registry.json")
+    if metrics_artifact_path.parent.exists():
+        with open(metrics_artifact_path, "w", encoding="utf-8") as f:
+            json.dump(registry, f, indent=2)
+        logger.info("Mirrored master registry to %s", metrics_artifact_path)
 
     logger.info("Successfully generated master registry with %d models.", len(registry["models"]))
     return registry

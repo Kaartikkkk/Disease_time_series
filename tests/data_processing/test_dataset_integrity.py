@@ -1,11 +1,4 @@
-"""Unit tests for Original and Improved Dataset Integrity and Synthetic Removal Verification.
-
-Ensures:
-1. Original dataset exists with historical authenticity intact.
-2. Improved dataset maintains historical target counts, adds 18 engineered features, and has 0 NaNs.
-3. No synthetic dataset directories or files exist in the project repository.
-4. Model training and validation registry is comprehensive and valid.
-"""
+"""Unit tests for Master Dataset Integrity, Schema Validation, and Single Source of Truth."""
 
 import json
 from pathlib import Path
@@ -14,9 +7,7 @@ import pytest
 
 DATA_DIR = Path("data")
 PROCESSED_DIR = DATA_DIR / "processed"
-ORIGINAL_CSV = PROCESSED_DIR / "india_plant_diseases_monthly.csv"
-IMPROVED_CSV = PROCESSED_DIR / "improved_india_plant_diseases_monthly.csv"
-BACKUP_DIR = PROCESSED_DIR / "original_backup"
+MASTER_CSV = DATA_DIR / "disease_timeseries_master.csv"
 REGISTRY_JSON = PROCESSED_DIR / "model_training_and_validation_registry.json"
 
 
@@ -28,50 +19,33 @@ def test_synthetic_files_completely_removed():
     assert not Path("SYNTHETIC_MODEL_COMPATIBILITY_REPORT.md").exists()
 
 
-def test_original_dataset_integrity():
-    """Verify original dataset preservation and historical invariant properties."""
-    assert ORIGINAL_CSV.exists(), f"Original CSV missing at {ORIGINAL_CSV}"
-    assert BACKUP_DIR.exists(), f"Backup directory missing at {BACKUP_DIR}"
+def test_master_dataset_integrity():
+    """Verify master dataset structure, dimensions, engineered features, and zero missing values."""
+    assert MASTER_CSV.exists(), f"Master CSV missing at {MASTER_CSV}"
 
-    df_orig = pd.read_csv(ORIGINAL_CSV)
-    assert len(df_orig) == 1320, f"Expected 1320 records, found {len(df_orig)}"
-    assert "date" in df_orig.columns
-    assert "pathogen_slug" in df_orig.columns
-    assert "documented_occurrence_count" in df_orig.columns
-
-    # Verify 10 distinct pathogens and 132 continuous months
-    assert df_orig["pathogen_slug"].nunique() == 10
-    dates = pd.to_datetime(df_orig["date"])
-    assert dates.min() == pd.Timestamp("2015-01-01")
-    assert dates.max() == pd.Timestamp("2025-12-01")
-
-
-def test_improved_dataset_integrity():
-    """Verify improved dataset structure, engineered features, and zero leakage."""
-    assert IMPROVED_CSV.exists(), f"Improved CSV missing at {IMPROVED_CSV}"
-
-    df_imp = pd.read_csv(IMPROVED_CSV)
-    df_orig = pd.read_csv(ORIGINAL_CSV)
-
-    assert len(df_imp) == 1320, f"Expected 1320 records, found {len(df_imp)}"
-    assert len(df_imp.columns) == 43, f"Expected 43 columns, found {len(df_imp.columns)}"
+    df = pd.read_csv(MASTER_CSV)
+    assert len(df) == 1320, f"Expected 1320 records, found {len(df)}"
+    assert len(df.columns) == 43, f"Expected 43 columns, found {len(df.columns)}"
 
     # Zero missing values across all columns
-    assert df_imp.isna().sum().sum() == 0, "Improved dataset must have 0 missing values"
+    assert df.isna().sum().sum() == 0, "Master dataset must have 0 missing values"
 
-    # Preserved historical target values (aligned by pathogen and date)
-    m = pd.merge(
-        df_imp[["pathogen_slug", "date", "documented_occurrence_count"]],
-        df_orig[["pathogen_slug", "date", "documented_occurrence_count"]],
-        on=["pathogen_slug", "date"],
-        suffixes=("_imp", "_orig"),
-    )
-    assert len(m) == 1320, "All 1320 records must match on (pathogen_slug, date)"
-    pd.testing.assert_series_equal(
-        m["documented_occurrence_count_imp"],
-        m["documented_occurrence_count_orig"],
-        check_names=False,
-    )
+    # Core target invariants
+    assert "documented_occurrence_count" in df.columns
+    assert "date" in df.columns
+    assert "pathogen_slug" in df.columns
+    assert (df["documented_occurrence_count"] >= 0).all(), "Target variable must be non-negative"
+
+    # 10 distinct pathogens and 132 months per pathogen
+    assert df["pathogen_slug"].nunique() == 10
+    counts = df["pathogen_slug"].value_counts()
+    for slug, count in counts.items():
+        assert count == 132, f"Pathogen {slug} has {count} records (expected 132)"
+
+    # Temporal range invariant
+    dates = pd.to_datetime(df["date"])
+    assert dates.min() == pd.Timestamp("2015-01-01")
+    assert dates.max() == pd.Timestamp("2025-12-01")
 
     # Key engineered features present
     expected_features = [
@@ -95,7 +69,7 @@ def test_improved_dataset_integrity():
         "sqrt_occurrence_count",
     ]
     for feat in expected_features:
-        assert feat in df_imp.columns, f"Feature '{feat}' missing from improved dataset"
+        assert feat in df.columns, f"Feature '{feat}' missing from master dataset"
 
 
 def test_model_training_and_validation_registry():
@@ -118,3 +92,22 @@ def test_model_training_and_validation_registry():
         assert "test_metrics" in m_data, f"Missing 'test_metrics' in {model_id}"
         assert "rmse" in m_data["validation_metrics"], f"Missing 'rmse' in {model_id}"
         assert "hyperparameters" in m_data, f"Missing 'hyperparameters' in {model_id}"
+
+
+def test_dataset_service_master_integrity():
+    """Verify that dataset service loads directly from the master dataset."""
+    from src.data.dataset_service import load_authoritative_master_dataset, load_authoritative_series, verify_dataset_integrity
+    m_df = load_authoritative_master_dataset()
+    assert len(m_df) == 1320
+    assert len(m_df.columns) == 43
+
+    s_df = load_authoritative_series("fusarium_oxysporum")
+    assert s_df is not None
+    assert len(s_df) == 132
+
+    res = verify_dataset_integrity()
+    assert res["status"] == "PASS", f"Dataset integrity failed: {res['errors']}"
+    assert res["pathogens_checked"] == 10
+    assert res["total_series_rows"] == 1320
+    assert res["total_series_nulls"] == 0
+

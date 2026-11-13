@@ -77,7 +77,7 @@ DEFAULT_HURDLE_REG_PARAMS: Dict[str, Any] = {
     "n_jobs": 1,
 }
 
-MASTER_PANEL_PATH = Path("data/processed/india_plant_diseases_monthly.csv")
+MASTER_PANEL_PATH = Path("data/disease_timeseries_master.csv")
 
 
 def build_global_panel_features(
@@ -168,11 +168,7 @@ def _load_historical_panel(train_df: pd.DataFrame, target_col: str) -> Tuple[pd.
         else "target_series"
     )
 
-    panel_candidate = (
-        Path("data/processed/improved_india_plant_diseases_monthly.csv")
-        if Path("data/processed/improved_india_plant_diseases_monthly.csv").exists()
-        else MASTER_PANEL_PATH
-    )
+    panel_candidate = MASTER_PANEL_PATH
     if panel_candidate.exists():
         try:
             mdf = pd.read_csv(panel_candidate)
@@ -222,7 +218,11 @@ def forecast_global_xgboost(
     if exclude_pathogen_id:
         feature_cols = [c for c in feature_cols if not c.startswith("is_")]
 
-    clean_train = feat_panel.dropna(subset=feature_cols + [target_col]).copy()
+    target_lags = [c for c in feature_cols if c.startswith("lag_")]
+    clean_train = feat_panel.dropna(subset=target_lags + [target_col]).copy()
+    # Handle missing weather features with training-only median imputation
+    clean_train[feature_cols] = clean_train[feature_cols].fillna(clean_train[feature_cols].median())
+
     if len(clean_train) < 12:
         raise ValueError(f"Insufficient training observations ({len(clean_train)}) for Global XGBoost.")
 
@@ -272,9 +272,12 @@ def forecast_global_xgboost(
         # Weather features
         for w_col in ("temp_mean_c_lag1", "precipitation_monthly_mm_lag1", "relative_humidity_pct_lag1"):
             if future_weather_df is not None and w_col in future_weather_df.columns and len(future_weather_df) >= step:
-                row_dict[w_col] = float(future_weather_df[w_col].iloc[step - 1])
+                w_val = future_weather_df[w_col].iloc[step - 1]
+                if pd.isna(w_val):
+                    w_val = float(clean_train[w_col].median() if w_col in clean_train.columns else 0.0)
+                row_dict[w_col] = float(w_val)
             else:
-                row_dict[w_col] = float(clean_train[w_col].mean()) if w_col in clean_train.columns else 0.0
+                row_dict[w_col] = float(clean_train[w_col].median()) if w_col in clean_train.columns else 0.0
 
         for s in all_slugs:
             row_dict[f"is_{s}"] = 1.0 if s == target_slug else 0.0
@@ -336,7 +339,10 @@ def forecast_global_random_forest(
     if exclude_pathogen_id:
         feature_cols = [c for c in feature_cols if not c.startswith("is_")]
 
-    clean_train = feat_panel.dropna(subset=feature_cols + [target_col]).copy()
+    target_lags = [c for c in feature_cols if c.startswith("lag_")]
+    clean_train = feat_panel.dropna(subset=target_lags + [target_col]).copy()
+    clean_train[feature_cols] = clean_train[feature_cols].fillna(clean_train[feature_cols].median())
+
     if len(clean_train) < 12:
         raise ValueError(f"Insufficient training observations ({len(clean_train)}) for Global Random Forest.")
 
@@ -375,9 +381,12 @@ def forecast_global_random_forest(
 
         for w_col in ("temp_mean_c_lag1", "precipitation_monthly_mm_lag1", "relative_humidity_pct_lag1"):
             if future_weather_df is not None and w_col in future_weather_df.columns and len(future_weather_df) >= step:
-                row_dict[w_col] = float(future_weather_df[w_col].iloc[step - 1])
+                w_val = future_weather_df[w_col].iloc[step - 1]
+                if pd.isna(w_val):
+                    w_val = float(clean_train[w_col].median() if w_col in clean_train.columns else 0.0)
+                row_dict[w_col] = float(w_val)
             else:
-                row_dict[w_col] = float(clean_train[w_col].mean()) if w_col in clean_train.columns else 0.0
+                row_dict[w_col] = float(clean_train[w_col].median()) if w_col in clean_train.columns else 0.0
 
         for s in all_slugs:
             row_dict[f"is_{s}"] = 1.0 if s == target_slug else 0.0
@@ -427,7 +436,10 @@ def forecast_hurdle_xgboost(
     panel_slice, target_slug = _load_historical_panel(train_df, target_col)
     feat_panel, feature_cols = build_global_panel_features(panel_slice, target_col=target_col)
 
-    clean_train = feat_panel.dropna(subset=feature_cols + [target_col]).copy()
+    target_lags = [c for c in feature_cols if c.startswith("lag_")]
+    clean_train = feat_panel.dropna(subset=target_lags + [target_col]).copy()
+    clean_train[feature_cols] = clean_train[feature_cols].fillna(clean_train[feature_cols].median())
+
     if len(clean_train) < 12:
         raise ValueError(f"Insufficient training observations ({len(clean_train)}) for Hurdle XGBoost.")
 
@@ -503,9 +515,12 @@ def forecast_hurdle_xgboost(
         for w_col in ("temp_mean_c_lag1", "precipitation_monthly_mm_lag1", "relative_humidity_pct_lag1"):
             if w_col in feature_cols:
                 if future_weather_df is not None and w_col in future_weather_df.columns and len(future_weather_df) >= step:
-                    row_vals.append(float(future_weather_df[w_col].iloc[step - 1]))
+                    w_val = future_weather_df[w_col].iloc[step - 1]
+                    if pd.isna(w_val):
+                        w_val = float(clean_train[w_col].median() if w_col in clean_train.columns else 0.0)
+                    row_vals.append(float(w_val))
                 else:
-                    row_vals.append(float(clean_train[w_col].mean()) if w_col in clean_train.columns else 0.0)
+                    row_vals.append(float(clean_train[w_col].median()) if w_col in clean_train.columns else 0.0)
 
         for s in all_slugs:
             row_vals.append(1.0 if s == target_slug else 0.0)

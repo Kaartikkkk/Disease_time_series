@@ -52,7 +52,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 logger = logging.getLogger("master_optimization")
 
 PROCESSED_DIR = REPO_ROOT / "data" / "processed"
-DATA_PATH = PROCESSED_DIR / "improved_india_plant_diseases_monthly.csv"
+DATA_PATH = Path("data/disease_timeseries_master.csv")
 
 VALIDATION_ORIGINS = [
     {"name": "Origin 1", "train_end": "2022-08-01", "eval_start": "2022-09-01", "eval_end": "2023-02-01", "horizon": 6},

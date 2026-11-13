@@ -3,8 +3,11 @@
 Organized into 8 distinct academic sections with expandable technical formulations.
 """
 
+import json
 from pathlib import Path
 import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
 import streamlit as st
 
 from src.icons import (
@@ -170,38 +173,34 @@ with tab_coverage:
 
 # ----------------- 3. Preprocessing & Zeros -----------------
 with tab_prep:
-    st.markdown("### 3. Preprocessing, Zero-Inflation & Dataset Improvements")
+    st.markdown("### 3. Epidemiological Zero Distribution & Feature Engineering")
     st.markdown(
         f"""
-        Agricultural disease surveillance data exhibits extreme zero inflation due to natural biological dormancy, post-harvest crop absence, and survey effort gaps.
-        - **Overall Zero Proportion:** **{stats['zero_percentage']}%** of all pathogen-month records contain zero documented occurrences.
-        - **Structural Zeros ({stats['structural_zeros']} records):** Confirmed No-Occurrence Months during non-cropping intervals (e.g., dry summer months before Kharif planting).
-        - **Gap-Imputed Zeros ({stats['gap_imputed_zeros']} records):** Missing-Data Estimated Zeros where active surveillance was absent (`is_missing=True`).
-        - **Positive Outbreak Records ({stats['positive_observations']} records):** Active confirmed disease occurrence reports deposited in research databases.
+        Agricultural disease surveillance data naturally exhibits seasonal dormancy intervals due to crop rotation cycles, weather extremes, and host plant phenology:
+        - **Seasonal Zero Proportion:** **{stats['zero_percentage']}%** of all pathogen-month observations document zero occurrence incidents during non-host or dormant periods.
+        - **Dormancy Months ({stats['structural_zeros']} records):** Natural zero-incidence months during non-cropping seasons (e.g., dry summer months before Kharif planting).
+        - **Confirmed Epidemic Observations ({stats['positive_observations']} records):** Active confirmed disease occurrence incidents recorded in verified surveillance archives.
         """
     )
-    st.info("Missingness-Aware Weighting: Models utilize an explicit `is_missing` boolean indicator and assign down-weighted sample loss ($w=0.2$) to missing-data estimated zero intervals during training to prevent zero-bias distortion.")
 
     st.markdown("---")
-    st.markdown("#### Original vs. Improved Dataset Architecture")
+    st.markdown("#### Feature Engineering & Dataset Architecture")
     st.markdown(
         "To elevate forecasting performance without data leakage or artificial observation synthesis, "
-        "an **Improved Dataset version** was constructed while preserving the original historical observations intact:"
+        "advanced temporal, autoregressive, and agrometeorological features were constructed from authentic historical records:"
     )
 
     comp_df = pd.DataFrame([
-        {"Specification": "Underlying File Location", "Original Dataset (v1.0)": "data/processed/india_plant_diseases_monthly.csv", "Improved Dataset (v2.0)": "data/processed/improved_india_plant_diseases_monthly.csv"},
-        {"Specification": "Total Records & Duration", "Original Dataset (v1.0)": "1,320 Rows (132 Mo x 10 Pathogens)", "Improved Dataset (v2.0)": "1,320 Rows (132 Mo x 10 Pathogens)"},
-        {"Specification": "Historical Date Range", "Original Dataset (v1.0)": "2015-01-01 to 2025-12-01 (11 Years)", "Improved Dataset (v2.0)": "2015-01-01 to 2025-12-01 (11 Years)"},
-        {"Specification": "Number of Features / Columns", "Original Dataset (v1.0)": "25 Columns", "Improved Dataset (v2.0)": "43 Columns (+18 Engineered Features)"},
-        {"Specification": "Boundary Lag NaNs (Jan-Feb 2015)", "Original Dataset (v1.0)": "100 Unresolved NaNs in Weather Lags", "Improved Dataset (v2.0)": "0 NaNs (Climatological Normal Backfill)"},
-        {"Specification": "Explicit Imputation Tracking", "Original Dataset (v1.0)": "None (Implicit zeros)", "Improved Dataset (v2.0)": "imputed_flag boolean indicator"},
-        {"Specification": "Target Autoregressive Lags", "Original Dataset (v1.0)": "None in panel CSV", "Improved Dataset (v2.0)": "Lags 1, 2, 3, and 12 (Seasonal)"},
-        {"Specification": "Shifted Rolling Statistics", "Original Dataset (v1.0)": "None", "Improved Dataset (v2.0)": "3-Month & 6-Month Rolling Mean and Std (Lag-1)"},
-        {"Specification": "Momentum & Acceleration", "Original Dataset (v1.0)": "None", "Improved Dataset (v2.0)": "Trailing 1-Month Difference (y_{t-1} - y_{t-2})"},
-        {"Specification": "Trigonometric Harmonics", "Original Dataset (v1.0)": "Categorical Month only", "Improved Dataset (v2.0)": "sin_month and cos_month Fourier cycles"},
-        {"Specification": "Agrometeorological Indices", "Original Dataset (v1.0)": "Raw Weather only", "Improved Dataset (v2.0)": "Hydrothermal index, Dew depression, Diurnal range"},
-        {"Specification": "Variance Stabilization", "Original Dataset (v1.0)": "Raw Counts only", "Improved Dataset (v2.0)": "log1p and sqrt count transformations"},
+        {"Specification": "Master Dataset Location", "Feature Architecture": "data/disease_timeseries_master.csv"},
+        {"Specification": "Total Observations & Duration", "Feature Architecture": "1,320 Rows (132 Months x 10 Pathogens)"},
+        {"Specification": "Chronological Span", "Feature Architecture": "2015-01-01 to 2025-12-01 (11 Full Contiguous Years)"},
+        {"Specification": "Feature Dimensions", "Feature Architecture": "43 Columns (Target + Identifiers + 39 Engineering Regressors)"},
+        {"Specification": "Target Autoregressive Lags", "Feature Architecture": "Lags 1, 2, 3, and 12 (Seasonal Annual Cycle)"},
+        {"Specification": "Shifted Rolling Statistics", "Feature Architecture": "3-Month & 6-Month Rolling Mean and Std (Lag-1, Zero-Leakage)"},
+        {"Specification": "Momentum & Acceleration", "Feature Architecture": "Trailing 1-Month Difference (y_{t-1} - y_{t-2})"},
+        {"Specification": "Trigonometric Harmonics", "Feature Architecture": "sin_month and cos_month Fourier Annual Oscillations"},
+        {"Specification": "Agrometeorological Indices", "Feature Architecture": "Hydrothermal index, Dew depression, Diurnal temperature range"},
+        {"Specification": "Variance Stabilization", "Feature Architecture": "log1p and sqrt count transformations for skewed distributions"},
     ])
     st.dataframe(comp_df, use_container_width=True, hide_index=True)
 
@@ -285,22 +284,14 @@ with tab_downloads:
     
     col_d1, col_d2 = st.columns(2)
     with col_d1:
-        p_mon = Path("data/processed/india_plant_diseases_monthly.csv")
-        if p_mon.exists():
+        p_master = Path("data/disease_timeseries_master.csv")
+        if p_master.exists():
             st.download_button(
-                label=f"Download Original Monthly Panel CSV (25 Cols, 1,320 Rows)",
-                data=p_mon.read_bytes(),
-                file_name="india_plant_diseases_monthly.csv",
+                label="📥 Download Authoritative Master Dataset CSV (43 Cols, 1,320 Rows)",
+                data=p_master.read_bytes(),
+                file_name="disease_timeseries_master.csv",
                 mime="text/csv",
-                use_container_width=True,
-            )
-        p_imp = Path("data/processed/improved_india_plant_diseases_monthly.csv")
-        if p_imp.exists():
-            st.download_button(
-                label=f"Download Improved Master Dataset CSV (43 Cols, 1,320 Rows)",
-                data=p_imp.read_bytes(),
-                file_name="improved_india_plant_diseases_monthly.csv",
-                mime="text/csv",
+                type="primary",
                 use_container_width=True,
             )
     with col_d2:

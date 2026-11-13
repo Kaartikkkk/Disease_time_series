@@ -265,18 +265,22 @@ def load_friendly_pathogen_options() -> Dict[str, str]:
 
 @st.cache_data
 def load_monthly_series(slug: str) -> Optional[pd.DataFrame]:
-    """Load processed continuous monthly series for a pathogen."""
-    path = PROCESSED_DIR / f"monthly_{slug}.csv"
-    if path.exists():
-        df = pd.read_csv(path)
-        df["date"] = pd.to_datetime(df["date"])
-        return df
-    return None
+    """Load continuous monthly series for a pathogen from the single master dataset."""
+    from src.data.dataset_service import load_authoritative_series
+    return load_authoritative_series(slug)
 
 
 @st.cache_data
 def load_clean_records(slug: str) -> Optional[pd.DataFrame]:
     """Load cleaned occurrence records for a pathogen."""
+    try:
+        from src.data.dataset_service import load_clean_event_records
+        df = load_clean_event_records(slug)
+        if df is not None:
+            return df
+    except Exception:
+        pass
+
     path = PROCESSED_DIR / f"clean_{slug}_records.csv"
     if path.exists():
         df = pd.read_csv(path, low_memory=False)

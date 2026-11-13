@@ -34,7 +34,7 @@ from src.models.global_models import (
 from src.models.gru_model import DEFAULT_GRU_CONFIG, forecast_gru
 from src.models.prophet_model import DEFAULT_PROPHET_PARAMS, forecast_prophet
 
-IMPROVED_DATA_PATH = REPO_ROOT / "data" / "processed" / "improved_india_plant_diseases_monthly.csv"
+IMPROVED_DATA_PATH = REPO_ROOT / "data" / "disease_timeseries_master.csv"
 DATA_PATH = IMPROVED_DATA_PATH if IMPROVED_DATA_PATH.exists() else REPO_ROOT / "data" / "processed" / "india_plant_diseases_monthly.csv"
 
 ORIGINS = [

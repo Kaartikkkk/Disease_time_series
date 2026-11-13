@@ -10,8 +10,9 @@ from typing import Any, Dict
 import pandas as pd
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-PROCESSED_DIR = BASE_DIR / "data" / "processed"
-MONTHLY_FILE = PROCESSED_DIR / "india_plant_diseases_monthly.csv"
+DATA_DIR = BASE_DIR / "data"
+PROCESSED_DIR = DATA_DIR / "processed"
+MONTHLY_FILE = DATA_DIR / "disease_timeseries_master.csv"
 QUALITY_REPORT_FILE = BASE_DIR / "data" / "reports" / "data_quality_report.json"
 
 

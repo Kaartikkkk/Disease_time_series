@@ -1,18 +1,26 @@
 """Visualization and reporting package."""
 from src.visualization.eda import (
-    plot_occurrence_timeseries,
-    plot_pathogen_distribution,
-    plot_seasonality_heatmap,
-    plot_spatial_occurrences,
-    plot_weather_correlation_matrix,
+    compute_series_summary,
+    compute_rolling_statistics,
+    perform_seasonal_decomposition,
+    compute_acf_pacf_values,
+    detect_outliers,
+    compute_weather_disease_correlations,
+    assess_forecasting_suitability,
 )
-from src.visualization.reporting import generate_eda_figures
+from src.visualization.reporting import (
+    export_forecast_csv,
+    generate_methodology_report,
+)
 
 __all__ = [
-    "plot_occurrence_timeseries",
-    "plot_pathogen_distribution",
-    "plot_seasonality_heatmap",
-    "plot_spatial_occurrences",
-    "plot_weather_correlation_matrix",
-    "generate_eda_figures",
+    "compute_series_summary",
+    "compute_rolling_statistics",
+    "perform_seasonal_decomposition",
+    "compute_acf_pacf_values",
+    "detect_outliers",
+    "compute_weather_disease_correlations",
+    "assess_forecasting_suitability",
+    "export_forecast_csv",
+    "generate_methodology_report",
 ]

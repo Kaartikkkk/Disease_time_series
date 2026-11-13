@@ -37,7 +37,7 @@ from src.models.prophet_model import forecast_prophet
 from src.models.random_forest import forecast_random_forest
 from src.models.xgboost_model import forecast_xgboost
 
-IMPROVED_DATA_PATH = Path("data/processed/improved_india_plant_diseases_monthly.csv")
+IMPROVED_DATA_PATH = Path("data/disease_timeseries_master.csv")
 DATA_PATH = IMPROVED_DATA_PATH if IMPROVED_DATA_PATH.exists() else Path("data/processed/india_plant_diseases_monthly.csv")
 OUTPUT_JSON_PATH = Path("reports/experiments/ADVANCED_MODEL_OPTIMIZATION_RESULTS.json")
 

@@ -195,18 +195,20 @@ def process_all_pathogens_to_monthly(
             region_id=reg_id,
         )
 
-        # Export individual monthly series
-        out_path = output_dir / f"monthly_{slug}.csv"
+        # Export baseline monthly series to original_backup to preserve data/processed clean
+        backup_dir = output_dir / "original_backup" if output_dir.name == "processed" else output_dir
+        backup_dir.mkdir(parents=True, exist_ok=True)
+        out_path = backup_dir / f"monthly_{slug}.csv"
         monthly_df.to_csv(out_path, index=False)
-        logger.info("Saved monthly series for '%s' to %s (%d months)", slug, out_path, len(monthly_df))
+        logger.info("Saved baseline monthly series for '%s' to %s (%d months)", slug, out_path, len(monthly_df))
 
         processed_dict[slug] = monthly_df
         all_monthly_dfs.append(monthly_df)
 
-    # Create combined multi-pathogen dataset
+    # Create combined multi-pathogen dataset in backup directory
     if all_monthly_dfs:
         combined_df = pd.concat(all_monthly_dfs, ignore_index=True)
-        combined_path = output_dir / "india_plant_diseases_monthly.csv"
+        combined_path = (output_dir / "original_backup" if output_dir.name == "processed" else output_dir) / "india_plant_diseases_monthly.csv"
         combined_df.to_csv(combined_path, index=False)
         logger.info("Saved unified multi-pathogen monthly dataset to %s (%d total rows)", combined_path, len(combined_df))
 

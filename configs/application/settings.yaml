@@ -12,6 +12,19 @@ paths:
   reports_dir: "data/reports"
   models_dir: "models"
   logs_dir: "logs"
+  authoritative_master_file: "data/processed/improved_india_plant_diseases_monthly.csv"
+  authoritative_pathogen_pattern: "data/processed/improved_monthly_{slug}.csv"
+  backup_dir: "data/processed/original_backup"
+
+authoritative_dataset:
+  collection_version: "2.0.0-improved"
+  active_format: "improved_monthly_{slug}.csv"
+  master_panel: "improved_india_plant_diseases_monthly.csv"
+  total_records: 1320
+  months_per_pathogen: 132
+  features_count: 43
+  missing_values_count: 0
+  boundary_imputation: "climatological_normal_backfill"
 
 # Candidate plant pathogens and diseases for Indian agriculture
 pathogens:

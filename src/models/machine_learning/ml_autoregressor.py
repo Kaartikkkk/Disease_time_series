@@ -60,10 +60,15 @@ def forecast_ml_autoregressor(
     if weather_lag_cols:
         for w_col in weather_lag_cols:
             if w_col in df_feat.columns:
+                # Causal forward-fill and training median imputation for missing weather features
+                s = df_feat[w_col].ffill()
+                med = s.median()
+                df_feat[w_col] = s.fillna(med if not pd.isna(med) else 0.0)
                 feature_cols.append(w_col)
 
     # Drop initial NaN rows created by lags
-    df_train_clean = df_feat.dropna(subset=feature_cols).copy()
+    lag_cols = [f"lag_{l}" for l in lags]
+    df_train_clean = df_feat.dropna(subset=lag_cols).copy()
     X_train = df_train_clean[feature_cols].values
     y_train = df_train_clean[target_col].values
 
@@ -111,10 +116,13 @@ def forecast_ml_autoregressor(
         if weather_lag_cols:
             for w_col in weather_lag_cols:
                 if future_weather_df is not None and w_col in future_weather_df.columns and len(future_weather_df) >= step:
-                    row_feat.append(future_weather_df[w_col].iloc[step - 1])
+                    w_val = future_weather_df[w_col].iloc[step - 1]
+                    if pd.isna(w_val):
+                        w_val = float(df_train_clean[w_col].median() if w_col in df_train_clean else 0.0)
+                    row_feat.append(float(w_val))
                 else:
-                    # Fallback to mean historical lagged value
-                    row_feat.append(df_train_clean[w_col].mean() if w_col in df_train_clean else 0.0)
+                    # Fallback to median historical lagged value
+                    row_feat.append(float(df_train_clean[w_col].median() if w_col in df_train_clean else 0.0))
 
         step_pred = float(model.predict([row_feat])[0])
         step_pred = max(0.0, step_pred)

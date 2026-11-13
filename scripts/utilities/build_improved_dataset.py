@@ -30,8 +30,12 @@ logger = logging.getLogger(__name__)
 
 PROCESSED_DIR = Path("data/processed")
 ORIGINAL_BACKUP_DIR = PROCESSED_DIR / "original_backup"
-MASTER_FILE = PROCESSED_DIR / "india_plant_diseases_monthly.csv"
-IMPROVED_MASTER_FILE = PROCESSED_DIR / "improved_india_plant_diseases_monthly.csv"
+MASTER_FILE = (
+    PROCESSED_DIR / "india_plant_diseases_monthly.csv"
+    if (PROCESSED_DIR / "india_plant_diseases_monthly.csv").exists()
+    else ORIGINAL_BACKUP_DIR / "india_plant_diseases_monthly.csv"
+)
+IMPROVED_MASTER_FILE = Path("data/disease_timeseries_master.csv")
 
 
 def backup_original_dataset() -> None:
