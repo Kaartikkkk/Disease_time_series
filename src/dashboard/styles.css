@@ -56,20 +56,16 @@ header[data-testid="stHeader"] {
     margin: 0 auto !important;
 }
 
-/* Modern Horizontal Top Navigation Bar */
+/* Modern Horizontal Top Navigation Bar (Non-Floating / Natural Flow) */
 .verdant-top-navbar {
-    position: sticky;
-    top: 0;
-    z-index: 9999;
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(82, 122, 80, 0.16);
-    box-shadow: 0 2px 10px rgba(16, 44, 38, 0.04);
-    padding: 10px 18px;
+    background: #FFFFFF;
+    border-bottom: 1px solid #E5E7EB;
+    box-shadow: none;
+    padding: 12px 28px;
     margin-left: -2rem;
     margin-right: -2rem;
     margin-top: -0.8rem;
@@ -87,7 +83,7 @@ header[data-testid="stHeader"] {
     .verdant-nav-links-wrap {
         gap: 3px;
     }
-    .verdant-nav-tab {
+    .verdant-nav-tab, .nav-pill {
         padding: 4px 8px;
         font-size: 0.76rem;
     }
@@ -97,7 +93,17 @@ header[data-testid="stHeader"] {
     align-items: center;
     gap: 10px;
     text-decoration: none !important;
-    color: #102C26 !important;
+    color: #111827 !important;
+    flex-shrink: 0;
+}
+.brand-icon-badge {
+    width: 32px;
+    height: 30px;
+    border-radius: 8px;
+    background: #1B4332;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
 }
 .verdant-brand-name {
@@ -140,46 +146,19 @@ header[data-testid="stHeader"] {
     background: #F4F7F4;
     border-color: rgba(82, 122, 80, 0.15);
 }
-.verdant-nav-tab.active {
-    color: #166534;
-    background: #EAF2E8;
-    border-color: rgba(22, 101, 52, 0.32);
-    font-weight: 700;
-    box-shadow: 0 1px 3px rgba(22, 101, 52, 0.06);
-}
-.verdant-top-utils {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-shrink: 0;
-}
-.mode-toggle-group {
-    display: inline-flex;
-    align-items: center;
-    background: #F1F5F0;
-    border: 1px solid rgba(82, 122, 80, 0.22);
-    border-radius: 18px;
-    padding: 2px;
-}
-.mode-toggle-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 4px 10px;
-    border-radius: 14px;
-    font-size: 0.72rem;
-    font-weight: 600;
-    color: #5A665D;
-    text-decoration: none !important;
-    transition: all 0.15s ease;
-}
-.mode-toggle-btn.active {
-    background: #183D32;
+.verdant-nav-tab.active, .nav-pill.active {
     color: #FFFFFF !important;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    background: #1B4332 !important;
+    border-color: #1B4332 !important;
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 }
-.mode-toggle-btn:hover:not(.active) {
-    color: #102C26;
+.verdant-nav-tab.active span, .nav-pill.active span {
+    color: #FFFFFF !important;
+}
+.verdant-nav-tab.active svg, .nav-pill.active svg {
+    color: #FFFFFF !important;
+    stroke: #FFFFFF !important;
 }
 
 /* Standard Compact Graph Explanation Card */

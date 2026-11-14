@@ -10,9 +10,12 @@ import streamlit as st
 import yaml
 
 from src.icons import (
+    icon_bar_chart,
     icon_dashboard,
     icon_database,
+    icon_home,
     icon_info,
+    icon_layers,
     icon_leaf,
     icon_microscope,
     icon_model_compare,
@@ -148,57 +151,68 @@ def render_graph_explanation_card(
 
 
 def render_top_navigation(active_page: str = "overview"):
-    """Render modern horizontal top navigation bar replacing the sidebar."""
-    is_adv = is_advanced_mode()
-    
+    """Render horizontal non-floating top navigation bar matching exact visual design."""
     nav_items = [
-        ("overview", "/", "Overview", icon_dashboard),
-        ("explorer", "/Disease_Explorer", "Disease Explorer", icon_microscope),
-        ("timeseries", "/Time_Series_Analysis", "Time Series Analysis", icon_timeseries),
-        ("comparison", "/Model_Comparison", "Model Comparison", icon_model_compare),
-        ("forecasts", "/Future_Forecasts", "Future Forecasts", icon_trending_up),
-        ("methodology", "/Data_and_Methodology", "Data & Methodology", icon_database),
+        ("overview", "/", "Overview", icon_home),
+        ("analysis", "/Time_Series_Analysis", "Analysis", icon_bar_chart),
+        ("models", "/Model_Comparison", "Models", icon_layers),
+        ("forecast", "/Future_Forecasts", "Forecast", icon_trending_up),
+        ("data", "/Data_and_Methodology", "Data", icon_database),
     ]
+
+    active_map = {
+        "overview": "overview",
+        "home": "overview",
+        "explorer": "analysis",
+        "disease_explorer": "analysis",
+        "timeseries": "analysis",
+        "time_series": "analysis",
+        "time_series_analysis": "analysis",
+        "analysis": "analysis",
+        "models": "models",
+        "comparison": "models",
+        "model_comparison": "models",
+        "forecast": "forecast",
+        "forecasts": "forecast",
+        "future_forecasts": "forecast",
+        "predictions": "forecast",
+        "data": "data",
+        "methodology": "data",
+        "data_and_methodology": "data",
+    }
+    current_key = active_map.get(str(active_page).lower(), "overview")
 
     nav_links_html = []
     for slug, url, label, icon_fn in nav_items:
-        is_active = (active_page == slug)
-        cls = "verdant-nav-tab active" if is_active else "verdant-nav-tab"
-        icon_col = "#166534" if is_active else "#5A665D"
+        is_active = (current_key == slug)
+        cls = "nav-pill active" if is_active else "nav-pill"
+        icon_col = "#FFFFFF" if is_active else "#4B5563"
         icon_markup = icon_fn(16, icon_col)
         nav_links_html.append(
             f'<a href="{url}" target="_self" class="{cls}">{icon_markup}<span>{label}</span></a>'
         )
 
     all_links = "".join(nav_links_html)
-    simple_active = "active" if not is_adv else ""
-    adv_active = "active" if is_adv else ""
 
     navbar_html = f"""
     <div class="verdant-top-navbar">
         <a href="/" target="_self" class="verdant-top-brand">
-            {icon_leaf(22, "#166534")}
-            <div>
-                <div class="verdant-brand-name">Agricultural Disease Forecasting Using Time Series</div>
-            </div>
+            <div class="brand-icon-badge">{icon_leaf(16, "#FFFFFF")}</div>
+            <span class="brand-title">AgriForecast</span>
+            <span class="brand-divider">|</span>
+            <span class="brand-subtitle">Agricultural Disease Forecasting</span>
         </a>
         <nav class="verdant-nav-links-wrap">
             {all_links}
         </nav>
-        <div class="verdant-top-utils">
-            <div class="mode-toggle-group" title="Toggle between Simple View and Advanced Research View">
-                <a href="?mode=simple" target="_self" class="mode-toggle-btn {simple_active}">Simple View</a>
-                <a href="?mode=advanced" target="_self" class="mode-toggle-btn {adv_active}">Advanced View</a>
-            </div>
-        </div>
     </div>
     """
     st.html(navbar_html)
 
 
 def render_app_sidebar(active_page: str = "overview"):
-    """Backward-compatible wrapper: Renders the horizontal top navigation."""
-    render_top_navigation(active_page)
+    """Backward-compatible no-op: Top navigation is rendered once via render_top_navigation."""
+    pass
 
 
 def render_top_header():

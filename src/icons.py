@@ -355,6 +355,32 @@ def icon_target(size: int = 20, color: str = "#C4A66A", css_class: str = "") -> 
     return _to_img(svg, size, css_class)
 
 
+def icon_network(size: int = 20, color: str = "#2D6A4F", css_class: str = "") -> str:
+    """Pathogen network / interacting biological nodes icon."""
+    c = _res_col(color, "#2D6A4F")
+    svg = f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="5" cy="5" r="2.2" stroke="{c}" stroke-width="1.75"/>
+  <circle cx="19" cy="5" r="2.2" stroke="{c}" stroke-width="1.75"/>
+  <circle cx="5" cy="19" r="2.2" stroke="{c}" stroke-width="1.75"/>
+  <circle cx="19" cy="19" r="2.2" stroke="{c}" stroke-width="1.75"/>
+  <circle cx="12" cy="12" r="2" fill="{c}"/>
+  <line x1="6.8" y1="6.8" x2="10.4" y2="10.4" stroke="{c}" stroke-width="1.75"/>
+  <line x1="17.2" y1="6.8" x2="13.6" y2="10.4" stroke="{c}" stroke-width="1.75"/>
+  <line x1="6.8" y1="17.2" x2="10.4" y2="13.6" stroke="{c}" stroke-width="1.75"/>
+  <line x1="17.2" y1="17.2" x2="13.6" y2="13.6" stroke="{c}" stroke-width="1.75"/>
+</svg>"""
+    return _to_img(svg, size, css_class)
+
+
+def icon_sigma(size: int = 20, color: str = "#2D6A4F", css_class: str = "") -> str:
+    """Mathematical summation / standard deviation sigma icon."""
+    c = _res_col(color, "#2D6A4F")
+    svg = f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M18 4H6L13 12L6 20H18" stroke="{c}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>"""
+    return _to_img(svg, size, css_class)
+
+
 def icon_droplets(size: int = 20, color: str = "#0284C7", css_class: str = "") -> str:
     """Water droplets icon for Relative Humidity & Leaf Wetness."""
     c = _res_col(color, "#0284C7")

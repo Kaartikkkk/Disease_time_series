@@ -15,6 +15,7 @@ from src.icons import (
     icon_check_circle,
     icon_database,
     icon_download,
+    icon_forecast,
     icon_leaf,
     icon_model_compare,
     icon_pulse,
@@ -24,47 +25,48 @@ from src.icons import (
 )
 from src.project_stats import get_project_telemetry
 from src.ui_helpers import (
+    ASSETS_DIR,
     get_config_settings,
+    get_image_base64,
     inject_custom_css,
     load_data_quality_report_data,
-    render_app_sidebar,
-    render_top_header,
+    render_top_navigation,
 )
 
 st.set_page_config(
-    page_title="Data & Methodology — Agricultural Disease Forecasting Using Time Series",
+    page_title="Data & Methodology — AgriForecast",
+    page_icon="🌾",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
 
 inject_custom_css()
-render_app_sidebar(active_page="methodology")
-render_top_header()
+render_top_navigation(active_page="data")
 
 stats = get_project_telemetry()
+hero_ear_b64 = get_image_base64(ASSETS_DIR / "hero_ear_blended.png")
+obj_hills_b64 = get_image_base64(ASSETS_DIR / "objective_hills_blended.png")
 
 # ==============================================================================
-# EDITORIAL HEADER
+# EDITORIAL HERO BANNER
 # ==============================================================================
-st.markdown(
-    f"""
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid rgba(82, 122, 80, 0.16);">
-        <div style="flex: 1 1 300px; min-width: 250px;">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
-                {icon_book(26, "#527A50")}
-                <h1 style="font-size: clamp(1.5rem, 3vw, 2.0rem); margin: 0; color: #102C26; word-break: normal; hyphens: none; line-height: 1.2;">Data Provenance, Architecture &amp; Methodology</h1>
-            </div>
-            <p style="color: #5A665D; font-size: 0.92rem; margin: 0; line-height: 1.45;">
-                Formal scientific documentation covering public biodiversity accessions, satellite agrometeorology, econometric formulations, and validation schemes.
-            </p>
-        </div>
-        <div style="background: rgba(82, 122, 80, 0.08); border: 1px solid rgba(82, 122, 80, 0.2); border-radius: 8px; padding: 6px 14px; font-size: 0.80rem; color: #183D32; font-family: 'JetBrains Mono', monospace; flex-shrink: 0; align-self: flex-start;">
-            OPEN ACCESS · CC-BY 4.0 / CC0
-        </div>
+hero_markup = f"""
+<div class="dashboard-hero-card" style="min-height: 180px; margin-bottom: 20px;">
+    <div class="hero-text-content" style="padding: 28px 36px; max-width: 620px;">
+        <div class="hero-tag">DATA &amp; METHODOLOGY</div>
+        <h1 class="hero-headline" style="font-size: 2.1rem; margin-bottom: 8px;">
+            Data Provenance, Architecture &amp; Methodology
+        </h1>
+        <p class="hero-subtitle" style="font-size: 0.95rem; margin-bottom: 0;">
+            Formal scientific documentation covering public biodiversity accessions, satellite agrometeorology, econometric formulations, and validation schemes.
+        </p>
     </div>
-    """,
-    unsafe_allow_html=True,
-)
+    <div class="hero-image-wrapper" style="width: 50%;">
+        <img src="{hero_ear_b64}" class="hero-ear-img" alt="Data and methodology" />
+    </div>
+</div>
+"""
+st.html(hero_markup)
 
 # ==============================================================================
 # EIGHT ACADEMIC SECTIONS
@@ -328,3 +330,29 @@ with tab_downloads:
         - Chen, T., & Guestrin, C. (2016). *XGBoost: A Scalable Tree Boosting System*. KDD '16, 785–794.
         """
     )
+
+# ==============================================================================
+# BOTTOM ACTION CTA WITH HILL CONTOURS
+# ==============================================================================
+cta_markup = f"""
+<div class="bottom-cta-wrap" style="position: relative; overflow: hidden; background: #FFFFFF; border: 1px solid rgba(82, 122, 80, 0.18); border-radius: 16px; padding: 24px; margin-top: 36px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;">
+    <div style="position: absolute; right: 0; bottom: 0; height: 100%; width: 40%; pointer-events: none; opacity: 0.45; background-image: url('{obj_hills_b64}'); background-size: cover; background-position: right bottom; background-repeat: no-repeat;"></div>
+    <div style="position: relative; z-index: 2; display: flex; gap: 16px; flex-wrap: wrap; width: 100%;">
+        <div style="flex: 1; min-width: 200px;">
+            <a href="/" target="_self" style="text-decoration: none;">
+                <div style="display: flex; align-items: center; justify-content: center; gap: 8px; background: #FFFFFF; border: 1.5px solid #2D6A4F; color: #2D6A4F; font-weight: 600; font-size: 0.92rem; padding: 12px 20px; border-radius: 10px;">
+                    {icon_leaf(16, "#2D6A4F")} Return to Platform Overview
+                </div>
+            </a>
+        </div>
+        <div style="flex: 1; min-width: 200px;">
+            <a href="/Future_Forecasts" target="_self" style="text-decoration: none;">
+                <div style="display: flex; align-items: center; justify-content: center; gap: 8px; background: #1B4332; color: #FFFFFF; font-weight: 600; font-size: 0.92rem; padding: 12px 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(27, 67, 50, 0.18);">
+                    {icon_forecast(16, "#FFFFFF")} Generate Future Forecasts &rarr;
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+"""
+st.html(cta_markup)

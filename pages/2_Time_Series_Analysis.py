@@ -21,13 +21,18 @@ from src.eda import (
 from src.icons import (
     icon_activity,
     icon_bar_chart,
+    icon_calendar,
     icon_check_circle,
     icon_info,
+    icon_layers,
     icon_leaf,
     icon_pulse,
+    icon_settings,
     icon_shield,
+    icon_sigma,
     icon_thermometer,
     icon_timeseries,
+    icon_trending_up,
     icon_weather,
 )
 from src.project_stats import get_project_telemetry
@@ -45,75 +50,89 @@ from src.stationarity import (
     synthesize_stationarity_decision,
 )
 from src.ui_helpers import (
+    ASSETS_DIR,
     format_plotly_figure,
+    get_image_base64,
     inject_custom_css,
     load_all_pathogen_options,
     load_monthly_series,
-    render_app_sidebar,
-    render_top_header,
+    render_top_navigation,
 )
 
 st.set_page_config(
-    page_title="Time Series Analysis — Agricultural Disease Forecasting Using Time Series",
+    page_title="Time Series Analysis — AgriForecast",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
 
 inject_custom_css()
-render_app_sidebar(active_page="timeseries")
-render_top_header()
+render_top_navigation(active_page="analysis")
 
 stats = get_project_telemetry()
 
+# Load tailored hero visuals
+hero_ear_b64 = get_image_base64(ASSETS_DIR / "hero_ear_blended.png")
+if not hero_ear_b64:
+    hero_ear_b64 = get_image_base64(ASSETS_DIR / "wheat_canopy_ears.jpg")
+
+obj_hills_b64 = get_image_base64(ASSETS_DIR / "objective_hills_blended.png")
+
 # ==============================================================================
-# 1. EDITORIAL HEADER
+# 1. EDITORIAL HERO BANNER (MATCHING AGRIFORECAST SPECIFICATION)
 # ==============================================================================
-st.markdown(
-    f"""
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid rgba(82, 122, 80, 0.16);">
-        <div style="flex: 1 1 300px; min-width: 250px;">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
-                {icon_timeseries(26, "#527A50")}
-                <h1 style="font-size: clamp(1.5rem, 3vw, 2.0rem); margin: 0; color: #102C26; word-break: normal; hyphens: none; line-height: 1.2;">Time Series Analysis &amp; Statistical Diagnostics</h1>
-            </div>
-            <p style="color: #5A665D; font-size: 0.92rem; margin: 0; line-height: 1.45;">
-                Longitudinal trajectory, stationarity tests (ADF/KPSS), seasonal decomposition, ACF/PACF memory, and NASA agrometeorological lags.
-            </p>
-        </div>
-        <div style="text-align: right; background: #FFFEFA; border: 1px solid rgba(82, 122, 80, 0.2); border-radius: 10px; padding: 6px 14px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); flex-shrink: 0; align-self: flex-start;">
-            <div style="font-size: 0.70rem; font-weight: 700; text-transform: uppercase; color: #527A50; letter-spacing: 0.05em;">
-                Econometric Diagnostic Suite
-            </div>
-            <div style="font-size: 0.75rem; color: #183D32; font-weight: 600; margin-top: 1px;">
-                Standard Grid: {stats['monthly_start_date']} – {stats['monthly_end_date']} ({stats['total_months']} Mo)
-            </div>
-        </div>
+hero_markup = f"""
+<div class="dashboard-hero-card" style="min-height: 180px; margin-bottom: 20px;">
+    <div class="hero-text-content" style="padding: 28px 36px; max-width: 620px;">
+        <div class="hero-tag">TIME SERIES ANALYSIS</div>
+        <h1 class="hero-headline" style="font-size: 2.1rem; margin-bottom: 8px;">
+            Time Series Analysis & Statistical Diagnostics
+        </h1>
+        <p class="hero-subtitle" style="font-size: 0.95rem; margin-bottom: 0;">
+            Longitudinal trajectory, stationarity tests, seasonal decomposition, ACF/PACF memory, and NASA agrometeorological lags.
+        </p>
     </div>
-    """,
-    unsafe_allow_html=True,
-)
+    <div class="hero-image-wrapper" style="width: 50%;">
+        <img src="{hero_ear_b64}" class="hero-ear-img" alt="Time series diagnostics" />
+    </div>
+</div>
+"""
+st.html(hero_markup)
 
 pathogen_dict = load_all_pathogen_options()
 
-# Parameter Toolbar
-bar_c1, bar_c2 = st.columns([1.6, 1.0])
+# ==============================================================================
+# 2. CONTROLS TOOLBAR CARD (FILTER + SLIDER)
+# ==============================================================================
+st.markdown('<div class="filter-toolbar-card">', unsafe_allow_html=True)
+bar_c1, bar_c2 = st.columns([1.3, 1.1])
 with bar_c1:
+    st.markdown(
+        f"<div class='filter-field-label'>{icon_leaf(15, '#2D6A4F')} Target Crop Disease</div>",
+        unsafe_allow_html=True,
+    )
     selected_slug = st.selectbox(
         "Target Crop Disease",
         options=list(pathogen_dict.keys()),
         format_func=lambda k: pathogen_dict[k],
         index=0,
+        label_visibility="collapsed",
         help="Select a crop disease series to run econometric diagnostics.",
     )
 with bar_c2:
+    st.markdown(
+        f"<div class='filter-field-label'>{icon_settings(15, '#2D6A4F')} Rolling Smoothing Window (Months)</div>",
+        unsafe_allow_html=True,
+    )
     window_size = st.slider(
         "Rolling Smoothing Window (Months)",
         min_value=2,
         max_value=12,
         value=6,
         step=1,
+        label_visibility="collapsed",
         help="Window size for moving average and standard deviation envelope.",
     )
+st.markdown('</div>', unsafe_allow_html=True)
 
 df_monthly = load_monthly_series(selected_slug)
 if df_monthly is None or df_monthly.empty:
@@ -125,56 +144,84 @@ series_summary = compute_series_summary(df_monthly, target_col=target_col)
 suitability = assess_forecasting_suitability(df_monthly, target_col=target_col, pathogen_name=pathogen_dict[selected_slug])
 date_min_str = pd.to_datetime(df_monthly["date"]).min().strftime("%b %Y")
 date_max_str = pd.to_datetime(df_monthly["date"]).max().strftime("%b %Y")
-year_span_str = f"{pd.to_datetime(df_monthly['date']).min().year}–{pd.to_datetime(df_monthly['date']).max().year}"
+year_span_str = f"{pd.to_datetime(df_monthly['date']).min().year} – {pd.to_datetime(df_monthly['date']).max().year}"
 
-# 4 Compact KPI Cards
-st.markdown(
-    f"""
-    <div class="metric-grid" style="margin-top: 10px; margin-bottom: 20px;">
-        <div class="research-metric-card">
-            <div class="metric-icon-wrap">{icon_timeseries(18, "#527A50")}</div>
-            <div class="metric-label-text">Timeline Span</div>
-            <div class="metric-value-text">{series_summary['total_months']} Months</div>
-            <div class="metric-note-text">{date_min_str} – {date_max_str} (Continuous)</div>
-        </div>
-        <div class="research-metric-card">
-            <div class="metric-icon-wrap">{icon_shield(18, "#527A50")}</div>
-            <div class="metric-label-text">Active Reporting</div>
-            <div class="metric-value-text">{series_summary['active_months']} Months</div>
-            <div class="metric-note-text">{series_summary['pct_non_zero']:.1f}% Positive · {100.0 - series_summary['pct_non_zero']:.1f}% Zeros</div>
-        </div>
-        <div class="research-metric-card">
-            <div class="metric-icon-wrap">{icon_leaf(18, "#527A50")}</div>
-            <div class="metric-label-text">Monthly Mean</div>
-            <div class="metric-value-text">{series_summary['mean_monthly_occurrences']}</div>
-            <div class="metric-note-text">Total: {series_summary['total_occurrences']:,} Recorded Reports</div>
-        </div>
-        <div class="research-metric-card">
-            <div class="metric-icon-wrap">{icon_thermometer(18, "#C4A66A")}</div>
-            <div class="metric-label-text">Standard Deviation</div>
-            <div class="metric-value-text">±{series_summary['std_monthly_occurrences']}</div>
-            <div class="metric-note-text">Sample Standard Deviation</div>
+# ==============================================================================
+# 3. FOUR COMPACT KPI METRIC CARDS
+# ==============================================================================
+kpi_markup = f"""
+<div class="kpi-row-grid" style="margin-top: 14px; margin-bottom: 22px;">
+    <div class="kpi-card">
+        <div class="kpi-icon-badge">{icon_calendar(20, "#2D6A4F")}</div>
+        <div>
+            <div class="kpi-label" style="text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.05em; font-weight: 700; color: #6B7280;">Timeline Span</div>
+            <div class="kpi-value">{series_summary['total_months']} Months</div>
+            <div class="kpi-subtext">{date_min_str} – {date_max_str}</div>
         </div>
     </div>
-    """,
-    unsafe_allow_html=True,
-)
+    <div class="kpi-card">
+        <div class="kpi-icon-badge">{icon_layers(20, "#2D6A4F")}</div>
+        <div>
+            <div class="kpi-label" style="text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.05em; font-weight: 700; color: #6B7280;">Active Reporting</div>
+            <div class="kpi-value">{series_summary['active_months']} Months</div>
+            <div class="kpi-subtext">{series_summary['pct_non_zero']:.1f}% Positive • {100.0 - series_summary['pct_non_zero']:.1f}% Zeros</div>
+        </div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-icon-badge">{icon_trending_up(20, "#2D6A4F")}</div>
+        <div>
+            <div class="kpi-label" style="text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.05em; font-weight: 700; color: #6B7280;">Monthly Mean</div>
+            <div class="kpi-value">{series_summary['mean_monthly_occurrences']}</div>
+            <div class="kpi-subtext">Total: {series_summary['total_occurrences']:,} Recorded Reports</div>
+        </div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-icon-badge">{icon_sigma(20, "#2D6A4F")}</div>
+        <div>
+            <div class="kpi-label" style="text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.05em; font-weight: 700; color: #6B7280;">Standard Deviation</div>
+            <div class="kpi-value">±{series_summary['std_monthly_occurrences']}</div>
+            <div class="kpi-subtext">Sample Standard Deviation</div>
+        </div>
+    </div>
+</div>
+"""
+st.html(kpi_markup)
 
 # ==============================================================================
-# 2. CONSOLIDATED FIVE-TAB WORKSPACE (CHART FIRST, INTERPRETATION BELOW)
+# 4. CONSOLIDATED PILL TABS
 # ==============================================================================
 tab_trend, tab_decomp, tab_stationarity, tab_acf, tab_weather, tab_volatility = st.tabs([
-    "1. Trajectory & Trend",
-    "2. Seasonal Decomposition",
-    "3. Stationarity & Differencing",
-    "4. Autocorrelation (ACF / PACF)",
-    "5. Weather Cross-Correlation",
-    "6. ARCH / GARCH Volatility",
+    "📈 Trajectory & Trend",
+    "📅 Seasonal Decomposition",
+    "📉 Stationarity & Differencing",
+    "⏱ Autocorrelation (ACF / PACF)",
+    "🌧 Weather Correlation",
+    "📊 ARCH / GARCH",
 ])
 
 # ----------------- Tab 1: Trajectory & Trend -----------------
 with tab_trend:
-    st.markdown(f"**Historical Occurrence Trajectory and Rolling Mean ({year_span_str})**")
+    st.markdown(
+        f"""
+        <div class="explorer-chart-card">
+            <div class="chart-card-header">
+                <div class="chart-card-title">
+                    Historical Occurrence Trajectory and Rolling Mean ({year_span_str})
+                </div>
+                <div class="chart-card-legend">
+                    <div>
+                        <span class="legend-swatch-bar"></span>
+                        <span>Monthly Occurrences</span>
+                    </div>
+                    <div>
+                        <span class="legend-swatch-line"></span>
+                        <span>{window_size}-Month Moving Average</span>
+                    </div>
+                </div>
+            </div>
+        """,
+        unsafe_allow_html=True,
+    )
     rolling_df = compute_rolling_statistics(df_monthly, window=window_size, target_col=target_col)
     
     fig_tr = go.Figure()
@@ -183,8 +230,8 @@ with tab_trend:
             x=df_monthly["date"],
             y=df_monthly[target_col],
             name="Monthly Occurrences",
-            marker_color="#183D32",
-            opacity=0.75,
+            marker_color="#104030",
+            opacity=1.0,
             hovertemplate="<b>Date:</b> %{x|%b %Y}<br><b>Reports:</b> %{y}<extra></extra>",
         )
     )
@@ -193,19 +240,38 @@ with tab_trend:
             x=rolling_df["date"],
             y=rolling_df[f"rolling_mean_{window_size}m"],
             name=f"{window_size}-Month Moving Average",
-            line=dict(color="#C4A66A", width=2.5),
+            line=dict(color="#D97706", width=2.4),
         )
     )
-    format_plotly_figure(
-        fig_tr,
-        title=f"Monthly Reports and {window_size}-Month Moving Average Trend ({date_min_str} – {date_max_str})",
-        height=360,
+    fig_tr.update_layout(
+        height=340,
+        margin=dict(l=30, r=20, t=10, b=30),
+        plot_bgcolor="#FFFFFF",
+        paper_bgcolor="#FFFFFF",
+        showlegend=False,
+        xaxis=dict(
+            showgrid=True,
+            gridcolor="#F3F4F6",
+            tickformat="%Y",
+            linecolor="#E5E7EB",
+        ),
+        yaxis=dict(
+            showgrid=True,
+            gridcolor="#F3F4F6",
+            linecolor="#E5E7EB",
+        ),
     )
     st.plotly_chart(fig_tr, use_container_width=True)
     
-    st.caption(
-        f"**Empirical Trend Interpretation:** The bar series highlights discrete monthly reporting pulses, while the gold curve tracks the {window_size}-month rolling baseline. "
-        f"For {pathogen_dict[selected_slug]}, activity alternates between zero-count dormancy intervals and seasonal epidemic bursts."
+    st.markdown(
+        f"""
+        <div class="chart-bottom-info-box">
+            {icon_info(16, "#166534")}
+            <span><strong>Empirical Trend Interpretation:</strong> The bar series highlights discrete monthly reporting pulses, while the gold curve tracks the {window_size}-month rolling baseline. For {pathogen_dict[selected_slug]}, activity alternates between zero-count dormancy intervals and seasonal epidemic bursts.</span>
+        </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
     
     with st.expander("📊 Outlier Detection & Distribution Bounds", expanded=False):
@@ -632,13 +698,22 @@ with tab_volatility:
                 best_spec = comp_df.iloc[0]["Specification"]
                 st.caption(f"🏆 **Optimal Specification by Information Criteria:** `{best_spec}` achieves the lowest AIC ({comp_df.iloc[0]['AIC']}).")
 
-# Navigation links
-st.markdown("<br>", unsafe_allow_html=True)
-try:
-    c_bot1, c_bot2 = st.columns(2)
-    with c_bot1:
-        st.page_link("pages/3_Model_Comparison.py", label="Proceed to Model Comparison & Benchmark ->", use_container_width=True)
-    with c_bot2:
-        st.page_link("pages/4_Future_Forecasts.py", label="Generate Future Forecasts ->", use_container_width=True)
-except Exception:
-    pass
+# ==============================================================================
+# 5. BOTTOM NAVIGATION CTA BUTTONS & LANDSCAPE ACCENT
+# ==============================================================================
+st.markdown(
+    f"""
+    <div class="bottom-cta-wrap">
+        <a href="/Model_Comparison" target="_self" class="hero-btn-primary" style="padding: 12px 26px; font-size: 0.92rem;">
+            {icon_layers(16, "#FFFFFF")} Proceed to Model Comparison
+        </a>
+        <a href="/Future_Forecasts" target="_self" class="hero-btn-secondary" style="padding: 12px 26px; font-size: 0.92rem;">
+            {icon_trending_up(16, "#111827")} Generate Future Forecasts
+        </a>
+    </div>
+    <div style="position: relative; width: 100%; height: 60px; overflow: hidden; pointer-events: none; margin-top: 10px; margin-bottom: -20px;">
+        <img src="{obj_hills_b64}" style="position: absolute; right: 0; bottom: 0; height: 100%; opacity: 0.7; object-fit: contain;" alt="contour hills" />
+    </div>
+    """,
+    unsafe_allow_html=True,
+)

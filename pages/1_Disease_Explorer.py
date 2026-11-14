@@ -12,82 +12,92 @@ import streamlit as st
 
 from src.icons import (
     icon_calendar,
+    icon_database,
     icon_download,
+    icon_info,
     icon_leaf,
     icon_map,
+    icon_network,
     icon_pathology,
     icon_pin,
     icon_pulse,
     icon_shield,
     icon_table,
     icon_timeseries,
+    icon_trending_up,
 )
 from src.project_stats import get_project_telemetry
 from src.ui_helpers import (
+    ASSETS_DIR,
     format_plotly_figure,
+    get_image_base64,
     inject_custom_css,
     load_all_pathogen_options,
     load_monthly_series,
-    render_app_sidebar,
-    render_top_header,
+    render_top_navigation,
 )
 
 st.set_page_config(
-    page_title="Disease Records — Agricultural Disease Forecasting Using Time Series",
+    page_title="Disease Records — AgriForecast",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
 
 inject_custom_css()
-render_app_sidebar(active_page="explorer")
-render_top_header()
+render_top_navigation(active_page="analysis")
 
 # Load authoritative dynamic project telemetry
 stats = get_project_telemetry()
 last_sync_time = datetime.now(timezone.utc).strftime("%d %b %Y · %H:%M UTC")
 
+# Load tailored hero visual
+hero_ear_b64 = get_image_base64(ASSETS_DIR / "hero_ear_blended.png")
+if not hero_ear_b64:
+    hero_ear_b64 = get_image_base64(ASSETS_DIR / "wheat_canopy_ears.jpg")
+
+obj_hills_b64 = get_image_base64(ASSETS_DIR / "objective_hills_blended.png")
+
 # ==============================================================================
-# 1. EDITORIAL HEADER
+# 1. EDITORIAL HERO BANNER (MATCHING AGRIFORECAST SPECIFICATION)
 # ==============================================================================
-st.markdown(
-    f"""
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid rgba(82, 122, 80, 0.16);">
-        <div style="flex: 1 1 300px; min-width: 250px;">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
-                {icon_pathology(24, "#527A50")}
-                <h1 style="font-size: clamp(1.5rem, 3vw, 2.0rem); margin: 0; color: #102C26; word-break: normal; hyphens: none; line-height: 1.2;">Disease Records &amp; Field Surveillance</h1>
-            </div>
-            <p style="color: #5A665D; font-size: 0.92rem; margin: 0; line-height: 1.45;">
-                Explore verified plant pathogen occurrences, agro-climatic regional distributions, and seasonal reporting cycles across India. Sourced from the single authoritative master dataset.
-            </p>
-        </div>
-        <div style="text-align: right; background: #FFFEFA; border: 1px solid rgba(82, 122, 80, 0.2); border-radius: 10px; padding: 6px 14px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); flex-shrink: 0; align-self: flex-start;">
-            <div style="display: flex; align-items: center; gap: 6px; font-size: 0.70rem; font-weight: 700; text-transform: uppercase; color: #527A50; letter-spacing: 0.05em;">
-                {icon_pulse(8, "#527A50")} Authoritative Master Dataset
-            </div>
-            <div style="font-size: 0.75rem; color: #5A665D; margin-top: 1px;">
-                Standardized Scope: <strong>{stats['monthly_start_date']} – {stats['monthly_end_date']}</strong>
-            </div>
-        </div>
+hero_markup = f"""
+<div class="dashboard-hero-card" style="min-height: 180px; margin-bottom: 20px;">
+    <div class="hero-text-content" style="padding: 28px 36px; max-width: 620px;">
+        <div class="hero-tag">DISEASE EXPLORER</div>
+        <h1 class="hero-headline" style="font-size: 2.1rem; margin-bottom: 8px;">
+            Disease Records & Field Surveillance
+        </h1>
+        <p class="hero-subtitle" style="font-size: 0.95rem; margin-bottom: 0;">
+            Explore verified plant pathogen occurrences, regional distribution, and seasonal trends across India.
+        </p>
     </div>
-    """,
-    unsafe_allow_html=True,
-)
+    <div class="hero-image-wrapper" style="width: 50%;">
+        <img src="{hero_ear_b64}" class="hero-ear-img" alt="Agricultural crop surveillance" />
+    </div>
+</div>
+"""
+st.html(hero_markup)
 
 # Load pathogens
 pathogen_dict = load_all_pathogen_options()
 
 # ==============================================================================
-# 2. FILTER TOOLBAR
+# 2. FILTER TOOLBAR CARD
 # ==============================================================================
+st.markdown('<div class="filter-toolbar-card">', unsafe_allow_html=True)
 bar_c1, bar_c2, bar_c3 = st.columns([1.2, 1.0, 1.0])
 
 with bar_c1:
+    st.markdown(
+        f"<div class='filter-field-label'>{icon_leaf(15, '#2D6A4F')} Plant Disease</div>",
+        unsafe_allow_html=True,
+    )
     selected_slug = st.selectbox(
-        "Target Plant Disease",
+        "Plant Disease",
         options=list(pathogen_dict.keys()),
         format_func=lambda k: pathogen_dict[k],
         index=0,
+        label_visibility="collapsed",
         help="Select an agricultural crop disease to inspect field records.",
     )
 
@@ -102,6 +112,10 @@ if "date" in df_monthly.columns and not pd.api.types.is_datetime64_any_dtype(df_
     df_monthly["date"] = pd.to_datetime(df_monthly["date"])
 
 with bar_c2:
+    st.markdown(
+        f"<div class='filter-field-label'>{icon_pin(15, '#2D6A4F')} Agro-Climatic Region</div>",
+        unsafe_allow_html=True,
+    )
     raw_regions = sorted(list(df_monthly["region_id"].dropna().unique()))
     available_regions = ["All Agro-Climatic Zones"] + raw_regions
     region_labels = {
@@ -117,19 +131,27 @@ with bar_c2:
         options=available_regions,
         format_func=lambda r: region_labels.get(r, r),
         index=0,
+        label_visibility="collapsed",
         help="Filter occurrence records by agricultural region.",
     )
 
 with bar_c3:
+    st.markdown(
+        f"<div class='filter-field-label'>{icon_calendar(15, '#2D6A4F')} Observation Period</div>",
+        unsafe_allow_html=True,
+    )
     min_date = df_monthly["date"].min().date()
     max_date = df_monthly["date"].max().date()
     date_range = st.date_input(
-        "Observation Date Range",
+        "Observation Period",
         value=(min_date, max_date),
         min_value=min_date,
         max_value=max_date,
+        label_visibility="collapsed",
         help="Filter records between specified start and end dates.",
     )
+
+st.markdown('</div>', unsafe_allow_html=True)
 
 # Filter Dataset
 filtered_df = df_monthly.copy()
@@ -146,60 +168,82 @@ if selected_region != "All Agro-Climatic Zones":
 # ==============================================================================
 # 3. FOUR COMPACT KPI METRIC CARDS
 # ==============================================================================
-host_crop = filtered_df["host_crop"].iloc[0] if ("host_crop" in filtered_df.columns and not filtered_df.empty) else "Agricultural Crop"
-date_span_str = (
-    f"{filtered_df['date'].min().strftime('%b %Y')} – {filtered_df['date'].max().strftime('%b %Y')}"
-    if not filtered_df.empty
-    else "N/A"
-)
-total_occurrences = int(filtered_df["documented_occurrence_count"].sum()) if not filtered_df.empty else 0
-active_regions_count = filtered_df["region_id"].nunique() if not filtered_df.empty else 0
+raw_host = filtered_df["host_crop"].iloc[0] if ("host_crop" in filtered_df.columns and not filtered_df.empty) else "Crop"
+host_clean = raw_host.split("(")[0].strip()
 
-st.markdown(
-    f"""
-    <div class="metric-grid" style="margin-top: 10px; margin-bottom: 20px;">
-        <div class="research-metric-card">
-            <div class="metric-icon-wrap">{icon_shield(18, "#527A50")}</div>
-            <div class="metric-label-text">Documented Occurrences</div>
-            <div class="metric-value-text">{total_occurrences:,}</div>
-            <div class="metric-note-text">Total Recorded Disease Reports</div>
-        </div>
-        <div class="research-metric-card">
-            <div class="metric-icon-wrap">{icon_timeseries(18, "#527A50")}</div>
-            <div class="metric-label-text">Observed Span</div>
-            <div class="metric-value-text" style="font-size: 1.25rem;">{date_span_str}</div>
-            <div class="metric-note-text">{len(filtered_df)} Continuous Months</div>
-        </div>
-        <div class="research-metric-card">
-            <div class="metric-icon-wrap">{icon_pin(18, "#527A50")}</div>
-            <div class="metric-label-text">Agro-Climatic Zones</div>
-            <div class="metric-value-text">{active_regions_count}</div>
-            <div class="metric-note-text">Regional Spatial Units</div>
-        </div>
-        <div class="research-metric-card">
-            <div class="metric-icon-wrap">{icon_leaf(18, "#527A50")}</div>
-            <div class="metric-label-text">Primary Host</div>
-            <div class="metric-value-text" style="font-size: 1.25rem;">{host_crop.split('(')[0].strip()}</div>
-            <div class="metric-note-text">Primary Agricultural Host</div>
+start_date_str = filtered_df["date"].min().strftime("%b %Y") if not filtered_df.empty else "Jan 2015"
+end_date_str = filtered_df["date"].max().strftime("%b %Y") if not filtered_df.empty else "Dec 2025"
+total_years_span = round(len(filtered_df) / 12.0) if not filtered_df.empty else 11
+total_occurrences = int(filtered_df["documented_occurrence_count"].sum()) if not filtered_df.empty else 0
+active_regions_count = filtered_df["region_id"].nunique() if not filtered_df.empty else 1
+
+kpi_markup = f"""
+<div class="kpi-row-grid" style="margin-top: 14px; margin-bottom: 22px;">
+    <div class="kpi-card">
+        <div class="kpi-icon-badge">{icon_database(20, "#2D6A4F")}</div>
+        <div>
+            <div class="kpi-value">{total_occurrences:,}</div>
+            <div class="kpi-subtext" style="color: #4B5563; font-weight: 500;">Documented Occurrences</div>
         </div>
     </div>
-    """,
-    unsafe_allow_html=True,
-)
+    <div class="kpi-card">
+        <div class="kpi-icon-badge">{icon_calendar(20, "#2D6A4F")}</div>
+        <div>
+            <div class="kpi-value">{total_years_span} Years</div>
+            <div class="kpi-subtext" style="color: #4B5563; font-weight: 500;">{start_date_str} – {end_date_str}</div>
+        </div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-icon-badge">{icon_network(20, "#2D6A4F")}</div>
+        <div>
+            <div class="kpi-value">{active_regions_count}</div>
+            <div class="kpi-subtext" style="color: #4B5563; font-weight: 500;">Agro-Climatic Zone{'s' if active_regions_count != 1 else ''}</div>
+        </div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-icon-badge">{icon_leaf(20, "#2D6A4F")}</div>
+        <div>
+            <div class="kpi-value">{host_clean}</div>
+            <div class="kpi-subtext" style="color: #4B5563; font-weight: 500;">Primary Host</div>
+        </div>
+    </div>
+</div>
+"""
+st.html(kpi_markup)
 
 # ==============================================================================
-# 4. STREAMLINED TABS (FOCUSED & ACTIONABLE)
+# 4. STREAMLINED PILL TABS
 # ==============================================================================
 tab_monthly, tab_seasonal, tab_map, tab_table = st.tabs([
-    "Historical Timeline",
-    "Seasonal Cycle",
-    "Geospatial Map",
-    "Recorded Reports Table",
+    "📈 Historical Timeline",
+    "📅 Seasonal Cycle",
+    "📍 Geospatial Map",
+    "📑 Records Table",
 ])
 
 # ----------------- Tab 1: Monthly Timeline -----------------
 with tab_monthly:
-    st.markdown(f"**Monthly Disease Occurrence Trajectory: {pathogen_dict[selected_slug]}**")
+    st.markdown(
+        f"""
+        <div class="explorer-chart-card">
+            <div class="chart-card-header">
+                <div class="chart-card-title">
+                    Monthly Disease Occurrence: {pathogen_dict[selected_slug]}
+                </div>
+                <div class="chart-card-legend">
+                    <div>
+                        <span class="legend-swatch-bar"></span>
+                        <span>Monthly Confirmed Occurrences</span>
+                    </div>
+                    <div>
+                        <span class="legend-swatch-line"></span>
+                        <span>3-Month Rolling Average</span>
+                    </div>
+                </div>
+            </div>
+        """,
+        unsafe_allow_html=True,
+    )
     if not filtered_df.empty:
         fig_m = go.Figure()
         fig_m.add_trace(
@@ -207,8 +251,8 @@ with tab_monthly:
                 x=filtered_df["date"],
                 y=filtered_df["documented_occurrence_count"],
                 name="Monthly Confirmed Occurrences",
-                marker_color="#183D32",
-                opacity=0.8,
+                marker_color="#104030",
+                opacity=1.0,
                 hovertemplate="Date: %{x|%b %Y}<br>Reports: %{y}<extra></extra>",
             )
         )
@@ -217,22 +261,47 @@ with tab_monthly:
                 x=filtered_df["date"],
                 y=filtered_df["documented_occurrence_count"].rolling(window=3, min_periods=1).mean(),
                 name="3-Month Rolling Average",
-                line=dict(color="#C4A66A", width=2.4),
+                line=dict(color="#D97706", width=2.4),
+                hovertemplate="3M Rolling Avg: %{y:.2f}<extra></extra>",
             )
         )
-        format_plotly_figure(
-            fig_m,
-            title=f"Monthly Verified Disease Reports ({filtered_df['date'].min().strftime('%b %Y')} – {filtered_df['date'].max().strftime('%b %Y')})",
-            height=360,
+        fig_m.update_layout(
+            height=340,
+            margin=dict(l=30, r=20, t=10, b=30),
+            plot_bgcolor="#FFFFFF",
+            paper_bgcolor="#FFFFFF",
+            showlegend=False,
+            xaxis=dict(
+                showgrid=True,
+                gridcolor="#F3F4F6",
+                tickformat="%Y",
+                linecolor="#E5E7EB",
+            ),
+            yaxis=dict(
+                showgrid=True,
+                gridcolor="#F3F4F6",
+                linecolor="#E5E7EB",
+            ),
         )
         st.plotly_chart(fig_m, use_container_width=True)
-        st.caption("Bar heights denote discrete monthly occurrence counts deposited in the master surveillance dataset; the gold curve traces the 3-month smoothed epidemiological trajectory.")
+        st.markdown(
+            f"""
+            <div class="chart-bottom-info-box">
+                {icon_info(16, "#166534")}
+                <span>Bar heights denote discrete monthly occurrence counts, while the gold curve shows the 3-month smoothed epidemiological trajectory.</span>
+            </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
     else:
         st.info("No monthly timeline series available for this pathogen in the selected filter.")
+        st.markdown("</div>", unsafe_allow_html=True)
 
 # ----------------- Tab 2: Seasonal Cycle -----------------
 with tab_seasonal:
-    st.markdown(f"**Annual Seasonal Reporting Profile: {pathogen_dict[selected_slug]}**")
+    st.markdown('<div class="explorer-chart-card">', unsafe_allow_html=True)
+    st.markdown(f"<div class='chart-card-title' style='margin-bottom: 12px;'>Annual Seasonal Reporting Profile: {pathogen_dict[selected_slug]}</div>", unsafe_allow_html=True)
     month_names = {
         1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr", 5: "May", 6: "Jun",
         7: "Jul", 8: "Aug", 9: "Sep", 10: "Oct", 11: "Nov", 12: "Dec",
@@ -253,22 +322,30 @@ with tab_seasonal:
             labels={"documented_occurrence_count": "Total Reports", "Month": "Calendar Month"},
             text="documented_occurrence_count",
             color="documented_occurrence_count",
-            color_continuous_scale=[[0, "#E8F5E9"], [0.5, "#527A50"], [1.0, "#183D32"]],
+            color_continuous_scale=[[0, "#E8F5E9"], [0.5, "#527A50"], [1.0, "#104030"]],
         )
-        format_plotly_figure(fig_seasonal, title="Historical Disease Reports by Calendar Month (Jan–Dec)", height=350)
-        fig_seasonal.update_layout(coloraxis_showscale=False)
+        format_plotly_figure(fig_seasonal, title="Historical Disease Reports by Calendar Month (Jan–Dec)", height=340)
+        fig_seasonal.update_layout(coloraxis_showscale=False, paper_bgcolor="#FFFFFF", plot_bgcolor="#FFFFFF")
         st.plotly_chart(fig_seasonal, use_container_width=True)
         peak_row = df_mb.sort_values("documented_occurrence_count", ascending=False).iloc[0]
-        st.caption(
-            f"Seasonal aggregation highlights intra-annual disease dynamics across the 11-year span, "
-            f"showing peak occurrence concentration in {peak_row['Month']} ({int(peak_row['documented_occurrence_count'])} cumulative reports)."
+        st.markdown(
+            f"""
+            <div class="chart-bottom-info-box">
+                {icon_info(16, "#166534")}
+                <span>Seasonal aggregation highlights intra-annual disease dynamics across the 11-year span, showing peak occurrence concentration in {peak_row['Month']} ({int(peak_row['documented_occurrence_count'])} cumulative reports).</span>
+            </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
         )
     else:
         st.info("Seasonal month distribution is being computed for this pathogen.")
+        st.markdown("</div>", unsafe_allow_html=True)
 
 # ----------------- Tab 3: Geospatial Map -----------------
 with tab_map:
-    st.markdown("**Agro-Climatic Regional Surveillance Across India**")
+    st.markdown('<div class="explorer-chart-card">', unsafe_allow_html=True)
+    st.markdown("<div class='chart-card-title' style='margin-bottom: 12px;'>Agro-Climatic Regional Surveillance Across India</div>", unsafe_allow_html=True)
 
     REGION_COORDINATES = {
         "national_composite": {"lat": 22.9734, "lon": 78.6569, "name": "National Composite (All India Centroid)"},
@@ -335,26 +412,28 @@ with tab_map:
         fig_map.update_layout(
             height=400,
             margin=dict(l=0, r=0, t=10, b=0),
-            paper_bgcolor="#FFFEFA",
+            paper_bgcolor="#FFFFFF",
             legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
         )
         st.plotly_chart(fig_map, use_container_width=True)
-        st.caption("Spatial surveillance centroids representing agro-climatic regional hubs for disease monitoring in the master dataset.")
 
         # Summary Table below map
-        st.markdown("**Agro-Climatic Summary for Selected Pathogen**")
+        st.markdown("<div style='font-size: 0.92rem; font-weight: 700; color: #111827; margin: 14px 0 6px 0;'>Agro-Climatic Summary for Selected Pathogen</div>", unsafe_allow_html=True)
         display_reg_df = reg_summary[["region_name", "region_id", "documented_occurrence_count", "temp_mean_c", "precipitation_monthly_mm", "relative_humidity_pct"]].copy()
         display_reg_df.columns = ["Agro-Climatic Zone", "Region Code", "Total Reports", "Mean Temp (°C)", "Monthly Rain (mm)", "Rel. Humidity (%)"]
         display_reg_df["Mean Temp (°C)"] = display_reg_df["Mean Temp (°C)"].round(1)
         display_reg_df["Monthly Rain (mm)"] = display_reg_df["Monthly Rain (mm)"].round(1)
         display_reg_df["Rel. Humidity (%)"] = display_reg_df["Rel. Humidity (%)"].round(1)
         st.dataframe(display_reg_df, use_container_width=True, hide_index=True)
+        st.markdown('</div>', unsafe_allow_html=True)
     else:
         st.info("No spatial data available for this selection.")
+        st.markdown('</div>', unsafe_allow_html=True)
 
 # ----------------- Tab 4: Recorded Reports Table & Master Provenance -----------------
 with tab_table:
-    st.markdown(f"**Authoritative Monthly Records ({len(filtered_df):,} Observations)**")
+    st.markdown('<div class="explorer-chart-card">', unsafe_allow_html=True)
+    st.markdown(f"<div class='chart-card-title' style='margin-bottom: 12px;'>Authoritative Monthly Records ({len(filtered_df):,} Observations)</div>", unsafe_allow_html=True)
     display_cols = [
         col for col in [
             "date", "documented_occurrence_count", "pathogen_slug", "host_crop",
@@ -386,14 +465,24 @@ with tab_table:
             {"Attribute": "SHA-256 Fingerprint", "Value": "c7bf42422df94183dea06a6c17ada8e784972f24ebefbbc252cb800d660f5d67", "Description": "Immutable cryptographic fingerprint"},
         ])
         st.dataframe(prov_df, use_container_width=True, hide_index=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
-# Navigation link
-st.markdown("<br>", unsafe_allow_html=True)
-try:
-    col_nav1, col_nav2 = st.columns(2)
-    with col_nav1:
-        st.page_link("pages/2_Time_Series_Analysis.py", label="Run Time Series Diagnostics ->", use_container_width=True)
-    with col_nav2:
-        st.page_link("pages/4_Future_Forecasts.py", label="Generate Future Forecasts ->", use_container_width=True)
-except Exception:
-    pass
+# ==============================================================================
+# 5. BOTTOM NAVIGATION CTA BUTTONS & LANDSCAPE ACCENT
+# ==============================================================================
+st.markdown(
+    f"""
+    <div class="bottom-cta-wrap">
+        <a href="/Time_Series_Analysis" target="_self" class="hero-btn-primary" style="padding: 12px 26px; font-size: 0.92rem;">
+            ▶ Run Time Series Diagnostics
+        </a>
+        <a href="/Future_Forecasts" target="_self" class="hero-btn-secondary" style="padding: 12px 26px; font-size: 0.92rem;">
+            {icon_trending_up(16, "#111827")} Generate Future Forecasts
+        </a>
+    </div>
+    <div style="position: relative; width: 100%; height: 60px; overflow: hidden; pointer-events: none; margin-top: 10px; margin-bottom: -20px;">
+        <img src="{obj_hills_b64}" style="position: absolute; right: 0; bottom: 0; height: 100%; opacity: 0.7; object-fit: contain;" alt="contour hills" />
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
