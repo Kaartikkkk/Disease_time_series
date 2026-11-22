@@ -282,17 +282,22 @@ winner_card_html = f"""
 st.html(winner_card_html)
 
 # ==============================================================================
+# ==============================================================================
 # 5. HELPER FUNCTION TO RENDER EXACT STYLED TABLES
 # ==============================================================================
-def render_styled_table(df_table, is_classical_section=True):
+def render_styled_table(df_table, is_classical_section=True, best_classical_rmse=None, best_classical_name="Classical"):
     rows_html = []
+    comp_header = "Improvement vs. Baseline" if is_classical_section else f"vs. Best Classical ({best_classical_name})"
+    
     for idx, r in df_table.iterrows():
         rank_num = idx + 1
         model_name = str(r.get("Model", ""))
         try:
             rmse_val = f"{float(r.get('RMSE', 0.0)):.3f}"
+            rmse_num = float(r.get("RMSE", 0.0))
         except Exception:
             rmse_val = str(r.get("RMSE", ""))
+            rmse_num = None
         try:
             mae_val = f"{float(r.get('MAE', 0.0)):.3f}"
         except Exception:
@@ -306,9 +311,22 @@ def render_styled_table(df_table, is_classical_section=True):
         except Exception:
             mase_val = str(r.get("MASE", "N/A"))
             
-        imp_val = r.get("Improvement vs Baseline", "N/A") if "Improvement vs Baseline" in r else ("N/A" if not is_classical_section else "0.0%")
-        if not is_classical_section:
-            imp_val = "N/A"
+        if is_classical_section:
+            raw_imp = r.get("Improvement vs Baseline", "0.0%")
+            if not raw_imp or raw_imp == "N/A":
+                raw_imp = "0.0%"
+            col_markup = f"<span style='color: {'#166534' if '+' in str(raw_imp) else '#4B5563'}; font-weight: {'600' if '+' in str(raw_imp) else '400'};'>{raw_imp}</span>"
+        else:
+            if best_classical_rmse and best_classical_rmse > 0 and rmse_num is not None:
+                gain_pct = ((best_classical_rmse - rmse_num) / best_classical_rmse) * 100.0
+                if gain_pct > 0.05:
+                    col_markup = f"<span style='color: #166534; font-weight: 700; background: rgba(22, 101, 52, 0.08); padding: 2px 7px; border-radius: 4px;'>+{gain_pct:.1f}% vs {best_classical_name}</span>"
+                elif gain_pct < -0.05:
+                    col_markup = f"<span style='color: #991B1B; font-weight: 600; background: rgba(153, 27, 27, 0.06); padding: 2px 7px; border-radius: 4px;'>{gain_pct:.1f}% vs {best_classical_name}</span>"
+                else:
+                    col_markup = f"<span style='color: #4B5563; font-weight: 500;'>0.0% (Par)</span>"
+            else:
+                col_markup = "<span style='color: #6B7280;'>N/A</span>"
             
         bg_style = "background-color: #EBF5EE; font-weight: 600;" if rank_num == 1 else "background-color: #FFFFFF;"
         row_markup = f"""
@@ -319,7 +337,7 @@ def render_styled_table(df_table, is_classical_section=True):
             <td style="padding: 9px 12px; color: #4B5563;">{mae_val}</td>
             <td style="padding: 9px 12px; color: #4B5563;">{smape_val}</td>
             <td style="padding: 9px 12px; color: #4B5563;">{mase_val}</td>
-            <td style="padding: 9px 12px; color: {'#166534' if '+' in str(imp_val) else '#4B5563'};">{imp_val}</td>
+            <td style="padding: 9px 12px;">{col_markup}</td>
         </tr>
         """
         rows_html.append(row_markup)
@@ -335,7 +353,7 @@ def render_styled_table(df_table, is_classical_section=True):
                     <th style="padding: 9px 12px; color: #4B5563; font-weight: 600;">MAE</th>
                     <th style="padding: 9px 12px; color: #4B5563; font-weight: 600;">sMAPE (%)</th>
                     <th style="padding: 9px 12px; color: #4B5563; font-weight: 600;">MASE</th>
-                    <th style="padding: 9px 12px; color: #4B5563; font-weight: 600;">Improvement vs. Baseline</th>
+                    <th style="padding: 9px 12px; color: #4B5563; font-weight: 600;">{comp_header}</th>
                 </tr>
             </thead>
             <tbody>
@@ -346,108 +364,164 @@ def render_styled_table(df_table, is_classical_section=True):
     """
 
 # ==============================================================================
-# 6. TWO PILL TABS: CLASSICAL & ADVANCED MODELS
+# 6. INTERACTIVE PILL TABS: CLASSICAL & ADVANCED MODELS (ZERO-SCROLL VIEW TOGGLE)
 # ==============================================================================
-pill_nav_html = f"""
-<div style="display: flex; gap: 10px; margin-top: 8px; margin-bottom: 22px;">
-    <a href="#classical-section" style="background: #1B4332; color: #FFFFFF; padding: 7px 18px; border-radius: 9999px; text-decoration: none; font-size: 0.88rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(27,67,50,0.15);">
-        {icon_bar_chart(15, '#FFFFFF')} Classical Models
-    </a>
-    <a href="#advanced-section" style="background: #F8F9FA; border: 1px solid rgba(0,0,0,0.1); color: #4B5563; padding: 7px 18px; border-radius: 9999px; text-decoration: none; font-size: 0.88rem; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;">
-        {icon_layers(15, '#4B5563')} Advanced Models
-    </a>
-</div>
-"""
-st.html(pill_nav_html)
+st.markdown("""
+<style>
+div[data-testid="stPills"] {
+    display: flex;
+    gap: 12px;
+    margin-top: 4px;
+    margin-bottom: 20px;
+}
+div[data-testid="stPills"] button {
+    border-radius: 9999px !important;
+    padding: 8px 22px !important;
+    font-size: 0.90rem !important;
+    font-weight: 600 !important;
+    border: 1.5px solid rgba(0, 0, 0, 0.1) !important;
+    background: #F8F9FA !important;
+    color: #4B5563 !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03) !important;
+    transition: all 0.2s ease !important;
+}
+div[data-testid="stPills"] button:hover {
+    background: #EBF5EE !important;
+    color: #1B4332 !important;
+    border-color: #1B4332 !important;
+}
+div[data-testid="stPills"] button[aria-checked="true"],
+div[data-testid="stPills"] button[data-selected="true"] {
+    background: #1B4332 !important;
+    color: #FFFFFF !important;
+    border-color: #1B4332 !important;
+    box-shadow: 0 3px 10px rgba(27, 67, 50, 0.25) !important;
+}
+div[data-testid="stPills"] button[aria-checked="true"] p,
+div[data-testid="stPills"] button[data-selected="true"] p {
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
+pill_options = ["📊 Classical Models", "🚀 Advanced Models", "🏆 Compare Both"]
+selected_family = st.pills(
+    "Select Model Category",
+    options=pill_options,
+    default="📊 Classical Models",
+    key="model_category_pills",
+    label_visibility="collapsed",
+)
+if not selected_family:
+    selected_family = "📊 Classical Models"
 
 # ----------------- SECTION 1: CLASSICAL STATISTICAL MODELS -----------------
-st.markdown('<div id="classical-section">', unsafe_allow_html=True)
-st.markdown(
-    f"""
-    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 2px;">
-        {icon_bar_chart(20, "#102C26")}
-        <h3 style="font-size: 1.25rem; font-weight: 700; color: #102C26; margin: 0;">Classical Statistical Forecasting Models</h3>
-    </div>
-    <div style="font-size: 0.86rem; color: #5A665D; margin-bottom: 8px;">
-        Univariate Box-Jenkins econometrics (AR, MA, ARIMA, SARIMA), Holt-Winters exponential smoothing, and seasonal persistence baselines.
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-if not df_classical.empty:
-    st.html(render_styled_table(df_classical, is_classical_section=True))
-    
-    # Horizontal Bar Chart
-    c_chart_df = df_classical.copy().sort_values(by="RMSE", ascending=True)
-    fig_c_bar = px.bar(
-        c_chart_df,
-        x="RMSE",
-        y="Model",
-        orientation="h",
-        text="RMSE",
-        color_discrete_sequence=["#527A50"],
+if selected_family in ["📊 Classical Models", "🏆 Compare Both"]:
+    st.markdown('<div id="classical-section">', unsafe_allow_html=True)
+    st.markdown(
+        f"""
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                {icon_bar_chart(20, "#102C26")}
+                <h3 style="font-size: 1.25rem; font-weight: 700; color: #102C26; margin: 0;">Classical Statistical Forecasting Models</h3>
+            </div>
+            <span style="font-size: 0.78rem; font-weight: 600; color: #2D6A4F; background: rgba(45, 106, 79, 0.1); padding: 3px 9px; border-radius: 9999px;">
+                Milestone 2 Econometric Suite ({len(df_classical)} Models)
+            </span>
+        </div>
+        <div style="font-size: 0.86rem; color: #5A665D; margin-bottom: 8px;">
+            Univariate Box-Jenkins econometrics (AR, MA, ARIMA, SARIMA), Holt-Winters exponential smoothing, and seasonal persistence baselines.
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
-    fig_c_bar.update_layout(
-        title=dict(text="<b>Classical Models: RMSE on Unseen Data (Lower is Better)</b>", font=dict(size=14, color="#102C26"), x=0.01),
-        xaxis=dict(title="RMSE (Reports)", showgrid=True, gridcolor="rgba(0,0,0,0.06)"),
-        yaxis=dict(title="", showgrid=False, automargin=True),
-        margin=dict(l=10, r=40, t=40, b=30),
-        height=270,
-        plot_bgcolor="rgba(0,0,0,0)",
-        paper_bgcolor="rgba(0,0,0,0)",
-    )
-    fig_c_bar.update_traces(texttemplate="%{text:.2f}", textposition="outside", cliponaxis=False)
-    st.plotly_chart(fig_c_bar, use_container_width=True)
-else:
-    st.info("No classical models evaluated for this configuration.")
 
-st.markdown('</div>', unsafe_allow_html=True)
-st.markdown("<div style='height: 24px;'></div>", unsafe_allow_html=True)
+    if not df_classical.empty:
+        st.html(render_styled_table(df_classical, is_classical_section=True))
+        
+        # Horizontal Bar Chart
+        c_chart_df = df_classical.copy().sort_values(by="RMSE", ascending=True)
+        fig_c_bar = px.bar(
+            c_chart_df,
+            x="RMSE",
+            y="Model",
+            orientation="h",
+            text="RMSE",
+            color_discrete_sequence=["#527A50"],
+        )
+        fig_c_bar.update_layout(
+            title=dict(text="<b>Classical Models: RMSE on Unseen Data (Lower is Better)</b>", font=dict(size=14, color="#102C26"), x=0.01),
+            xaxis=dict(title="RMSE (Reports)", showgrid=True, gridcolor="rgba(0,0,0,0.06)"),
+            yaxis=dict(title="", showgrid=False, automargin=True),
+            margin=dict(l=10, r=40, t=40, b=30),
+            height=270,
+            plot_bgcolor="rgba(0,0,0,0)",
+            paper_bgcolor="rgba(0,0,0,0)",
+        )
+        fig_c_bar.update_traces(texttemplate="%{text:.2f}", textposition="outside", cliponaxis=False)
+        st.plotly_chart(fig_c_bar, use_container_width=True)
+    else:
+        st.info("No classical models evaluated for this configuration.")
+
+    st.markdown('</div>', unsafe_allow_html=True)
+    if selected_family == "🏆 Compare Both":
+        st.markdown("<div style='height: 24px;'></div>", unsafe_allow_html=True)
 
 # ----------------- SECTION 2: ADVANCED & MODERN MODELS -----------------
-st.markdown('<div id="advanced-section">', unsafe_allow_html=True)
-st.markdown(
-    f"""
-    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 2px;">
-        {icon_layers(20, "#102C26")}
-        <h3 style="font-size: 1.25rem; font-weight: 700; color: #102C26; margin: 0;">Advanced &amp; Modern Forecasting Models</h3>
-    </div>
-    <div style="font-size: 0.86rem; color: #5A665D; margin-bottom: 8px;">
-        Two-stage Hurdle XGBoost, Prophet Bayesian curves, multi-pathogen pooled ensembles, and deep recurrent neural networks (GRU &amp; LSTM).
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-if not df_advanced.empty:
-    st.html(render_styled_table(df_advanced, is_classical_section=False))
-    
-    # Horizontal Bar Chart
-    a_chart_df = df_advanced.copy().sort_values(by="RMSE", ascending=True)
-    fig_a_bar = px.bar(
-        a_chart_df,
-        x="RMSE",
-        y="Model",
-        orientation="h",
-        text="RMSE",
-        color_discrete_sequence=["#527A50"],
+if selected_family in ["🚀 Advanced Models", "🏆 Compare Both"]:
+    st.markdown('<div id="advanced-section">', unsafe_allow_html=True)
+    st.markdown(
+        f"""
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                {icon_layers(20, "#102C26")}
+                <h3 style="font-size: 1.25rem; font-weight: 700; color: #102C26; margin: 0;">Advanced &amp; Modern Forecasting Models</h3>
+            </div>
+            <span style="font-size: 0.78rem; font-weight: 600; color: #166534; background: rgba(22, 101, 52, 0.1); padding: 3px 9px; border-radius: 9999px;">
+                Milestone 3 ML/DL Suite ({len(df_advanced)} Models)
+            </span>
+        </div>
+        <div style="font-size: 0.86rem; color: #5A665D; margin-bottom: 8px;">
+            Two-stage Hurdle XGBoost, Prophet Bayesian curves, multi-pathogen pooled ensembles, and deep recurrent neural networks (GRU &amp; LSTM), benchmarked directly against top classical baseline.
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
-    fig_a_bar.update_layout(
-        title=dict(text="<b>Advanced Models: RMSE on Unseen Data (Lower is Better)</b>", font=dict(size=14, color="#102C26"), x=0.01),
-        xaxis=dict(title="RMSE (Reports)", showgrid=True, gridcolor="rgba(0,0,0,0.06)"),
-        yaxis=dict(title="", showgrid=False, automargin=True),
-        margin=dict(l=10, r=40, t=40, b=30),
-        height=320,
-        plot_bgcolor="rgba(0,0,0,0)",
-        paper_bgcolor="rgba(0,0,0,0)",
-    )
-    fig_a_bar.update_traces(texttemplate="%{text:.2f}", textposition="outside", cliponaxis=False)
-    st.plotly_chart(fig_a_bar, use_container_width=True)
-else:
-    st.info("No advanced models evaluated for this configuration.")
 
-st.markdown('</div>', unsafe_allow_html=True)
+    if not df_advanced.empty:
+        st.html(render_styled_table(
+            df_advanced,
+            is_classical_section=False,
+            best_classical_rmse=c_m1_rmse,
+            best_classical_name=c_m1_name,
+        ))
+        
+        # Horizontal Bar Chart
+        a_chart_df = df_advanced.copy().sort_values(by="RMSE", ascending=True)
+        fig_a_bar = px.bar(
+            a_chart_df,
+            x="RMSE",
+            y="Model",
+            orientation="h",
+            text="RMSE",
+            color_discrete_sequence=["#527A50"],
+        )
+        fig_a_bar.update_layout(
+            title=dict(text="<b>Advanced Models: RMSE on Unseen Data (Lower is Better)</b>", font=dict(size=14, color="#102C26"), x=0.01),
+            xaxis=dict(title="RMSE (Reports)", showgrid=True, gridcolor="rgba(0,0,0,0.06)"),
+            yaxis=dict(title="", showgrid=False, automargin=True),
+            margin=dict(l=10, r=40, t=40, b=30),
+            height=320,
+            plot_bgcolor="rgba(0,0,0,0)",
+            paper_bgcolor="rgba(0,0,0,0)",
+        )
+        fig_a_bar.update_traces(texttemplate="%{text:.2f}", textposition="outside", cliponaxis=False)
+        st.plotly_chart(fig_a_bar, use_container_width=True)
+    else:
+        st.info("No advanced models evaluated for this configuration.")
+
+    st.markdown('</div>', unsafe_allow_html=True)
 
 # ==============================================================================
 # 7. GROUND-TRUTH OVERLAY & HEAD-TO-HEAD BENCHMARK (EXPANDABLE DETAIL)
