@@ -9,6 +9,7 @@ Generates:
 
 import os
 import sys
+import shutil
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -24,7 +25,8 @@ from reportlab.platypus import (
 )
 from reportlab.pdfgen import canvas
 
-REPORTS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "reports"))
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+REPORTS_DIR = os.path.abspath(os.path.join(REPO_ROOT, "reports"))
 ASSETS_DIR = os.path.abspath(os.path.join(REPORTS_DIR, "assets"))
 os.makedirs(ASSETS_DIR, exist_ok=True)
 
@@ -570,6 +572,13 @@ def build_m2_pdf():
     doc.build(story, canvasmaker=NumberedCanvas)
     print(f"Successfully generated Milestone 2 PDF: {pdf_path}")
 
+    # Copy to final_submission/reports/
+    final_sub_dir = os.path.join(REPO_ROOT, "final_submission", "reports")
+    os.makedirs(final_sub_dir, exist_ok=True)
+    final_pdf_path = os.path.join(final_sub_dir, "MILESTONE_2_CLASSICAL_TIME_SERIES_REPORT.pdf")
+    shutil.copyfile(pdf_path, final_pdf_path)
+    print(f"Successfully synchronized Milestone 2 PDF to final_submission: {final_pdf_path}")
+
 
 def build_m3_pdf():
     pdf_path = os.path.join(REPORTS_DIR, "MILESTONE_3_ADVANCED_FORECASTING_REPORT.pdf")
@@ -783,4 +792,3 @@ def build_m3_pdf():
 
 if __name__ == "__main__":
     build_m2_pdf()
-    build_m3_pdf()

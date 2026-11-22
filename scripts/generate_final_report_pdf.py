@@ -25,7 +25,8 @@ from reportlab.platypus import (
 )
 from reportlab.pdfgen import canvas
 
-REPORTS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "reports"))
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+REPORTS_DIR = os.path.abspath(os.path.join(REPO_ROOT, "reports"))
 ASSETS_DIR = os.path.abspath(os.path.join(REPORTS_DIR, "assets"))
 os.makedirs(ASSETS_DIR, exist_ok=True)
 
@@ -187,7 +188,7 @@ def get_styles():
 
 
 def build_final_report_pdf():
-    pdf_path = os.path.join(REPORTS_DIR, "PHASE_3_FINAL_PROJECT_REPORT.pdf")
+    pdf_path = os.path.join(REPORTS_DIR, "MILESTONE_3_ADVANCED_FORECASTING_REPORT.pdf")
     doc = SimpleDocTemplate(
         pdf_path,
         pagesize=letter,
@@ -636,10 +637,12 @@ def build_final_report_pdf():
     doc.build(story, canvasmaker=AcademicNumberedCanvas)
     print(f"Successfully generated 9-Page Academic Report: {pdf_path}")
 
-    # Copy to MILESTONE_3_ADVANCED_FORECASTING_REPORT.pdf as well
-    m3_pdf_path = os.path.join(REPORTS_DIR, "MILESTONE_3_ADVANCED_FORECASTING_REPORT.pdf")
-    shutil.copyfile(pdf_path, m3_pdf_path)
-    print(f"Successfully synchronized 9-Page Academic Report: {m3_pdf_path}")
+    # Copy to final_submission/reports/
+    final_sub_dir = os.path.join(REPO_ROOT, "final_submission", "reports")
+    os.makedirs(final_sub_dir, exist_ok=True)
+    final_pdf_path = os.path.join(final_sub_dir, "MILESTONE_3_ADVANCED_FORECASTING_REPORT.pdf")
+    shutil.copyfile(pdf_path, final_pdf_path)
+    print(f"Successfully synchronized to final_submission: {final_pdf_path}")
     return pdf_path
 
 

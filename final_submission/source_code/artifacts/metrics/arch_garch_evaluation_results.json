@@ -1,0 +1,2577 @@
+{
+  "metadata": {
+    "dataset": "disease_timeseries_master.csv",
+    "total_pathogens": 10,
+    "date_range": [
+      "2015-01-01",
+      "2025-12-01"
+    ],
+    "target_col": "documented_occurrence_count"
+  },
+  "pathogen_suitability": {
+    "alternaria_solani": {
+      "zero_percentage": 78.8,
+      "mean": 0.54,
+      "std": 2.29,
+      "adf_pvalue": 0.0,
+      "kpss_pvalue": 0.1,
+      "arch_lm_raw_p": 0.9999,
+      "arch_lm_diff_p": 0.0,
+      "arch_lm_resid_p": 0.9999,
+      "suitability_verdict": "Strong ARCH Effects (Highly Suitable for Volatility Modelling)"
+    },
+    "bipolaris_oryzae": {
+      "zero_percentage": 78.8,
+      "mean": 0.71,
+      "std": 2.14,
+      "adf_pvalue": 0.0,
+      "kpss_pvalue": 0.0357,
+      "arch_lm_raw_p": 0.1385,
+      "arch_lm_diff_p": 0.0,
+      "arch_lm_resid_p": 0.0001,
+      "suitability_verdict": "Strong ARCH Effects (Highly Suitable for Volatility Modelling)"
+    },
+    "fusarium_oxysporum": {
+      "zero_percentage": 19.7,
+      "mean": 5.21,
+      "std": 5.6,
+      "adf_pvalue": 0.6266,
+      "kpss_pvalue": 0.01,
+      "arch_lm_raw_p": 0.341,
+      "arch_lm_diff_p": 0.0,
+      "arch_lm_resid_p": 0.9992,
+      "suitability_verdict": "Strong ARCH Effects (Highly Suitable for Volatility Modelling)"
+    },
+    "macrophomina_phaseolina": {
+      "zero_percentage": 58.3,
+      "mean": 1.58,
+      "std": 3.14,
+      "adf_pvalue": 0.9655,
+      "kpss_pvalue": 0.01,
+      "arch_lm_raw_p": 0.0001,
+      "arch_lm_diff_p": 0.0,
+      "arch_lm_resid_p": 0.0066,
+      "suitability_verdict": "Strong ARCH Effects (Highly Suitable for Volatility Modelling)"
+    },
+    "phytophthora_infestans": {
+      "zero_percentage": 93.2,
+      "mean": 0.17,
+      "std": 1.03,
+      "adf_pvalue": 0.0,
+      "kpss_pvalue": 0.0951,
+      "arch_lm_raw_p": 1.0,
+      "arch_lm_diff_p": 0.0,
+      "arch_lm_resid_p": 0.9999,
+      "suitability_verdict": "Moderate ARCH Effects (Suitable on Differenced Series)"
+    },
+    "puccinia_striiformis": {
+      "zero_percentage": 97.0,
+      "mean": 0.05,
+      "std": 0.33,
+      "adf_pvalue": 0.0415,
+      "kpss_pvalue": 0.1,
+      "arch_lm_raw_p": 0.9993,
+      "arch_lm_diff_p": 0.0,
+      "arch_lm_resid_p": 0.9992,
+      "suitability_verdict": "Moderate ARCH Effects (Suitable on Differenced Series)"
+    },
+    "pyricularia_oryzae": {
+      "zero_percentage": 78.0,
+      "mean": 0.85,
+      "std": 2.29,
+      "adf_pvalue": 0.0,
+      "kpss_pvalue": 0.1,
+      "arch_lm_raw_p": 0.7909,
+      "arch_lm_diff_p": 0.0022,
+      "arch_lm_resid_p": 0.9789,
+      "suitability_verdict": "Strong ARCH Effects (Highly Suitable for Volatility Modelling)"
+    },
+    "ralstonia_solanacearum": {
+      "zero_percentage": 68.2,
+      "mean": 1.73,
+      "std": 6.96,
+      "adf_pvalue": 0.0003,
+      "kpss_pvalue": 0.1,
+      "arch_lm_raw_p": 0.9751,
+      "arch_lm_diff_p": 0.0,
+      "arch_lm_resid_p": 0.9878,
+      "suitability_verdict": "Strong ARCH Effects (Highly Suitable for Volatility Modelling)"
+    },
+    "rhizoctonia_solani": {
+      "zero_percentage": 59.1,
+      "mean": 2.06,
+      "std": 4.51,
+      "adf_pvalue": 0.9983,
+      "kpss_pvalue": 0.01,
+      "arch_lm_raw_p": 0.0,
+      "arch_lm_diff_p": 0.0002,
+      "arch_lm_resid_p": 0.0134,
+      "suitability_verdict": "Strong ARCH Effects (Highly Suitable for Volatility Modelling)"
+    },
+    "xanthomonas_oryzae": {
+      "zero_percentage": 87.1,
+      "mean": 0.52,
+      "std": 3.49,
+      "adf_pvalue": 0.0,
+      "kpss_pvalue": 0.1,
+      "arch_lm_raw_p": 0.9978,
+      "arch_lm_diff_p": 0.0,
+      "arch_lm_resid_p": 0.9488,
+      "suitability_verdict": "Moderate ARCH Effects (Suitable on Differenced Series)"
+    }
+  },
+  "model_specifications": {
+    "alternaria_solani": {
+      "approach_a_residuals": {
+        "arch_1": {
+          "p": 1,
+          "q": 0,
+          "log_likelihood": -164.53,
+          "aic": 335.05,
+          "bic": 343.7,
+          "arch_lm_pvalue": 0.9999,
+          "converged": true,
+          "params": {
+            "omega": 1.0493,
+            "alpha[1]": 0.0,
+            "nu": 2.9913
+          }
+        },
+        "arch_2": {
+          "p": 2,
+          "q": 0,
+          "log_likelihood": -164.53,
+          "aic": 337.05,
+          "bic": 348.58,
+          "arch_lm_pvalue": 0.9999,
+          "converged": true,
+          "params": {
+            "omega": 1.0495,
+            "alpha[1]": 0.0,
+            "alpha[2]": 0.0,
+            "nu": 2.9912
+          }
+        },
+        "arch_5": {
+          "p": 5,
+          "q": 0,
+          "log_likelihood": -164.53,
+          "aic": 343.05,
+          "bic": 363.23,
+          "arch_lm_pvalue": 0.9999,
+          "converged": true,
+          "params": {
+            "omega": 1.0493,
+            "alpha[1]": 0.0,
+            "alpha[2]": 0.0,
+            "alpha[3]": 0.0,
+            "alpha[4]": 0.0,
+            "alpha[5]": 0.0,
+            "nu": 2.9913
+          }
+        },
+        "garch_1_1": {
+          "p": 1,
+          "q": 1,
+          "log_likelihood": -164.53,
+          "aic": 337.05,
+          "bic": 348.58,
+          "arch_lm_pvalue": 0.9999,
+          "converged": true,
+          "params": {
+            "omega": 1.0493,
+            "alpha[1]": 0.0,
+            "beta[1]": 0.0,
+            "nu": 2.9914
+          }
+        },
+        "garch_1_2": {
+          "p": 1,
+          "q": 2,
+          "log_likelihood": -164.53,
+          "aic": 339.05,
+          "bic": 353.47,
+          "arch_lm_pvalue": 0.9999,
+          "converged": true,
+          "params": {
+            "omega": 1.0492,
+            "alpha[1]": 0.0,
+            "beta[1]": 0.0,
+            "beta[2]": 0.0,
+            "nu": 2.9914
+          }
+        },
+        "garch_2_1": {
+          "p": 2,
+          "q": 1,
+          "log_likelihood": -164.53,
+          "aic": 339.05,
+          "bic": 353.47,
+          "arch_lm_pvalue": 0.9999,
+          "converged": true,
+          "params": {
+            "omega": 1.0494,
+            "alpha[1]": 0.0,
+            "alpha[2]": 0.0,
+            "beta[1]": 0.0,
+            "nu": 2.9913
+          }
+        },
+        "garch_2_2": {
+          "p": 2,
+          "q": 2,
+          "log_likelihood": -164.53,
+          "aic": 341.05,
+          "bic": 358.35,
+          "arch_lm_pvalue": 0.9999,
+          "converged": true,
+          "params": {
+            "omega": 1.0493,
+            "alpha[1]": 0.0,
+            "alpha[2]": 0.0,
+            "beta[1]": 0.0,
+            "beta[2]": 0.0,
+            "nu": 2.9914
+          }
+        }
+      },
+      "approach_b_diff": {
+        "arch_1": {
+          "p": 1,
+          "q": 0,
+          "log_likelihood": 117.07,
+          "aic": -226.14,
+          "bic": -214.64,
+          "arch_lm_pvalue": 0.9999,
+          "converged": false,
+          "params": {
+            "mu": -0.0003,
+            "omega": 0.0001,
+            "alpha[1]": 0.5692,
+            "nu": 2.05
+          }
+        },
+        "arch_2": {
+          "p": 2,
+          "q": 0,
+          "log_likelihood": -303.85,
+          "aic": 617.7,
+          "bic": 632.08,
+          "arch_lm_pvalue": 0.9997,
+          "converged": false,
+          "params": {
+            "mu": 0.187,
+            "omega": 4.9465,
+            "alpha[1]": 0.2995,
+            "alpha[2]": 0.0,
+            "nu": 491.1717
+          }
+        },
+        "arch_5": {
+          "p": 5,
+          "q": 0,
+          "log_likelihood": -87.3,
+          "aic": 190.61,
+          "bic": 213.61,
+          "arch_lm_pvalue": 0.9999,
+          "converged": true,
+          "params": {
+            "mu": 0.0014,
+            "omega": 0.1305,
+            "alpha[1]": 0.8169,
+            "alpha[2]": 0.1831,
+            "alpha[3]": 0.0,
+            "alpha[4]": 0.0,
+            "alpha[5]": 0.0,
+            "nu": 2.2376
+          }
+        },
+        "garch_1_1": {
+          "p": 1,
+          "q": 1,
+          "log_likelihood": -175.78,
+          "aic": 361.56,
+          "bic": 375.93,
+          "arch_lm_pvalue": 0.9999,
+          "converged": true,
+          "params": {
+            "mu": 0.114,
+            "omega": 0.1014,
+            "alpha[1]": 0.8055,
+            "beta[1]": 0.0,
+            "nu": 9.4334
+          }
+        },
+        "garch_1_2": {
+          "p": 1,
+          "q": 2,
+          "log_likelihood": -89.57,
+          "aic": 191.14,
+          "bic": 208.39,
+          "arch_lm_pvalue": 0.9999,
+          "converged": true,
+          "params": {
+            "mu": 0.0118,
+            "omega": 0.3787,
+            "alpha[1]": 0.9998,
+            "beta[1]": 0.0,
+            "beta[2]": 0.0,
+            "nu": 2.05
+          }
+        },
+        "garch_2_1": {
+          "p": 2,
+          "q": 1,
+          "log_likelihood": 73.45,
+          "aic": -134.9,
+          "bic": -117.65,
+          "arch_lm_pvalue": 0.9999,
+          "converged": true,
+          "params": {
+            "mu": 0.0018,
+            "omega": 0.0004,
+            "alpha[1]": 1.0,
+            "alpha[2]": 0.0,
+            "beta[1]": 0.0,
+            "nu": 2.05
+          }
+        },
+        "garch_2_2": {
+          "p": 2,
+          "q": 2,
+          "log_likelihood": -296.9,
+          "aic": 607.79,
+          "bic": 627.92,
+          "arch_lm_pvalue": 0.9999,
+          "converged": false,
+          "params": {
+            "mu": 0.1484,
+            "omega": 4.0741,
+            "alpha[1]": 0.4672,
+            "alpha[2]": 0.0,
+            "beta[1]": 0.0,
+            "beta[2]": 0.0,
+            "nu": 200.8997
+          }
+        }
+      }
+    },
+    "bipolaris_oryzae": {
+      "approach_a_residuals": {
+        "arch_1": {
+          "p": 1,
+          "q": 0,
+          "log_likelihood": -182.19,
+          "aic": 370.38,
+          "bic": 379.03,
+          "arch_lm_pvalue": 0.9991,
+          "converged": true,
+          "params": {
+            "omega": 0.5649,
+            "alpha[1]": 1.0,
+            "nu": 3.1304
+          }
+        },
+        "arch_2": {
+          "p": 2,
+          "q": 0,
+          "log_likelihood": -180.44,
+          "aic": 368.87,
+          "bic": 380.4,
+          "arch_lm_pvalue": 0.999,
+          "converged": true,
+          "params": {
+            "omega": 0.4559,
+            "alpha[1]": 0.908,
+            "alpha[2]": 0.092,
+            "nu": 3.3219
+          }
+        },
+        "arch_5": {
+          "p": 5,
+          "q": 0,
+          "log_likelihood": -180.43,
+          "aic": 374.85,
+          "bic": 395.03,
+          "arch_lm_pvalue": 0.999,
+          "converged": true,
+          "params": {
+            "omega": 0.4547,
+            "alpha[1]": 0.9081,
+            "alpha[2]": 0.091,
+            "alpha[3]": 0.0,
+            "alpha[4]": 0.0,
+            "alpha[5]": 0.001,
+            "nu": 3.3164
+          }
+        },
+        "garch_1_1": {
+          "p": 1,
+          "q": 1,
+          "log_likelihood": -180.56,
+          "aic": 369.13,
+          "bic": 380.66,
+          "arch_lm_pvalue": 0.999,
+          "converged": true,
+          "params": {
+            "omega": 0.4211,
+            "alpha[1]": 0.9257,
+            "beta[1]": 0.0743,
+            "nu": 3.3266
+          }
+        },
+        "garch_1_2": {
+          "p": 1,
+          "q": 2,
+          "log_likelihood": -180.56,
+          "aic": 371.13,
+          "bic": 385.54,
+          "arch_lm_pvalue": 0.999,
+          "converged": true,
+          "params": {
+            "omega": 0.421,
+            "alpha[1]": 0.9257,
+            "beta[1]": 0.0743,
+            "beta[2]": 0.0,
+            "nu": 3.3266
+          }
+        },
+        "garch_2_1": {
+          "p": 2,
+          "q": 1,
+          "log_likelihood": -180.44,
+          "aic": 370.87,
+          "bic": 385.29,
+          "arch_lm_pvalue": 0.999,
+          "converged": true,
+          "params": {
+            "omega": 0.4559,
+            "alpha[1]": 0.908,
+            "alpha[2]": 0.092,
+            "beta[1]": 0.0,
+            "nu": 3.3219
+          }
+        },
+        "garch_2_2": {
+          "p": 2,
+          "q": 2,
+          "log_likelihood": -180.44,
+          "aic": 372.87,
+          "bic": 390.17,
+          "arch_lm_pvalue": 0.999,
+          "converged": true,
+          "params": {
+            "omega": 0.4559,
+            "alpha[1]": 0.908,
+            "alpha[2]": 0.092,
+            "beta[1]": 0.0,
+            "beta[2]": 0.0,
+            "nu": 3.3219
+          }
+        }
+      },
+      "approach_b_diff": {
+        "arch_1": {
+          "p": 1,
+          "q": 0,
+          "log_likelihood": 273.22,
+          "aic": -538.44,
+          "bic": -526.93,
+          "arch_lm_pvalue": 0.9991,
+          "converged": true,
+          "params": {
+            "mu": -0.0,
+            "omega": 0.0,
+            "alpha[1]": 1.0,
+            "nu": 2.05
+          }
+        },
+        "arch_2": {
+          "p": 2,
+          "q": 0,
+          "log_likelihood": -71.36,
+          "aic": 152.72,
+          "bic": 167.09,
+          "arch_lm_pvalue": 0.9998,
+          "converged": true,
+          "params": {
+            "mu": -0.0118,
+            "omega": 0.0296,
+            "alpha[1]": 1.0,
+            "alpha[2]": 0.0,
+            "nu": 2.8119
+          }
+        },
+        "arch_5": {
+          "p": 5,
+          "q": 0,
+          "log_likelihood": -87.57,
+          "aic": 191.13,
+          "bic": 214.13,
+          "arch_lm_pvalue": 0.9999,
+          "converged": true,
+          "params": {
+            "mu": 0.0034,
+            "omega": 0.0011,
+            "alpha[1]": 0.1216,
+            "alpha[2]": 0.0,
+            "alpha[3]": 0.0,
+            "alpha[4]": 0.1087,
+            "alpha[5]": 0.0,
+            "nu": 3.2561
+          }
+        },
+        "garch_1_1": {
+          "p": 1,
+          "q": 1,
+          "log_likelihood": -43.0,
+          "aic": 96.01,
+          "bic": 110.39,
+          "arch_lm_pvalue": 0.9999,
+          "converged": true,
+          "params": {
+            "mu": -0.0025,
+            "omega": 0.0268,
+            "alpha[1]": 0.9572,
+            "beta[1]": 0.0314,
+            "nu": 2.1564
+          }
+        },
+        "garch_1_2": {
+          "p": 1,
+          "q": 2,
+          "log_likelihood": -15.15,
+          "aic": 42.3,
+          "bic": 59.56,
+          "arch_lm_pvalue": 0.9999,
+          "converged": true,
+          "params": {
+            "mu": -0.0008,
+            "omega": 0.0059,
+            "alpha[1]": 0.9394,
+            "beta[1]": 0.0178,
+            "beta[2]": 0.0178,
+            "nu": 2.159
+          }
+        },
+        "garch_2_1": {
+          "p": 2,
+          "q": 1,
+          "log_likelihood": 182.43,
+          "aic": -352.85,
+          "bic": -335.6,
+          "arch_lm_pvalue": 0.9999,
+          "converged": false,
+          "params": {
+            "mu": -0.0,
+            "omega": 0.0,
+            "alpha[1]": 1.0,
+            "alpha[2]": 0.0,
+            "beta[1]": 0.0002,
+            "nu": 2.05
+          }
+        },
+        "garch_2_2": {
+          "p": 2,
+          "q": 2,
+          "log_likelihood": -94.6,
+          "aic": 203.19,
+          "bic": 223.32,
+          "arch_lm_pvalue": 0.9999,
+          "converged": true,
+          "params": {
+            "mu": 0.0045,
+            "omega": 0.01,
+            "alpha[1]": 0.2247,
+            "alpha[2]": 0.0014,
+            "beta[1]": 0.4377,
+            "beta[2]": 0.0139,
+            "nu": 2.2308
+          }
+        }
+      }
+    },
+    "fusarium_oxysporum": {
+      "approach_a_residuals": {
+        "arch_1": {
+          "p": 1,
+          "q": 0,
+          "log_likelihood": -391.54,
+          "aic": 789.07,
+          "bic": 797.72,
+          "arch_lm_pvalue": 0.9981,
+          "converged": true,
+          "params": {
+            "omega": 24.0327,
+            "alpha[1]": 0.0205,
+            "nu": 4.7807
+          }
+        },
+        "arch_2": {
+          "p": 2,
+          "q": 0,
+          "log_likelihood": -389.46,
+          "aic": 786.92,
+          "bic": 798.45,
+          "arch_lm_pvalue": 0.9667,
+          "converged": true,
+          "params": {
+            "omega": 13.8495,
+            "alpha[1]": 0.0614,
+            "alpha[2]": 0.5663,
+            "nu": 4.8777
+          }
+        },
+        "arch_5": {
+          "p": 5,
+          "q": 0,
+          "log_likelihood": -388.89,
+          "aic": 791.78,
+          "bic": 811.96,
+          "arch_lm_pvalue": 0.9575,
+          "converged": true,
+          "params": {
+            "omega": 11.3845,
+            "alpha[1]": 0.0675,
+            "alpha[2]": 0.5791,
+            "alpha[3]": 0.0307,
+            "alpha[4]": 0.0,
+            "alpha[5]": 0.0824,
+            "nu": 4.7189
+          }
+        },
+        "garch_1_1": {
+          "p": 1,
+          "q": 1,
+          "log_likelihood": -383.85,
+          "aic": 775.69,
+          "bic": 787.22,
+          "arch_lm_pvalue": 0.998,
+          "converged": true,
+          "params": {
+            "omega": 0.2084,
+            "alpha[1]": 0.0263,
+            "beta[1]": 0.9737,
+            "nu": 4.9189
+          }
+        },
+        "garch_1_2": {
+          "p": 1,
+          "q": 2,
+          "log_likelihood": -382.13,
+          "aic": 774.26,
+          "bic": 788.67,
+          "arch_lm_pvalue": 0.9972,
+          "converged": true,
+          "params": {
+            "omega": 0.3615,
+            "alpha[1]": 0.0754,
+            "beta[1]": 0.0,
+            "beta[2]": 0.9246,
+            "nu": 5.2288
+          }
+        },
+        "garch_2_1": {
+          "p": 2,
+          "q": 1,
+          "log_likelihood": -383.73,
+          "aic": 777.46,
+          "bic": 791.87,
+          "arch_lm_pvalue": 0.9982,
+          "converged": true,
+          "params": {
+            "omega": 0.212,
+            "alpha[1]": 0.0,
+            "alpha[2]": 0.03,
+            "beta[1]": 0.97,
+            "nu": 4.9177
+          }
+        },
+        "garch_2_2": {
+          "p": 2,
+          "q": 2,
+          "log_likelihood": -382.13,
+          "aic": 776.26,
+          "bic": 793.55,
+          "arch_lm_pvalue": 0.9972,
+          "converged": true,
+          "params": {
+            "omega": 0.3615,
+            "alpha[1]": 0.0754,
+            "alpha[2]": 0.0,
+            "beta[1]": 0.0,
+            "beta[2]": 0.9246,
+            "nu": 5.2284
+          }
+        }
+      },
+      "approach_b_diff": {
+        "arch_1": {
+          "p": 1,
+          "q": 0,
+          "log_likelihood": -411.87,
+          "aic": 831.73,
+          "bic": 843.24,
+          "arch_lm_pvalue": 0.9502,
+          "converged": true,
+          "params": {
+            "mu": -0.0358,
+            "omega": 21.5272,
+            "alpha[1]": 1.0,
+            "nu": 3.1095
+          }
+        },
+        "arch_2": {
+          "p": 2,
+          "q": 0,
+          "log_likelihood": -411.79,
+          "aic": 833.59,
+          "bic": 847.96,
+          "arch_lm_pvalue": 0.948,
+          "converged": true,
+          "params": {
+            "mu": -0.0041,
+            "omega": 20.1274,
+            "alpha[1]": 0.9492,
+            "alpha[2]": 0.0508,
+            "nu": 3.1522
+          }
+        },
+        "arch_5": {
+          "p": 5,
+          "q": 0,
+          "log_likelihood": -408.07,
+          "aic": 832.15,
+          "bic": 855.15,
+          "arch_lm_pvalue": 0.8203,
+          "converged": true,
+          "params": {
+            "mu": 0.2143,
+            "omega": 8.8349,
+            "alpha[1]": 0.5333,
+            "alpha[2]": 0.0,
+            "alpha[3]": 0.105,
+            "alpha[4]": 0.0,
+            "alpha[5]": 0.3617,
+            "nu": 3.7799
+          }
+        },
+        "garch_1_1": {
+          "p": 1,
+          "q": 1,
+          "log_likelihood": -409.44,
+          "aic": 828.89,
+          "bic": 843.26,
+          "arch_lm_pvalue": 0.0871,
+          "converged": true,
+          "params": {
+            "mu": 0.1538,
+            "omega": 1.0199,
+            "alpha[1]": 0.1739,
+            "beta[1]": 0.8261,
+            "nu": 3.7675
+          }
+        },
+        "garch_1_2": {
+          "p": 1,
+          "q": 2,
+          "log_likelihood": -406.55,
+          "aic": 825.1,
+          "bic": 842.35,
+          "arch_lm_pvalue": 0.5462,
+          "converged": true,
+          "params": {
+            "mu": 0.1085,
+            "omega": 1.2444,
+            "alpha[1]": 0.2878,
+            "beta[1]": 0.0,
+            "beta[2]": 0.7122,
+            "nu": 3.9877
+          }
+        },
+        "garch_2_1": {
+          "p": 2,
+          "q": 1,
+          "log_likelihood": -409.44,
+          "aic": 830.89,
+          "bic": 848.14,
+          "arch_lm_pvalue": 0.0871,
+          "converged": true,
+          "params": {
+            "mu": 0.1537,
+            "omega": 1.0203,
+            "alpha[1]": 0.1739,
+            "alpha[2]": 0.0,
+            "beta[1]": 0.8261,
+            "nu": 3.768
+          }
+        },
+        "garch_2_2": {
+          "p": 2,
+          "q": 2,
+          "log_likelihood": -406.55,
+          "aic": 827.1,
+          "bic": 847.23,
+          "arch_lm_pvalue": 0.5462,
+          "converged": true,
+          "params": {
+            "mu": 0.1086,
+            "omega": 1.245,
+            "alpha[1]": 0.2878,
+            "alpha[2]": 0.0,
+            "beta[1]": 0.0,
+            "beta[2]": 0.7122,
+            "nu": 3.9876
+          }
+        }
+      }
+    },
+    "macrophomina_phaseolina": {
+      "approach_a_residuals": {
+        "arch_1": {
+          "p": 1,
+          "q": 0,
+          "log_likelihood": -256.84,
+          "aic": 519.69,
+          "bic": 528.33,
+          "arch_lm_pvalue": 0.0248,
+          "converged": true,
+          "params": {
+            "omega": 2.4671,
+            "alpha[1]": 1.0,
+            "nu": 2.4969
+          }
+        },
+        "arch_2": {
+          "p": 2,
+          "q": 0,
+          "log_likelihood": -249.45,
+          "aic": 506.9,
+          "bic": 518.43,
+          "arch_lm_pvalue": 0.0003,
+          "converged": true,
+          "params": {
+            "omega": 1.0027,
+            "alpha[1]": 0.3367,
+            "alpha[2]": 0.6633,
+            "nu": 2.8941
+          }
+        },
+        "arch_5": {
+          "p": 5,
+          "q": 0,
+          "log_likelihood": -238.19,
+          "aic": 490.39,
+          "bic": 510.57,
+          "arch_lm_pvalue": 0.9982,
+          "converged": true,
+          "params": {
+            "omega": 0.524,
+            "alpha[1]": 0.0958,
+            "alpha[2]": 0.1571,
+            "alpha[3]": 0.1194,
+            "alpha[4]": 0.0553,
+            "alpha[5]": 0.5724,
+            "nu": 3.2706
+          }
+        },
+        "garch_1_1": {
+          "p": 1,
+          "q": 1,
+          "log_likelihood": -243.38,
+          "aic": 494.75,
+          "bic": 506.28,
+          "arch_lm_pvalue": 0.2613,
+          "converged": true,
+          "params": {
+            "omega": 0.2651,
+            "alpha[1]": 0.333,
+            "beta[1]": 0.667,
+            "nu": 2.807
+          }
+        },
+        "garch_1_2": {
+          "p": 1,
+          "q": 2,
+          "log_likelihood": -243.38,
+          "aic": 496.75,
+          "bic": 511.17,
+          "arch_lm_pvalue": 0.2613,
+          "converged": true,
+          "params": {
+            "omega": 0.2651,
+            "alpha[1]": 0.333,
+            "beta[1]": 0.667,
+            "beta[2]": 0.0,
+            "nu": 2.8072
+          }
+        },
+        "garch_2_1": {
+          "p": 2,
+          "q": 1,
+          "log_likelihood": -242.72,
+          "aic": 495.43,
+          "bic": 509.85,
+          "arch_lm_pvalue": 0.3524,
+          "converged": true,
+          "params": {
+            "omega": 0.2873,
+            "alpha[1]": 0.1532,
+            "alpha[2]": 0.229,
+            "beta[1]": 0.6178,
+            "nu": 2.8643
+          }
+        },
+        "garch_2_2": {
+          "p": 2,
+          "q": 2,
+          "log_likelihood": -242.72,
+          "aic": 497.43,
+          "bic": 514.73,
+          "arch_lm_pvalue": 0.3523,
+          "converged": true,
+          "params": {
+            "omega": 0.2873,
+            "alpha[1]": 0.1532,
+            "alpha[2]": 0.2289,
+            "beta[1]": 0.6179,
+            "beta[2]": 0.0,
+            "nu": 2.864
+          }
+        }
+      },
+      "approach_b_diff": {
+        "arch_1": {
+          "p": 1,
+          "q": 0,
+          "log_likelihood": -213.5,
+          "aic": 435.0,
+          "bic": 446.5,
+          "arch_lm_pvalue": 0.1323,
+          "converged": true,
+          "params": {
+            "mu": -0.0,
+            "omega": 0.0,
+            "alpha[1]": 1.0,
+            "nu": 2.1987
+          }
+        },
+        "arch_2": {
+          "p": 2,
+          "q": 0,
+          "log_likelihood": -201.24,
+          "aic": 412.48,
+          "bic": 426.85,
+          "arch_lm_pvalue": 0.1373,
+          "converged": true,
+          "params": {
+            "mu": -0.0,
+            "omega": 0.0,
+            "alpha[1]": 0.7727,
+            "alpha[2]": 0.2273,
+            "nu": 2.2119
+          }
+        },
+        "arch_5": {
+          "p": 5,
+          "q": 0,
+          "log_likelihood": -231.94,
+          "aic": 479.87,
+          "bic": 502.87,
+          "arch_lm_pvalue": 0.9972,
+          "converged": false,
+          "params": {
+            "mu": 0.0047,
+            "omega": 0.0211,
+            "alpha[1]": 0.7434,
+            "alpha[2]": 0.1016,
+            "alpha[3]": 0.0,
+            "alpha[4]": 0.0,
+            "alpha[5]": 0.157,
+            "nu": 2.4211
+          }
+        },
+        "garch_1_1": {
+          "p": 1,
+          "q": 1,
+          "log_likelihood": -200.25,
+          "aic": 410.5,
+          "bic": 424.88,
+          "arch_lm_pvalue": 0.9987,
+          "converged": false,
+          "params": {
+            "mu": -0.0,
+            "omega": 0.0,
+            "alpha[1]": 0.8961,
+            "beta[1]": 0.1039,
+            "nu": 2.3246
+          }
+        },
+        "garch_1_2": {
+          "p": 1,
+          "q": 2,
+          "log_likelihood": -200.24,
+          "aic": 412.49,
+          "bic": 429.74,
+          "arch_lm_pvalue": 0.9989,
+          "converged": true,
+          "params": {
+            "mu": -0.0,
+            "omega": 0.0,
+            "alpha[1]": 0.8993,
+            "beta[1]": 0.1007,
+            "beta[2]": 0.0,
+            "nu": 2.3279
+          }
+        },
+        "garch_2_1": {
+          "p": 2,
+          "q": 1,
+          "log_likelihood": -211.15,
+          "aic": 434.29,
+          "bic": 451.55,
+          "arch_lm_pvalue": 0.9998,
+          "converged": false,
+          "params": {
+            "mu": 0.0001,
+            "omega": 0.0001,
+            "alpha[1]": 0.7379,
+            "alpha[2]": 0.2072,
+            "beta[1]": 0.055,
+            "nu": 2.3684
+          }
+        },
+        "garch_2_2": {
+          "p": 2,
+          "q": 2,
+          "log_likelihood": -298.23,
+          "aic": 610.45,
+          "bic": 630.58,
+          "arch_lm_pvalue": 0.8798,
+          "converged": false,
+          "params": {
+            "mu": 0.461,
+            "omega": 0.0677,
+            "alpha[1]": 0.1501,
+            "alpha[2]": 0.3404,
+            "beta[1]": 0.0,
+            "beta[2]": 0.5095,
+            "nu": 17.308
+          }
+        }
+      }
+    },
+    "phytophthora_infestans": {
+      "approach_a_residuals": {
+        "arch_1": {
+          "p": 1,
+          "q": 0,
+          "log_likelihood": -10.1,
+          "aic": 26.19,
+          "bic": 34.84,
+          "arch_lm_pvalue": 1.0,
+          "converged": true,
+          "params": {
+            "omega": 0.1044,
+            "alpha[1]": 0.1962,
+            "nu": 2.6827
+          }
+        },
+        "arch_2": {
+          "p": 2,
+          "q": 0,
+          "log_likelihood": -8.97,
+          "aic": 25.95,
+          "bic": 37.48,
+          "arch_lm_pvalue": 0.9999,
+          "converged": true,
+          "params": {
+            "omega": 0.1217,
+            "alpha[1]": 0.0,
+            "alpha[2]": 0.01,
+            "nu": 2.6208
+          }
+        },
+        "arch_5": {
+          "p": 5,
+          "q": 0,
+          "log_likelihood": -8.7,
+          "aic": 31.4,
+          "bic": 51.58,
+          "arch_lm_pvalue": 0.9999,
+          "converged": true,
+          "params": {
+            "omega": 0.1195,
+            "alpha[1]": 0.0,
+            "alpha[2]": 0.01,
+            "alpha[3]": 0.0021,
+            "alpha[4]": 0.0001,
+            "alpha[5]": 0.0,
+            "nu": 2.6229
+          }
+        },
+        "garch_1_1": {
+          "p": 1,
+          "q": 1,
+          "log_likelihood": -9.45,
+          "aic": 26.9,
+          "bic": 38.43,
+          "arch_lm_pvalue": 1.0,
+          "converged": true,
+          "params": {
+            "omega": 0.0091,
+            "alpha[1]": 0.0013,
+            "beta[1]": 0.9099,
+            "nu": 2.8227
+          }
+        },
+        "garch_1_2": {
+          "p": 1,
+          "q": 2,
+          "log_likelihood": -9.45,
+          "aic": 28.9,
+          "bic": 43.31,
+          "arch_lm_pvalue": 1.0,
+          "converged": true,
+          "params": {
+            "omega": 0.0094,
+            "alpha[1]": 0.0013,
+            "beta[1]": 0.8872,
+            "beta[2]": 0.0206,
+            "nu": 2.8211
+          }
+        },
+        "garch_2_1": {
+          "p": 2,
+          "q": 1,
+          "log_likelihood": -9.26,
+          "aic": 28.51,
+          "bic": 42.93,
+          "arch_lm_pvalue": 1.0,
+          "converged": true,
+          "params": {
+            "omega": 0.0096,
+            "alpha[1]": 0.0,
+            "alpha[2]": 0.0014,
+            "beta[1]": 0.9044,
+            "nu": 2.8201
+          }
+        },
+        "garch_2_2": {
+          "p": 2,
+          "q": 2,
+          "log_likelihood": -9.07,
+          "aic": 30.14,
+          "bic": 47.44,
+          "arch_lm_pvalue": 1.0,
+          "converged": true,
+          "params": {
+            "omega": 0.0153,
+            "alpha[1]": 0.0,
+            "alpha[2]": 0.0023,
+            "beta[1]": 0.3386,
+            "beta[2]": 0.5112,
+            "nu": 2.8011
+          }
+        }
+      },
+      "approach_b_diff": {
+        "arch_1": {
+          "p": 1,
+          "q": 0,
+          "log_likelihood": 754.13,
+          "aic": -1500.25,
+          "bic": -1488.75,
+          "arch_lm_pvalue": 1.0,
+          "converged": true,
+          "params": {
+            "mu": 0.0,
+            "omega": 0.0,
+            "alpha[1]": 1.0,
+            "nu": 2.05
+          }
+        },
+        "arch_2": {
+          "p": 2,
+          "q": 0,
+          "log_likelihood": 205.8,
+          "aic": -401.61,
+          "bic": -387.23,
+          "arch_lm_pvalue": 1.0,
+          "converged": false,
+          "params": {
+            "mu": 0.0043,
+            "omega": 0.0001,
+            "alpha[1]": 0.9971,
+            "alpha[2]": 0.0029,
+            "nu": 2.05
+          }
+        },
+        "arch_5": {
+          "p": 5,
+          "q": 0,
+          "log_likelihood": -3417.0,
+          "aic": 6849.99,
+          "bic": 6872.99,
+          "arch_lm_pvalue": 0.0,
+          "converged": false,
+          "params": {
+            "mu": -81551.4655,
+            "omega": 4.9373,
+            "alpha[1]": 0.2172,
+            "alpha[2]": 0.1758,
+            "alpha[3]": 0.2677,
+            "alpha[4]": 0.1665,
+            "alpha[5]": 0.1729,
+            "nu": 2.2029
+          }
+        },
+        "garch_1_1": {
+          "p": 1,
+          "q": 1,
+          "log_likelihood": 310.15,
+          "aic": -610.3,
+          "bic": -595.93,
+          "arch_lm_pvalue": 1.0,
+          "converged": true,
+          "params": {
+            "mu": -0.0005,
+            "omega": 0.0025,
+            "alpha[1]": 0.5772,
+            "beta[1]": 0.0012,
+            "nu": 2.05
+          }
+        },
+        "garch_1_2": {
+          "p": 1,
+          "q": 2,
+          "log_likelihood": 365.92,
+          "aic": -719.83,
+          "bic": -702.58,
+          "arch_lm_pvalue": 1.0,
+          "converged": true,
+          "params": {
+            "mu": -0.0015,
+            "omega": 0.0006,
+            "alpha[1]": 1.0,
+            "beta[1]": 0.0,
+            "beta[2]": 0.0,
+            "nu": 2.05
+          }
+        },
+        "garch_2_1": {
+          "p": 2,
+          "q": 1,
+          "log_likelihood": -3710.6,
+          "aic": 7433.2,
+          "bic": 7450.45,
+          "arch_lm_pvalue": 0.0,
+          "converged": true,
+          "params": {
+            "mu": -157170.9681,
+            "omega": 0.4457,
+            "alpha[1]": 0.0,
+            "alpha[2]": 0.0,
+            "beta[1]": 0.7156,
+            "nu": 2.2119
+          }
+        },
+        "garch_2_2": {
+          "p": 2,
+          "q": 2,
+          "log_likelihood": 314.35,
+          "aic": -614.69,
+          "bic": -594.57,
+          "arch_lm_pvalue": 1.0,
+          "converged": false,
+          "params": {
+            "mu": -0.0026,
+            "omega": 0.0014,
+            "alpha[1]": 0.8825,
+            "alpha[2]": 0.004,
+            "beta[1]": 0.0021,
+            "beta[2]": 0.0,
+            "nu": 2.0617
+          }
+        }
+      }
+    },
+    "puccinia_striiformis": {
+      "approach_a_residuals": {
+        "arch_1": {
+          "p": 1,
+          "q": 0,
+          "log_likelihood": 137.35,
+          "aic": -268.71,
+          "bic": -260.06,
+          "arch_lm_pvalue": 0.9992,
+          "converged": true,
+          "params": {
+            "omega": 0.016,
+            "alpha[1]": 0.0,
+            "nu": 2.4768
+          }
+        },
+        "arch_2": {
+          "p": 2,
+          "q": 0,
+          "log_likelihood": 137.35,
+          "aic": -266.71,
+          "bic": -255.17,
+          "arch_lm_pvalue": 0.9992,
+          "converged": true,
+          "params": {
+            "omega": 0.016,
+            "alpha[1]": 0.0,
+            "alpha[2]": 0.0,
+            "nu": 2.4772
+          }
+        },
+        "arch_5": {
+          "p": 5,
+          "q": 0,
+          "log_likelihood": 137.35,
+          "aic": -260.71,
+          "bic": -240.53,
+          "arch_lm_pvalue": 0.9992,
+          "converged": true,
+          "params": {
+            "omega": 0.016,
+            "alpha[1]": 0.0,
+            "alpha[2]": 0.0,
+            "alpha[3]": 0.0,
+            "alpha[4]": 0.0,
+            "alpha[5]": 0.0,
+            "nu": 2.4768
+          }
+        },
+        "garch_1_1": {
+          "p": 1,
+          "q": 1,
+          "log_likelihood": 137.35,
+          "aic": -266.71,
+          "bic": -255.17,
+          "arch_lm_pvalue": 0.9992,
+          "converged": true,
+          "params": {
+            "omega": 0.016,
+            "alpha[1]": 0.0,
+            "beta[1]": 0.0,
+            "nu": 2.4764
+          }
+        },
+        "garch_1_2": {
+          "p": 1,
+          "q": 2,
+          "log_likelihood": 139.0,
+          "aic": -268.0,
+          "bic": -253.58,
+          "arch_lm_pvalue": 0.999,
+          "converged": true,
+          "params": {
+            "omega": 0.0095,
+            "alpha[1]": 0.0,
+            "beta[1]": 0.0,
+            "beta[2]": 0.1453,
+            "nu": 2.7508
+          }
+        },
+        "garch_2_1": {
+          "p": 2,
+          "q": 1,
+          "log_likelihood": 137.35,
+          "aic": -264.71,
+          "bic": -250.29,
+          "arch_lm_pvalue": 0.9992,
+          "converged": true,
+          "params": {
+            "omega": 0.016,
+            "alpha[1]": 0.0,
+            "alpha[2]": 0.0,
+            "beta[1]": 0.0,
+            "nu": 2.4768
+          }
+        },
+        "garch_2_2": {
+          "p": 2,
+          "q": 2,
+          "log_likelihood": 139.0,
+          "aic": -266.0,
+          "bic": -248.7,
+          "arch_lm_pvalue": 0.999,
+          "converged": true,
+          "params": {
+            "omega": 0.0095,
+            "alpha[1]": 0.0,
+            "alpha[2]": 0.0,
+            "beta[1]": 0.0,
+            "beta[2]": 0.1453,
+            "nu": 2.7512
+          }
+        }
+      },
+      "approach_b_diff": {
+        "arch_1": {
+          "p": 1,
+          "q": 0,
+          "log_likelihood": 928.26,
+          "aic": -1848.52,
+          "bic": -1837.02,
+          "arch_lm_pvalue": 0.9986,
+          "converged": false,
+          "params": {
+            "mu": -0.0,
+            "omega": 0.0,
+            "alpha[1]": 1.0,
+            "nu": 2.05
+          }
+        },
+        "arch_2": {
+          "p": 2,
+          "q": 0,
+          "log_likelihood": 847.71,
+          "aic": -1685.43,
+          "bic": -1671.05,
+          "arch_lm_pvalue": 0.9994,
+          "converged": false,
+          "params": {
+            "mu": 0.0001,
+            "omega": 0.0,
+            "alpha[1]": 1.0,
+            "alpha[2]": 0.0,
+            "nu": 2.05
+          }
+        },
+        "arch_5": {
+          "p": 5,
+          "q": 0,
+          "log_likelihood": -52.3,
+          "aic": 120.59,
+          "bic": 143.6,
+          "arch_lm_pvalue": 0.9987,
+          "converged": false,
+          "params": {
+            "mu": -0.1471,
+            "omega": 0.0029,
+            "alpha[1]": 1.0,
+            "alpha[2]": 0.0,
+            "alpha[3]": 0.0,
+            "alpha[4]": 0.0,
+            "alpha[5]": 0.0,
+            "nu": 91.2638
+          }
+        },
+        "garch_1_1": {
+          "p": 1,
+          "q": 1,
+          "log_likelihood": 86.67,
+          "aic": -163.33,
+          "bic": -148.95,
+          "arch_lm_pvalue": 0.9994,
+          "converged": true,
+          "params": {
+            "mu": -0.0059,
+            "omega": 0.0027,
+            "alpha[1]": 1.0,
+            "beta[1]": 0.0,
+            "nu": 30.4542
+          }
+        },
+        "garch_1_2": {
+          "p": 1,
+          "q": 2,
+          "log_likelihood": -745.49,
+          "aic": 1502.97,
+          "bic": 1520.22,
+          "arch_lm_pvalue": 0.0,
+          "converged": true,
+          "params": {
+            "mu": -1.2889,
+            "omega": 0.0005,
+            "alpha[1]": 0.0001,
+            "beta[1]": 0.9495,
+            "beta[2]": 0.0,
+            "nu": 2.7897
+          }
+        },
+        "garch_2_1": {
+          "p": 2,
+          "q": 1,
+          "log_likelihood": 528.57,
+          "aic": -1045.14,
+          "bic": -1027.89,
+          "arch_lm_pvalue": 0.9994,
+          "converged": false,
+          "params": {
+            "mu": -0.0007,
+            "omega": 0.0,
+            "alpha[1]": 0.9445,
+            "alpha[2]": 0.0,
+            "beta[1]": 0.0,
+            "nu": 6.2604
+          }
+        },
+        "garch_2_2": {
+          "p": 2,
+          "q": 2,
+          "log_likelihood": 430.35,
+          "aic": -846.71,
+          "bic": -826.58,
+          "arch_lm_pvalue": 0.9994,
+          "converged": false,
+          "params": {
+            "mu": 0.0007,
+            "omega": 0.0001,
+            "alpha[1]": 1.0,
+            "alpha[2]": 0.0,
+            "beta[1]": 0.0001,
+            "beta[2]": 0.0,
+            "nu": 2.7142
+          }
+        }
+      }
+    },
+    "pyricularia_oryzae": {
+      "approach_a_residuals": {
+        "arch_1": {
+          "p": 1,
+          "q": 0,
+          "log_likelihood": -227.4,
+          "aic": 460.79,
+          "bic": 469.44,
+          "arch_lm_pvalue": 0.9796,
+          "converged": true,
+          "params": {
+            "omega": 4.5295,
+            "alpha[1]": 0.5542,
+            "nu": 2.2915
+          }
+        },
+        "arch_2": {
+          "p": 2,
+          "q": 0,
+          "log_likelihood": -227.4,
+          "aic": 462.79,
+          "bic": 474.32,
+          "arch_lm_pvalue": 0.9796,
+          "converged": true,
+          "params": {
+            "omega": 4.5313,
+            "alpha[1]": 0.5541,
+            "alpha[2]": 0.0,
+            "nu": 2.2914
+          }
+        },
+        "arch_5": {
+          "p": 5,
+          "q": 0,
+          "log_likelihood": -227.36,
+          "aic": 468.72,
+          "bic": 488.89,
+          "arch_lm_pvalue": 0.9788,
+          "converged": true,
+          "params": {
+            "omega": 4.5215,
+            "alpha[1]": 0.5669,
+            "alpha[2]": 0.0,
+            "alpha[3]": 0.0097,
+            "alpha[4]": 0.0,
+            "alpha[5]": 0.0,
+            "nu": 2.287
+          }
+        },
+        "garch_1_1": {
+          "p": 1,
+          "q": 1,
+          "log_likelihood": -227.4,
+          "aic": 462.79,
+          "bic": 474.32,
+          "arch_lm_pvalue": 0.9796,
+          "converged": true,
+          "params": {
+            "omega": 4.5262,
+            "alpha[1]": 0.5536,
+            "beta[1]": 0.0,
+            "nu": 2.2918
+          }
+        },
+        "garch_1_2": {
+          "p": 1,
+          "q": 2,
+          "log_likelihood": -227.36,
+          "aic": 464.71,
+          "bic": 479.13,
+          "arch_lm_pvalue": 0.9788,
+          "converged": true,
+          "params": {
+            "omega": 4.4602,
+            "alpha[1]": 0.5691,
+            "beta[1]": 0.0,
+            "beta[2]": 0.0169,
+            "nu": 2.2859
+          }
+        },
+        "garch_2_1": {
+          "p": 2,
+          "q": 1,
+          "log_likelihood": -227.4,
+          "aic": 464.79,
+          "bic": 479.2,
+          "arch_lm_pvalue": 0.9796,
+          "converged": true,
+          "params": {
+            "omega": 4.5284,
+            "alpha[1]": 0.5537,
+            "alpha[2]": 0.0,
+            "beta[1]": 0.0,
+            "nu": 2.2916
+          }
+        },
+        "garch_2_2": {
+          "p": 2,
+          "q": 2,
+          "log_likelihood": -227.36,
+          "aic": 466.71,
+          "bic": 484.01,
+          "arch_lm_pvalue": 0.9788,
+          "converged": true,
+          "params": {
+            "omega": 4.4602,
+            "alpha[1]": 0.5694,
+            "alpha[2]": 0.0,
+            "beta[1]": 0.0,
+            "beta[2]": 0.0169,
+            "nu": 2.2859
+          }
+        }
+      },
+      "approach_b_diff": {
+        "arch_1": {
+          "p": 1,
+          "q": 0,
+          "log_likelihood": 21.28,
+          "aic": -34.56,
+          "bic": -23.06,
+          "arch_lm_pvalue": 0.9901,
+          "converged": true,
+          "params": {
+            "mu": -0.0,
+            "omega": 0.0,
+            "alpha[1]": 1.0,
+            "nu": 2.05
+          }
+        },
+        "arch_2": {
+          "p": 2,
+          "q": 0,
+          "log_likelihood": -117.2,
+          "aic": 244.4,
+          "bic": 258.78,
+          "arch_lm_pvalue": 0.9639,
+          "converged": false,
+          "params": {
+            "mu": 0.0031,
+            "omega": 0.0092,
+            "alpha[1]": 0.9988,
+            "alpha[2]": 0.0015,
+            "nu": 2.1577
+          }
+        },
+        "arch_5": {
+          "p": 5,
+          "q": 0,
+          "log_likelihood": -842.64,
+          "aic": 1701.27,
+          "bic": 1724.28,
+          "arch_lm_pvalue": 0.0,
+          "converged": true,
+          "params": {
+            "mu": -67.6668,
+            "omega": 4.6063,
+            "alpha[1]": 0.7099,
+            "alpha[2]": 0.0,
+            "alpha[3]": 0.2899,
+            "alpha[4]": 0.0,
+            "alpha[5]": 0.0,
+            "nu": 2.4734
+          }
+        },
+        "garch_1_1": {
+          "p": 1,
+          "q": 1,
+          "log_likelihood": -58.86,
+          "aic": 127.71,
+          "bic": 142.09,
+          "arch_lm_pvalue": 0.9683,
+          "converged": true,
+          "params": {
+            "mu": 0.0007,
+            "omega": 0.0005,
+            "alpha[1]": 0.9972,
+            "beta[1]": 0.0001,
+            "nu": 2.0537
+          }
+        },
+        "garch_1_2": {
+          "p": 1,
+          "q": 2,
+          "log_likelihood": -215.42,
+          "aic": 442.84,
+          "bic": 460.1,
+          "arch_lm_pvalue": 0.9051,
+          "converged": true,
+          "params": {
+            "mu": 0.0101,
+            "omega": 0.1536,
+            "alpha[1]": 0.7959,
+            "beta[1]": 0.0,
+            "beta[2]": 0.0,
+            "nu": 4.607
+          }
+        },
+        "garch_2_1": {
+          "p": 2,
+          "q": 1,
+          "log_likelihood": -45.99,
+          "aic": 103.99,
+          "bic": 121.24,
+          "arch_lm_pvalue": 0.9692,
+          "converged": true,
+          "params": {
+            "mu": -0.0007,
+            "omega": 0.0003,
+            "alpha[1]": 1.0,
+            "alpha[2]": 0.0,
+            "beta[1]": 0.0,
+            "nu": 2.05
+          }
+        },
+        "garch_2_2": {
+          "p": 2,
+          "q": 2,
+          "log_likelihood": -133.52,
+          "aic": 281.04,
+          "bic": 301.17,
+          "arch_lm_pvalue": 0.9499,
+          "converged": true,
+          "params": {
+            "mu": -0.0001,
+            "omega": 0.0474,
+            "alpha[1]": 1.0,
+            "alpha[2]": 0.0,
+            "beta[1]": 0.0,
+            "beta[2]": 0.0,
+            "nu": 2.05
+          }
+        }
+      }
+    },
+    "ralstonia_solanacearum": {
+      "approach_a_residuals": {
+        "arch_1": {
+          "p": 1,
+          "q": 0,
+          "log_likelihood": -294.33,
+          "aic": 594.67,
+          "bic": 603.32,
+          "arch_lm_pvalue": 0.4459,
+          "converged": true,
+          "params": {
+            "omega": 6.56,
+            "alpha[1]": 0.7774,
+            "nu": 2.5853
+          }
+        },
+        "arch_2": {
+          "p": 2,
+          "q": 0,
+          "log_likelihood": -291.06,
+          "aic": 590.12,
+          "bic": 601.65,
+          "arch_lm_pvalue": 0.0004,
+          "converged": true,
+          "params": {
+            "omega": 3.6026,
+            "alpha[1]": 0.3503,
+            "alpha[2]": 0.4895,
+            "nu": 3.0097
+          }
+        },
+        "arch_5": {
+          "p": 5,
+          "q": 0,
+          "log_likelihood": -290.62,
+          "aic": 595.23,
+          "bic": 615.41,
+          "arch_lm_pvalue": 0.0001,
+          "converged": true,
+          "params": {
+            "omega": 3.9729,
+            "alpha[1]": 0.3206,
+            "alpha[2]": 0.308,
+            "alpha[3]": 0.0461,
+            "alpha[4]": 0.0025,
+            "alpha[5]": 0.0,
+            "nu": 2.9475
+          }
+        },
+        "garch_1_1": {
+          "p": 1,
+          "q": 1,
+          "log_likelihood": -290.8,
+          "aic": 589.6,
+          "bic": 601.13,
+          "arch_lm_pvalue": 0.001,
+          "converged": true,
+          "params": {
+            "omega": 2.8342,
+            "alpha[1]": 0.391,
+            "beta[1]": 0.338,
+            "nu": 2.8952
+          }
+        },
+        "garch_1_2": {
+          "p": 1,
+          "q": 2,
+          "log_likelihood": -290.8,
+          "aic": 591.6,
+          "bic": 606.02,
+          "arch_lm_pvalue": 0.001,
+          "converged": true,
+          "params": {
+            "omega": 2.8342,
+            "alpha[1]": 0.391,
+            "beta[1]": 0.338,
+            "beta[2]": 0.0,
+            "nu": 2.8951
+          }
+        },
+        "garch_2_1": {
+          "p": 2,
+          "q": 1,
+          "log_likelihood": -290.63,
+          "aic": 591.27,
+          "bic": 605.68,
+          "arch_lm_pvalue": 0.0001,
+          "converged": true,
+          "params": {
+            "omega": 3.5413,
+            "alpha[1]": 0.3144,
+            "alpha[2]": 0.3042,
+            "beta[1]": 0.1007,
+            "nu": 2.9555
+          }
+        },
+        "garch_2_2": {
+          "p": 2,
+          "q": 2,
+          "log_likelihood": -290.67,
+          "aic": 593.34,
+          "bic": 610.63,
+          "arch_lm_pvalue": 0.0001,
+          "converged": true,
+          "params": {
+            "omega": 3.7803,
+            "alpha[1]": 0.3177,
+            "alpha[2]": 0.2518,
+            "beta[1]": 0.0,
+            "beta[2]": 0.0824,
+            "nu": 2.9218
+          }
+        }
+      },
+      "approach_b_diff": {
+        "arch_1": {
+          "p": 1,
+          "q": 0,
+          "log_likelihood": -64.83,
+          "aic": 137.65,
+          "bic": 149.16,
+          "arch_lm_pvalue": 0.9789,
+          "converged": true,
+          "params": {
+            "mu": 0.0,
+            "omega": 0.0,
+            "alpha[1]": 1.0,
+            "nu": 2.0519
+          }
+        },
+        "arch_2": {
+          "p": 2,
+          "q": 0,
+          "log_likelihood": -0.71,
+          "aic": 11.43,
+          "bic": 25.8,
+          "arch_lm_pvalue": 0.9922,
+          "converged": true,
+          "params": {
+            "mu": -0.0,
+            "omega": 0.0,
+            "alpha[1]": 0.6506,
+            "alpha[2]": 0.3494,
+            "nu": 2.0574
+          }
+        },
+        "arch_5": {
+          "p": 5,
+          "q": 0,
+          "log_likelihood": -238.99,
+          "aic": 493.97,
+          "bic": 516.98,
+          "arch_lm_pvalue": 0.9814,
+          "converged": true,
+          "params": {
+            "mu": -0.0013,
+            "omega": 0.1093,
+            "alpha[1]": 0.6025,
+            "alpha[2]": 0.1392,
+            "alpha[3]": 0.021,
+            "alpha[4]": 0.0,
+            "alpha[5]": 0.2331,
+            "nu": 3.9258
+          }
+        },
+        "garch_1_1": {
+          "p": 1,
+          "q": 1,
+          "log_likelihood": -72.13,
+          "aic": 154.27,
+          "bic": 168.64,
+          "arch_lm_pvalue": 0.9988,
+          "converged": false,
+          "params": {
+            "mu": -0.0001,
+            "omega": 0.0,
+            "alpha[1]": 1.0,
+            "beta[1]": 0.0,
+            "nu": 2.091
+          }
+        },
+        "garch_1_2": {
+          "p": 1,
+          "q": 2,
+          "log_likelihood": -365.77,
+          "aic": 743.54,
+          "bic": 760.8,
+          "arch_lm_pvalue": 0.8411,
+          "converged": false,
+          "params": {
+            "mu": 1.6188,
+            "omega": 0.0001,
+            "alpha[1]": 0.711,
+            "beta[1]": 0.292,
+            "beta[2]": 0.0,
+            "nu": 3.8624
+          }
+        },
+        "garch_2_1": {
+          "p": 2,
+          "q": 1,
+          "log_likelihood": -239.33,
+          "aic": 490.67,
+          "bic": 507.92,
+          "arch_lm_pvalue": 0.998,
+          "converged": false,
+          "params": {
+            "mu": -0.0394,
+            "omega": 0.0033,
+            "alpha[1]": 0.9965,
+            "alpha[2]": 0.0035,
+            "beta[1]": 0.0,
+            "nu": 3.4412
+          }
+        },
+        "garch_2_2": {
+          "p": 2,
+          "q": 2,
+          "log_likelihood": -108.33,
+          "aic": 230.66,
+          "bic": 250.78,
+          "arch_lm_pvalue": 0.9991,
+          "converged": true,
+          "params": {
+            "mu": 0.0,
+            "omega": 0.0,
+            "alpha[1]": 0.2309,
+            "alpha[2]": 0.0267,
+            "beta[1]": 0.1673,
+            "beta[2]": 0.0,
+            "nu": 2.3875
+          }
+        }
+      }
+    },
+    "rhizoctonia_solani": {
+      "approach_a_residuals": {
+        "arch_1": {
+          "p": 1,
+          "q": 0,
+          "log_likelihood": -302.52,
+          "aic": 611.04,
+          "bic": 619.69,
+          "arch_lm_pvalue": 0.1245,
+          "converged": true,
+          "params": {
+            "omega": 9.3359,
+            "alpha[1]": 0.6393,
+            "nu": 2.4755
+          }
+        },
+        "arch_2": {
+          "p": 2,
+          "q": 0,
+          "log_likelihood": -302.52,
+          "aic": 613.04,
+          "bic": 624.57,
+          "arch_lm_pvalue": 0.1243,
+          "converged": true,
+          "params": {
+            "omega": 9.3344,
+            "alpha[1]": 0.6389,
+            "alpha[2]": 0.0,
+            "nu": 2.4756
+          }
+        },
+        "arch_5": {
+          "p": 5,
+          "q": 0,
+          "log_likelihood": -290.19,
+          "aic": 594.37,
+          "bic": 614.55,
+          "arch_lm_pvalue": 0.8251,
+          "converged": true,
+          "params": {
+            "omega": 1.1126,
+            "alpha[1]": 0.155,
+            "alpha[2]": 0.0,
+            "alpha[3]": 0.0156,
+            "alpha[4]": 0.1127,
+            "alpha[5]": 0.7166,
+            "nu": 6.8317
+          }
+        },
+        "garch_1_1": {
+          "p": 1,
+          "q": 1,
+          "log_likelihood": -297.76,
+          "aic": 603.53,
+          "bic": 615.06,
+          "arch_lm_pvalue": 0.9052,
+          "converged": true,
+          "params": {
+            "omega": 0.1108,
+            "alpha[1]": 0.0659,
+            "beta[1]": 0.9341,
+            "nu": 4.5126
+          }
+        },
+        "garch_1_2": {
+          "p": 1,
+          "q": 2,
+          "log_likelihood": -297.53,
+          "aic": 605.06,
+          "bic": 619.47,
+          "arch_lm_pvalue": 0.8959,
+          "converged": true,
+          "params": {
+            "omega": 0.1756,
+            "alpha[1]": 0.1013,
+            "beta[1]": 0.326,
+            "beta[2]": 0.5727,
+            "nu": 4.4517
+          }
+        },
+        "garch_2_1": {
+          "p": 2,
+          "q": 1,
+          "log_likelihood": -297.76,
+          "aic": 605.53,
+          "bic": 619.94,
+          "arch_lm_pvalue": 0.9052,
+          "converged": true,
+          "params": {
+            "omega": 0.1108,
+            "alpha[1]": 0.0659,
+            "alpha[2]": 0.0,
+            "beta[1]": 0.9341,
+            "nu": 4.5125
+          }
+        },
+        "garch_2_2": {
+          "p": 2,
+          "q": 2,
+          "log_likelihood": -297.53,
+          "aic": 607.06,
+          "bic": 624.35,
+          "arch_lm_pvalue": 0.8958,
+          "converged": true,
+          "params": {
+            "omega": 0.1756,
+            "alpha[1]": 0.1013,
+            "alpha[2]": 0.0,
+            "beta[1]": 0.3259,
+            "beta[2]": 0.5728,
+            "nu": 4.4513
+          }
+        }
+      },
+      "approach_b_diff": {
+        "arch_1": {
+          "p": 1,
+          "q": 0,
+          "log_likelihood": -100.4,
+          "aic": 208.79,
+          "bic": 220.29,
+          "arch_lm_pvalue": 0.9983,
+          "converged": false,
+          "params": {
+            "mu": -0.0,
+            "omega": 0.0,
+            "alpha[1]": 1.0,
+            "nu": 2.4443
+          }
+        },
+        "arch_2": {
+          "p": 2,
+          "q": 0,
+          "log_likelihood": -318.75,
+          "aic": 647.5,
+          "bic": 661.87,
+          "arch_lm_pvalue": 0.9991,
+          "converged": false,
+          "params": {
+            "mu": 0.2696,
+            "omega": 0.9311,
+            "alpha[1]": 0.6014,
+            "alpha[2]": 0.3986,
+            "nu": 32.7414
+          }
+        },
+        "arch_5": {
+          "p": 5,
+          "q": 0,
+          "log_likelihood": -141.74,
+          "aic": 299.48,
+          "bic": 322.49,
+          "arch_lm_pvalue": 0.9999,
+          "converged": false,
+          "params": {
+            "mu": -0.0004,
+            "omega": 0.0004,
+            "alpha[1]": 0.8212,
+            "alpha[2]": 0.1788,
+            "alpha[3]": 0.0,
+            "alpha[4]": 0.0,
+            "alpha[5]": 0.0,
+            "nu": 2.2629
+          }
+        },
+        "garch_1_1": {
+          "p": 1,
+          "q": 1,
+          "log_likelihood": -202.96,
+          "aic": 415.91,
+          "bic": 430.29,
+          "arch_lm_pvalue": 0.9997,
+          "converged": true,
+          "params": {
+            "mu": -0.0014,
+            "omega": 0.0069,
+            "alpha[1]": 0.7816,
+            "beta[1]": 0.1999,
+            "nu": 3.0235
+          }
+        },
+        "garch_1_2": {
+          "p": 1,
+          "q": 2,
+          "log_likelihood": -128.53,
+          "aic": 269.06,
+          "bic": 286.32,
+          "arch_lm_pvalue": 0.9998,
+          "converged": true,
+          "params": {
+            "mu": -0.0003,
+            "omega": 0.0,
+            "alpha[1]": 0.9997,
+            "beta[1]": 0.0003,
+            "beta[2]": 0.0,
+            "nu": 2.3262
+          }
+        },
+        "garch_2_1": {
+          "p": 2,
+          "q": 1,
+          "log_likelihood": -193.67,
+          "aic": 399.33,
+          "bic": 416.58,
+          "arch_lm_pvalue": 0.9999,
+          "converged": true,
+          "params": {
+            "mu": 0.0043,
+            "omega": 0.0002,
+            "alpha[1]": 0.979,
+            "alpha[2]": 0.021,
+            "beta[1]": 0.0,
+            "nu": 3.4896
+          }
+        },
+        "garch_2_2": {
+          "p": 2,
+          "q": 2,
+          "log_likelihood": -332.56,
+          "aic": 679.12,
+          "bic": 699.24,
+          "arch_lm_pvalue": 0.9697,
+          "converged": false,
+          "params": {
+            "mu": 0.1992,
+            "omega": 0.0,
+            "alpha[1]": 0.6883,
+            "alpha[2]": 0.016,
+            "beta[1]": 0.0,
+            "beta[2]": 0.2958,
+            "nu": 40.2164
+          }
+        }
+      }
+    },
+    "xanthomonas_oryzae": {
+      "approach_a_residuals": {
+        "arch_1": {
+          "p": 1,
+          "q": 0,
+          "log_likelihood": -144.51,
+          "aic": 295.02,
+          "bic": 303.67,
+          "arch_lm_pvalue": 0.1907,
+          "converged": true,
+          "params": {
+            "omega": 0.3906,
+            "alpha[1]": 0.5433,
+            "nu": 3.985
+          }
+        },
+        "arch_2": {
+          "p": 2,
+          "q": 0,
+          "log_likelihood": -144.51,
+          "aic": 297.02,
+          "bic": 308.55,
+          "arch_lm_pvalue": 0.1907,
+          "converged": true,
+          "params": {
+            "omega": 0.3907,
+            "alpha[1]": 0.5434,
+            "alpha[2]": 0.0,
+            "nu": 3.9848
+          }
+        },
+        "arch_5": {
+          "p": 5,
+          "q": 0,
+          "log_likelihood": -144.48,
+          "aic": 302.97,
+          "bic": 323.14,
+          "arch_lm_pvalue": 0.1439,
+          "converged": true,
+          "params": {
+            "omega": 0.3983,
+            "alpha[1]": 0.5112,
+            "alpha[2]": 0.0,
+            "alpha[3]": 0.0003,
+            "alpha[4]": 0.0001,
+            "alpha[5]": 0.0002,
+            "nu": 3.9584
+          }
+        },
+        "garch_1_1": {
+          "p": 1,
+          "q": 1,
+          "log_likelihood": -144.51,
+          "aic": 297.02,
+          "bic": 308.55,
+          "arch_lm_pvalue": 0.1907,
+          "converged": true,
+          "params": {
+            "omega": 0.3907,
+            "alpha[1]": 0.5433,
+            "beta[1]": 0.0,
+            "nu": 3.9849
+          }
+        },
+        "garch_1_2": {
+          "p": 1,
+          "q": 2,
+          "log_likelihood": -144.51,
+          "aic": 299.01,
+          "bic": 313.43,
+          "arch_lm_pvalue": 0.1693,
+          "converged": true,
+          "params": {
+            "omega": 0.3942,
+            "alpha[1]": 0.5294,
+            "beta[1]": 0.0,
+            "beta[2]": 0.0005,
+            "nu": 3.9741
+          }
+        },
+        "garch_2_1": {
+          "p": 2,
+          "q": 1,
+          "log_likelihood": -144.51,
+          "aic": 299.02,
+          "bic": 313.44,
+          "arch_lm_pvalue": 0.1907,
+          "converged": true,
+          "params": {
+            "omega": 0.3907,
+            "alpha[1]": 0.5434,
+            "alpha[2]": 0.0,
+            "beta[1]": 0.0,
+            "nu": 3.9848
+          }
+        },
+        "garch_2_2": {
+          "p": 2,
+          "q": 2,
+          "log_likelihood": -144.51,
+          "aic": 301.01,
+          "bic": 318.31,
+          "arch_lm_pvalue": 0.1693,
+          "converged": true,
+          "params": {
+            "omega": 0.3942,
+            "alpha[1]": 0.5294,
+            "alpha[2]": 0.0,
+            "beta[1]": 0.0,
+            "beta[2]": 0.0005,
+            "nu": 3.9742
+          }
+        }
+      },
+      "approach_b_diff": {
+        "arch_1": {
+          "p": 1,
+          "q": 0,
+          "log_likelihood": 59.88,
+          "aic": -111.77,
+          "bic": -100.27,
+          "arch_lm_pvalue": 0.9892,
+          "converged": true,
+          "params": {
+            "mu": -0.001,
+            "omega": 0.0135,
+            "alpha[1]": 0.9977,
+            "nu": 2.0649
+          }
+        },
+        "arch_2": {
+          "p": 2,
+          "q": 0,
+          "log_likelihood": -43.79,
+          "aic": 97.57,
+          "bic": 111.95,
+          "arch_lm_pvalue": 0.9958,
+          "converged": true,
+          "params": {
+            "mu": -0.0081,
+            "omega": 0.1153,
+            "alpha[1]": 1.0,
+            "alpha[2]": 0.0,
+            "nu": 2.3226
+          }
+        },
+        "arch_5": {
+          "p": 5,
+          "q": 0,
+          "log_likelihood": -84.11,
+          "aic": 184.22,
+          "bic": 207.22,
+          "arch_lm_pvalue": 0.9872,
+          "converged": false,
+          "params": {
+            "mu": -0.0038,
+            "omega": 0.0677,
+            "alpha[1]": 0.9977,
+            "alpha[2]": 0.0007,
+            "alpha[3]": 0.0,
+            "alpha[4]": 0.0018,
+            "alpha[5]": 0.0,
+            "nu": 4.8544
+          }
+        },
+        "garch_1_1": {
+          "p": 1,
+          "q": 1,
+          "log_likelihood": -81.02,
+          "aic": 172.05,
+          "bic": 186.42,
+          "arch_lm_pvalue": 0.027,
+          "converged": true,
+          "params": {
+            "mu": 0.0066,
+            "omega": 1.7404,
+            "alpha[1]": 1.0,
+            "beta[1]": 0.0,
+            "nu": 2.05
+          }
+        },
+        "garch_1_2": {
+          "p": 1,
+          "q": 2,
+          "log_likelihood": -178.06,
+          "aic": 368.12,
+          "bic": 385.37,
+          "arch_lm_pvalue": 0.2148,
+          "converged": true,
+          "params": {
+            "mu": 0.1455,
+            "omega": 0.7541,
+            "alpha[1]": 0.9486,
+            "beta[1]": 0.0,
+            "beta[2]": 0.0,
+            "nu": 70.1202
+          }
+        },
+        "garch_2_1": {
+          "p": 2,
+          "q": 1,
+          "log_likelihood": -228.55,
+          "aic": 469.11,
+          "bic": 486.36,
+          "arch_lm_pvalue": 0.0,
+          "converged": true,
+          "params": {
+            "mu": -0.3003,
+            "omega": 1.9632,
+            "alpha[1]": 0.392,
+            "alpha[2]": 0.4741,
+            "beta[1]": 0.0016,
+            "nu": 86.576
+          }
+        },
+        "garch_2_2": {
+          "p": 2,
+          "q": 2,
+          "log_likelihood": -93.55,
+          "aic": 201.1,
+          "bic": 221.23,
+          "arch_lm_pvalue": 0.7692,
+          "converged": true,
+          "params": {
+            "mu": -0.0665,
+            "omega": 0.5044,
+            "alpha[1]": 0.883,
+            "alpha[2]": 0.0033,
+            "beta[1]": 0.0087,
+            "beta[2]": 0.0157,
+            "nu": 2.3057
+          }
+        }
+      }
+    }
+  },
+  "walk_forward_benchmarks": {
+    "alternaria_solani": {
+      "n_eval_points": 42,
+      "rmse": 1.728,
+      "mae": 0.965,
+      "wape": 1.013,
+      "mase": 1.431,
+      "rmsve": 1.449,
+      "mave": 0.842,
+      "qlike": 3.545
+    },
+    "bipolaris_oryzae": {
+      "n_eval_points": 42,
+      "rmse": 3.658,
+      "mae": 1.961,
+      "wape": 1.16,
+      "mase": 4.364,
+      "rmsve": 2.393,
+      "mave": 1.445,
+      "qlike": 8.401
+    },
+    "fusarium_oxysporum": {
+      "n_eval_points": 42,
+      "rmse": 6.047,
+      "mae": 4.693,
+      "wape": 0.517,
+      "mase": 1.309,
+      "rmsve": 4.064,
+      "mave": 3.522,
+      "qlike": 1.37
+    },
+    "macrophomina_phaseolina": {
+      "n_eval_points": 42,
+      "rmse": 4.033,
+      "mae": 2.734,
+      "wape": 0.755,
+      "mase": 2.734,
+      "rmsve": 2.739,
+      "mave": 1.872,
+      "qlike": 2.551
+    },
+    "phytophthora_infestans": {
+      "n_eval_points": 42,
+      "rmse": 1.879,
+      "mae": 0.595,
+      "wape": 1.315,
+      "mase": 8.821,
+      "rmsve": 1.826,
+      "mave": 0.614,
+      "qlike": 120.086
+    },
+    "puccinia_striiformis": {
+      "n_eval_points": 42,
+      "rmse": 0.343,
+      "mae": 0.107,
+      "wape": 1.492,
+      "mase": 1.186,
+      "rmsve": 0.333,
+      "mave": 0.138,
+      "qlike": 16.854
+    },
+    "pyricularia_oryzae": {
+      "n_eval_points": 42,
+      "rmse": 2.474,
+      "mae": 1.482,
+      "wape": 1.132,
+      "mase": 1.403,
+      "rmsve": 2.29,
+      "mave": 1.816,
+      "qlike": 2.18
+    },
+    "ralstonia_solanacearum": {
+      "n_eval_points": 42,
+      "rmse": 13.392,
+      "mae": 5.114,
+      "wape": 1.294,
+      "mase": 6.502,
+      "rmsve": 13.337,
+      "mave": 5.773,
+      "qlike": 10.637
+    },
+    "rhizoctonia_solani": {
+      "n_eval_points": 42,
+      "rmse": 6.808,
+      "mae": 4.403,
+      "wape": 0.794,
+      "mase": 8.164,
+      "rmsve": 5.437,
+      "mave": 3.525,
+      "qlike": 6.991
+    },
+    "xanthomonas_oryzae": {
+      "n_eval_points": 42,
+      "rmse": 10.478,
+      "mae": 2.97,
+      "wape": 2.114,
+      "mase": 13.215,
+      "rmsve": 7.847,
+      "mave": 2.61,
+      "qlike": 83.242
+    }
+  }
+}

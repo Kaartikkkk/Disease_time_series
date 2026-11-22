@@ -128,8 +128,9 @@ Disease_time_series/
 │   ├── 4_Future_Forecasts.py                  # Multi-step projections & prediction intervals
 │   └── 5_Data_and_Methodology.py              # Governance downloads & mathematical formulas
 │
-├── configs/                                   # Central configuration repository
-│   ├── application/                           # Application and UI runtime settings (settings.yaml)
+├── config/                                    # Central configuration repository
+│   ├── settings.yaml                          # Application, UI, and pathogen configuration
+│   ├── model_selection_policy.json            # Automated ensemble routing matrix
 │   ├── models/                                # Model policies, frozen configs, routing matrices
 │   └── evaluation/                            # Walk-forward origins & holdout evaluation specs
 │
@@ -139,18 +140,18 @@ Disease_time_series/
 │   ├── metrics/                               # Final holdout and multi-origin score records
 │   └── tuning/                                # Hyperparameter sweeps, ablation & ensemble logs
 │
-├── data/                                      # Data store
-│   ├── raw/                                   # Unmodified GBIF, EPPO & NASA source archives
-│   ├── processed/                             # Monthly aggregations & finalized dataset versions
-│   └── reference/                             # Domain references & crop vulnerability lists
+├── data/                                      # Authoritative dataset store
+│   ├── disease_timeseries_master.csv          # Single active master dataset (1,320 rows, 10 pathogens)
+│   └── processed/                             # Processed validation metrics, predictions & metadata
 │
 ├── src/                                       # Core source library
 │   ├── data/                                  # Data ingestion, cleaning, schemas & aggregation
 │   ├── models/                                # Modular forecasting model families
 │   │   ├── classical/                         # AR, MA, ARIMA, SARIMA, ARIMAX, SARIMAX, HW, Naive
 │   │   ├── machine_learning/                  # Random Forest, XGBoost, Hurdle, Global Models
-│   │   ├── deep_learning/                     # PyTorch LSTM, GRU networks
+│   │   ├── deep_learning/                     # PyTorch LSTM, GRU networks, Temporal Transformer
 │   │   ├── probabilistic/                     # Meta Prophet Bayesian additive model
+│   │   ├── volatility/                        # ARCH & GARCH(1,1) risk/residual volatility models
 │   │   └── common/                            # Base classes, ForecastContext, adapters, schemas
 │   ├── evaluation/                            # Metrics (RMSE, MAE, MASE, WAPE), loss calculations
 │   ├── forecasting/                           # Rolling walk-forward pipeline, recursive inference
@@ -159,26 +160,34 @@ Disease_time_series/
 │
 ├── scripts/                                   # Automation scripts and execution pipelines
 │   ├── training/                              # Model training & registry generation scripts
-│   ├── tuning/                                # Hyperparameter optimization & ablation searches
-│   ├── benchmarking/                          # Multi-origin & final holdout validation engines
-│   └── utilities/                             # Dataset construction & figure generation tools
+│   ├── evaluation/                            # Final holdout, ARCH/GARCH & multi-origin benchmark engines
+│   ├── verification/                          # Dataset integrity & pipeline verification scripts
+│   ├── generate_pdf_reports.py                # Compiles Milestone 2 PDF (Exact 4 Pages)
+│   └── generate_final_report_pdf.py           # Compiles Milestone 3 PDF (Exact 9 Pages)
 │
-├── tests/                                     # Pytest test suite (99 passed across 7 domains)
+├── tests/                                     # Pytest test suite (113 passed across 8 domains)
 │   ├── classical/                             # Unit tests for Box-Jenkins & classical models
 │   ├── machine_learning/                      # Leakage, scaling & unit tests for RF/XGBoost
-│   ├── deep_learning/                         # Scaler isolation & network tests for LSTM/GRU
+│   ├── deep_learning/                         # Scaler isolation & network tests for LSTM/GRU/Transformer
 │   ├── probabilistic/                         # Interval bounds & clipping tests for Prophet
+│   ├── volatility/                            # Engle ARCH-LM & GARCH(1,1) test suite
 │   ├── data_processing/                       # Occurrence cleaning & monthly aggregation tests
 │   ├── evaluation/                            # Metric computation & multi-origin validation tests
 │   └── integration/                           # Pipeline, routing policy & UI integration tests
 │
-└── reports/                                   # Categorized scientific reports & documentation
-    ├── architecture/                          # Architectural audits, design reports, compliance
-    ├── dataset/                               # Dataset improvement audits & provenance records
-    ├── experiments/                           # Hyperparameter optimization & model reports
-    ├── evaluation/                            # Multi-origin validation & comparative analyses
-    ├── final/                                 # Final holdout evaluation & pathogen routing reports
-    └── figures/                               # Generated scientific figures and publication plots
+├── final_submission/                          # University Final Evaluation Submission
+│   ├── reports/                               # EXACTLY TWO final academic PDF reports
+│   │   ├── MILESTONE_2_CLASSICAL_TIME_SERIES_REPORT.pdf  # Exact 4 Pages
+│   │   └── MILESTONE_3_ADVANCED_FORECASTING_REPORT.pdf   # Exact 9 Pages
+│   └── source_code/                           # Self-contained reproducible source package
+│
+├── docs/                                      # Documentation & Editable Report Sources
+│   └── editable_report_sources/               # Markdown versions & viva demonstration guides
+│
+└── reports/                                   # Local synchronized PDF reports
+    ├── MILESTONE_2_CLASSICAL_TIME_SERIES_REPORT.pdf      # Exact 4 Pages
+    ├── MILESTONE_3_ADVANCED_FORECASTING_REPORT.pdf       # Exact 9 Pages
+    └── assets/                                           # Vector/bitmap figures embedded in reports
 ```
 
 ---
