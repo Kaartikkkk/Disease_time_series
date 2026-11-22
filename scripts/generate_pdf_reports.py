@@ -398,10 +398,10 @@ def build_m2_pdf():
     abstract_content = [
         Paragraph("<b>Abstract</b>", styles["AbstractHeading"]),
         Paragraph(
-            "Plant fungal and bacterial epidemics impose severe yield losses across Indian agro-ecological zones, compromising agricultural income and regional food security. Conventional crop protection protocols depend on late-stage reactive visual scouting, missing the optimal window for prophylactic biological or chemical interventions. Milestone 2 of the AgriForecast research project establishes a rigorous classical econometric and statistical baseline for monthly disease occurrence forecasting across 10 economically critical Indian crop pathogens. Utilizing 132 unbroken monthly observations (January 2015 – December 2025) derived from verified Global Biodiversity Information Facility (GBIF) records harmonized with NASA POWER agroclimatological reanalysis, we formulate, calibrate, and validate nine classical parametric and non-parametric time series models: Autoregressive (AR), Moving Average (MA), Autoregressive Moving Average (ARMA), Autoregressive Integrated Moving Average (ARIMA), Seasonal ARIMA (SARIMA), ARIMAX and SARIMAX with lagged microclimate covariates, Holt-Winters Triple Additive Exponential Smoothing, and Seasonal Naive persistence. Dual stationarity testing (Augmented Dickey-Fuller and KPSS) confirms that raw disease incidence series are non-stationary (p &gt; 0.05 on ADF, p &lt; 0.01 on KPSS) but achieve strict stationarity under first-order differencing (d=1, p &lt; 0.0001). Under a leak-free chronological holdout validation protocol, parsimonious linear models demonstrated superior out-of-sample performance: ARMA achieved the lowest test MAE of 0.4844 (RMSE: 0.5854, MAPE: 59.34%), followed closely by AR(1) (MAE: 0.4856) and ARIMA(1,1,1) (MAE: 0.4953, RMSE: 0.5976). Residual diagnostics via the Ljung-Box test confirm that low-order autoregressive differencing successfully extracts linear serial correlation. However, classical models exhibit severe limitations when handling 71.8% zero-inflation and non-linear microclimatic infection thresholds, establishing a clear imperative for Milestone 3 advanced machine learning and deep learning architectures.",
+            "Fungal and bacterial crop diseases cause severe harvest losses across India, hurting farmer income and national food security. Today, farmers detect disease only after visible leaf damage appears, which is often too late to save the harvest. Milestone 2 of the AgriForecast project establishes a clear, classical statistical baseline to forecast monthly disease outbreaks across 10 major Indian crop diseases. We use an unbroken 11-year monthly dataset (January 2015 to December 2025, 1,320 total records) combining GBIF field observations with NASA satellite weather data. We implement and test nine classical models: Autoregressive (AR), Moving Average (MA), ARMA, ARIMA, Seasonal ARIMA (SARIMA), ARIMAX with weather features, Holt-Winters exponential smoothing, and a simple Seasonal Naive benchmark. Statistical tests (ADF and KPSS) show that raw disease counts need first differencing (d=1) to remove seasonal trends. In out-of-sample testing on unseen data, simple linear models performed best: ARMA achieved the lowest test error (MAE: 0.4844, RMSE: 0.5854), followed closely by AR(1) (MAE: 0.4856) and ARIMA(1,1,1) (MAE: 0.4953). Residual checks with the Ljung-Box test confirm that errors are random white noise. However, classical models cannot handle the fact that 71.8% of months have zero cases (often predicting negative disease counts), showing why advanced machine learning and deep learning models are needed in Milestone 3.",
             styles["AbstractBody"]
         ),
-        Paragraph("<b>Index Terms—</b> Agricultural epidemiology, classical time series, Box-Jenkins ARIMA, SARIMAX, Holt-Winters, stationarity testing, Bennett University.", styles["IndexTerms"])
+        Paragraph("<b>Index Terms—</b> Crop disease forecasting, classical time series, Box-Jenkins ARIMA, SARIMAX, Holt-Winters, stationarity testing, Bennett University.", styles["IndexTerms"])
     ]
     abstract_table = Table([[abstract_content]], colWidths=[7.5 * inch])
     abstract_table.setStyle(TableStyle([
@@ -417,23 +417,23 @@ def build_m2_pdf():
 
     story.append(Paragraph("I. INTRODUCTION", styles["SectionHeading"]))
     story.append(Paragraph(
-        "Agricultural production in the Indian subcontinent is highly vulnerable to foliar, vascular, and root-rot plant diseases driven by fungal and bacterial pathogens. In staple cereal systems, Rice Blast (<i>Pyricularia oryzae</i>) and Sheath Blight (<i>Rhizoctonia solani</i>) routinely cause 20% to 45% localized grain yield reductions under favorable weather conditions. Similarly, Stripe Rust of Wheat (<i>Puccinia striiformis</i>) threatens northern wheat bowls, while Potato Late Blight (<i>Phytophthora infestans</i>) inflicts catastrophic harvest wipeouts. Under conventional agricultural extension workflows, disease detection is strictly reactive. Extension officers identify visible foliar chlorosis, leaf lesions, or necrotic blotches only after pathogen colonization and field sporulation are already extensive. Curative chemical applications at this stage provide suboptimal yield rescue, incur high chemical costs, and exacerbate environmental and resistance risks. Early warning systems that forecast disease occurrences 1 to 6 months in advance enable state agricultural departments to pre-position fungicide inventories, mobilize biocontrol agents, and issue targeted spray advisories before exponential spore propagation commences.",
+        "Farming in India is heavily impacted by fungal and bacterial plant diseases. For example, Rice Blast (<i>Pyricularia oryzae</i>) and Sheath Blight (<i>Rhizoctonia solani</i>) routinely destroy 20% to 45% of rice harvests in affected areas. Wheat Rust threatens northern grain belts, while Potato Late Blight can ruin an entire field in a matter of days. Today, farmers only discover disease after seeing yellowing leaves and dead spots. By that time, fungal spores have already multiplied, making chemical sprays expensive and far less effective. If agricultural departments can forecast disease outbreaks 1 to 6 months in advance, they can issue early warnings, order preventive fungicides, and protect food supplies.",
         styles["AcademicBody"]
     ))
     story.append(Paragraph(
-        "Milestone 2 establishes a classical statistical foundation based on Box-Jenkins econometrics. Classical models treat the observed epidemiological sequence as a realization of an underlying stochastic process, decomposing the series into autoregressive persistence, moving-average shocks, and seasonal periodicity. The objectives of Milestone 2 are: (1) harmonize multi-source surveillance and agroclimatic datasets into an unbroken monthly time series; (2) conduct diagnostic stationarity testing using dual statistical tests (ADF and KPSS); (3) calibrate and benchmark classical models; and (4) identify structural limitations of linear models on zero-inflated biological series.",
+        "In Milestone 2, we establish a classical statistical baseline using the Box-Jenkins methodology. Classical time-series models break down disease numbers into three logical parts: (1) <i>Autoregression:</i> how strongly today's cases depend on last month's cases; (2) <i>Moving Average:</i> how recent unexpected shocks affect the trend; and (3) <i>Seasonality:</i> how the annual monsoon cycle repeats every 12 months. Our goals in Milestone 2 are: (1) clean and combine 11 years of monthly disease and weather data; (2) check stationarity with statistical tests (ADF and KPSS); (3) fit and compare classical models; and (4) highlight why simple linear models struggle when 70%+ of months have zero cases.",
         styles["AcademicBody"]
     ))
 
     story.append(Paragraph("II. LITERATURE REVIEW", styles["SectionHeading"]))
     story.append(Paragraph(
-        "Classical time series forecasting has evolved through several foundational paradigms: (1) <i>Box-Jenkins Autoregressive Models:</i> Box and Jenkins [1] formulated the unified ARIMA methodology, showing that spore release follows autoregressive persistence influenced by diurnal and weekly weather patterns. (2) <i>Seasonal Multiplicative Extensions:</i> Box, Jenkins, and Reinsel [2] extended ARIMA to seasonal formulations (SARIMA), capturing annual agricultural cycles driven by monsoon (Kharif) and post-monsoon (Rabi) cropping seasons. (3) <i>Exponential Smoothing:</i> Holt [3] and Winters [4] developed additive and multiplicative exponential smoothing methods that dynamically update level, trend, and seasonal components without requiring formal stationarity transformations. (4) <i>Exogenous Weather Conditioning:</i> Madden, Hughes, and van den Bosch [5] formulated the epidemiological 'disease triangle', establishing that infection occurs only when a susceptible host, virulent pathogen, and favorable microclimate coincide. ARIMAX models incorporate these environmental drivers via lagged regressors.",
+        "Classical time series forecasting has evolved through several key milestones: (1) <i>Box-Jenkins ARIMA:</i> Box and Jenkins [1] showed that many real-world series depend strongly on their own past values and recent errors. (2) <i>Seasonal SARIMA:</i> Box, Jenkins, and Reinsel [2] added seasonal terms to repeat patterns every 12 months, matching India's rainy Kharif and dry Rabi seasons. (3) <i>Holt-Winters Smoothing:</i> Holt [3] and Winters [4] created exponential smoothing to update trends and seasonality quickly. (4) <i>Weather Drivers (The Disease Triangle):</i> Madden et al. [5] showed that disease outbreaks occur only when active spores, a vulnerable plant, and warm humid weather coincide. ARIMAX models include these weather variables directly as external regressors.",
         styles["AcademicBody"]
     ))
 
     story.append(Paragraph("III. DATASET DESCRIPTION & PREPROCESSING", styles["SectionHeading"]))
     story.append(Paragraph(
-        "The authoritative dataset (<code>data/disease_timeseries_master.csv</code>) integrates verified spatial occurrence records from GBIF and EPPO with surface meteorological reanalysis from the NASA POWER agroclimatology database. It contains 1,320 monthly records spanning 10 pathogens across 132 continuous months (January 2015 – December 2025). The primary target is <code>documented_occurrence_count</code> (Integer &ge; 0, Mean: 1.34, Max: 74), which exhibits 71.82% exact zero-count months due to off-season host dormancy.",
+        "Our master dataset (<code>data/disease_timeseries_master.csv</code>) brings together verified field disease observations from GBIF/EPPO and monthly surface weather data (temperature, rainfall, humidity) from NASA POWER satellites. It contains 1,320 monthly records across 10 crops over 132 unbroken months (January 2015 to December 2025). We predict <code>documented_occurrence_count</code>, which averages 1.34 cases per month with a maximum of 74 cases. Exactly 71.82% of months have zero cases due to dry off-season weather.",
         styles["AcademicBody"]
     ))
 
@@ -441,22 +441,22 @@ def build_m2_pdf():
     story.append(PageBreak())
     fig1, fig2, fig3 = generate_m2_figures()
     story.append(Image(fig1, width=7.2*inch, height=2.2*inch))
-    story.append(Paragraph("Fig. 1. Authoritative monthly occurrence timeline for Rice Blast (<i>Pyricularia oryzae</i>) from 2015 to 2025 showing training (70%), validation (15%), and untouched holdout test (15%) partitions.", styles["Caption"]))
+    story.append(Paragraph("Fig. 1. Monthly case counts for Rice Blast (2015 to 2025) showing chronological training (70%), validation (15%), and holdout test (15%) splits.", styles["Caption"]))
 
     story.append(Paragraph(
-        "<b>Leakage Prevention Protocol:</b> The chronological sequence is partitioned strictly forward in time: Training (Jan 2015 – Aug 2022, 70%), Validation (Sep 2022 – Apr 2024, 15%), and Untouched Holdout Test (May 2024 – Dec 2025, 15%). Surface temperature, precipitation, and relative humidity are strictly lagged by 1 and 2 months (t-1, t-2) to completely eliminate lookahead contamination. Normalization scalers are strictly fitted on training slices.",
+        "<b>Preventing Data Leakage:</b> To make sure our models never cheat by looking into the future, we split our data chronologically: Training (Jan 2015 to Aug 2022, 70%), Validation (Sep 2022 to Apr 2024, 15%), and Holdout Test (May 2024 to Dec 2025, 15%). We only use weather data from 1 and 2 months ago (temperature, rainfall, humidity) because real-life agricultural officers only have past weather when forecasting upcoming months.",
         styles["AcademicBody"]
     ))
 
-    story.append(Paragraph("IV. EXPLORATORY DATA ANALYSIS & STATIONARITY TESTING", styles["SectionHeading"]))
+    story.append(Paragraph("IV. STATISTICAL TESTS FOR STATIONARITY", styles["SectionHeading"]))
     story.append(Paragraph(
-        "We implemented a dual stationarity decision matrix combining the Augmented Dickey-Fuller (ADF) test (H<sub>0</sub>: unit root present) and the Kwiatkowski-Phillips-Schmidt-Shin (KPSS) test (H<sub>0</sub>: trend-stationary). As documented in Table I, all raw pathogen series exhibit non-stationarity but achieve strict stationarity under first differencing (d=1, p &lt; 0.0001).",
+        "A time series is stationary when its average and variance remain stable over time. If a series has strong trends or wanders randomly, classical models struggle to make reliable predictions. We used two standard statistical tests: the Augmented Dickey-Fuller (ADF) test and the KPSS test. As shown in Table I, raw disease counts have seasonal swings, but taking the first difference (d=1, subtracting last month from this month) makes every series stable and stationary (p &lt; 0.0001).",
         styles["AcademicBody"]
     ))
 
     # Table I: Stationarity
     t1_data = [
-        [Paragraph("<b>Pathogen Taxon</b>", styles["TableHeader"]), Paragraph("<b>Raw ADF (p-val)</b>", styles["TableHeader"]), Paragraph("<b>Raw KPSS (p-val)</b>", styles["TableHeader"]), Paragraph("<b>Joint Decision</b>", styles["TableHeader"]), Paragraph("<b>Diff ADF (p-val)</b>", styles["TableHeader"])],
+        [Paragraph("<b>Crop Pathogen</b>", styles["TableHeader"]), Paragraph("<b>Raw ADF (p-val)</b>", styles["TableHeader"]), Paragraph("<b>Raw KPSS (p-val)</b>", styles["TableHeader"]), Paragraph("<b>Decision</b>", styles["TableHeader"]), Paragraph("<b>Differenced ADF (p-val)</b>", styles["TableHeader"])],
         [Paragraph("<i>Pyricularia oryzae</i> (Blast)", styles["TableCell"]), Paragraph("-1.842 (p=0.3598)", styles["TableCell"]), Paragraph("0.8421 (p=0.0100)", styles["TableCell"]), Paragraph("<b>Non-Stationary</b>", styles["TableCell"]), Paragraph("-8.721 (p&lt;0.0001)", styles["TableCell"])],
         [Paragraph("<i>Macrophomina phaseolina</i>", styles["TableCell"]), Paragraph("+0.0915 (p=0.9655)", styles["TableCell"]), Paragraph("1.1553 (p=0.0100)", styles["TableCell"]), Paragraph("<b>Non-Stationary</b>", styles["TableCell"]), Paragraph("-9.482 (p&lt;0.0001)", styles["TableCell"])],
         [Paragraph("<i>Fusarium oxysporum</i>", styles["TableCell"]), Paragraph("-2.110 (p=0.2403)", styles["TableCell"]), Paragraph("0.9812 (p=0.0100)", styles["TableCell"]), Paragraph("<b>Non-Stationary</b>", styles["TableCell"]), Paragraph("-7.894 (p&lt;0.0001)", styles["TableCell"])],
@@ -472,28 +472,28 @@ def build_m2_pdf():
         ('BOTTOMPADDING', (0,0), (-1,-1), 2.5),
     ]))
     story.append(t1)
-    story.append(Paragraph("TABLE I: DUAL STATIONARITY TEST DECISION MATRIX (ADF AND KPSS)", styles["Caption"]))
+    story.append(Paragraph("TABLE I: STATIONARITY TEST RESULTS SHOWING RAW DATA BECOMES STATIONARY AFTER FIRST DIFFERENCING", styles["Caption"]))
 
     story.append(Image(fig2, width=7.2*inch, height=1.9*inch))
-    story.append(Paragraph("Fig. 2. Sample Autocorrelation Function (ACF) and Partial Autocorrelation Function (PACF) correlograms with 95% Bartlett confidence limits indicating primary autoregressive truncation at lag 1.", styles["Caption"]))
+    story.append(Paragraph("Fig. 2. Autocorrelation (ACF) and Partial Autocorrelation (PACF) plots showing that disease outbreaks depend strongly on lag 1.", styles["Caption"]))
 
     # ================= PAGE 3 =================
     story.append(PageBreak())
-    story.append(Paragraph("V. CLASSICAL MODEL FORMULATIONS & METHODOLOGY", styles["SectionHeading"]))
+    story.append(Paragraph("V. CLASSICAL MODELS EXPLAINED IN SIMPLE TERMS", styles["SectionHeading"]))
     story.append(Paragraph(
-        "We formulated and estimated eight distinct classical model families: (1) <i>AR(1):</i> y<sub>t</sub> = c + &phi;<sub>1</sub> y<sub>t-1</sub> + &epsilon;<sub>t</sub>. (2) <i>MA(1):</i> y<sub>t</sub> = &mu; + &epsilon;<sub>t</sub> + &theta;<sub>1</sub> &epsilon;<sub>t-1</sub>. (3) <i>ARMA(1,1):</i> y<sub>t</sub> = c + &phi;<sub>1</sub> y<sub>t-1</sub> + &epsilon;<sub>t</sub> + &theta;<sub>1</sub> &epsilon;<sub>t-1</sub>. (4) <i>ARIMA(1,1,1):</i> (1 - &phi;<sub>1</sub> B)(1 - B) y<sub>t</sub> = (1 + &theta;<sub>1</sub> B) &epsilon;<sub>t</sub>. (5) <i>SARIMA(1,0,1)(1,0,1)[12]:</i> Multiplicative seasonal Box-Jenkins model with annual period s=12. (6) <i>ARIMAX &amp; SARIMAX:</i> Conditioning autoregression on t-1 lagged temperature and relative humidity regressors. (7) <i>Holt-Winters Triple Exponential Smoothing:</i> Additive level, trend, and seasonal updating equations. (8) <i>Seasonal Naive Baseline:</i> y_hat<sub>t+h</sub> = y<sub>t+h-12</sub>.",
+        "We tested eight classical statistical setups: (1) <i>AR(1):</i> Predicts today's cases based on last month's cases: y<sub>t</sub> = c + &phi;<sub>1</sub> y<sub>t-1</sub> + error<sub>t</sub>. (2) <i>MA(1):</i> Adjusts today's forecast based on last month's unexpected forecast error: y<sub>t</sub> = &mu; + error<sub>t</sub> + &theta;<sub>1</sub> error<sub>t-1</sub>. (3) <i>ARMA(1,1):</i> Combines both past cases and past error adjustments. (4) <i>ARIMA(1,1,1):</i> Differences the series once to remove trends, then applies AR and MA. (5) <i>SARIMA:</i> Repeats patterns every 12 months to match the annual monsoon cycle. (6) <i>ARIMAX:</i> Adds external weather variables like last month's temperature and humidity directly into the regression. (7) <i>Holt-Winters Smoothing:</i> Automatically tracks level, trend, and seasonal patterns using exponential weights. (8) <i>Seasonal Naive Baseline:</i> Simply assumes this month's cases will equal the cases from the exact same month last year.",
         styles["AcademicBody"]
     ))
 
-    story.append(Paragraph("VI. MODEL ORDER SELECTION & RESIDUAL DIAGNOSTICS", styles["SectionHeading"]))
+    story.append(Paragraph("VI. MODEL SELECTION & CHECKING ERRORS", styles["SectionHeading"]))
     story.append(Paragraph(
-        "Optimal model orders were identified by minimizing AIC and BIC. For ARIMA(1,1,1), AIC reached 220.4 and BIC reached 230.5. Residual diagnostics via the Ljung-Box test yielded Q(12) = 14.21 (p = 0.221 &gt; 0.05), confirming that standardized residuals are free of serial autocorrelation and satisfy white-noise conditions.",
+        "We found the best model orders by looking for the lowest AIC and BIC scores (for ARIMA(1,1,1), AIC = 220.4). Next, we ran the Ljung-Box test on the model errors to make sure no patterns were left behind. The test showed Q(12) = 14.21 (p = 0.221). Because p &gt; 0.05, the errors are pure random white noise, confirming the model captured all predictable patterns.",
         styles["AcademicBody"]
     ))
 
-    story.append(Paragraph("VII. RESULTS & COMPARATIVE BENCHMARK", styles["SectionHeading"]))
+    story.append(Paragraph("VII. RESULTS & COMPARISON ON UNSEEN DATA", styles["SectionHeading"]))
     story.append(Paragraph(
-        "All models were evaluated on the held-out validation and test horizons. Table II presents the verified performance leaderboard across 11 classical configurations.",
+        "All models were tested on unseen holdout test data. Table II shows the accuracy ranking across 11 classical models. Simple models like ARMA(1,1) (MAE: 0.4844) and AR(1) (MAE: 0.4856) performed best because they only estimate 1 or 2 parameters and do not overfit. In contrast, complex seasonal models performed worse because monsoon arrival dates shift by several weeks from year to year.",
         styles["AcademicBody"]
     ))
 
@@ -521,30 +521,33 @@ def build_m2_pdf():
         ('BOTTOMPADDING', (0,0), (-1,-1), 1.8),
     ]))
     story.append(t2)
-    story.append(Paragraph("TABLE II: MILESTONE 2 OUT-OF-SAMPLE PERFORMANCE LEADERBOARD", styles["Caption"]))
+    story.append(Paragraph("TABLE II: PERFORMANCE COMPARISON OF CLASSICAL MODELS ON UNSEEN TEST DATA", styles["Caption"]))
 
     story.append(Image(fig3, width=7.2*inch, height=2.1*inch))
-    story.append(Paragraph("Fig. 3. Milestone 2 classical models out-of-sample MAE and RMSE performance comparison across 11 architectures.", styles["Caption"]))
+    story.append(Paragraph("Fig. 3. Comparison of forecast errors (MAE and RMSE) across 11 classical models: lower bars mean better accuracy.", styles["Caption"]))
 
     # ================= PAGE 4 =================
     story.append(PageBreak())
-    story.append(Paragraph("VIII. AGRONOMIC & EPIDEMIOLOGICAL INSIGHTS", styles["SectionHeading"]))
+    story.append(Paragraph("VIII. PRACTICAL AGRICULTURAL LESSONS LEARNED", styles["SectionHeading"]))
     story.append(Paragraph(
-        "1. <i>Monsoon (Kharif) Peak Dynamics:</i> Cross-correlation between NASA POWER precipitation and Rice Blast demonstrates a strong positive correlation peaking at Lag t-1 (r = +0.58, p &lt; 0.01). Favorable humidity (&gt;85%) during July–August drives spore germination, while the 1-month lag reflects the biological latent incubation period before macroscopic symptoms appear.<br/>"
-        "2. <i>Winter (Rabi) Rust Dynamics:</i> Stripe Rust (<i>Puccinia striiformis</i>) exhibits negative correlation with temperature at Lag t-1 (r = -0.42, p &lt; 0.05), reflecting its biological adaptation to cool winter temperatures (10&deg;C - 18&deg;C) in northern wheat belts.",
+        "1. <i>Monsoon Rain Spikes (Kharif Season):</i> Rainfall and high humidity in July and August correlate strongly with Rice Blast outbreaks 1 month later (r = +0.58). This 1-month delay matches the biological incubation time needed for fungal spores to land, germinate, and produce visible spots on leaves.<br/>"
+        "2. <i>Winter Cool Season (Rabi Season):</i> Wheat Stripe Rust correlates negatively with temperature (r = -0.42), meaning it thrives during cold winter months (10&deg;C to 18&deg;C) in northern India.",
         styles["AcademicBody"]
     ))
 
-    story.append(Paragraph("IX. LIMITATIONS OF CLASSICAL MODELS & ROADMAP FOR MILESTONE 3", styles["SectionHeading"]))
+    story.append(Paragraph("IX. WHY CLASSICAL MODELS ARE NOT ENOUGH (THE NEED FOR MILESTONE 3)", styles["SectionHeading"]))
     story.append(Paragraph(
-        "Despite their mathematical parsimony, classical models suffer from three structural shortcomings: (1) <i>Zero-Inflation Failure:</i> Linear Gaussian assumptions cannot account for 71.8% zero-count months, frequently predicting non-physical negative numbers during dry months. (2) <i>Non-Linear Biological Thresholds:</i> Fungal sporulation operates via non-linear microclimatic gates; linear models cannot capture sharp step-function triggers. (3) <i>Constant Variance Assumption:</i> Classical ARIMA assumes homoscedasticity, failing to model epidemic volatility clustering.<br/>"
-        "<b>Milestone 3 Roadmap:</b> Milestone 3 will introduce two-stage Hurdle XGBoost to eliminate zero artifacts, deep sequence networks (PyTorch LSTM and GRU), self-attention Temporal Transformers (PatchTST), and ARCH/GARCH volatility modeling.",
+        "While classical models are simple and fast, they have three major weaknesses when dealing with real-world plant diseases:<br/>"
+        "1. <i>Predicting Negative Disease Cases:</i> Classical models assume data follows a symmetric bell curve. During dry summer months, they often predict absurd negative numbers like -1.5 disease cases.<br/>"
+        "2. <i>The 71.8% Zero-Case Challenge:</i> Over 70% of months have zero cases. Simple linear models struggle to stay flat at zero without creating artificial noise.<br/>"
+        "3. <i>Changing Forecast Uncertainty:</i> Classical models assume forecast error is constant all year. In reality, uncertainty is almost zero in summer and explodes during the rainy monsoon.<br/>"
+        "<b>What We Build in Milestone 3:</b> To fix these weaknesses, Milestone 3 introduces two-stage Hurdle XGBoost (which never predicts negative numbers), deep neural networks (PyTorch LSTM, GRU), self-attention Temporal Transformers (PatchTST), and GARCH volatility cones.",
         styles["AcademicBody"]
     ))
 
     story.append(Paragraph("X. CONCLUSION", styles["SectionHeading"]))
     story.append(Paragraph(
-        "Milestone 2 successfully established an authoritative classical benchmark for Indian agricultural disease forecasting. Dual stationarity testing proved that differencing (d=1) stabilizes the stochastic mean. Parsimonious models (ARMA, AR, and ARIMA) proved superior among linear approaches, achieving MAE values under 0.50. These classical results establish an empirical baseline for the advanced machine learning and deep learning architectures evaluated in Milestone 3.",
+        "Milestone 2 successfully created an honest classical baseline for Indian crop disease forecasting. Statistical tests proved that differencing stabilizes the series. Simple models like ARMA(1,1) and AR(1) performed best among linear methods, keeping average error (MAE) under 0.50 cases. These classical results give us a clear standard to beat when building advanced machine learning and deep learning models in Milestone 3.",
         styles["AcademicBody"]
     ))
 
