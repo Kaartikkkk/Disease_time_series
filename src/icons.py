@@ -355,6 +355,32 @@ def icon_target(size: int = 20, color: str = "#C4A66A", css_class: str = "") -> 
     return _to_img(svg, size, css_class)
 
 
+def icon_network(size: int = 20, color: str = "#2D6A4F", css_class: str = "") -> str:
+    """Pathogen network / interacting biological nodes icon."""
+    c = _res_col(color, "#2D6A4F")
+    svg = f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="5" cy="5" r="2.2" stroke="{c}" stroke-width="1.75"/>
+  <circle cx="19" cy="5" r="2.2" stroke="{c}" stroke-width="1.75"/>
+  <circle cx="5" cy="19" r="2.2" stroke="{c}" stroke-width="1.75"/>
+  <circle cx="19" cy="19" r="2.2" stroke="{c}" stroke-width="1.75"/>
+  <circle cx="12" cy="12" r="2" fill="{c}"/>
+  <line x1="6.8" y1="6.8" x2="10.4" y2="10.4" stroke="{c}" stroke-width="1.75"/>
+  <line x1="17.2" y1="6.8" x2="13.6" y2="10.4" stroke="{c}" stroke-width="1.75"/>
+  <line x1="6.8" y1="17.2" x2="10.4" y2="13.6" stroke="{c}" stroke-width="1.75"/>
+  <line x1="17.2" y1="17.2" x2="13.6" y2="13.6" stroke="{c}" stroke-width="1.75"/>
+</svg>"""
+    return _to_img(svg, size, css_class)
+
+
+def icon_sigma(size: int = 20, color: str = "#2D6A4F", css_class: str = "") -> str:
+    """Mathematical summation / standard deviation sigma icon."""
+    c = _res_col(color, "#2D6A4F")
+    svg = f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M18 4H6L13 12L6 20H18" stroke="{c}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>"""
+    return _to_img(svg, size, css_class)
+
+
 def icon_droplets(size: int = 20, color: str = "#0284C7", css_class: str = "") -> str:
     """Water droplets icon for Relative Humidity & Leaf Wetness."""
     c = _res_col(color, "#0284C7")
@@ -411,6 +437,64 @@ def icon_table(size: int = 18, color: str = "#527A50", css_class: str = "") -> s
     svg = f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect x="3" y="3" width="18" height="18" rx="2" stroke="{c}" stroke-width="1.75"/>
   <path d="M3 9H21M3 15H21M9 3V21M15 3V21" stroke="{c}" stroke-width="1.5"/>
+</svg>"""
+    return _to_img(svg, size, css_class)
+
+
+def icon_trophy(size: int = 18, color: str = "#D97706", css_class: str = "") -> str:
+    """Trophy award icon."""
+    c = _res_col(color, "#D97706")
+    svg = f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M6 9C6 5 18 5 18 9C18 13 14 15 12 15C10 15 6 13 6 9Z" stroke="{c}" stroke-width="1.75" stroke-linejoin="round"/>
+  <path d="M6 9H3C3 11.5 4.5 13 6 13" stroke="{c}" stroke-width="1.75" stroke-linecap="round"/>
+  <path d="M18 9H21C21 11.5 19.5 13 18 13" stroke="{c}" stroke-width="1.75" stroke-linecap="round"/>
+  <path d="M12 15V19M8 21H16" stroke="{c}" stroke-width="1.75" stroke-linecap="round"/>
+</svg>"""
+    return _to_img(svg, size, css_class)
+
+
+def icon_refresh(size: int = 16, color: str = "#FFFFFF", css_class: str = "") -> str:
+    """Sync / refresh circular reload icon."""
+    c = _res_col(color, "#FFFFFF")
+    svg = f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M21 12A9 9 0 0 0 6 5.3L3 8M3 3V8H8" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M3 12A9 9 0 0 0 18 18.7L21 16M21 21V16H16" stroke="{c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>"""
+    return _to_img(svg, size, css_class)
+
+
+def icon_bulb(size: int = 16, color: str = "#D97706", css_class: str = "") -> str:
+    """Lightbulb / interpretation insight icon."""
+    c = _res_col(color, "#D97706")
+    svg = f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M9 18H15M10 21H14M12 2A7 7 0 0 0 5 9C5 12.3 7 14.5 8 16H16C17 14.5 19 12.3 19 9A7 7 0 0 0 12 2Z" stroke="{c}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>"""
+    return _to_img(svg, size, css_class)
+
+
+def icon_check(size: int = 14, color: str = "#166534", css_class: str = "") -> str:
+    """Simple checkmark icon."""
+    c = _res_col(color, "#166534")
+    svg = f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M5 13L9 17L19 7" stroke="{c}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>"""
+    return _to_img(svg, size, css_class)
+
+
+def icon_arrow_up(size: int = 12, color: str = "#166534", css_class: str = "") -> str:
+    """Upward delta arrow."""
+    c = _res_col(color, "#166534")
+    svg = f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M12 19V5M5 12L12 5L19 12" stroke="{c}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>"""
+    return _to_img(svg, size, css_class)
+
+
+def icon_arrow_down(size: int = 12, color: str = "#DC2626", css_class: str = "") -> str:
+    """Downward delta arrow."""
+    c = _res_col(color, "#DC2626")
+    svg = f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M12 5V19M19 12L12 19L5 12" stroke="{c}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>"""
     return _to_img(svg, size, css_class)
 

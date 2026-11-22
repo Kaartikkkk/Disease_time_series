@@ -1,0 +1,42 @@
+{
+  "dataset": "improved_india_plant_diseases_monthly.csv",
+  "temporal_resolution": "Monthly (132 time steps, Jan 2015 - Dec 2025)",
+  "validation_split": {
+    "start_period": "2022-09",
+    "end_period": "2024-04",
+    "horizons": [1, 2, 3, 4, 5, 6],
+    "origins": [
+      {
+        "origin_id": 1,
+        "cutoff_date": "2022-08-01",
+        "eval_window": "2022-09 to 2023-02"
+      },
+      {
+        "origin_id": 2,
+        "cutoff_date": "2023-02-01",
+        "eval_window": "2023-03 to 2023-08"
+      },
+      {
+        "origin_id": 3,
+        "cutoff_date": "2023-08-01",
+        "eval_window": "2023-09 to 2024-02"
+      },
+      {
+        "origin_id": 4,
+        "cutoff_date": "2023-10-01",
+        "eval_window": "2023-11 to 2024-04"
+      }
+    ],
+    "total_evaluation_steps": 240
+  },
+  "final_holdout_split": {
+    "start_period": "2024-05",
+    "end_period": "2025-12",
+    "duration_months": 20,
+    "pathogen_count": 10,
+    "total_evaluation_records": 200,
+    "evaluation_mode": "Expanding-window 1-step-ahead walk-forward"
+  },
+  "primary_metrics": ["RMSE", "MAE", "MSE", "MASE", "WAPE"],
+  "classification_metrics": ["Precision", "Recall", "F1", "FAR"]
+}

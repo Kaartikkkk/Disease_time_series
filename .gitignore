@@ -30,8 +30,12 @@ ENV/
 .vscode/
 .idea/
 .DS_Store
+__MACOSX/
 *.swp
 *.swo
+
+# Testing & Caches
+.pytest_cache/
 
 # Project local artifacts
 logs/*.log
@@ -40,6 +44,3 @@ models/*.joblib
 
 # Environment variables
 .env
-
-# Legacy archive
-archive_legacy_v1/

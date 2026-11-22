@@ -27,6 +27,7 @@ def compute_forecast_metrics(
     season_length: int = 12,
     parameters: str = "",
     model_family: str = "",
+    model_category: str = "",
 ) -> Dict[str, Any]:
     """Calculate all standard and robust time series forecast accuracy metrics.
 
@@ -58,6 +59,7 @@ def compute_forecast_metrics(
             "model_name": model_name,
             "parameters": parameters,
             "model_family": model_family,
+            "model_category": model_category,
             "n_observations": 0,
             "mae": None,
             "rmse": None,
@@ -138,6 +140,7 @@ def compute_forecast_metrics(
         "model_name": model_name,
         "parameters": parameters,
         "model_family": model_family,
+        "model_category": model_category,
         "n_observations": n,
         "mae": round(mae, 3),
         "rmse": round(rmse, 3),
@@ -181,12 +184,12 @@ def build_model_comparison_table(eval_results: List[Dict[str, Any]]) -> pd.DataF
 
         rows.append({
             "Model": res.get("model_name"),
+            "Category": res.get("model_category") or res.get("model_family") or "Time Series",
             "Selected Parameters": res.get("parameters", "Auto-Optimized"),
             "RMSE": m_rmse,
             "MAE": res.get("mae"),
             "sMAPE (%)": f"{res.get('smape'):.2f}%" if res.get("smape") is not None else "N/A",
-            "WAPE (%)": f"{m_wape:.1f}%" if m_wape is not None else "N/A",
-            "Baseline Improvement": imp_str,
+            "Improvement vs Baseline": imp_str,
             "MASE": f"{m_mase:.3f}" if m_mase is not None else "N/A",
             "Performance": perf_str,
             "Forecast Score (%)": f"{m_acc:.1f}%" if m_acc is not None else "N/A",

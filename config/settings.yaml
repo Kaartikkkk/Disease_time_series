@@ -202,14 +202,23 @@ forecasting:
     - "seasonal_naive"
     - "ar"
     - "ma"
-    - "arma"
     - "arima"
     - "sarima"
     - "holt_winters"
     - "arimax"
     - "sarimax"
-  modern_models:
-    - "prophet"
-    - "autots"
+  ml_models:
     - "random_forest_autoregressor"
     - "gradient_boosting_autoregressor"
+  milestone_3_planned:
+    - "xgboost"
+    - "prophet"
+    - "lstm"
+    - "gru"
+  hyperparameters:
+    seasonal_period: 12
+    autoregressive_lags: [1, 2, 3, 12]
+    weather_exog_cols:
+      - "temp_mean_c_lag1"
+      - "precipitation_monthly_mm_lag1"
+      - "relative_humidity_pct_lag1"
