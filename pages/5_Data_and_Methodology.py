@@ -35,7 +35,6 @@ from src.ui_helpers import (
 
 st.set_page_config(
     page_title="Data & Methodology — AgriForecast",
-    page_icon="🌾",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
@@ -289,7 +288,7 @@ with tab_downloads:
         p_master = Path("data/disease_timeseries_master.csv")
         if p_master.exists():
             st.download_button(
-                label="📥 Download Authoritative Master Dataset CSV (43 Cols, 1,320 Rows)",
+                label="Download Authoritative Master Dataset CSV (43 Cols, 1,320 Rows)",
                 data=p_master.read_bytes(),
                 file_name="disease_timeseries_master.csv",
                 mime="text/csv",

@@ -16,6 +16,7 @@ from src.models.classical.ma_model import forecast_ma
 from src.models.classical.sarima_model import forecast_sarima
 from src.models.classical.sarimax_model import forecast_sarimax_model
 from src.models.classical.seasonal_naive import forecast_seasonal_naive
+from src.models.classical.var_model import forecast_var
 from src.models.machine_learning.gradient_boosting import forecast_gradient_boosting
 from src.models.machine_learning.random_forest import forecast_random_forest
 from src.models.machine_learning.xgboost_model import HAS_XGBOOST, forecast_xgboost
@@ -26,6 +27,7 @@ from src.models.machine_learning.global_models import (
 )
 from src.models.deep_learning.lstm_model import HAS_TORCH, forecast_lstm
 from src.models.deep_learning.gru_model import forecast_gru
+from src.models.deep_learning.transformer_model import forecast_transformer
 from src.models.probabilistic.prophet_model import HAS_PROPHET, forecast_prophet
 from src.models.volatility.arch_garch_model import ARCHGARCHModel
 
@@ -460,6 +462,57 @@ def adapt_gru(ctx: ForecastContext) -> Dict[str, Any]:
         model_name="GRU (Gated Recurrent Unit)",
         parameters=param_str,
         model_family="Recurrent Neural Network (PyTorch)",
+        fitted_model=model,
+    )
+    out["metadata"]["diagnostics"] = diagnostics
+    return out
+
+
+def adapt_transformer(ctx: ForecastContext) -> Dict[str, Any]:
+    """Adapter for compact univariate PyTorch Time Series Transformer (PatchTST / Multi-Head Attention)."""
+    if not HAS_TORCH:
+        raise ImportError("PyTorch (torch) is not installed or unavailable in this environment.")
+
+    transformer_config = ctx.config.get("transformer_config")
+    preds, lb, ub, model, diagnostics = forecast_transformer(
+        ctx.train_df,
+        horizon=ctx.horizon,
+        target_col=ctx.target_col,
+        transformer_config=transformer_config,
+    )
+    param_str = (
+        f"PyTorch Transformer (d_model={diagnostics['d_model']}, nhead={diagnostics['nhead']}, "
+        f"lookback={diagnostics['lookback']}, best_ep={diagnostics['best_epoch']}/{diagnostics['epochs_trained']})"
+    )
+    out = _build_output(
+        preds, lb, ub,
+        model_name="Temporal Transformer (PatchTST / Attention)",
+        parameters=param_str,
+        model_family="Self-Attention Transformer (PyTorch)",
+        fitted_model=model,
+    )
+    out["metadata"]["diagnostics"] = diagnostics
+    return out
+
+
+def adapt_var(ctx: ForecastContext) -> Dict[str, Any]:
+    """Adapter for Multivariate Vector Autoregression (VAR) on disease and weather."""
+    maxlags = int(ctx.config.get("maxlags", 2))
+    exog_cols = ctx.exog_cols or ["temp_mean_c", "relative_humidity_pct"]
+
+    preds, lb, ub, model, diagnostics = forecast_var(
+        train_df=ctx.train_df,
+        horizon=ctx.horizon,
+        target_col=ctx.target_col,
+        exog_cols=exog_cols,
+        maxlags=maxlags,
+    )
+    param_str = diagnostics.get("parameters", f"VAR({diagnostics.get('lag_order', 1)})")
+    out = _build_output(
+        preds, lb, ub,
+        model_name="VAR (Vector Autoregression)",
+        parameters=param_str,
+        model_family="Multivariate Autoregressive System",
         fitted_model=model,
     )
     out["metadata"]["diagnostics"] = diagnostics

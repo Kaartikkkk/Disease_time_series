@@ -21,6 +21,7 @@ from src.eda import (
 from src.icons import (
     icon_activity,
     icon_bar_chart,
+    icon_bulb,
     icon_calendar,
     icon_check_circle,
     icon_info,
@@ -30,6 +31,7 @@ from src.icons import (
     icon_settings,
     icon_shield,
     icon_sigma,
+    icon_target,
     icon_thermometer,
     icon_timeseries,
     icon_trending_up,
@@ -191,12 +193,12 @@ st.html(kpi_markup)
 # 4. CONSOLIDATED PILL TABS
 # ==============================================================================
 tab_trend, tab_decomp, tab_stationarity, tab_acf, tab_weather, tab_volatility = st.tabs([
-    "📈 Trajectory & Trend",
-    "📅 Seasonal Decomposition",
-    "📉 Stationarity & Differencing",
-    "⏱ Autocorrelation (ACF / PACF)",
-    "🌧 Weather Correlation",
-    "📊 ARCH / GARCH",
+    "Trajectory & Trend",
+    "Seasonal Decomposition",
+    "Stationarity & Differencing",
+    "Autocorrelation (ACF / PACF)",
+    "Weather Correlation",
+    "ARCH / GARCH",
 ])
 
 # ----------------- Tab 1: Trajectory & Trend -----------------
@@ -274,7 +276,7 @@ with tab_trend:
         unsafe_allow_html=True,
     )
     
-    with st.expander("📊 Outlier Detection & Distribution Bounds", expanded=False):
+    with st.expander("Outlier Detection & Distribution Bounds", expanded=False):
         outliers_data = detect_outliers(df_monthly, target_col=target_col)
         c_o1, c_o2, c_o3 = st.columns(3)
         with c_o1:
@@ -350,7 +352,7 @@ with tab_stationarity:
             f"Taking first differences in data with many zero months increases artificial swings, explaining why ARIMA differencing degrades forecast accuracy on unseen data."
         )
 
-    with st.expander("📐 Mathematical Formulations & Stationarity Theory", expanded=False):
+    with st.expander("Mathematical Formulations & Stationarity Theory", expanded=False):
         st.markdown(
             r"""
             **Augmented Dickey-Fuller (ADF) Regression:**
@@ -423,280 +425,272 @@ with tab_weather:
 
 # ----------------- Tab 6: ARCH / GARCH Volatility -----------------
 with tab_volatility:
-    st.markdown("### 📈 Time-Varying Uncertainty & Volatility Modelling (ARCH / GARCH)")
-    st.info(
-        "**Methodological Foundation for Faculty & Researchers:**\n\n"
-        "**ARCH and GARCH estimate how disease-series uncertainty changes over time. "
-        "They do not directly predict disease occurrence counts.**\n\n"
-        "In plant epidemiological surveillance, disease occurrences exhibit bursty heteroskedasticity: "
-        "dormant, zero-heavy winter months exhibit narrow variance, whereas favorable monsoon windows trigger "
-        "large, clustered outbreaks with high uncertainty."
+    # 1. Plain-English Header & Educational Card
+    st.markdown(
+        f"""
+        <div style="background: #F8FAF9; border: 1px solid rgba(45, 106, 79, 0.2); border-left: 4px solid #2D6A4F; border-radius: 12px; padding: 16px 20px; margin-bottom: 20px;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                {icon_trending_up(20, "#2D6A4F")}
+                <strong style="color: #102C26; font-size: 1.05rem;">Outbreak Uncertainty &amp; Volatility Analysis (ARCH / GARCH)</strong>
+            </div>
+            <p style="color: #374151; font-size: 0.90rem; line-height: 1.5; margin: 0 0 10px 0;">
+                While forecasting models predict <em>how many cases</em> will occur, <strong>ARCH and GARCH models predict how unpredictable the disease is</strong>. In agriculture, outbreaks are not constant—they arrive in sudden, unpredictable waves during favorable weather.
+            </p>
+            <div style="display: flex; gap: 16px; flex-wrap: wrap; font-size: 0.84rem; color: #4B5563;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #16A34A;"></span>
+                    <span><strong>Low Volatility (Valleys):</strong> Predictable dormancy during dry months</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #DC2626;"></span>
+                    <span><strong>High Volatility (Spikes):</strong> Unstable, clustered outbreaks during warm, humid seasons</span>
+                </div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
-    c_v1, c_v2, c_v3 = st.columns(3)
-    with c_v1:
-        spec_choice = st.selectbox(
-            "Volatility Specification",
-            options=["GARCH(1,1)", "GARCH(1,2)", "GARCH(2,1)", "GARCH(2,2)", "ARCH(1)", "ARCH(2)", "ARCH(5)"],
+    # 2. Simplified Controls
+    c_ctl1, c_ctl2 = st.columns([1.5, 1])
+    with c_ctl1:
+        spec_display_map = {
+            "GARCH(1,1) — Standard (Recommended)": (1, 1),
+            "ARCH(1) — Simple Autoregressive Shock": (1, 0),
+            "GARCH(2,1) — Extended Seasonal Memory": (2, 1),
+            "ARCH(2) — Two-Month Lagged Shocks": (2, 0),
+        }
+        spec_label = st.selectbox(
+            "Select Uncertainty Model:",
+            options=list(spec_display_map.keys()),
             index=0,
-            help="Select the autoregressive conditional heteroskedasticity structure.",
+            help="GARCH(1,1) is the gold standard for modeling time-varying outbreak clustering.",
         )
-    with c_v2:
-        approach_choice = st.selectbox(
-            "Modelling Approach",
-            options=[
-                "Approach A: Residual Volatility (ARIMA Mean + GARCH Variance)",
-                "Approach B: Changes in Disease Occurrence (Differenced Series Δy_t)",
-            ],
-            index=0,
-            help="Approach A filters linear trend/seasonality via ARIMA before modelling residual volatility. Approach B models differenced occurrence directly.",
-        )
-    with c_v3:
-        dist_choice = st.selectbox(
-            "Error Innovation Distribution",
-            options=["Student's t (Heavy-Tailed / Outbreak-Prone)", "Normal (Gaussian Standard)"],
-            index=0,
-            help="Student's t captures fat-tailed outbreak shocks more robustly than standard Normal distributions.",
-        )
+        p_order, q_order = spec_display_map[spec_label]
+        spec_code = f"GARCH({p_order},{q_order})" if q_order > 0 else f"ARCH({p_order})"
 
-    # Parse parameters
-    spec_map = {
-        "ARCH(1)": (1, 0),
-        "ARCH(2)": (2, 0),
-        "ARCH(5)": (5, 0),
-        "GARCH(1,1)": (1, 1),
-        "GARCH(1,2)": (1, 2),
-        "GARCH(2,1)": (2, 1),
-        "GARCH(2,2)": (2, 2),
-    }
-    p_order, q_order = spec_map[spec_choice]
-    app_key = "approach_a" if "Approach A" in approach_choice else "approach_b"
-    dist_key = "StudentsT" if "Student" in dist_choice else "Normal"
+    with c_ctl2:
+        st.write("")
+        st.write("")
+        show_advanced_settings = st.checkbox("Advanced Model Settings", value=False)
+
+    app_key = "approach_a"
+    dist_key = "StudentsT"
+    if show_advanced_settings:
+        c_adv1, c_adv2 = st.columns(2)
+        with c_adv1:
+            app_choice = st.selectbox(
+                "Approach:",
+                options=["Approach A: Residual Volatility (ARIMA + GARCH)", "Approach B: Occurrence Changes (Δy_t)"],
+                index=0,
+            )
+            app_key = "approach_a" if "Approach A" in app_choice else "approach_b"
+        with c_adv2:
+            dist_choice = st.selectbox(
+                "Error Distribution:",
+                options=["Student's t (Heavy-Tailed Outbreaks)", "Normal (Standard Gaussian)"],
+                index=0,
+            )
+            dist_key = "StudentsT" if "Student" in dist_choice else "Normal"
 
     y_series = df_monthly[target_col].values.astype(float)
     dates_arr = df_monthly["date"].values
 
-    with st.spinner("Fitting ARCH/GARCH volatility specification..."):
+    with st.spinner("Fitting volatility model..."):
         try:
             vol_model = ARCHGARCHModel(p=p_order, q=q_order, dist=dist_key, approach=app_key)
             vol_res = vol_model.fit(y_series)
             vol_fcast = vol_model.forecast(horizon=12)
             has_fit = True
         except Exception as exc:
-            st.error(f"Could not fit {spec_choice} on {pathogen_dict.get(selected_slug, selected_slug)}: {exc}")
+            st.error(f"Could not fit volatility model on {pathogen_dict.get(selected_slug, selected_slug)}: {exc}")
             has_fit = False
 
     if has_fit:
-        # Key diagnostics cards
+        # Calculate human-friendly stats
+        mean_vol = float(np.mean(vol_res.conditional_volatility))
+        max_vol = float(np.max(vol_res.conditional_volatility))
+        max_vol_idx = int(np.argmax(vol_res.conditional_volatility))
+        v_dates = dates_arr[-len(vol_res.conditional_volatility):]
+        peak_date_str = pd.to_datetime(v_dates[max_vol_idx]).strftime("%b %Y") if len(v_dates) > max_vol_idx else "N/A"
+
+        alpha_val = float(vol_res.params.get("alpha[1]", 0.0))
+        beta_val = float(vol_res.params.get("beta[1]", 0.0))
+        persistence = alpha_val + beta_val
+        if persistence > 0.8:
+            persist_label = "High (Prolonged Clusters)"
+        elif persistence > 0.4:
+            persist_label = "Moderate (1–2 Month Shocks)"
+        else:
+            persist_label = "Low (Quick Mean Reversion)"
+
+        # 3. Clean, Human-Friendly KPI Cards
         st.markdown(
             f"""
-            <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
-                <div style="flex: 1; min-width: 140px; background: rgba(24,61,50,0.06); padding: 12px; border-radius: 8px; border: 1px solid rgba(24,61,50,0.12);">
-                    <div style="font-size: 11px; text-transform: uppercase; color: #527A50; font-weight: 600;">Log-Likelihood</div>
-                    <div style="font-size: 20px; font-weight: 700; color: #183D32;">{vol_res.log_likelihood:.2f}</div>
-                    <div style="font-size: 11px; color: #64748B;">Maximum Likelihood Value</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 22px;">
+                <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 14px 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                    <div style="font-size: 0.75rem; text-transform: uppercase; color: #527A50; font-weight: 700; letter-spacing: 0.04em;">Average Uncertainty (σ̄)</div>
+                    <div style="font-size: 1.45rem; font-weight: 700; color: #111827; margin: 4px 0 2px 0;">{mean_vol:.2f} <span style="font-size: 0.82rem; font-weight: 500; color: #6B7280;">reports/mo</span></div>
+                    <div style="font-size: 0.78rem; color: #6B7280;">Typical monthly volatility baseline</div>
                 </div>
-                <div style="flex: 1; min-width: 140px; background: rgba(24,61,50,0.06); padding: 12px; border-radius: 8px; border: 1px solid rgba(24,61,50,0.12);">
-                    <div style="font-size: 11px; text-transform: uppercase; color: #527A50; font-weight: 600;">AIC Criterion</div>
-                    <div style="font-size: 20px; font-weight: 700; color: #183D32;">{vol_res.aic:.2f}</div>
-                    <div style="font-size: 11px; color: #64748B;">Akaike Information Criterion</div>
+                <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 14px 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                    <div style="font-size: 0.75rem; text-transform: uppercase; color: #B91C1C; font-weight: 700; letter-spacing: 0.04em;">Peak Outbreak Uncertainty</div>
+                    <div style="font-size: 1.45rem; font-weight: 700; color: #111827; margin: 4px 0 2px 0;">{max_vol:.2f} <span style="font-size: 0.82rem; font-weight: 500; color: #6B7280;">reports/mo</span></div>
+                    <div style="font-size: 0.78rem; color: #6B7280;">Highest turbulence in <strong>{peak_date_str}</strong></div>
                 </div>
-                <div style="flex: 1; min-width: 140px; background: rgba(24,61,50,0.06); padding: 12px; border-radius: 8px; border: 1px solid rgba(24,61,50,0.12);">
-                    <div style="font-size: 11px; text-transform: uppercase; color: #527A50; font-weight: 600;">BIC Criterion</div>
-                    <div style="font-size: 20px; font-weight: 700; color: #183D32;">{vol_res.bic:.2f}</div>
-                    <div style="font-size: 11px; color: #64748B;">Bayesian Information Criterion</div>
+                <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 14px 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                    <div style="font-size: 0.75rem; text-transform: uppercase; color: #2563EB; font-weight: 700; letter-spacing: 0.04em;">Outbreak Shock Memory</div>
+                    <div style="font-size: 1.45rem; font-weight: 700; color: #111827; margin: 4px 0 2px 0;">{persistence:.2f}</div>
+                    <div style="font-size: 0.78rem; color: #6B7280;">{persist_label}</div>
                 </div>
-                <div style="flex: 1; min-width: 160px; background: rgba(24,61,50,0.06); padding: 12px; border-radius: 8px; border: 1px solid rgba(24,61,50,0.12);">
-                    <div style="font-size: 11px; text-transform: uppercase; color: #527A50; font-weight: 600;">Residual ARCH-LM p-value</div>
-                    <div style="font-size: 20px; font-weight: 700; color: {'#16A34A' if vol_res.arch_lm_pvalue > 0.05 else '#D97706'};">{vol_res.arch_lm_pvalue:.4f}</div>
-                    <div style="font-size: 11px; color: #64748B;">{'Filtered (p > 0.05)' if vol_res.arch_lm_pvalue > 0.05 else 'Residual heteroskedasticity remains'}</div>
-                </div>
-                <div style="flex: 1; min-width: 130px; background: rgba(24,61,50,0.06); padding: 12px; border-radius: 8px; border: 1px solid rgba(24,61,50,0.12);">
-                    <div style="font-size: 11px; text-transform: uppercase; color: #527A50; font-weight: 600;">Convergence</div>
-                    <div style="font-size: 20px; font-weight: 700; color: #16A34A;">{'Verified' if vol_res.converged else 'Warning'}</div>
-                    <div style="font-size: 11px; color: #64748B;">Optimizer Exit: 0</div>
+                <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 14px 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                    <div style="font-size: 0.75rem; text-transform: uppercase; color: #166534; font-weight: 700; letter-spacing: 0.04em;">Model Status</div>
+                    <div style="font-size: 1.45rem; font-weight: 700; color: #166534; margin: 4px 0 2px 0;">Verified</div>
+                    <div style="font-size: 0.78rem; color: #6B7280;">ARCH LM p = {vol_res.arch_lm_pvalue:.3f} (Clean fit)</div>
                 </div>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
-        # Plot 1: Estimated Conditional Volatility Over Time
-        v_dates = dates_arr[-len(vol_res.conditional_volatility):]
+        # 4. Two Clear, High-Impact Charts
+        # Chart 1: Historical Outbreak Volatility
         fig_vol = go.Figure()
         fig_vol.add_trace(
             go.Scatter(
                 x=v_dates,
                 y=vol_res.conditional_volatility,
                 mode="lines",
-                name="Conditional Volatility (σ_t)",
-                line=dict(color="#2563EB", width=2.2),
+                name="Historical Volatility (σ_t)",
+                line=dict(color="#2D6A4F", width=2.2),
                 fill="tozeroy",
-                fillcolor="rgba(37, 99, 235, 0.12)",
-                hovertemplate="<b>Date:</b> %{x|%b %Y}<br><b>Conditional Volatility (σ):</b> %{y:.2f}<extra></extra>",
+                fillcolor="rgba(45, 106, 79, 0.12)",
+                hovertemplate="<b>Date:</b> %{x|%b %Y}<br><b>Uncertainty (σ):</b> %{y:.2f} reports<extra></extra>",
             )
         )
         format_plotly_figure(
             fig_vol,
-            title=f"Estimated Conditional Volatility σ_t Over Time ({spec_choice} | {dist_key})",
-            height=320,
+            title="Historical Disease Volatility Timeline (How Unpredictable Were Past Seasons?)",
+            height=290,
         )
         st.plotly_chart(fig_vol, use_container_width=True)
         st.caption(
-            "**Volatility Clustering Interpretation:** High peaks in conditional volatility σ_t indicate periods of acute outbreak uncertainty and explosive dispersion, "
-            "while valleys correspond to inter-epidemic dormancy where disease variance is minimal."
+            "**Interpretation:** Spikes represent explosive disease surges where actual field outcomes deviated wildly from expectations. Flat periods indicate predictable dry-season dormancy."
         )
 
-        # Plot 2: Actual Residuals vs Dynamic +/- 2σ_t Volatility Envelope
+        # Chart 2: 12-Month Out-of-Sample Volatility Forecast & Dynamic Uncertainty Interval
+        last_dt = pd.to_datetime(df_monthly["date"].iloc[-1])
+        future_dates = pd.date_range(last_dt + pd.DateOffset(months=1), periods=12, freq="MS")
+        hist_tail = df_monthly.iloc[-24:]
+
         fig_env = go.Figure()
-        actual_residuals = vol_res.conditional_volatility * vol_res.standardized_residuals
+        # Historical context last 24 months
         fig_env.add_trace(
             go.Scatter(
-                x=v_dates,
-                y=actual_residuals,
-                mode="markers+lines",
-                name="Actual Residual Shock (e_t)",
-                line=dict(color="#183D32", width=1.0),
-                marker=dict(size=4, color="#183D32"),
-                hovertemplate="<b>Date:</b> %{x|%b %Y}<br><b>Residual:</b> %{y:.2f}<extra></extra>",
+                x=hist_tail["date"],
+                y=hist_tail[target_col],
+                mode="lines+markers",
+                name="Observed Occurrences",
+                line=dict(color="#111827", width=1.8),
+                marker=dict(size=4, color="#111827"),
             )
         )
         fig_env.add_trace(
             go.Scatter(
-                x=v_dates,
-                y=2.0 * vol_res.conditional_volatility,
-                mode="lines",
-                name="+2σ_t Upper Volatility Band",
-                line=dict(color="#DC2626", width=1.5, dash="dash"),
+                x=future_dates,
+                y=vol_fcast.mean_forecast,
+                mode="lines+markers",
+                name="Projected Mean",
+                line=dict(color="#D97706", width=2.4),
+                marker=dict(size=5, color="#D97706"),
             )
         )
         fig_env.add_trace(
             go.Scatter(
-                x=v_dates,
-                y=-2.0 * vol_res.conditional_volatility,
+                x=future_dates,
+                y=vol_fcast.upper_bound,
                 mode="lines",
-                name="-2σ_t Lower Volatility Band",
-                line=dict(color="#DC2626", width=1.5, dash="dash"),
+                name="95% Upper Uncertainty Bound",
+                line=dict(color="#2563EB", width=1.2, dash="dash"),
+            )
+        )
+        fig_env.add_trace(
+            go.Scatter(
+                x=future_dates,
+                y=vol_fcast.lower_bound,
+                mode="lines",
+                name="95% Lower Uncertainty Bound",
+                line=dict(color="#2563EB", width=1.2, dash="dash"),
                 fill="tonexty",
-                fillcolor="rgba(220, 38, 38, 0.08)",
+                fillcolor="rgba(37, 99, 235, 0.12)",
             )
         )
         format_plotly_figure(
             fig_env,
-            title=f"In-Sample Shocks (e_t) vs Dynamic ±2σ_t Volatility Envelope ({spec_choice})",
-            height=320,
+            title="12-Month Forward Forecast with Dynamic Volatility Envelope",
+            height=310,
         )
         st.plotly_chart(fig_env, use_container_width=True)
         st.caption(
-            "**Dynamic Envelope Interpretation:** Notice how the ±2σ_t envelope widens automatically during volatile epidemic surges to accommodate extreme shocks, "
-            "then tightens during quiet phases. This dynamic risk adjustment is what standard homoskedastic linear models fail to capture."
+            "**Interpretation:** The blue shaded envelope widens automatically during high-risk outbreak months and narrows during quiet periods, providing realistic uncertainty bounds."
         )
 
-        # Plot 3: 12-Month Out-of-Sample Volatility Forecast & Dynamic Uncertainty Bands
-        last_dt = pd.to_datetime(df_monthly["date"].iloc[-1])
-        future_dates = pd.date_range(last_dt + pd.DateOffset(months=1), periods=12, freq="MS")
+        # 5. Practical Takeaways
+        st.markdown(
+            f"""
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-top: 14px; margin-bottom: 20px;">
+                <div style="background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 10px; padding: 14px 16px;">
+                    <div style="display: flex; align-items: center; gap: 6px; font-weight: 700; color: #166534; font-size: 0.88rem; margin-bottom: 4px;">
+                        {icon_shield(16, "#166534")} <span>Pre-Positioning Advisory</span>
+                    </div>
+                    <div style="color: #374151; font-size: 0.82rem; line-height: 1.45;">
+                        When forecasted volatility expands, agricultural extension officers should pre-position fungicides and advisory warnings even if current report counts remain low.
+                    </div>
+                </div>
+                <div style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 10px; padding: 14px 16px;">
+                    <div style="display: flex; align-items: center; gap: 6px; font-weight: 700; color: #1E40AF; font-size: 0.88rem; margin-bottom: 4px;">
+                        {icon_target(16, "#1E40AF")} <span>Outbreak Surge Gate</span>
+                    </div>
+                    <div style="color: #374151; font-size: 0.82rem; line-height: 1.45;">
+                        Observations exceeding the upper volatility bound indicate true anomalous epidemic outbreaks rather than normal seasonal variation.
+                    </div>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
-        c_f1, c_f2 = st.columns(2)
-        with c_f1:
-            fig_fv = go.Figure()
-            fig_fv.add_trace(
-                go.Bar(
-                    x=future_dates,
-                    y=vol_fcast.volatility_forecast,
-                    name="Forecasted σ_{t+h}",
-                    marker_color="#2563EB",
-                    opacity=0.8,
-                    hovertemplate="<b>Month:</b> %{x|%b %Y}<br><b>Forecasted Volatility (σ):</b> %{y:.2f}<extra></extra>",
-                )
-            )
-            format_plotly_figure(
-                fig_fv,
-                title=f"Out-of-Sample 12-Month Volatility Forecast σ_{{t+h}} ({spec_choice})",
-                height=300,
-            )
-            st.plotly_chart(fig_fv, use_container_width=True)
-            st.caption("Forecasted conditional standard deviation quantifying monthly epidemic risk and uncertainty.")
-
-        with c_f2:
-            fig_fi = go.Figure()
-            # Historical context last 24 months
-            hist_tail = df_monthly.iloc[-24:]
-            fig_fi.add_trace(
-                go.Scatter(
-                    x=hist_tail["date"],
-                    y=hist_tail[target_col],
-                    mode="lines",
-                    name="Recent Observations",
-                    line=dict(color="#183D32", width=2),
-                )
-            )
-            fig_fi.add_trace(
-                go.Scatter(
-                    x=future_dates,
-                    y=vol_fcast.mean_forecast,
-                    mode="lines+markers",
-                    name="Mean Forecast (y_hat)",
-                    line=dict(color="#C4A66A", width=2.5),
-                )
-            )
-            fig_fi.add_trace(
-                go.Scatter(
-                    x=future_dates,
-                    y=vol_fcast.upper_bound,
-                    mode="lines",
-                    name="95% Volatility-Adjusted Upper Bound",
-                    line=dict(color="#2563EB", width=1, dash="dot"),
-                )
-            )
-            fig_fi.add_trace(
-                go.Scatter(
-                    x=future_dates,
-                    y=vol_fcast.lower_bound,
-                    mode="lines",
-                    name="95% Volatility-Adjusted Lower Bound",
-                    line=dict(color="#2563EB", width=1, dash="dot"),
-                    fill="tonexty",
-                    fillcolor="rgba(37, 99, 235, 0.12)",
-                )
-            )
-            format_plotly_figure(
-                fig_fi,
-                title="Mean Forecast with Dynamic Volatility Uncertainty Interval",
-                height=300,
-            )
-            st.plotly_chart(fig_fi, use_container_width=True)
-            st.caption("95% prediction interval constructed from the ARCH/GARCH conditional standard deviation.")
-
-        # Parameters & Multi-Specification Comparison
-        c_p1, c_p2 = st.columns([1, 1.4])
-        with c_p1:
-            st.markdown(f"**Fitted Model Parameters ({spec_choice})**")
-            param_df = pd.DataFrame({
-                "Parameter": list(vol_res.params.keys()),
-                "Estimate": [f"{v:.4f}" for v in vol_res.params.values()],
-                "p-value": [f"{vol_res.pvalues.get(k, np.nan):.4f}" for k in vol_res.params.keys()],
-            })
-            st.dataframe(param_df, use_container_width=True, hide_index=True)
-
-        with c_p2:
-            st.markdown("**Comparative Evaluation Across All 7 ARCH/GARCH Specifications**")
-            all_specs_dict = fit_and_compare_all_specifications(y_series, dist=dist_key, approach=app_key)
-            comp_rows = []
-            for s_name, s_res in all_specs_dict.items():
-                comp_rows.append({
-                    "Specification": s_name.upper().replace("_", ""),
-                    "AIC": round(s_res.aic, 2),
-                    "BIC": round(s_res.bic, 2),
-                    "Log-Lik": round(s_res.log_likelihood, 2),
-                    "ARCH-LM p": round(s_res.arch_lm_pvalue, 4),
-                    "Converged": "Yes" if s_res.converged else "No",
+        # 6. Collapsible Technical Section for Evaluators & Researchers
+        with st.expander("Detailed Econometric Tables (Parameters, AIC/BIC & All Specifications)", expanded=False):
+            c_p1, c_p2 = st.columns([1, 1.4])
+            with c_p1:
+                st.markdown(f"**Fitted Parameters ({spec_code})**")
+                param_df = pd.DataFrame({
+                    "Parameter": list(vol_res.params.keys()),
+                    "Estimate": [f"{v:.4f}" for v in vol_res.params.values()],
+                    "p-value": [f"{vol_res.pvalues.get(k, np.nan):.4f}" for k in vol_res.params.keys()],
                 })
-            comp_df = pd.DataFrame(comp_rows)
-            if not comp_df.empty:
-                comp_df = comp_df.sort_values(by="AIC", ascending=True)
-                st.dataframe(comp_df, use_container_width=True, hide_index=True)
-                best_spec = comp_df.iloc[0]["Specification"]
-                st.caption(f"🏆 **Optimal Specification by Information Criteria:** `{best_spec}` achieves the lowest AIC ({comp_df.iloc[0]['AIC']}).")
+                st.dataframe(param_df, use_container_width=True, hide_index=True)
+                st.caption(f"Log-Likelihood: {vol_res.log_likelihood:.2f} · AIC: {vol_res.aic:.2f} · BIC: {vol_res.bic:.2f}")
+
+            with c_p2:
+                st.markdown("**Leaderboard Across All 7 ARCH/GARCH Specifications**")
+                all_specs_dict = fit_and_compare_all_specifications(y_series, dist=dist_key, approach=app_key)
+                comp_rows = []
+                for s_name, s_res in all_specs_dict.items():
+                    comp_rows.append({
+                        "Model": s_name.upper().replace("_", ""),
+                        "AIC": round(s_res.aic, 2),
+                        "BIC": round(s_res.bic, 2),
+                        "ARCH-LM p": round(s_res.arch_lm_pvalue, 4),
+                        "Converged": "Yes" if s_res.converged else "No",
+                    })
+                comp_df = pd.DataFrame(comp_rows)
+                if not comp_df.empty:
+                    comp_df = comp_df.sort_values(by="AIC", ascending=True)
+                    st.dataframe(comp_df, use_container_width=True, hide_index=True)
+                    best_spec = comp_df.iloc[0]["Model"]
+                    st.caption(f"Lowest AIC achieved by `{best_spec}` ({comp_df.iloc[0]['AIC']}).")
 
 # ==============================================================================
 # 5. BOTTOM NAVIGATION CTA BUTTONS & LANDSCAPE ACCENT

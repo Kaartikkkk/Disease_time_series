@@ -26,6 +26,7 @@ from src.icons import (
     icon_arrow_right,
     icon_bar_chart,
     icon_calendar,
+    icon_check,
     icon_check_circle,
     icon_download,
     icon_forecast,
@@ -39,6 +40,7 @@ from src.icons import (
     icon_target,
     icon_timeseries,
     icon_trending_up,
+    icon_trophy,
     icon_weather,
 )
 from src.project_stats import get_project_telemetry
@@ -54,7 +56,6 @@ from src.ui_helpers import (
 
 st.set_page_config(
     page_title="Model Comparison — AgriForecast",
-    page_icon="🌾",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
@@ -138,7 +139,7 @@ with col_p3:
     )
 with col_p4:
     st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
-    run_btn = st.button("⟳ Re-Run Evaluation", type="primary", use_container_width=True)
+    run_btn = st.button("Re-Run Evaluation", type="primary", use_container_width=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
 is_multi_origin = "Multi-Origin" in eval_protocol
@@ -243,7 +244,7 @@ winner_card_html = f"""
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
         <div style="flex: 1 1 260px; min-width: 240px;">
             <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #2D6A4F; letter-spacing: 0.05em; display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
-                <span>🏆</span> <span>OVERALL WINNER</span>
+                {icon_trophy(16, "#2D6A4F")} <span>OVERALL WINNER</span>
             </div>
             <h2 style="font-size: 1.6rem; font-weight: 700; color: #102C26; margin: 4px 0 6px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 {overall_champ}
@@ -257,15 +258,15 @@ winner_card_html = f"""
                 <span style="background: rgba(45, 106, 79, 0.1); color: #2D6A4F; font-size: 0.70rem; font-weight: 700; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.05em;">KEY TAKEAWAYS</span>
             </div>
             <div style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #102C26; margin-top: 6px;">
-                <span style="color: #2D6A4F; font-weight: 700;">✓</span>
+                {icon_check(14, "#2D6A4F")}
                 <span><strong>Lower error:</strong> RMSE {winner_rmse:.2f} (best among all models)</span>
             </div>
             <div style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #102C26; margin-top: 4px;">
-                <span style="color: #2D6A4F; font-weight: 700;">✓</span>
+                {icon_check(14, "#2D6A4F")}
                 <span><strong>Captures complex patterns:</strong> Handles non-linear and seasonal behavior</span>
             </div>
             <div style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #102C26; margin-top: 4px;">
-                <span style="color: #2D6A4F; font-weight: 700;">✓</span>
+                {icon_check(14, "#2D6A4F")}
                 <span><strong>More reliable forecasts:</strong> Reduces false spikes and improves stability</span>
             </div>
         </div>
@@ -452,7 +453,7 @@ st.markdown('</div>', unsafe_allow_html=True)
 # 7. GROUND-TRUTH OVERLAY & HEAD-TO-HEAD BENCHMARK (EXPANDABLE DETAIL)
 # ==============================================================================
 st.markdown("<div style='height: 18px;'></div>", unsafe_allow_html=True)
-with st.expander("📈 Ground-Truth Overlay & Head-to-Head Comparison Matrix", expanded=False):
+with st.expander("Ground-Truth Overlay & Head-to-Head Comparison Matrix", expanded=False):
     # Actual vs Predicted Plot
     fig_val = go.Figure()
     fig_val.add_trace(

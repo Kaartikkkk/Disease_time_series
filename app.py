@@ -205,7 +205,7 @@ st.plotly_chart(fig_preview, use_container_width=True)
 # ==============================================================================
 # 5. AGRO-ECOLOGICAL ENVIRONMENTS (IN EXPANDABLE DRAWER FOR CLEAN MINIMALISM)
 # ==============================================================================
-with st.expander("🌾 Explore Indian Agro-Ecological Environments & Micro-Climates", expanded=False):
+with st.expander("Explore Indian Agro-Ecological Environments & Micro-Climates", expanded=False):
     st.markdown(
         f"""
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin: 12px 0;">

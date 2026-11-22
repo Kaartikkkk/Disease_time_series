@@ -215,10 +215,10 @@ st.html(kpi_markup)
 # 4. STREAMLINED PILL TABS
 # ==============================================================================
 tab_monthly, tab_seasonal, tab_map, tab_table = st.tabs([
-    "📈 Historical Timeline",
-    "📅 Seasonal Cycle",
-    "📍 Geospatial Map",
-    "📑 Records Table",
+    "Historical Timeline",
+    "Seasonal Cycle",
+    "Geospatial Map",
+    "Records Table",
 ])
 
 # ----------------- Tab 1: Monthly Timeline -----------------
@@ -455,7 +455,7 @@ with tab_table:
         )
 
     # Master Dataset Provenance expander
-    with st.expander("🔍 Master Dataset Integrity & Provenance Details", expanded=False):
+    with st.expander("Master Dataset Integrity & Provenance Details", expanded=False):
         prov_df = pd.DataFrame([
             {"Attribute": "Authoritative Master Dataset", "Value": "data/disease_timeseries_master.csv", "Description": "Single source of truth for all models & visualizers"},
             {"Attribute": "Total Master Observations", "Value": "1,320 Monthly Records", "Description": "132 continuous months per pathogen (Jan 2015 – Dec 2025)"},
@@ -474,7 +474,7 @@ st.markdown(
     f"""
     <div class="bottom-cta-wrap">
         <a href="/Time_Series_Analysis" target="_self" class="hero-btn-primary" style="padding: 12px 26px; font-size: 0.92rem;">
-            ▶ Run Time Series Diagnostics
+            {icon_timeseries(16, "#FFFFFF")} Run Time Series Diagnostics
         </a>
         <a href="/Future_Forecasts" target="_self" class="hero-btn-secondary" style="padding: 12px 26px; font-size: 0.92rem;">
             {icon_trending_up(16, "#111827")} Generate Future Forecasts

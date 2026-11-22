@@ -33,7 +33,9 @@ from src.forecasting import (
     run_model_comparison,
 )
 from src.icons import (
+    icon_arrow_down,
     icon_arrow_right,
+    icon_arrow_up,
     icon_bar_chart,
     icon_calendar,
     icon_check_circle,
@@ -82,7 +84,6 @@ from src.ui_helpers import (
 
 st.set_page_config(
     page_title="Future Forecasts — AgriForecast",
-    page_icon="🌾",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
@@ -152,8 +153,10 @@ with col_c2:
     )
     model_choices = [
         "Hurdle XGBoost (Classifier + Regressor)",
+        "Temporal Transformer (PatchTST / Attention)",
         "LSTM (Sequence Neural Net)",
         "GRU (Gated Recurrent Unit)",
+        "VAR (Vector Autoregression)",
         "Global Random Forest (Multi-Pathogen)",
         "Global XGBoost (Multi-Pathogen)",
         "Prophet (Trend + Seasonality)",
@@ -524,9 +527,9 @@ for out in monthly_outlooks:
     # Delta Badge
     chg = out.get("change_abs", 0.0)
     if chg > 0:
-        delta_markup = f"<span style='color: #166534; font-size: 0.72rem; font-weight: 700;'>▲ +{chg:.1f}</span>"
+        delta_markup = f"<span style='color: #166534; font-size: 0.72rem; font-weight: 700; display: inline-flex; align-items: center; gap: 2px;'>{icon_arrow_up(10, '#166534')} +{chg:.1f}</span>"
     elif chg < 0:
-        delta_markup = f"<span style='color: #DC2626; font-size: 0.72rem; font-weight: 700;'>▼ {chg:.1f}</span>"
+        delta_markup = f"<span style='color: #DC2626; font-size: 0.72rem; font-weight: 700; display: inline-flex; align-items: center; gap: 2px;'>{icon_arrow_down(10, '#DC2626')} {chg:.1f}</span>"
     else:
         delta_markup = f"<span style='color: #6B7280; font-size: 0.72rem; font-weight: 700;'>— 0.0</span>"
         
@@ -580,11 +583,11 @@ for out in monthly_outlooks:
     
     trend_lbl = out.get("trend_label", "Broadly stable")
     if "Increas" in trend_lbl:
-        trend_markup = f"<span style='color: #166534; font-weight: 600;'>▲ {trend_lbl}</span>"
+        trend_markup = f"<span style='color: #166534; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;'>{icon_arrow_up(10, '#166534')} {trend_lbl}</span>"
     elif "Decreas" in trend_lbl:
-        trend_markup = f"<span style='color: #DC2626; font-weight: 600;'>▼ {trend_lbl}</span>"
+        trend_markup = f"<span style='color: #DC2626; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;'>{icon_arrow_down(10, '#DC2626')} {trend_lbl}</span>"
     else:
-        trend_markup = f"<span style='color: #6B7280; font-weight: 600;'>▼ {trend_lbl}</span>"
+        trend_markup = f"<span style='color: #6B7280; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;'>{icon_arrow_down(10, '#6B7280')} {trend_lbl}</span>"
         
     level = out.get("activity_level", "Within typical activity")
     if "Above" in level:
@@ -652,7 +655,7 @@ st.download_button(
 # ==============================================================================
 # 9. MULTI-DISEASE WATCH MATRIX (EXPANDER)
 # ==============================================================================
-with st.expander("🌐 National Multi-Disease Attention Matrix (10 Plant Pathogens)", expanded=False):
+with st.expander("National Multi-Disease Attention Matrix (10 Plant Pathogens)", expanded=False):
     st.markdown("Cross-pathogen surveillance summary ranking predicted activity against historical seasonal baselines:")
     df_watch = build_multi_disease_watch_matrix(pathogen_dict, load_monthly_series, horizon_months=6)
     if not df_watch.empty:

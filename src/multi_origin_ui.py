@@ -28,10 +28,12 @@ from src.icons import (
     icon_forecast,
     icon_info,
     icon_model_compare,
+    icon_network,
     icon_pulse,
     icon_shield,
     icon_target,
     icon_timeseries,
+    icon_trophy,
 )
 from src.ui_helpers import format_plotly_figure, render_graph_explanation_card
 
@@ -179,7 +181,7 @@ def render_section_f_model_training_details(selected_pathogen_slug: str) -> None
             <div class="verdant-card" style="padding: 12px 14px;">
                 <div style="font-size: 0.72rem; color: #5A665D; text-transform: uppercase; font-weight: 600;">Training Runtime &amp; Status</div>
                 <div style="font-size: 1.05rem; font-weight: 700; color: #102C26; margin-top: 2px;">{m.get('training_duration_sec', 0.0):.2f}s</div>
-                <div style="font-size: 0.78rem; color: #166534; font-weight: 600; margin-top: 2px;">✓ {m.get('convergence_status', 'Converged')}</div>
+                <div style="font-size: 0.78rem; color: #166534; font-weight: 600; margin-top: 2px;">{icon_check_circle(14, "#166534")} {m.get('convergence_status', 'Converged')}</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -356,10 +358,10 @@ def render_optimization_and_ablation_section() -> None:
     )
 
     tab_opt, tab_abl, tab_trans, tab_ens = st.tabs([
-        "⚡ Hyperparameter Optimization",
-        "🔬 Feature Ablation Study",
-        "📐 Target Transformations",
-        "🤝 Multi-Model Ensembles",
+        "Hyperparameter Optimization",
+        "Feature Ablation Study",
+        "Target Transformations",
+        "Multi-Model Ensembles",
     ])
 
     with tab_opt:
@@ -612,9 +614,11 @@ def render_final_holdout_evaluation_section() -> None:
     col_c1, col_c2, col_c3, col_c4 = st.columns(4)
     with col_c1:
         st.markdown(
-            """
+            f"""
             <div style="background: #F0FDF4; border: 1px solid #86EFAC; border-radius: 12px; padding: 14px; height: 100%;">
-                <div style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #15803D;">🏆 Overall Champion</div>
+                <div style="display: flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #15803D;">
+                    {icon_trophy(14, "#15803D")} <span>Overall Champion</span>
+                </div>
                 <div style="font-size: 1.05rem; font-weight: 700; color: #14532D; margin: 4px 0;">Ensemble 3 (Inverse-Variance)</div>
                 <div style="font-size: 0.8rem; color: #374151; line-height: 1.4;">
                     Holdout RMSE: <strong>4.897</strong> | Recall: <strong>94.2%</strong><br>
@@ -626,9 +630,11 @@ def render_final_holdout_evaluation_section() -> None:
         )
     with col_c2:
         st.markdown(
-            """
+            f"""
             <div style="background: #EFF6FF; border: 1px solid #93C5FD; border-radius: 12px; padding: 14px; height: 100%;">
-                <div style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #1D4ED8;">🌲 Machine Learning Champion</div>
+                <div style="display: flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #1D4ED8;">
+                    {icon_network(14, "#1D4ED8")} <span>Machine Learning Champion</span>
+                </div>
                 <div style="font-size: 1.05rem; font-weight: 700; color: #1E3A8A; margin: 4px 0;">Global Random Forest</div>
                 <div style="font-size: 0.8rem; color: #374151; line-height: 1.4;">
                     Holdout RMSE: <strong>4.988</strong> | Macro RMSE: <strong>4.118</strong><br>
@@ -640,9 +646,11 @@ def render_final_holdout_evaluation_section() -> None:
         )
     with col_c3:
         st.markdown(
-            """
+            f"""
             <div style="background: #FAF5FF; border: 1px solid #D8B4FE; border-radius: 12px; padding: 14px; height: 100%;">
-                <div style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #6D28D9;">🧠 Deep Learning Champion</div>
+                <div style="display: flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #6D28D9;">
+                    {icon_pulse(14, "#6D28D9")} <span>Deep Learning Champion</span>
+                </div>
                 <div style="font-size: 1.05rem; font-weight: 700; color: #4C1D95; margin: 4px 0;">GRU (Gated Recurrent Unit)</div>
                 <div style="font-size: 0.8rem; color: #374151; line-height: 1.4;">
                     Holdout RMSE: <strong>5.106</strong> | Outbreak Recall: <strong>90.4%</strong><br>
@@ -654,9 +662,11 @@ def render_final_holdout_evaluation_section() -> None:
         )
     with col_c4:
         st.markdown(
-            """
+            f"""
             <div style="background: #F9FAFB; border: 1px solid #D1D5DB; border-radius: 12px; padding: 14px; height: 100%;">
-                <div style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #4B5563;">📈 Classical Champion</div>
+                <div style="display: flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #4B5563;">
+                    {icon_timeseries(14, "#4B5563")} <span>Classical Champion</span>
+                </div>
                 <div style="font-size: 1.05rem; font-weight: 700; color: #111827; margin: 4px 0;">MA(1) (Moving Average)</div>
                 <div style="font-size: 0.8rem; color: #374151; line-height: 1.4;">
                     Holdout RMSE: <strong>5.517</strong> | Latency: <strong>0.008s</strong><br>
@@ -670,11 +680,11 @@ def render_final_holdout_evaluation_section() -> None:
     st.markdown("<br>", unsafe_allow_html=True)
 
     tab_h1, tab_h2, tab_h3, tab_h4, tab_h5 = st.tabs([
-        "🏆 Holdout Leaderboard (Table A)",
-        "⚖️ Classical vs. Modern (Table B)",
-        "🌿 Pathogen Champions & Routing (Table C)",
-        "🔍 Generalization Stability (Table D)",
-        "📊 Residual Robustness (Table E)",
+        "Holdout Leaderboard (Table A)",
+        "Classical vs. Modern (Table B)",
+        "Pathogen Champions & Routing (Table C)",
+        "Generalization Stability (Table D)",
+        "Residual Robustness (Table E)",
     ])
 
     with tab_h1:
@@ -855,10 +865,10 @@ def render_optimization_and_ablation_section() -> None:
     )
 
     tab_opt, tab_abl, tab_trans, tab_ens = st.tabs([
-        "⚡ Hyperparameter Optimization",
-        "🔬 Feature Ablation Study",
-        "📐 Target Transformations",
-        "🤝 Multi-Model Ensembles",
+        "Hyperparameter Optimization",
+        "Feature Ablation Study",
+        "Target Transformations",
+        "Multi-Model Ensembles",
     ])
 
     with tab_opt:
@@ -1086,7 +1096,6 @@ def render_multi_origin_dashboard(
             "Multi-origin benchmark results not found at "
             f"<code>{MULTI_ORIGIN_RESULTS_PATH}</code>.<br>"
             "Please run <code>python scripts/run_multi_origin_benchmark.py</code> to generate results.",
-            icon="⚠️",
         )
         return
 
@@ -1888,9 +1897,11 @@ def render_multi_origin_dashboard(
     col_r1, col_r2, col_r3, col_r4 = st.columns(4)
     with col_r1:
         st.markdown(
-            """
+            f"""
             <div style="background: #FFFEFA; border: 1px solid rgba(82, 122, 80, 0.25); border-radius: 12px; padding: 14px; height: 100%;">
-                <div style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #166534;">🏆 Overall Production Champion</div>
+                <div style="display: flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #166534;">
+                    {icon_trophy(14, "#166534")} <span>Overall Production Champion</span>
+                </div>
                 <div style="font-size: 1.05rem; font-weight: 700; color: #102C26; margin: 4px 0;">Ensemble 3 (Inverse-Variance)</div>
                 <div style="font-size: 0.8rem; color: #4B5563; line-height: 1.4;">
                     Lowest Holdout RMSE (4.897), Outbreak Recall (94.2%), and error variance (23.98 MSE).
