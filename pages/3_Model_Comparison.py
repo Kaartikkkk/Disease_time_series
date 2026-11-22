@@ -364,60 +364,67 @@ def render_styled_table(df_table, is_classical_section=True, best_classical_rmse
     """
 
 # ==============================================================================
-# 6. INTERACTIVE PILL TABS: CLASSICAL & ADVANCED MODELS (ZERO-SCROLL VIEW TOGGLE)
+# 6. INTERACTIVE PILL TABS: CLASSICAL & ADVANCED MODELS (ZERO-SCROLL VIEW TOGGLE WITH SVG ICONS)
 # ==============================================================================
-st.markdown("""
-<style>
-div[data-testid="stPills"] {
-    display: flex;
-    gap: 12px;
-    margin-top: 4px;
-    margin-bottom: 20px;
-}
-div[data-testid="stPills"] button {
-    border-radius: 9999px !important;
-    padding: 8px 22px !important;
-    font-size: 0.90rem !important;
-    font-weight: 600 !important;
-    border: 1.5px solid rgba(0, 0, 0, 0.1) !important;
-    background: #F8F9FA !important;
-    color: #4B5563 !important;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.03) !important;
-    transition: all 0.2s ease !important;
-}
-div[data-testid="stPills"] button:hover {
-    background: #EBF5EE !important;
-    color: #1B4332 !important;
-    border-color: #1B4332 !important;
-}
-div[data-testid="stPills"] button[aria-checked="true"],
-div[data-testid="stPills"] button[data-selected="true"] {
-    background: #1B4332 !important;
-    color: #FFFFFF !important;
-    border-color: #1B4332 !important;
-    box-shadow: 0 3px 10px rgba(27, 67, 50, 0.25) !important;
-}
-div[data-testid="stPills"] button[aria-checked="true"] p,
-div[data-testid="stPills"] button[data-selected="true"] p {
-    color: #FFFFFF !important;
-    font-weight: 700 !important;
-}
-</style>
-""", unsafe_allow_html=True)
+view_param = str(st.query_params.get("view", "classical")).lower()
+if view_param not in ["classical", "advanced", "both"]:
+    view_param = "classical"
 
-pill_options = ["📊 Classical Models", "🚀 Advanced Models", "🏆 Compare Both"]
-selected_family = st.pills(
-    "Select Model Category",
-    options=pill_options,
-    default="📊 Classical Models",
-    key="model_category_pills",
-    label_visibility="collapsed",
-)
-if not selected_family:
-    selected_family = "📊 Classical Models"
+def get_pill_url(target_view: str) -> str:
+    params = dict(st.query_params)
+    params["view"] = target_view
+    query_str = "&".join(f"{k}={v}" for k, v in params.items())
+    return f"?{query_str}"
+
+c_active = (view_param == "classical")
+a_active = (view_param == "advanced")
+b_active = (view_param == "both")
+
+c_bg = "#1B4332" if c_active else "#F8F9FA"
+c_color = "#FFFFFF" if c_active else "#374151"
+c_border = "#1B4332" if c_active else "rgba(0,0,0,0.12)"
+c_icon = icon_bar_chart(16, c_color)
+
+a_bg = "#1B4332" if a_active else "#F8F9FA"
+a_color = "#FFFFFF" if a_active else "#374151"
+a_border = "#1B4332" if a_active else "rgba(0,0,0,0.12)"
+a_icon = icon_layers(16, a_color)
+
+b_bg = "#1B4332" if b_active else "#F8F9FA"
+b_color = "#FFFFFF" if b_active else "#374151"
+b_border = "#1B4332" if b_active else "rgba(0,0,0,0.12)"
+b_icon = icon_model_compare(16, b_color)
+
+pill_selector_html = f"""
+<div style="display: flex; gap: 12px; margin-top: 6px; margin-bottom: 22px; flex-wrap: wrap;">
+    <a href="{get_pill_url('classical')}" target="_self" class="model-view-pill {'active' if c_active else ''}" style="background: {c_bg}; color: {c_color}; border: 1.5px solid {c_border}; padding: 8px 22px; border-radius: 9999px; text-decoration: none; font-size: 0.90rem; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; box-shadow: {'0 2px 8px rgba(27,67,50,0.22)' if c_active else '0 1px 3px rgba(0,0,0,0.03)'}; transition: all 0.15s ease;">
+        {c_icon}
+        <span>Classical Models</span>
+    </a>
+    <a href="{get_pill_url('advanced')}" target="_self" class="model-view-pill {'active' if a_active else ''}" style="background: {a_bg}; color: {a_color}; border: 1.5px solid {a_border}; padding: 8px 22px; border-radius: 9999px; text-decoration: none; font-size: 0.90rem; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; box-shadow: {'0 2px 8px rgba(27,67,50,0.22)' if a_active else '0 1px 3px rgba(0,0,0,0.03)'}; transition: all 0.15s ease;">
+        {a_icon}
+        <span>Advanced Models</span>
+    </a>
+    <a href="{get_pill_url('both')}" target="_self" class="model-view-pill {'active' if b_active else ''}" style="background: {b_bg}; color: {b_color}; border: 1.5px solid {b_border}; padding: 8px 22px; border-radius: 9999px; text-decoration: none; font-size: 0.90rem; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; box-shadow: {'0 2px 8px rgba(27,67,50,0.22)' if b_active else '0 1px 3px rgba(0,0,0,0.03)'}; transition: all 0.15s ease;">
+        {b_icon}
+        <span>Compare Both</span>
+    </a>
+</div>
+<style>
+.model-view-pill:not(.active):hover {{
+    background: #EBF5EE !important;
+    border-color: #1B4332 !important;
+    color: #1B4332 !important;
+}}
+.model-view-pill:not(.active):hover svg {{
+    stroke: #1B4332 !important;
+}}
+</style>
+"""
+st.html(pill_selector_html)
 
 # ----------------- SECTION 1: CLASSICAL STATISTICAL MODELS -----------------
-if selected_family in ["📊 Classical Models", "🏆 Compare Both"]:
+if view_param in ["classical", "both"]:
     st.markdown('<div id="classical-section">', unsafe_allow_html=True)
     st.markdown(
         f"""
@@ -465,11 +472,11 @@ if selected_family in ["📊 Classical Models", "🏆 Compare Both"]:
         st.info("No classical models evaluated for this configuration.")
 
     st.markdown('</div>', unsafe_allow_html=True)
-    if selected_family == "🏆 Compare Both":
+    if view_param == "both":
         st.markdown("<div style='height: 24px;'></div>", unsafe_allow_html=True)
 
 # ----------------- SECTION 2: ADVANCED & MODERN MODELS -----------------
-if selected_family in ["🚀 Advanced Models", "🏆 Compare Both"]:
+if view_param in ["advanced", "both"]:
     st.markdown('<div id="advanced-section">', unsafe_allow_html=True)
     st.markdown(
         f"""
