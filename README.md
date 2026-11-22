@@ -4,16 +4,16 @@
 [![Framework](https://img.shields.io/badge/Streamlit-1.40+-FF4B4B.svg)](https://streamlit.io/)
 [![Statistical Suite](https://img.shields.io/badge/Statsmodels-0.14+-brightgreen.svg)](https://www.statsmodels.org/)
 [![Machine Learning](https://img.shields.io/badge/Scikit--Learn%20%7C%20XGBoost-1.5+-orange.svg)](https://xgboost.readthedocs.io/)
-[![Deep Learning](https://img.shields.io/badge/PyTorch-LSTM%20%7C%20GRU-red.svg)](https://pytorch.org/)
+[![Deep Learning](https://img.shields.io/badge/PyTorch-Transformer%20%7C%20LSTM%20%7C%20GRU-red.svg)](https://pytorch.org/)
 [![Probabilistic](https://img.shields.io/badge/Meta%20Prophet-Bayesian-informational.svg)](https://facebook.github.io/prophet/)
-[![Testing](https://img.shields.io/badge/Pytest-99%20Passed%20(100%25)-success.svg)](https://pytest.org/)
+[![Testing](https://img.shields.io/badge/Pytest-100%25%20Passed-success.svg)](https://pytest.org/)
 [![Design System](https://img.shields.io/badge/Design%20System-Editorial%20Climate--Tech-102C26.svg)](https://github.com)
 [![License](https://img.shields.io/badge/License-CC--BY--4.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 
 > **Academic and Portfolio-Grade Time-Series Surveillance & Outbreak Forecasting Platform for Indian Agriculture**  
 > An end-to-end epidemiological forecasting and agro-meteorological intelligence platform utilizing **100% real, publicly available scientific surveillance data** from the **Global Biodiversity Information Facility (GBIF)**, climate analytics from **NASA POWER**, and phytosanitary records from the **European and Mediterranean Plant Protection Organization (EPPO)**.
 >
-> Built with an editorial climate-tech design system (*Fraunces* + *Plus Jakarta Sans* + *JetBrains Mono*), earthy botanical aesthetic (`#102C26`, `#527A50`, `#F6F4EC`, `#C4A66A`), unified SVG iconography, 17 multi-horizon forecasting models across 4 paradigm families, rigorous multi-origin walk-forward validation, and an untouched 20-month final holdout benchmark.
+> Built with an editorial climate-tech design system (*Fraunces* + *Plus Jakarta Sans* + *JetBrains Mono*), earthy botanical aesthetic (`#102C26`, `#527A50`, `#F6F4EC`, `#C4A66A`), unified SVG iconography, 19 multi-horizon forecasting models across 5 paradigm families, rigorous multi-origin walk-forward validation, and an untouched 20-month final holdout benchmark.
 
 ---
 
@@ -300,7 +300,12 @@ python scripts/utilities/generate_final_test_figures.py
 
 ## 📚 Scientific Documentation & Reports Catalog
 
-Over 40 comprehensive technical reports and audit logs are cataloged in `reports/`:
+Key Milestone 3 (M3) project deliverables and technical reports are cataloged in `reports/`:
+
+- **Phase 3 Core Deliverables (`reports/`)**:
+  - `PHASE_3_FINAL_REPORT.md`: Comprehensive academic final report with problem statement, statistical pre-tests (ADF, KPSS, ARCH-LM), full mathematical formulations of all 19 models, complete evaluation leaderboards, domain insights, limitations, challenges, and future scope.
+  - `PHASE_3_PRESENTATION.md`: Slide-by-slide 15-slide defense deck with visual layouts, talking points, presenter scripts, and key takeaways.
+  - `VIVA_DEMONSTRATION_GUIDE.md`: Step-by-step viva defense walkthrough and Top 10 expected examiner Q&A with mathematical proofs.
 
 - **Architecture (`reports/architecture/`)**:
   - `PROJECT_ARCHITECTURE_AUDIT.md`: System-wide dependency and import audit.

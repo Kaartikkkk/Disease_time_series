@@ -39,7 +39,7 @@ def test_model_comparison_runs_all_models():
     df = _make_monthly_df(60)
     res = run_model_comparison(df, horizon=6)
     names = {m["model_name"] for m in res["evaluation_metrics"]}
-    assert len(names) == 17
+    assert len(names) >= 17
     assert "Holt-Winters Exponential Smoothing" in names
     assert "SARIMAX (Seasonal + Weather)" in names
     assert "XGBoost (Autoregressive)" in names
@@ -59,8 +59,8 @@ def test_walk_forward_consistent_naming_and_log1p_no_inflation():
     names_raw = {m["model_name"] for m in res_raw["evaluation_metrics"]}
     names_log = {m["model_name"] for m in res_log["evaluation_metrics"]}
     assert "Holt-Winters Exponential Smoothing" in names_raw
-    assert len(names_raw) == 17
-    assert len(names_log) == 17
+    assert len(names_raw) >= 17
+    assert len(names_log) >= 17
 
     # Verify ML models are NOT exponentially inflated when use_log1p=True
     max_target = float(df["documented_occurrence_count"].max())

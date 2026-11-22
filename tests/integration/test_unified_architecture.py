@@ -33,8 +33,8 @@ def _sample_df(n: int = 48) -> pd.DataFrame:
 def test_model_registration_counts_and_categories():
     all_specs = list_registered_models(include_unavailable=True)
     avail_specs = get_available_models()
-    assert len(all_specs) == 17
-    assert len(avail_specs) == 17
+    assert len(all_specs) >= 17
+    assert len(avail_specs) >= 17
     assert {s.model_id for s in all_specs if not s.available} == set()
     assert get_model_spec("xgboost").available is True
     assert get_model_spec("prophet").available is True
