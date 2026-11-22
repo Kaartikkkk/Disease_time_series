@@ -226,6 +226,13 @@ Given actual ground truth $y_t$ and point forecasts $\hat{y}_t$ over horizon $H$
 | 9 | Holt-Winters Exponential Smoothing | Classical | 5.21 | 4.10 | 112.50 | 58.5% | 0.88 | 50.0% |
 | 10 | Seasonal Naive (Baseline) | Classical | 6.84 | 5.42 | 148.20 | 77.4% | 1.00 | 50.0% |
 
+#### 5.1.1 Theoretical Analysis: Why Transformer & LSTM Win While Tabular Models Underperform Classical
+A critical question in time-series econometrics is why certain modern machine learning architectures (Random Forest, single-tree XGBoost, Prophet) underperform simple classical Box-Jenkins models (MA(1) RMSE 4.31, ARIMA(1,1,1) RMSE 4.31), while Temporal Transformer (RMSE 4.15) and LSTM (RMSE 4.27) successfully outperform them:
+1. **The Makridakis M4/M5 Principle & Sample Size ($N=92$):** Monthly disease data yields 92 training records per pathogen. The classical MA(1) estimates a single parsimonious parameter ($\theta_1 = 0.312$), yielding ultra-low estimation variance. Decision trees, conversely, construct dozens of axis-aligned splits, easily overfitting local training noise on small sample sizes.
+2. **71.8% Zero-Inflation Distortion:** Standard tree regression minimizes continuous squared-error loss, predicting fractional numbers (0.3–0.7) during dry dormant periods. This constantly accumulates error penalty. MA(1) swiftly collapses to the unconditional zero mean. Only Hurdle XGBoost remedies this via a two-stage binary classifier gate.
+3. **Prophet's Continuous Fourier Mismatch (RMSE 4.88):** Prophet models seasonality using smooth trigonometric waves. Plant disease epidemics are sudden threshold eruptions governed by microclimate gates (RH $>80\%$ and $22^\circ\text{C}-28^\circ\text{C}$). Continuous sine curves over-predict during dry seasons and underestimate sharp epidemic peaks.
+4. **Why PatchTST Transformer & LSTM Excel:** Subseries patching ($P=3$) in PatchTST preserves local continuous trajectory semantics without point-wise token overfitting, while self-attention learns long-range cross-seasonal weather dependencies. In LSTM, continuous hidden states smoothly maintain biological spore incubation memory across dormancy regimes.
+
 ---
 
 #### 5.2 Multi-Horizon Accuracy Degradation Analysis
@@ -298,6 +305,9 @@ We estimated all 7 specifications on Rice Blast (*Pyricularia oryzae*) residuals
 1. **Spatial-Temporal Graph Neural Networks (ST-GNNs):** Incorporating geospatial county adjacency graphs to model airborne spore dispersion across district borders.
 2. **Satellite Remote Sensing Ingestion:** Integrating Sentinel-2 NDVI (Normalized Difference Vegetation Index) and MODIS canopy moisture layers directly into the transformer input tokens.
 3. **Mobile Edge Deployment:** Compressing the Hurdle XGBoost and GRU models into ONNX/TFLite for offline smartphone execution by field extension officers.
+
+#### 7.4 Live Production Deployment & Web Architecture
+The complete multi-paradigm forecasting suite is deployed both in production on Streamlit Cloud at **[https://kaartikkk-disease-time-series-app-bfmqmd.streamlit.app](https://kaartikkk-disease-time-series-app-bfmqmd.streamlit.app)** and locally on port 8501. The application features zero-scroll SVG filter tabs (`Classical Models`, `Advanced Models`, `Compare Both`) and dynamic comparative benchmarking against the best classical model (`vs. Best Classical (MA(1))`). All modules are validated by an automated 113-test Pytest test suite with 100% passing compliance.
 
 ---
 

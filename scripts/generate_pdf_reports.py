@@ -675,7 +675,7 @@ def build_m3_pdf():
     fig1, fig2, fig3 = generate_m3_figures()
     story.append(Paragraph("VI. COMPREHENSIVE COMPARATIVE BENCHMARK (MILESTONE 2 VS. MILESTONE 3)", styles["SectionHeading"]))
     story.append(Paragraph(
-        "All 19 models were evaluated on identical out-of-sample holdout test dates (May 2024 – Dec 2025) on primary pathogen <i>Pyricularia oryzae</i> (Rice Blast). Table II presents the unified benchmark leaderboard.",
+        "All 19 models were evaluated on identical out-of-sample holdout test dates (May 2024 – Dec 2025) on primary pathogen <i>Pyricularia oryzae</i> (Rice Blast). Table II presents the unified benchmark leaderboard. Temporal Transformer (RMSE 4.149) and PyTorch LSTM (4.266) outperform the best classical model (MA(1), RMSE 4.307) by +3.7% and +1.0%. Conversely, tabular trees and Prophet face the classical M4 small-sample bias-variance trade-off (N=92) and 71.8% zero-inflation penalties, which only Hurdle and Patch-based architectures successfully resolve.",
         styles["AcademicBody"]
     ))
 
@@ -734,7 +734,7 @@ def build_m3_pdf():
     story.append(PageBreak())
     story.append(Paragraph("IX. STREAMLIT WEB PLATFORM & AUTOMATED VERIFICATION", styles["SectionHeading"]))
     story.append(Paragraph(
-        "The complete 19-model forecasting suite is deployed within a responsive 6-module Streamlit application running on port 8501: Module 1 (Surveillance Explorer), Module 2 (Classical Benchmarks), Module 3 (Advanced ML/DL Lab), Module 4 (Unified Leaderboard), Module 5 (Econometric Volatility Cones), and Module 6 (Agronomic Advisory Engine). All modules are verified by an automated test suite of 113 Pytest tests passing with 100% compliance (113 passed / 0 failed).",
+        "The complete 19-model forecasting suite is deployed both in production on Streamlit Cloud (https://kaartikkk-disease-time-series-app-bfmqmd.streamlit.app) and locally on port 8501: Module 1 (Surveillance Explorer), Module 2 (Classical Benchmarks), Module 3 (Advanced ML/DL Lab), Module 4 (Unified Leaderboard with zero-scroll SVG filter tabs and dynamic classical benchmark gains), Module 5 (Econometric Volatility Cones), and Module 6 (Agronomic Advisory Engine). All modules are verified by an automated test suite of 113 Pytest tests passing with 100% compliance (113 passed / 0 failed).",
         styles["AcademicBody"]
     ))
 

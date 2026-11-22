@@ -174,10 +174,13 @@ All 19 models were evaluated on identical out-of-sample holdout test dates (May 
 | **M3** | 11 | **Multivariate VAR(2)** | Econometric System | 5.114 | 4.102 | 102.15% | 93.18% | 135.2% | 0.898 |
 | **M3** | 12 | **Local Random Forest** | Single-Series Tree | 5.421 | 4.315 | 108.40% | 97.40% | 142.1% | 0.945 |
 
-#### B. In-Depth Comparative Findings
-1. **Transformer & LSTM Superiority in Complex Surges:** The Temporal Transformer achieved the lowest holdout RMSE (4.149), followed closely by LSTM (4.266). By applying multi-head self-attention across 3-month subseries patches, the Transformer successfully identified multi-month pre-epidemic climate signatures that linear models missed.
-2. **Hurdle Architecture Eliminates Zero Artifacts:** Standard linear and tree models frequently output negative or fractional predictions during non-epidemic months. Hurdle XGBoost achieved an exact 0.0 prediction across 88% of dormant months while maintaining strong predictive fidelity on positive outbreaks ($\text{MAE} = 3.489$).
-3. **Prophet & Tree Overfitting on Small Samples:** Prophet underperformed classical and deep architectures ($\text{RMSE} = 5.072$), as its continuous piecewise linear trend assumption struggles with discrete, zero-heavy biological events. Similarly, unregularized local tree models suffered from sample scarcity ($N=92$).
+#### B. In-Depth Comparative Findings & Theoretical Model Defense
+1. **Transformer & LSTM Superiority over Best Classical Baseline:** The Temporal Transformer achieved the lowest holdout RMSE (4.149), followed closely by PyTorch LSTM (4.266), establishing a **+3.7%** and **+1.0%** error reduction over the best classical model (MA(1), RMSE 4.307). By applying multi-head self-attention across 3-month subseries patches, the Transformer successfully captures multi-month pre-epidemic microclimate signatures without suffering from point-wise noise, while LSTM's internal continuous cell memory tracks latent biological spore incubation states across seasons.
+2. **The Time-Series ML Paradox (Why Tabular Trees & Prophet Underperform Classical MA(1)):**
+   - *Occam's Razor & Sample Size ($N=92$):* In alignment with empirical findings from the Makridakis M4/M5 forecasting competitions, simple classical models often beat complex machine learning on short monthly horizons. The classical MA(1) estimates a single parsimonious parameter ($\theta_1 = 0.312$) with minimal estimation variance. In contrast, unconstrained decision trees (Random Forest RMSE 5.421, XGBoost Autoregressive RMSE 4.766) create dozens of discontinuous axis-aligned splits, easily overfitting local historical noise on small monthly training sets ($N = 92$).
+   - *71.8% Zero-Inflation Penalty:* Standard regression trees minimize continuous squared error loss ($\text{MSE}$). Across extended dry-season dormancy stretches, tree leaves predict small non-zero fractions (0.3–0.7 cases), systematically accumulating error penalty. MA(1), by contrast, rapidly collapses to the unconditional mean zero.
+   - *Failure of Continuous Fourier Harmonics in Prophet ($RMSE = 5.072$):* Prophet assumes smooth trigonometric seasonality ($s(t) = \sum a_n \cos(2\pi n t / 12) + b_n \sin(2\pi n t / 12)$). Phytopathogenic epidemics, however, are abrupt non-linear threshold phenomena triggered only when joint microclimate gates are crossed (RH $> 80\%$ and $22^\circ\text{C}-28^\circ\text{C}$). Smooth calendar harmonics inevitably over-predict during dry years and under-predict during explosive outbreak surges.
+3. **Hurdle Architecture Resolves Zero Artifacts:** Hurdle XGBoost decouples binary occurrence classification from positive severity estimation, achieving an exact 0.0 prediction across 88% of dormant months while maintaining strong predictive fidelity on positive outbreaks ($\text{MAE} = 3.489$).
 
 ---
 
@@ -210,11 +213,13 @@ During quiet periods, the prediction interval narrows significantly, reducing fa
 
 ### IX. Streamlit Web Platform Architecture & Live Demonstration
 
-The entire 19-model forecasting engine is deployed in a responsive Streamlit application running on port 8501, comprising six operational modules:
+The entire 19-model forecasting engine is deployed both locally on port 8501 and live in production on Streamlit Cloud at **`https://kaartikkk-disease-time-series-app-bfmqmd.streamlit.app`**. The platform comprises six fully integrated operational modules:
 1. **Module 1 — Surveillance Dataset Explorer:** Interactive spatio-temporal filtering across 10 pathogens, seasonal heatmaps, and NASA POWER climate correlations.
 2. **Module 2 — Classical Model Benchmarks:** Interactive inspection of Milestone 2 Box-Jenkins models, ACF/PACF plots, and Ljung-Box residual diagnostics.
 3. **Module 3 — Advanced ML & Deep Learning Lab:** Dynamic multi-step forecasting with PyTorch LSTM, GRU, Temporal Transformer, and Hurdle XGBoost.
-4. **Module 4 — Unified Comparative Leaderboard:** Cross-model benchmarking on identical holdout horizons with downloadable metrics.
+4. **Module 4 — Unified Comparative Leaderboard:** Cross-model benchmarking on identical holdout horizons featuring:
+   - **Zero-Scroll View Switcher:** Clean SVG vector icon tabs (`Classical Models`, `Advanced Models`, `Compare Both`) allowing seamless switching between model families without vertical scrolling fatigue.
+   - **Dynamic Classical Benchmarking:** The `Improvement vs. Baseline` column dynamically computes relative percentage error reduction against the best classical model (`vs. Best Classical (MA(1))`), honestly displaying performance gains for deep models (+3.7% for Transformer, +1.0% for LSTM) alongside tabular model trade-offs.
 5. **Module 5 — Econometric Volatility & Risk Cones:** Dynamic GARCH volatility tracking and risk-calibrated 95% prediction cones.
 6. **Module 6 — Real-Time Agronomic Advisory Engine:** Automated rule-based alert generation translating forecasts into actionable crop protection advisories.
 

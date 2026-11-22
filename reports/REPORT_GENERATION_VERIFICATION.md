@@ -88,6 +88,19 @@ PDF files were generated programmatically using ReportLab 5.1.0 in `./.venv` and
 
 ---
 
-## 5. Final Certification
+## 5. Deployment, Navigation & Defense Update Certification (November 22, 2026)
+
+All project reports, PDF deliverables, and viva demonstration guides have been synchronized with the latest deployment and model comparative findings:
+1. **Live Production Deployment URL:** Documented as `https://kaartikkk-disease-time-series-app-bfmqmd.streamlit.app` across all reports.
+2. **Zero-Scroll SVG Navigation:** Documented interactive pill buttons (`Classical Models`, `Advanced Models`, `Compare Both`) utilizing custom SVG icons without page scrolling fatigue.
+3. **Dynamic Classical Benchmarking:** Documented the `Improvement vs. Baseline` column benchmarking advanced models against the best classical model (`vs. Best Classical (MA(1))`), showing $+3.7\%$ improvement for Temporal Transformer and $+1.0\%$ for LSTM.
+4. **Theoretical Model Defense (Viva Q11):** Documented comprehensive justification for why unconstrained tabular models and Prophet underperform classical MA(1) due to small sample size ($N=92$), 71.8% zero-inflation penalties, and continuous Fourier mismatch, while PatchTST Transformer and LSTM succeed via subseries patching and continuous recurrent gating.
+5. **PDF Page Budget Compliance:** Both regenerated PDFs strictly adhere to the university limit ($\le 10$ pages):
+   - Milestone 2 PDF: **4 Pages**
+   - Milestone 3 PDF: **5 Pages**
+
+---
+
+## 6. Final Certification
 
 The Milestone 2 and Milestone 3 academic project reports satisfy all academic and professional standards prescribed by Bennett University's CSET 369 Time Series Analysis & Forecasting curriculum. The documents are complete, fully reproducible, and ready for formal submission and academic defense.

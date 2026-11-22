@@ -223,10 +223,14 @@ Models were evaluated on the 6-month holdout window for the primary benchmark pa
 ```
 *Table I. Out-of-sample forecast accuracy metrics on Rice Blast validation holdout.*
 
-#### B. Analysis of Performance Discrepancies
-1. **Superiority of Temporal Transformers and RNNs:** The PyTorch Temporal Transformer achieved the lowest overall RMSE (4.149) and MAPE (83.92%). The self-attention mechanism successfully attends across 12-month seasonal tokens, outperforming classical exponential smoothing by 18.8%.
-2. **Failure Modes of Classical Smoothing:** Holt-Winters and Seasonal Naive produced the highest errors (RMSE $> 5.10$). When an epidemic surge deviates from the exact month of the previous year, seasonal naive lags experience severe double-penalty errors.
-3. **Zero-Inflation Resolution via Hurdle XGBoost:** Standard linear models predict negative counts during dry seasons. Hurdle XGBoost completely eliminates negative predictions, reducing false alarm rates.
+#### B. Analysis of Performance Discrepancies & The Time-Series ML Paradox
+1. **Transformer & LSTM Superiority over Classical Baselines:** The PyTorch Temporal Transformer (PatchTST) achieved the lowest overall RMSE (4.149) and MAPE (83.92%), followed closely by PyTorch LSTM (4.266), establishing a **+3.7%** and **+1.0%** error reduction over the best classical model (MA(1), RMSE 4.307). Sub-series patching ($P=3$) preserves local trend semantics and prevents point-wise noise overfitting, while multi-head self-attention learns long-range non-linear weather trigger associations across annual cycles.
+2. **Why Tabular Ensembles and Prophet Underperform Classical MA(1):**
+   - *Sample Size Constraints & Model Parsimony:* In adherence to Occam's razor and empirical M4 competition findings, simple models excel on small datasets. With only $N=92$ monthly training observations, MA(1) achieves minimal estimation variance with a single parameter ($\theta_1 = 0.312$). In contrast, standard Random Forest (RMSE 4.385–5.421) and single XGBoost (RMSE 4.473–4.766) fit complex axis-aligned step partitions that easily overfit sample variance.
+   - *71.8% Zero-Inflation Distortion:* Standard continuous squared-error loss forces tree leaves to predict fractional values (0.3–0.7) during dry-season dormancy, accumulating penalty. MA(1) quickly reverts to the series unconditional zero mean.
+   - *Prophet Fourier Mismatch (RMSE 5.072):* Prophet assumes smooth sinusoidal seasonality. Plant disease epidemics are abrupt non-linear threshold surges triggered by microclimate gates (RH $> 80\%$, temperature $20^\circ\text{C}-28^\circ\text{C}$). Smooth trigonometric curves fail to capture episodic dormancy and abrupt explosive spikes.
+3. **Zero-Inflation Resolution via Hurdle XGBoost:** Standard linear and tree models predict non-physical negative counts or fractional artifacts during dry seasons. Hurdle XGBoost completely eliminates negative predictions by decoupling the occurrence probability gate from positive intensity estimation.
+4. **Live Deployment & Zero-Scroll Interface:** The complete 19-model suite is deployed in production at [https://kaartikkk-disease-time-series-app-bfmqmd.streamlit.app](https://kaartikkk-disease-time-series-app-bfmqmd.streamlit.app) with SVG filter pills (`Classical Models`, `Advanced Models`, `Compare Both`) and dynamic benchmarking against the best classical model (`vs. Best Classical (MA(1))`).
 
 #### C. ARCH vs. GARCH Volatility Evaluation (AIC & BIC)
 We fitted 7 specifications on *Pyricularia oryzae* residuals:
