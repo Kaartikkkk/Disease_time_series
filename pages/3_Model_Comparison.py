@@ -366,62 +366,80 @@ def render_styled_table(df_table, is_classical_section=True, best_classical_rmse
 # ==============================================================================
 # 6. INTERACTIVE PILL TABS: CLASSICAL & ADVANCED MODELS (ZERO-SCROLL VIEW TOGGLE WITH SVG ICONS)
 # ==============================================================================
-view_param = str(st.query_params.get("view", "classical")).lower()
-if view_param not in ["classical", "advanced", "both"]:
+# Read query param for initial state
+q_view = str(st.query_params.get("view", "classical")).lower()
+opt_classical = ":material/bar_chart: Classical Models"
+opt_advanced = ":material/layers: Advanced Models"
+opt_both = ":material/compare_arrows: Compare Both"
+
+default_pill = opt_classical
+if "adv" in q_view:
+    default_pill = opt_advanced
+elif "both" in q_view:
+    default_pill = opt_both
+
+# Inject custom CSS to make Streamlit pills look beautiful and match AgriForecast branding
+st.markdown(
+    """
+    <style>
+    /* Custom styling for Model Category Pills */
+    div[data-testid="stPills"] {
+        margin-top: 4px !important;
+        margin-bottom: 22px !important;
+        gap: 12px !important;
+    }
+    div[data-testid="stPill"] {
+        border-radius: 9999px !important;
+        font-weight: 600 !important;
+        font-size: 0.90rem !important;
+        padding: 6px 18px !important;
+        border: 1.5px solid rgba(0,0,0,0.12) !important;
+        background: #F8F9FA !important;
+        color: #374151 !important;
+        transition: all 0.15s ease !important;
+    }
+    div[data-testid="stPill"]:hover {
+        background: #EBF5EE !important;
+        border-color: #1B4332 !important;
+        color: #1B4332 !important;
+    }
+    div[data-testid="stPill"][aria-selected="true"],
+    div[data-testid="stPill"][data-selected="true"] {
+        background-color: #1B4332 !important;
+        border-color: #1B4332 !important;
+        color: #FFFFFF !important;
+        box-shadow: 0 2px 8px rgba(27,67,50,0.22) !important;
+    }
+    div[data-testid="stPill"][aria-selected="true"] span,
+    div[data-testid="stPill"][data-selected="true"] span {
+        color: #FFFFFF !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+selected_pill = st.pills(
+    label="Model Family Navigation",
+    options=[opt_classical, opt_advanced, opt_both],
+    default=default_pill,
+    selection_mode="single",
+    label_visibility="collapsed",
+    key="model_comparison_pills_selector",
+)
+
+if not selected_pill or "Classical" in selected_pill:
     view_param = "classical"
+elif "Advanced" in selected_pill:
+    view_param = "advanced"
+else:
+    view_param = "both"
 
-def get_pill_url(target_view: str) -> str:
-    params = dict(st.query_params)
-    params["view"] = target_view
-    query_str = "&".join(f"{k}={v}" for k, v in params.items())
-    return f"?{query_str}"
-
-c_active = (view_param == "classical")
-a_active = (view_param == "advanced")
-b_active = (view_param == "both")
-
-c_bg = "#1B4332" if c_active else "#F8F9FA"
-c_color = "#FFFFFF" if c_active else "#374151"
-c_border = "#1B4332" if c_active else "rgba(0,0,0,0.12)"
-c_icon = icon_bar_chart(16, c_color)
-
-a_bg = "#1B4332" if a_active else "#F8F9FA"
-a_color = "#FFFFFF" if a_active else "#374151"
-a_border = "#1B4332" if a_active else "rgba(0,0,0,0.12)"
-a_icon = icon_layers(16, a_color)
-
-b_bg = "#1B4332" if b_active else "#F8F9FA"
-b_color = "#FFFFFF" if b_active else "#374151"
-b_border = "#1B4332" if b_active else "rgba(0,0,0,0.12)"
-b_icon = icon_model_compare(16, b_color)
-
-pill_selector_html = f"""
-<div style="display: flex; gap: 12px; margin-top: 6px; margin-bottom: 22px; flex-wrap: wrap;">
-    <a href="{get_pill_url('classical')}" target="_self" class="model-view-pill {'active' if c_active else ''}" style="background: {c_bg}; color: {c_color}; border: 1.5px solid {c_border}; padding: 8px 22px; border-radius: 9999px; text-decoration: none; font-size: 0.90rem; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; box-shadow: {'0 2px 8px rgba(27,67,50,0.22)' if c_active else '0 1px 3px rgba(0,0,0,0.03)'}; transition: all 0.15s ease;">
-        {c_icon}
-        <span>Classical Models</span>
-    </a>
-    <a href="{get_pill_url('advanced')}" target="_self" class="model-view-pill {'active' if a_active else ''}" style="background: {a_bg}; color: {a_color}; border: 1.5px solid {a_border}; padding: 8px 22px; border-radius: 9999px; text-decoration: none; font-size: 0.90rem; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; box-shadow: {'0 2px 8px rgba(27,67,50,0.22)' if a_active else '0 1px 3px rgba(0,0,0,0.03)'}; transition: all 0.15s ease;">
-        {a_icon}
-        <span>Advanced Models</span>
-    </a>
-    <a href="{get_pill_url('both')}" target="_self" class="model-view-pill {'active' if b_active else ''}" style="background: {b_bg}; color: {b_color}; border: 1.5px solid {b_border}; padding: 8px 22px; border-radius: 9999px; text-decoration: none; font-size: 0.90rem; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; box-shadow: {'0 2px 8px rgba(27,67,50,0.22)' if b_active else '0 1px 3px rgba(0,0,0,0.03)'}; transition: all 0.15s ease;">
-        {b_icon}
-        <span>Compare Both</span>
-    </a>
-</div>
-<style>
-.model-view-pill:not(.active):hover {{
-    background: #EBF5EE !important;
-    border-color: #1B4332 !important;
-    color: #1B4332 !important;
-}}
-.model-view-pill:not(.active):hover svg {{
-    stroke: #1B4332 !important;
-}}
-</style>
-"""
-st.html(pill_selector_html)
+# Silently sync query param without page reload
+try:
+    st.query_params["view"] = view_param
+except Exception:
+    pass
 
 # ----------------- SECTION 1: CLASSICAL STATISTICAL MODELS -----------------
 if view_param in ["classical", "both"]:
