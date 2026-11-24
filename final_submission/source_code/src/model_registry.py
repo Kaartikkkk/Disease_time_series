@@ -34,6 +34,7 @@ from src.models.adapters import (
     adapt_transformer,
     adapt_var,
     adapt_xgboost,
+    adapt_autots,
     adapt_arch_1,
     adapt_arch_2,
     adapt_arch_5,
@@ -46,6 +47,7 @@ from src.models.base import ForecastContext, ModelAdapterFn, validate_forecast_o
 from src.models.lstm_model import HAS_TORCH
 from src.models.prophet_model import HAS_PROPHET
 from src.models.xgboost_model import HAS_XGBOOST
+from src.models.machine_learning.autots_model import HAS_AUTOTS
 
 logger = logging.getLogger(__name__)
 
@@ -269,6 +271,18 @@ MODEL_SPECS: Dict[str, ModelSpec] = {
         default_config={"lags": [1, 2, 3, 6, 12]},
         adapter=adapt_hurdle_xgboost,
         notes="Two-stage Hurdle XGBoost separating occurrence probability and positive magnitude",
+    ),
+    "autots": ModelSpec(
+        model_id="autots",
+        display_name="AutoTS (AutoML Benchmark)",
+        category="Machine Learning",
+        model_family="Automated ML (AutoTS)",
+        available=HAS_AUTOTS,
+        supports_exog=False,
+        has_ci=True,
+        default_config={"model_list": "superfast", "max_generations": 1},
+        adapter=adapt_autots,
+        notes="Automated genetic model search baseline across fast time-series algorithms",
     ),
     "transformer": ModelSpec(
         model_id="transformer",

@@ -30,6 +30,7 @@ from src.models.deep_learning.gru_model import forecast_gru
 from src.models.deep_learning.transformer_model import forecast_transformer
 from src.models.probabilistic.prophet_model import HAS_PROPHET, forecast_prophet
 from src.models.volatility.arch_garch_model import ARCHGARCHModel
+from src.models.machine_learning.autots_model import HAS_AUTOTS, forecast_autots
 
 
 def _extract_exog(ctx: ForecastContext) -> Tuple[Optional[pd.DataFrame], Optional[pd.DataFrame]]:
@@ -287,6 +288,30 @@ def adapt_xgboost(ctx: ForecastContext) -> Dict[str, Any]:
     )
     out["metadata"]["diagnostics"] = diagnostics
     return out
+
+
+def adapt_autots(ctx: ForecastContext) -> Dict[str, Any]:
+    """Adapter for AutoTS automated time-series genetic search."""
+    if not HAS_AUTOTS:
+        raise ImportError("autots is not installed or unavailable in this environment.")
+
+    model_list = str(ctx.config.get("model_list", "superfast"))
+    max_gen = int(ctx.config.get("max_generations", 1))
+    preds, lb, ub, meta = forecast_autots(
+        train_df=ctx.train_df,
+        horizon=ctx.horizon,
+        target_col=ctx.target_col,
+        date_col="date" if "date" in ctx.train_df.columns else ctx.train_df.columns[0],
+        model_list=model_list,
+        max_generations=max_gen,
+    )
+    return _build_output(
+        preds, lb, ub,
+        model_name="AutoTS (AutoML Benchmark)",
+        parameters=f"Best: {meta.get('best_model_name', 'Ensemble')} (gens={max_gen})",
+        model_family="Automated ML (AutoTS)",
+        fitted_model=meta.get("fitted_model"),
+    )
 
 
 def adapt_global_xgboost(ctx: ForecastContext) -> Dict[str, Any]:
