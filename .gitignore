@@ -136,3 +136,13 @@ models/*.joblib
 *.rar
 *.7z
 final_submission/code/*.zip
+
+# ------------------------------------------------------------------------------
+# 12. Scratch Scripts, Viva Preparation & Temporary Exports
+# (Preserves official Milestone 2 and Milestone 3 reports in reports/)
+# ------------------------------------------------------------------------------
+scratch/
+*DEFENSE_GUIDE*.pdf
+*defense_guide*.pdf
+/*.pdf
+
