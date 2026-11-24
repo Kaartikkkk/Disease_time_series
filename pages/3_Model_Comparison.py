@@ -303,10 +303,6 @@ def render_styled_table(df_table, is_classical_section=True, best_classical_rmse
         except Exception:
             mae_val = str(r.get("MAE", ""))
         try:
-            smape_val = f"{float(str(r.get('sMAPE (%)', 0.0)).replace('%', '')):.2f}%" if "sMAPE (%)" in r else "N/A"
-        except Exception:
-            smape_val = str(r.get("sMAPE (%)", "N/A"))
-        try:
             mase_val = f"{float(r.get('MASE', 0.0)):.3f}" if "MASE" in r and r.get("MASE") != "N/A" else "N/A"
         except Exception:
             mase_val = str(r.get("MASE", "N/A"))
@@ -335,7 +331,6 @@ def render_styled_table(df_table, is_classical_section=True, best_classical_rmse
             <td style="padding: 9px 12px; color: #102C26; font-weight: {'700' if rank_num == 1 else '500'};">{model_name}</td>
             <td style="padding: 9px 12px; color: #102C26; font-weight: {'700' if rank_num == 1 else '500'};">{rmse_val}</td>
             <td style="padding: 9px 12px; color: #4B5563;">{mae_val}</td>
-            <td style="padding: 9px 12px; color: #4B5563;">{smape_val}</td>
             <td style="padding: 9px 12px; color: #4B5563;">{mase_val}</td>
             <td style="padding: 9px 12px;">{col_markup}</td>
         </tr>
@@ -351,7 +346,6 @@ def render_styled_table(df_table, is_classical_section=True, best_classical_rmse
                     <th style="padding: 9px 12px; color: #4B5563; font-weight: 600;">Model</th>
                     <th style="padding: 9px 12px; color: #4B5563; font-weight: 600;">RMSE &darr;</th>
                     <th style="padding: 9px 12px; color: #4B5563; font-weight: 600;">MAE</th>
-                    <th style="padding: 9px 12px; color: #4B5563; font-weight: 600;">sMAPE (%)</th>
                     <th style="padding: 9px 12px; color: #4B5563; font-weight: 600;">MASE</th>
                     <th style="padding: 9px 12px; color: #4B5563; font-weight: 600;">{comp_header}</th>
                 </tr>
