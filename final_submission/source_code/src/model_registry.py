@@ -33,6 +33,7 @@ from src.models.adapters import (
     adapt_seasonal_naive,
     adapt_transformer,
     adapt_var,
+    adapt_varima,
     adapt_xgboost,
     adapt_autots,
     adapt_arch_1,
@@ -307,6 +308,18 @@ MODEL_SPECS: Dict[str, ModelSpec] = {
         default_config={"maxlags": 2},
         adapter=adapt_var,
         notes="Milestone 3 Multivariate Vector Autoregression on joint disease-weather endogenous system",
+    ),
+    "varima": ModelSpec(
+        model_id="varima",
+        display_name="VARIMA(1,1,1) (Multivariate System)",
+        category="Statistical",
+        model_family="Multivariate Autoregressive System",
+        available=True,
+        supports_exog=True,
+        has_ci=True,
+        default_config={"p": 1, "d": 1, "q": 1, "trend": "c"},
+        adapter=adapt_varima,
+        notes="Multivariate Vector Autoregressive Integrated Moving Average on joint disease-weather system",
     ),
 }
 

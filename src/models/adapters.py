@@ -17,6 +17,7 @@ from src.models.classical.sarima_model import forecast_sarima
 from src.models.classical.sarimax_model import forecast_sarimax_model
 from src.models.classical.seasonal_naive import forecast_seasonal_naive
 from src.models.classical.var_model import forecast_var
+from src.models.classical.varima_model import forecast_varima
 from src.models.machine_learning.gradient_boosting import forecast_gradient_boosting
 from src.models.machine_learning.random_forest import forecast_random_forest
 from src.models.machine_learning.xgboost_model import HAS_XGBOOST, forecast_xgboost
@@ -536,6 +537,36 @@ def adapt_var(ctx: ForecastContext) -> Dict[str, Any]:
     out = _build_output(
         preds, lb, ub,
         model_name="VAR (Vector Autoregression)",
+        parameters=param_str,
+        model_family="Multivariate Autoregressive System",
+        fitted_model=model,
+    )
+    out["metadata"]["diagnostics"] = diagnostics
+    return out
+
+
+def adapt_varima(ctx: ForecastContext) -> Dict[str, Any]:
+    """Adapter for Multivariate Vector Autoregressive Integrated Moving Average (VARIMA)."""
+    p = int(ctx.config.get("p", 1))
+    d = int(ctx.config.get("d", 1))
+    q = int(ctx.config.get("q", 1))
+    trend = str(ctx.config.get("trend", "c"))
+    exog_cols = ctx.exog_cols or ["temp_mean_c", "relative_humidity_pct"]
+
+    preds, lb, ub, model, diagnostics = forecast_varima(
+        train_df=ctx.train_df,
+        horizon=ctx.horizon,
+        target_col=ctx.target_col,
+        exog_cols=exog_cols,
+        p=p,
+        d=d,
+        q=q,
+        trend=trend,
+    )
+    param_str = diagnostics.get("parameters", f"VARIMA({p},{d},{q})")
+    out = _build_output(
+        preds, lb, ub,
+        model_name="VARIMA (Vector Autoregressive Integrated Moving Average)",
         parameters=param_str,
         model_family="Multivariate Autoregressive System",
         fitted_model=model,
