@@ -41,7 +41,7 @@
     {
       "Model": "AutoTS",
       "Split": "Validation_6mo",
-      "Order_or_Selected_Pipeline": "Ensemble",
+      "Order_or_Selected_Pipeline": "BasicLinearModel",
       "rmse": 4.708,
       "mae": 3.167,
       "mape_pct": 100.0,

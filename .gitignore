@@ -146,3 +146,18 @@ scratch/
 *defense_guide*.pdf
 /*.pdf
 
+# ------------------------------------------------------------------------------
+# 13. Data Files & Datasets
+# ------------------------------------------------------------------------------
+# Ignore raw API downloads, transient caches, and temporary reports
+data/raw/
+data/cache/
+data/reports/
+
+# Explicitly track authoritative master dataset and benchmark results
+!data/disease_timeseries_master.csv
+!data/processed/
+!data/processed/*.json
+!data/processed/*.csv
+
+
