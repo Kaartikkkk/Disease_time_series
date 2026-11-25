@@ -1,0 +1,58 @@
+{
+  "Ensemble 1 (50% Hurdle + 50% Global RF)": {
+    "rmse": 5.995,
+    "mae": 2.33,
+    "mse": 35.942,
+    "mase": 0.678,
+    "smape": 140.08,
+    "wape": 83.71,
+    "f1": 0.742,
+    "precision": 0.656,
+    "recall": 0.854,
+    "mae_pos": 3.903,
+    "mae_zero": 0.676,
+    "near_zero_pct": 33.3
+  },
+  "Ensemble 2 (60% Hurdle + 40% Prophet)": {
+    "rmse": 5.975,
+    "mae": 2.276,
+    "mse": 35.699,
+    "mase": 0.662,
+    "smape": 140.41,
+    "wape": 81.76,
+    "f1": 0.737,
+    "precision": 0.669,
+    "recall": 0.821,
+    "mae_pos": 3.856,
+    "mae_zero": 0.615,
+    "near_zero_pct": 37.1
+  },
+  "Ensemble 3 (Inverse-Variance: 40% Hurdle + 35% Prophet + 25% GRF)": {
+    "rmse": 5.982,
+    "mae": 2.287,
+    "mse": 35.783,
+    "mase": 0.666,
+    "smape": 140.56,
+    "wape": 82.15,
+    "f1": 0.727,
+    "precision": 0.658,
+    "recall": 0.813,
+    "mae_pos": 3.868,
+    "mae_zero": 0.624,
+    "near_zero_pct": 36.7
+  },
+  "Ensemble 4 (50% Classical MA(1) + 50% Hurdle XGB)": {
+    "rmse": 6.103,
+    "mae": 2.357,
+    "mse": 37.249,
+    "mase": 0.686,
+    "smape": 144.97,
+    "wape": 84.7,
+    "f1": 0.727,
+    "precision": 0.681,
+    "recall": 0.78,
+    "mae_pos": 4.104,
+    "mae_zero": 0.522,
+    "near_zero_pct": 41.2
+  }
+}

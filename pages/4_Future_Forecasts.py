@@ -70,6 +70,8 @@ from src.models.random_forest import forecast_random_forest
 from src.models.sarima_model import forecast_sarima
 from src.models.sarimax_model import forecast_sarimax_model
 from src.models.seasonal_naive import forecast_seasonal_naive
+from src.models.var_model import forecast_var
+from src.models.varima_model import forecast_varima
 from src.models.xgboost_model import forecast_xgboost
 from src.project_stats import get_project_telemetry
 from src.ui_helpers import (
@@ -165,6 +167,8 @@ with col_c2:
         "Seasonal Naive (Baseline)",
         "Holt-Winters Exponential Smoothing",
         "ARIMA(1,1,1)",
+        "VAR (Vector Autoregression)",
+        "VARIMA (Vector Autoregressive Integrated Moving Average)",
         "SARIMA(1,0,1)(1,0,1)[12]",
         "ARIMAX (Weather Regressors)",
         "SARIMAX (Seasonal + Weather)",
@@ -233,6 +237,10 @@ with st.spinner(f"Projecting forward occurrences using {chosen_model}..."):
             p_fut, lb_95, ub_95, _ = forecast_ma(y_full, horizon=horizon_months, q=1)
         elif chosen_model == "ARIMA(1,1,1)":
             p_fut, lb_95, ub_95, _ = forecast_arima(y_full, horizon=horizon_months, order=(1, 1, 1), auto_optimize=True)
+        elif chosen_model == "VAR (Vector Autoregression)":
+            p_fut, lb_95, ub_95, _, _ = forecast_var(df_monthly, horizon=horizon_months, target_col=target_col)
+        elif chosen_model == "VARIMA (Vector Autoregressive Integrated Moving Average)":
+            p_fut, lb_95, ub_95, _, _ = forecast_varima(df_monthly, horizon=horizon_months, target_col=target_col)
         elif chosen_model == "SARIMA(1,0,1)(1,0,1)[12]":
             p_fut, lb_95, ub_95, _ = forecast_sarima(y_full, horizon=horizon_months, order=(1, 0, 1), seasonal_order=(1, 0, 1, 12), auto_optimize=True)
         elif chosen_model == "Holt-Winters Exponential Smoothing":

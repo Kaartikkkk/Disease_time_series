@@ -276,7 +276,7 @@ MODEL_SPECS: Dict[str, ModelSpec] = {
     "autots": ModelSpec(
         model_id="autots",
         display_name="AutoTS (AutoML Benchmark)",
-        category="Machine Learning",
+        category="AutoML Tool",
         model_family="Automated ML (AutoTS)",
         available=HAS_AUTOTS,
         supports_exog=False,
