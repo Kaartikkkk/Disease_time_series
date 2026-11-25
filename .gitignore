@@ -136,3 +136,28 @@ models/*.joblib
 *.rar
 *.7z
 final_submission/code/*.zip
+
+# ------------------------------------------------------------------------------
+# 12. Scratch Scripts, Viva Preparation & Temporary Exports
+# (Preserves official Milestone 2 and Milestone 3 reports in reports/)
+# ------------------------------------------------------------------------------
+scratch/
+*DEFENSE_GUIDE*.pdf
+*defense_guide*.pdf
+/*.pdf
+
+# ------------------------------------------------------------------------------
+# 13. Data Files & Datasets
+# ------------------------------------------------------------------------------
+# Ignore raw API downloads, transient caches, and temporary reports
+data/raw/
+data/cache/
+data/reports/
+
+# Explicitly track authoritative master dataset and benchmark results
+!data/disease_timeseries_master.csv
+!data/processed/
+!data/processed/*.json
+!data/processed/*.csv
+
+

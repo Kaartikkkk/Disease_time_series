@@ -1,0 +1,63 @@
+{
+  "metadata": {
+    "pathogen": "Rice Blast (Pyricularia oryzae)",
+    "total_records": 132,
+    "autots_models_evaluated": 579
+  },
+  "results": [
+    {
+      "Model": "VARIMA(1,1,1)",
+      "Split": "Test_20mo",
+      "Order_or_Selected_Pipeline": "VARIMA(1,1,1)",
+      "rmse": 2.613,
+      "mae": 1.863,
+      "mape_pct": 47.4,
+      "mape_epsilon_pct": 109.2,
+      "smape_pct": 161.8,
+      "wape_pct": 133.1
+    },
+    {
+      "Model": "AutoTS",
+      "Split": "Test_20mo",
+      "Order_or_Selected_Pipeline": "Ensemble",
+      "rmse": 2.882,
+      "mae": 1.642,
+      "mape_pct": 81.3,
+      "mape_epsilon_pct": 63.9,
+      "smape_pct": 174.1,
+      "wape_pct": 117.3
+    },
+    {
+      "Model": "VARIMA(1,1,1)",
+      "Split": "Validation_6mo",
+      "Order_or_Selected_Pipeline": "VARIMA(1,1,1)",
+      "rmse": 3.773,
+      "mae": 3.115,
+      "mape_pct": 70.6,
+      "mape_epsilon_pct": 113.6,
+      "smape_pct": 155.4,
+      "wape_pct": 98.4
+    },
+    {
+      "Model": "AutoTS",
+      "Split": "Validation_6mo",
+      "Order_or_Selected_Pipeline": "BasicLinearModel",
+      "rmse": 4.708,
+      "mae": 3.167,
+      "mape_pct": 100.0,
+      "mape_epsilon_pct": 50.0,
+      "smape_pct": 100.0,
+      "wape_pct": 100.0
+    }
+  ],
+  "varima_diagnostics": {
+    "validation_aic": 1303.341463196223,
+    "validation_bic": 1363.6020913526274,
+    "k_endogenous": 3,
+    "variables": [
+      "documented_occurrence_count",
+      "temp_mean_c",
+      "relative_humidity_pct"
+    ]
+  }
+}

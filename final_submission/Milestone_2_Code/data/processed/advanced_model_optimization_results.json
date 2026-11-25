@@ -1,0 +1,276 @@
+{
+  "global_random_forest": {
+    "Baseline (depth=4, leaf=4, n=120)": {
+      "rmse": 6.044,
+      "mae": 2.372,
+      "precision": 0.649,
+      "recall": 0.797,
+      "f1": 0.715,
+      "far": 45.3,
+      "config": {
+        "n_estimators": 120,
+        "max_depth": 4,
+        "min_samples_leaf": 4,
+        "max_features": 0.8,
+        "random_state": 42,
+        "n_jobs": 1
+      }
+    },
+    "Candidate A (depth=5, leaf=3, n=140, max_features=0.75)": {
+      "rmse": 6.059,
+      "mae": 2.366,
+      "precision": 0.636,
+      "recall": 0.837,
+      "f1": 0.723,
+      "far": 50.4,
+      "config": {
+        "n_estimators": 140,
+        "max_depth": 5,
+        "min_samples_leaf": 3,
+        "max_features": 0.75,
+        "random_state": 42,
+        "n_jobs": 1
+      }
+    },
+    "Candidate B (depth=5, leaf=2, n=160, max_features=0.7)": {
+      "rmse": 6.065,
+      "mae": 2.41,
+      "precision": 0.629,
+      "recall": 0.854,
+      "f1": 0.724,
+      "far": 53.0,
+      "config": {
+        "n_estimators": 160,
+        "max_depth": 5,
+        "min_samples_leaf": 2,
+        "max_features": 0.7,
+        "random_state": 42,
+        "n_jobs": 1
+      }
+    },
+    "Candidate C (depth=4, leaf=2, n=150, max_features=0.8)": {
+      "rmse": 6.159,
+      "mae": 2.439,
+      "precision": 0.647,
+      "recall": 0.805,
+      "f1": 0.717,
+      "far": 46.2,
+      "config": {
+        "n_estimators": 150,
+        "max_depth": 4,
+        "min_samples_leaf": 2,
+        "max_features": 0.8,
+        "random_state": 42,
+        "n_jobs": 1
+      }
+    }
+  },
+  "global_xgboost": {
+    "Baseline (lr=0.03, depth=3, n=110, subsample=0.85)": {
+      "rmse": 6.057,
+      "mae": 2.426,
+      "precision": 0.682,
+      "recall": 0.732,
+      "f1": 0.706,
+      "far": 35.9,
+      "config": {
+        "n_estimators": 110,
+        "max_depth": 3,
+        "learning_rate": 0.03,
+        "subsample": 0.85,
+        "colsample_bytree": 0.85,
+        "reg_alpha": 0.3,
+        "reg_lambda": 1.0,
+        "random_state": 42,
+        "n_jobs": 1
+      }
+    },
+    "Candidate A (lr=0.025, depth=4, n=130, subsample=0.8, colsample=0.8, reg_alpha=0.4, reg_lambda=1.5)": {
+      "rmse": 6.027,
+      "mae": 2.391,
+      "precision": 0.636,
+      "recall": 0.797,
+      "f1": 0.708,
+      "far": 47.9,
+      "config": {
+        "n_estimators": 130,
+        "max_depth": 4,
+        "learning_rate": 0.025,
+        "subsample": 0.8,
+        "colsample_bytree": 0.8,
+        "reg_alpha": 0.4,
+        "reg_lambda": 1.5,
+        "random_state": 42,
+        "n_jobs": 1
+      }
+    },
+    "Candidate B (lr=0.02, depth=3, n=150, subsample=0.85, colsample=0.85, min_child_weight=2)": {
+      "rmse": 6.192,
+      "mae": 2.519,
+      "precision": 0.698,
+      "recall": 0.732,
+      "f1": 0.714,
+      "far": 33.3,
+      "config": {
+        "n_estimators": 150,
+        "max_depth": 3,
+        "learning_rate": 0.02,
+        "subsample": 0.85,
+        "colsample_bytree": 0.85,
+        "min_child_weight": 2,
+        "reg_alpha": 0.3,
+        "reg_lambda": 1.2,
+        "random_state": 42,
+        "n_jobs": 1
+      }
+    }
+  },
+  "hurdle_xgboost": {
+    "Baseline Hurdle (clf_depth=3, reg_depth=3, n=80)": {
+      "rmse": 6.007,
+      "mae": 2.322,
+      "precision": 0.669,
+      "recall": 0.854,
+      "f1": 0.75,
+      "far": 44.4,
+      "config": {
+        "clf_params": {
+          "n_estimators": 80,
+          "max_depth": 3,
+          "learning_rate": 0.05,
+          "subsample": 0.85,
+          "colsample_bytree": 0.85,
+          "eval_metric": "logloss",
+          "random_state": 42,
+          "n_jobs": 1
+        },
+        "reg_params": {
+          "n_estimators": 80,
+          "max_depth": 3,
+          "learning_rate": 0.05,
+          "subsample": 0.85,
+          "colsample_bytree": 0.85,
+          "reg_alpha": 0.2,
+          "reg_lambda": 1.2,
+          "random_state": 42,
+          "n_jobs": 1
+        }
+      }
+    },
+    "Candidate A (calibrated reg_lr=0.04, reg_depth=4, reg_lambda=2.0, clf_n=100)": {
+      "rmse": 6.034,
+      "mae": 2.349,
+      "precision": 0.675,
+      "recall": 0.846,
+      "f1": 0.751,
+      "far": 42.7,
+      "config": {
+        "clf_params": {
+          "n_estimators": 100,
+          "max_depth": 3,
+          "learning_rate": 0.04,
+          "subsample": 0.85,
+          "colsample_bytree": 0.85,
+          "eval_metric": "logloss",
+          "random_state": 42,
+          "n_jobs": 1
+        },
+        "reg_params": {
+          "n_estimators": 100,
+          "max_depth": 4,
+          "learning_rate": 0.04,
+          "subsample": 0.85,
+          "colsample_bytree": 0.85,
+          "reg_alpha": 0.2,
+          "reg_lambda": 2.0,
+          "random_state": 42,
+          "n_jobs": 1
+        }
+      }
+    },
+    "Candidate B (reg_alpha=0.5, reg_lambda=2.5, clf_subsample=0.8)": {
+      "rmse": 5.996,
+      "mae": 2.338,
+      "precision": 0.662,
+      "recall": 0.862,
+      "f1": 0.749,
+      "far": 46.2,
+      "config": {
+        "clf_params": {
+          "n_estimators": 80,
+          "max_depth": 3,
+          "learning_rate": 0.05,
+          "subsample": 0.8,
+          "colsample_bytree": 0.8,
+          "eval_metric": "logloss",
+          "random_state": 42,
+          "n_jobs": 1
+        },
+        "reg_params": {
+          "n_estimators": 80,
+          "max_depth": 3,
+          "learning_rate": 0.05,
+          "subsample": 0.85,
+          "colsample_bytree": 0.85,
+          "reg_alpha": 0.5,
+          "reg_lambda": 2.5,
+          "random_state": 42,
+          "n_jobs": 1
+        }
+      }
+    }
+  },
+  "prophet": {
+    "Baseline (cps=0.05, sps=0.1, additive)": {
+      "rmse": 6.021,
+      "mae": 2.294,
+      "precision": 0.73,
+      "recall": 0.748,
+      "f1": 0.739,
+      "far": 29.1,
+      "config": {
+        "yearly_seasonality": true,
+        "weekly_seasonality": false,
+        "daily_seasonality": false,
+        "seasonality_mode": "additive",
+        "changepoint_prior_scale": 0.05,
+        "seasonality_prior_scale": 0.1,
+        "interval_width": 0.95
+      }
+    },
+    "Candidate A (cps=0.08, sps=0.2, additive)": {
+      "rmse": 6.052,
+      "mae": 2.318,
+      "precision": 0.724,
+      "recall": 0.724,
+      "f1": 0.724,
+      "far": 29.1,
+      "config": {
+        "yearly_seasonality": true,
+        "weekly_seasonality": false,
+        "daily_seasonality": false,
+        "seasonality_mode": "additive",
+        "changepoint_prior_scale": 0.08,
+        "seasonality_prior_scale": 0.2,
+        "interval_width": 0.95
+      }
+    },
+    "Candidate B (cps=0.03, sps=0.1, additive)": {
+      "rmse": 6.037,
+      "mae": 2.293,
+      "precision": 0.714,
+      "recall": 0.732,
+      "f1": 0.723,
+      "far": 30.8,
+      "config": {
+        "yearly_seasonality": true,
+        "weekly_seasonality": false,
+        "daily_seasonality": false,
+        "seasonality_mode": "additive",
+        "changepoint_prior_scale": 0.03,
+        "seasonality_prior_scale": 0.1,
+        "interval_width": 0.95
+      }
+    }
+  }
+}

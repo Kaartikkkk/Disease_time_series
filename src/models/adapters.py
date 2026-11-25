@@ -17,6 +17,7 @@ from src.models.classical.sarima_model import forecast_sarima
 from src.models.classical.sarimax_model import forecast_sarimax_model
 from src.models.classical.seasonal_naive import forecast_seasonal_naive
 from src.models.classical.var_model import forecast_var
+from src.models.classical.varima_model import forecast_varima
 from src.models.machine_learning.gradient_boosting import forecast_gradient_boosting
 from src.models.machine_learning.random_forest import forecast_random_forest
 from src.models.machine_learning.xgboost_model import HAS_XGBOOST, forecast_xgboost
@@ -30,6 +31,7 @@ from src.models.deep_learning.gru_model import forecast_gru
 from src.models.deep_learning.transformer_model import forecast_transformer
 from src.models.probabilistic.prophet_model import HAS_PROPHET, forecast_prophet
 from src.models.volatility.arch_garch_model import ARCHGARCHModel
+from src.models.machine_learning.autots_model import HAS_AUTOTS, forecast_autots
 
 
 def _extract_exog(ctx: ForecastContext) -> Tuple[Optional[pd.DataFrame], Optional[pd.DataFrame]]:
@@ -289,6 +291,30 @@ def adapt_xgboost(ctx: ForecastContext) -> Dict[str, Any]:
     return out
 
 
+def adapt_autots(ctx: ForecastContext) -> Dict[str, Any]:
+    """Adapter for AutoTS automated time-series genetic search."""
+    if not HAS_AUTOTS:
+        raise ImportError("autots is not installed or unavailable in this environment.")
+
+    model_list = str(ctx.config.get("model_list", "superfast"))
+    max_gen = int(ctx.config.get("max_generations", 1))
+    preds, lb, ub, meta = forecast_autots(
+        train_df=ctx.train_df,
+        horizon=ctx.horizon,
+        target_col=ctx.target_col,
+        date_col="date" if "date" in ctx.train_df.columns else ctx.train_df.columns[0],
+        model_list=model_list,
+        max_generations=max_gen,
+    )
+    return _build_output(
+        preds, lb, ub,
+        model_name="AutoTS (AutoML Benchmark)",
+        parameters=f"Best: {meta.get('best_model_name', 'Ensemble')} (gens={max_gen})",
+        model_family="Automated ML (AutoTS)",
+        fitted_model=meta.get("fitted_model"),
+    )
+
+
 def adapt_global_xgboost(ctx: ForecastContext) -> Dict[str, Any]:
     """Adapter for pooled multi-pathogen Global XGBoost."""
     if not HAS_XGBOOST:
@@ -511,6 +537,36 @@ def adapt_var(ctx: ForecastContext) -> Dict[str, Any]:
     out = _build_output(
         preds, lb, ub,
         model_name="VAR (Vector Autoregression)",
+        parameters=param_str,
+        model_family="Multivariate Autoregressive System",
+        fitted_model=model,
+    )
+    out["metadata"]["diagnostics"] = diagnostics
+    return out
+
+
+def adapt_varima(ctx: ForecastContext) -> Dict[str, Any]:
+    """Adapter for Multivariate Vector Autoregressive Integrated Moving Average (VARIMA)."""
+    p = int(ctx.config.get("p", 1))
+    d = int(ctx.config.get("d", 1))
+    q = int(ctx.config.get("q", 1))
+    trend = str(ctx.config.get("trend", "c"))
+    exog_cols = ctx.exog_cols or ["temp_mean_c", "relative_humidity_pct"]
+
+    preds, lb, ub, model, diagnostics = forecast_varima(
+        train_df=ctx.train_df,
+        horizon=ctx.horizon,
+        target_col=ctx.target_col,
+        exog_cols=exog_cols,
+        p=p,
+        d=d,
+        q=q,
+        trend=trend,
+    )
+    param_str = diagnostics.get("parameters", f"VARIMA({p},{d},{q})")
+    out = _build_output(
+        preds, lb, ub,
+        model_name="VARIMA (Vector Autoregressive Integrated Moving Average)",
         parameters=param_str,
         model_family="Multivariate Autoregressive System",
         fitted_model=model,

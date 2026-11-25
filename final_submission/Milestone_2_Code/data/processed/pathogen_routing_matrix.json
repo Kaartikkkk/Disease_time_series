@@ -1,0 +1,120 @@
+{
+  "metadata": {
+    "title": "Production Pathogen Routing Matrix",
+    "version": "1.0.0",
+    "generated_at": "2026-11-13 02:14:52",
+    "total_pathogens": 10
+  },
+  "routing_table": [
+    {
+      "pathogen_slug": "alternaria_solani",
+      "common_name": "Early Blight of Potato/Tomato",
+      "primary_model_name": "Seasonal Naive (Baseline)",
+      "primary_holdout_rmse": 1.761,
+      "primary_holdout_mae": 1.1,
+      "secondary_model_name": "GRU (Gated Recurrent Unit)",
+      "secondary_holdout_rmse": 1.916,
+      "is_classical_primary": true,
+      "operational_justification": "Classical Seasonal Naive (Baseline) outperforms modern models by 8.8% RMSE due to stable autoregressive/seasonal memory without overfitting."
+    },
+    {
+      "pathogen_slug": "bipolaris_oryzae",
+      "common_name": "Brown Spot of Rice",
+      "primary_model_name": "SARIMA(1,0,1)(1,0,1)[12]",
+      "primary_holdout_rmse": 1.678,
+      "primary_holdout_mae": 1.112,
+      "secondary_model_name": "Random Forest (Autoregressive)",
+      "secondary_holdout_rmse": 1.72,
+      "is_classical_primary": true,
+      "operational_justification": "Classical SARIMA(1,0,1)(1,0,1)[12] outperforms modern models by 2.5% RMSE due to stable autoregressive/seasonal memory without overfitting."
+    },
+    {
+      "pathogen_slug": "fusarium_oxysporum",
+      "common_name": "Fusarium Wilt",
+      "primary_model_name": "Prophet (Trend + Seasonality)",
+      "primary_holdout_rmse": 5.494,
+      "primary_holdout_mae": 4.556,
+      "secondary_model_name": "ARIMA(1,1,1)",
+      "secondary_holdout_rmse": 5.56,
+      "is_classical_primary": false,
+      "operational_justification": "Exogenous meteorological covariates and non-linear interactions provide competitive advantage over purely univariate models."
+    },
+    {
+      "pathogen_slug": "macrophomina_phaseolina",
+      "common_name": "Dry Root Rot / Charcoal Rot",
+      "primary_model_name": "ARIMA(1,1,1)",
+      "primary_holdout_rmse": 5.151,
+      "primary_holdout_mae": 4.148,
+      "secondary_model_name": "Global Random Forest (Multi-Pathogen)",
+      "secondary_holdout_rmse": 5.166,
+      "is_classical_primary": true,
+      "operational_justification": "Classical ARIMA(1,1,1) outperforms modern models by 0.3% RMSE due to stable autoregressive/seasonal memory without overfitting."
+    },
+    {
+      "pathogen_slug": "phytophthora_infestans",
+      "common_name": "Late Blight of Potato",
+      "primary_model_name": "SARIMAX (Seasonal + Weather)",
+      "primary_holdout_rmse": 0.858,
+      "primary_holdout_mae": 0.352,
+      "secondary_model_name": "GRU (Gated Recurrent Unit)",
+      "secondary_holdout_rmse": 0.886,
+      "is_classical_primary": true,
+      "operational_justification": "Classical SARIMAX (Seasonal + Weather) outperforms modern models by 3.3% RMSE due to stable autoregressive/seasonal memory without overfitting."
+    },
+    {
+      "pathogen_slug": "puccinia_striiformis",
+      "common_name": "Yellow / Stripe Rust of Wheat",
+      "primary_model_name": "XGBoost (Autoregressive)",
+      "primary_holdout_rmse": 0.415,
+      "primary_holdout_mae": 0.153,
+      "secondary_model_name": "AR(1)",
+      "secondary_holdout_rmse": 0.441,
+      "is_classical_primary": false,
+      "operational_justification": "High zero-inflation (19/20 months dormant) favors two-stage or specialized gating to avoid false alarms."
+    },
+    {
+      "pathogen_slug": "pyricularia_oryzae",
+      "common_name": "Rice Blast",
+      "primary_model_name": "GRU (Gated Recurrent Unit)",
+      "primary_holdout_rmse": 2.819,
+      "primary_holdout_mae": 1.805,
+      "secondary_model_name": "MA(1)",
+      "secondary_holdout_rmse": 2.846,
+      "is_classical_primary": false,
+      "operational_justification": "Sequential temporal dynamics and recurring multi-month epidemic peaks are best captured by recurrent neural memory."
+    },
+    {
+      "pathogen_slug": "ralstonia_solanacearum",
+      "common_name": "Bacterial Wilt",
+      "primary_model_name": "LSTM (Sequence Neural Net)",
+      "primary_holdout_rmse": 2.141,
+      "primary_holdout_mae": 1.152,
+      "secondary_model_name": "MA(1)",
+      "secondary_holdout_rmse": 2.185,
+      "is_classical_primary": false,
+      "operational_justification": "Sequential temporal dynamics and recurring multi-month epidemic peaks are best captured by recurrent neural memory."
+    },
+    {
+      "pathogen_slug": "rhizoctonia_solani",
+      "common_name": "Sheath Blight of Rice",
+      "primary_model_name": "Seasonal Naive (Baseline)",
+      "primary_holdout_rmse": 7.523,
+      "primary_holdout_mae": 4.7,
+      "secondary_model_name": "Prophet (Trend + Seasonality)",
+      "secondary_holdout_rmse": 8.041,
+      "is_classical_primary": true,
+      "operational_justification": "Classical Seasonal Naive (Baseline) outperforms modern models by 6.9% RMSE due to stable autoregressive/seasonal memory without overfitting."
+    },
+    {
+      "pathogen_slug": "xanthomonas_oryzae",
+      "common_name": "Bacterial Blight of Rice",
+      "primary_model_name": "Global Random Forest (Multi-Pathogen)",
+      "primary_holdout_rmse": 8.467,
+      "primary_holdout_mae": 3.699,
+      "secondary_model_name": "MA(1)",
+      "secondary_holdout_rmse": 10.759,
+      "is_classical_primary": false,
+      "operational_justification": "Exogenous meteorological covariates and non-linear interactions provide competitive advantage over purely univariate models."
+    }
+  ]
+}

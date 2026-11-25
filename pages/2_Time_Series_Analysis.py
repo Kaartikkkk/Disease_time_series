@@ -500,7 +500,6 @@ with tab_volatility:
         try:
             vol_model = ARCHGARCHModel(p=p_order, q=q_order, dist=dist_key, approach=app_key)
             vol_res = vol_model.fit(y_series)
-            vol_fcast = vol_model.forecast(horizon=12)
             has_fit = True
         except Exception as exc:
             st.error(f"Could not fit volatility model on {pathogen_dict.get(selected_slug, selected_slug)}: {exc}")
@@ -576,63 +575,6 @@ with tab_volatility:
         st.plotly_chart(fig_vol, use_container_width=True)
         st.caption(
             "**Interpretation:** Spikes represent explosive disease surges where actual field outcomes deviated wildly from expectations. Flat periods indicate predictable dry-season dormancy."
-        )
-
-        # Chart 2: 12-Month Out-of-Sample Volatility Forecast & Dynamic Uncertainty Interval
-        last_dt = pd.to_datetime(df_monthly["date"].iloc[-1])
-        future_dates = pd.date_range(last_dt + pd.DateOffset(months=1), periods=12, freq="MS")
-        hist_tail = df_monthly.iloc[-24:]
-
-        fig_env = go.Figure()
-        # Historical context last 24 months
-        fig_env.add_trace(
-            go.Scatter(
-                x=hist_tail["date"],
-                y=hist_tail[target_col],
-                mode="lines+markers",
-                name="Observed Occurrences",
-                line=dict(color="#111827", width=1.8),
-                marker=dict(size=4, color="#111827"),
-            )
-        )
-        fig_env.add_trace(
-            go.Scatter(
-                x=future_dates,
-                y=vol_fcast.mean_forecast,
-                mode="lines+markers",
-                name="Projected Mean",
-                line=dict(color="#D97706", width=2.4),
-                marker=dict(size=5, color="#D97706"),
-            )
-        )
-        fig_env.add_trace(
-            go.Scatter(
-                x=future_dates,
-                y=vol_fcast.upper_bound,
-                mode="lines",
-                name="95% Upper Uncertainty Bound",
-                line=dict(color="#2563EB", width=1.2, dash="dash"),
-            )
-        )
-        fig_env.add_trace(
-            go.Scatter(
-                x=future_dates,
-                y=vol_fcast.lower_bound,
-                mode="lines",
-                name="95% Lower Uncertainty Bound",
-                line=dict(color="#2563EB", width=1.2, dash="dash"),
-                fill="tonexty",
-                fillcolor="rgba(37, 99, 235, 0.12)",
-            )
-        )
-        format_plotly_figure(
-            fig_env,
-            title="12-Month Forward Forecast with Dynamic Volatility Envelope",
-            height=310,
-        )
-        st.plotly_chart(fig_env, use_container_width=True)
-        st.caption(
-            "**Interpretation:** The blue shaded envelope widens automatically during high-risk outbreak months and narrows during quiet periods, providing realistic uncertainty bounds."
         )
 
         # 5. Practical Takeaways

@@ -1,0 +1,20 @@
+pathogen_slug,common_name,model_name,test_rmse,test_mae,test_mase,test_smape_pct,test_wape_pct,test_mape_nonzero_pct,test_bias,f1_score,pr_auc
+pyricularia_oryzae,Rice Blast,GRU (Gated Recurrent Unit),2.819,1.805,1.543,178.5,128.9,76.0,0.555,0.348,0.283
+pyricularia_oryzae,Rice Blast,MA(1),2.846,1.772,1.515,175.4,126.6,69.1,0.481,0.435,0.378
+pyricularia_oryzae,Rice Blast,"ARIMA(1,1,1)",2.867,1.818,1.554,176.4,129.8,70.9,0.448,0.462,0.369
+pyricularia_oryzae,Rice Blast,AR(1),2.868,1.821,1.557,176.5,130.1,71.0,0.448,0.462,0.333
+pyricularia_oryzae,Rice Blast,LSTM (Sequence Neural Net),2.873,1.737,1.485,181.2,124.1,78.6,0.707,0.3,0.319
+pyricularia_oryzae,Rice Blast,"SARIMA(1,0,1)(1,0,1)[12]",2.881,1.943,1.661,181.2,138.8,79.3,0.326,0.353,0.326
+pyricularia_oryzae,Rice Blast,Random Forest (Autoregressive),2.952,2.001,1.71,171.0,142.9,62.2,0.073,0.476,0.322
+pyricularia_oryzae,Rice Blast,SARIMAX (Seasonal + Weather),2.997,1.984,1.696,146.6,141.7,77.0,0.221,0.444,0.388
+pyricularia_oryzae,Rice Blast,Seasonal Naive (Baseline),3.0,1.8,1.538,97.1,128.6,85.6,0.6,0.429,0.317
+pyricularia_oryzae,Rice Blast,XGBoost (Autoregressive),3.012,2.155,1.842,176.3,154.0,73.1,0.055,0.4,0.29
+pyricularia_oryzae,Rice Blast,Ensemble 2 (60% Hurdle + 40% Prophet),3.097,2.094,1.79,175.0,149.6,69.2,0.159,0.381,0.291
+pyricularia_oryzae,Rice Blast,Prophet (Trend + Seasonality),3.124,2.049,1.752,183.5,146.4,82.8,0.427,0.421,0.266
+pyricularia_oryzae,Rice Blast,Holt-Winters Exponential Smoothing,3.128,2.046,1.749,183.1,146.2,82.0,0.426,0.444,0.27
+pyricularia_oryzae,Rice Blast,Hurdle XGBoost (Classifier + Regressor),3.171,2.142,1.831,171.5,153.0,63.1,-0.02,0.545,0.333
+pyricularia_oryzae,Rice Blast,Ensemble 3 (Inverse-Variance Triad),3.21,2.141,1.83,174.9,152.9,68.9,0.112,0.381,0.3
+pyricularia_oryzae,Rice Blast,Ensemble 1 (50% Hurdle + 50% Global RF),3.424,2.222,1.899,172.0,158.7,63.7,-0.069,0.545,0.353
+pyricularia_oryzae,Rice Blast,Global XGBoost (Multi-Pathogen),3.614,2.302,1.967,174.0,164.4,67.5,-0.097,0.571,0.348
+pyricularia_oryzae,Rice Blast,Global Random Forest (Multi-Pathogen),3.723,2.301,1.967,172.6,164.4,64.4,-0.117,0.455,0.354
+pyricularia_oryzae,Rice Blast,Production Selection Policy (Frozen Ensemble),3.723,2.301,1.967,172.6,164.4,64.4,-0.117,0.455,0.354
